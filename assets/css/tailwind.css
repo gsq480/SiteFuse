@@ -1,0 +1,10 @@
+@import "tailwindcss" source("../..");
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --color-brand: oklch(60% 0.21 262);
+  --color-brand-600: oklch(55% 0.2 262);
+}
+
+.container { @apply mx-auto max-w-7xl; }
+.prose p { @apply leading-7 text-slate-700; }
