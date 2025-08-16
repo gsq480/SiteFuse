@@ -1,23 +1,12 @@
 name: Provision Child Theme v2
-
 on:
   workflow_dispatch:
     inputs:
-      slug:
-        description: "Site slug (kebab-case, used for theme folder)"
-        required: true
-      name:
-        description: "Site display name"
-        required: true
-      brand:
-        description: "Brand hex colour (e.g. #7A5A45)"
-        required: true
-      accent:
-        description: "Accent hex colour (e.g. #D2B48C)"
-        required: true
-      hero:
-        description: "Hero image URL"
-        required: true
+      slug:   { description: "Site slug (kebab-case)", required: true }
+      name:   { description: "Site display name", required: true }
+      brand:  { description: "Brand hex (e.g. #7A5A45)", required: true }
+      accent: { description: "Accent hex (e.g. #D2B48C)", required: true }
+      hero:   { description: "Hero image URL", required: true }
 
 jobs:
   build-deploy:
@@ -26,33 +15,29 @@ jobs:
       CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
       CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
       CLOUDWAYS_KEY:  ${{ secrets.CLOUDWAYS_SSH_KEY }}
-      DEPLOY_PATH:    ${{ secrets.DEPLOY_PATH }}      # points at a theme path on the server
-      APP_PATH:       ${{ secrets.APP_PATH }}         # /home/.../public_html
+      DEPLOY_PATH:    ${{ secrets.DEPLOY_PATH }}
+      APP_PATH:       ${{ secrets.APP_PATH }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: SSH setup
         run: |
-          set -eo pipefail
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
+          set -e
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/cloudways_id
           chmod 600 ~/.ssh/cloudways_id
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
 
-      - name: Generate child theme, build Tailwind v4, zip
+      - name: Generate child theme
         env:
           SLUG:  ${{ inputs.slug }}
           NAME:  ${{ inputs.name }}
           BRAND: ${{ inputs.brand }}
-          ACCENT: ${{ inputs.accent }}
+          ACCENT:${{ inputs.accent }}
           HERO:  ${{ inputs.hero }}
         run: |
-          set -eo pipefail
+          set -euo pipefail
           WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
-
-          # scaffold
           mkdir -p child/assets/css child/assets/img child/dist
           cat > child/style.css <<CSS
           /*
@@ -74,7 +59,6 @@ jobs:
           PHP
           cat > child/assets/css/tailwind.css <<CSS
           @import "tailwindcss";
-          /* design tokens */
           @theme {
             --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
             --color-brand: ${BRAND};
@@ -89,7 +73,6 @@ jobs:
           .section-title{ @apply text-2xl md:text-3xl font-extrabold tracking-tight; }
           .lead{ @apply text-lg text-slate-700; }
           CSS
-
           cat > child/header.php <<'PHP'
           <!doctype html>
           <html <?php language_attributes(); ?>>
@@ -109,21 +92,6 @@ jobs:
             </div>
           </header>
           PHP
-
-          cat > child/footer.php <<'PHP'
-          <footer class="mt-16 bg-slate-900 text-slate-200">
-            <div class="container px-4 py-10 grid gap-6 md:grid-cols-3">
-              <div><div class="text-lg font-semibold">About</div><p class="text-sm opacity-80 mt-2">Neighbourhood coffee, fresh bakes, warm service.</p></div>
-              <div><div class="text-lg font-semibold">Hours</div><ul class="text-sm opacity-80 mt-2 space-y-1"><li>Mon–Fri 7–3</li><li>Sat–Sun 8–2</li></ul></div>
-              <div><div class="text-lg font-semibold">Find us</div><p class="text-sm opacity-80 mt-2">123 Lonsdale St, Canberra</p></div>
-            </div>
-            <div class="border-t border-slate-800"><div class="container px-4 py-4 text-sm opacity-70 flex justify-between"><span>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?></span><span>Powered by WordPress</span></div></div>
-          </footer>
-          <?php wp_footer(); ?>
-          </body>
-          </html>
-          PHP
-
           cat > child/front-page.php <<'PHP'
           <?php get_header(); ?>
           <main id="main" class="container px-4 py-10 space-y-12">
@@ -142,40 +110,32 @@ jobs:
                 </div>
               </div>
             </section>
-            <section class="grid md:grid-cols-3 gap-6">
-              <article class="card"><h3 class="font-bold text-lg">House blend</h3><p class="mt-2 text-sm text-slate-600">Balanced chocolate with a bright citrus finish.</p></article>
-              <article class="card"><h3 class="font-bold text-lg">Daily bakes</h3><p class="mt-2 text-sm text-slate-600">Croissants, banana bread, seasonal tarts baked every morning.</p></article>
-              <article class="card"><h3 class="font-bold text-lg">Local first</h3><p class="mt-2 text-sm text-slate-600">We source dairy, flour and produce from Canberra suppliers.</p></article>
-            </section>
           </main>
           <?php get_footer(); ?>
           PHP
-
-          # assets
           curl -fsSL "$HERO" -o child/assets/img/hero.jpg || true
 
-          # Tailwind build (same as your green workflow)
-          npx tailwindcss -i child/assets/css/tailwind.css -o child/dist/tailwind.css --minify
-
-          # zip (also keep folder for rsync)
-          (cd child && zip -qr "../${SLUG}-child.zip" .)
-          ls -la
-
-      - name: Deploy to Cloudways and activate
-        env:
-          SLUG: ${{ inputs.slug }}
+      - name: Install Tailwind CLI binary
         run: |
-          set -eo pipefail
-          test -n "$APP_PATH" || { echo "APP_PATH secret is required (e.g. /home/.../public_html)"; exit 1; }
+          set -e
+          curl -sSL https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 -o /usr/local/bin/tailwindcss
+          chmod +x /usr/local/bin/tailwindcss
+          tailwindcss --version
 
-          # Derive the remote themes dir from DEPLOY_PATH (which points at a theme)
+      - name: Build CSS with Tailwind CLI
+        run: |
+          set -e
+          # build in the workdir created above (Actions preserves it per-step)
+          tailwindcss -i child/assets/css/tailwind.css -o child/dist/tailwind.css --minify
+          test -s child/dist/tailwind.css && echo "Built CSS size: $(wc -c < child/dist/tailwind.css) bytes"
+
+      - name: Deploy child theme and activate
+        env: { SLUG: ${{ inputs.slug }} }
+        run: |
+          set -e
           THEMES_DIR="$(ssh -i ~/.ssh/cloudways_id -o BatchMode=yes ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} "dirname '${DEPLOY_PATH}'")"
-
-          # Upload (mirror) the child theme folder
           rsync -az --delete -e "ssh -i ~/.ssh/cloudways_id -o BatchMode=yes" \
             child/ "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}:${THEMES_DIR}/${SLUG}-child/"
-
-          # Activate with WP-CLI
           ssh -i ~/.ssh/cloudways_id -o BatchMode=yes ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} "
             cd '${APP_PATH}' &&
             wp theme enable '${SLUG}-child' --quiet || true &&
