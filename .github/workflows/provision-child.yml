@@ -33,6 +33,14 @@ jobs:
       - name: Clean repo node_modules
         run: rm -rf node_modules
 
+      - name: Clean all node_modules
+        run: |
+          rm -rf node_modules
+          rm -rf **/node_modules
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Generate child theme (Tailwind v4 zero-config, build CSS, zip)
         run: |
           set -e
