@@ -75,7 +75,7 @@ jobs:
               @apply inline-flex items-center justify-center rounded-lg px-5 py-2 font-semibold;
             }
             .btn-primary {
-              @apply btn bg-[--color-brand] text-white hover:bg-[--color-brand-600];
+              @apply inline-flex items-center justify-center rounded-lg px-5 py-2 font-semibold bg-[--color-brand] text-white hover:bg-[--color-brand-600];
             }
             .container {
               @apply mx-auto max-w-6xl;
@@ -156,6 +156,9 @@ jobs:
             child/ "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}:${THEMES_DIR}/${SLUG}-child/"
           ssh -i ~/.ssh/cloudways_id -o BatchMode=yes ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} "
             cd '${APP_PATH}' &&
+            wp theme enable '${SLUG}-child' --quiet || true &&
+            wp theme activate '${SLUG}-child' --quiet
+          "
             wp theme enable '${SLUG}-child' --quiet || true &&
             wp theme activate '${SLUG}-child' --quiet
           "
