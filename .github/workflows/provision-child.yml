@@ -7,6 +7,7 @@ on:
       brand:  { description: "Brand colour hex eg #7A5A45",  required: true }
       accent: { description: "Accent colour hex eg #D2B48C", required: true }
       hero:   { description: "Hero image URL", required: true, default: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop" }
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
@@ -14,6 +15,7 @@ jobs:
       CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
       CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
       APP_PATH:       ${{ secrets.APP_PATH }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,16 +27,12 @@ jobs:
           chmod 600 ~/.ssh/cloudways_id
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
 
-      - name: Setup Node
+      - name: Setup Node (no repo deps)
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install Tailwind CLI globally
-        run: |
-          npm install -g tailwindcss@4
-
-      - name: Generate child theme and zip (clean env, no repo node_modules)
+      - name: Generate child theme and zip in clean temp dir
         env:
           SLUG:   ${{ inputs.slug }}
           NAME:   ${{ inputs.name }}
@@ -43,9 +41,8 @@ jobs:
           HERO:   ${{ inputs.hero }}
         run: |
           set -euo pipefail
-          WORKDIR="$(mktemp -d)"
-          echo "Workdir: $WORKDIR"
-          cd "$WORKDIR"
+          WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
+
           mkdir -p child/assets/css child/assets/img child/dist child/parts
 
           cat > child/style.css <<CSS
@@ -184,10 +181,12 @@ jobs:
 
           curl -fsSL "$HERO" -o child/assets/img/hero.jpg || true
 
-          # Clean env so no repo node_modules are used
+          # absolute isolation from repo node_modules
           export NODE_PATH=
           export npm_config_userconfig=/dev/null
-          tailwindcss -i child/assets/css/tailwind.css -o child/dist/tailwind.css --minify
+
+          # use an isolated CLI copy that npx fetches, not your repo's
+          npx --yes --package tailwindcss@4 tailwindcss -i child/assets/css/tailwind.css -o child/dist/tailwind.css --minify
 
           (cd child && zip -qr "../${SLUG}-child.zip" .)
           mv "${SLUG}-child.zip" "$GITHUB_WORKSPACE/"
