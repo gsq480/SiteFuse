@@ -30,7 +30,7 @@ jobs:
           ACCENT: ${{ inputs.accent }}
           HERO:  ${{ inputs.hero }}
         run: |
-          set -euo pipefail
+          set -eo pipefail
           WORKDIR="$(mktemp -d)"; cd "$WORKDIR"
           mkdir -p child/assets/css child/assets/img child/dist
           cat <<CSS > child/style.css
@@ -67,7 +67,7 @@ jobs:
         env:
           SLUG: ${{ inputs.slug }}
         run: |
-          set -euo pipefail
+          set -eo pipefail
           rsync -avz -e "ssh -i ~/.ssh/cloudways_id -o StrictHostKeyChecking=yes" "${SLUG}-child.zip" "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}:/home/1504475.cloudwaysapps.com/zhudbfctnw/public_html"
           ssh -i ~/.ssh/cloudways_id "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}" bash -lc "
             set -e
