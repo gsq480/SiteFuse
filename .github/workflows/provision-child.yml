@@ -126,7 +126,8 @@ jobs:
           tailwindcss -i child/assets/css/tailwind.css -o child/dist/tailwind.css --minify
           test -s child/dist/tailwind.css && echo "Built CSS size: $(wc -c < child/dist/tailwind.css) bytes"
       - name: Deploy child theme and activate
-        env: { SLUG: ${{ inputs.slug }} }
+        env:
+          SLUG: ${{ inputs.slug }}
         run: |
           set -e
           THEMES_DIR="$(ssh -i ~/.ssh/cloudways_id -o BatchMode=yes ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} "dirname '${DEPLOY_PATH}'")"
