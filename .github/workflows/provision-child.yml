@@ -25,33 +25,20 @@ jobs:
           chmod 600 ~/.ssh/cloudways_id
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
 
-      - name: Setup Node
+      - name: Ensure clean workspace (no repo node_modules or locks)
+        run: |
+          rm -rf node_modules **/node_modules package-lock.json pnpm-lock.yaml yarn.lock
+
+      - name: Setup Node (for npx only)
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Clean repo node_modules
-        run: rm -rf node_modules
-
-      - name: Clean all node_modules
-        run: |
-          rm -rf node_modules
-          rm -rf **/node_modules
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Generate child theme (Tailwind v4 zero-config, build CSS, zip)
+      - name: Generate child theme (Tailwind v4 via npx, no repo deps)
         run: |
           set -e
-          SLUG="${{ inputs.slug }}"
-          NAME="${{ inputs.name }}"
-          BRAND="${{ inputs.brand }}"
-          ACCENT="${{ inputs.accent }}"
-          HERO="${{ inputs.hero }}"
-
+          SLUG="${{ inputs.slug }}"; NAME="${{ inputs.name }}"; BRAND="${{ inputs.brand }}"; ACCENT="${{ inputs.accent }}"; HERO="${{ inputs.hero }}"
           mkdir -p child/assets/css child/assets/img child/dist child/parts
-
           cat > child/style.css <<CSS
           /*
           Theme Name: ${NAME} Child
@@ -60,7 +47,6 @@ jobs:
           Version: 1.0.0
           */
           CSS
-
           cat > child/functions.php <<'PHP'
           <?php
           add_action('wp_enqueue_scripts', function () {
@@ -71,11 +57,9 @@ jobs:
             wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $ver);
           });
           PHP
-
           cat > child/assets/css/tailwind.css <<CSS
           @import "tailwindcss";
           .btn { @apply inline-flex items-center justify-center rounded-lg px-5 py-2 font-semibold; }
-          /* Brand tokens */
           @theme {
             --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
             --color-brand: ${BRAND};
@@ -90,101 +74,20 @@ jobs:
           .lead { @apply text-lg text-slate-700; }
           .nav-link { @apply hover:underline; }
           CSS
-
           cat > child/header.php <<'PHP'
-          <!doctype html>
-          <html <?php language_attributes(); ?>>
-          <head>
-            <meta charset="<?php bloginfo('charset'); ?>">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <?php wp_head(); ?>
-          </head>
-          <body <?php body_class('bg-[--color-cream] text-slate-900 font-sans'); ?>>
-          <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 p-2 bg-white rounded" href="#main">Skip to content</a>
-          <header class="bg-white/90 backdrop-blur border-b">
-            <div class="container px-4 py-4 flex items-center justify-between">
-              <a class="text-xl font-extrabold tracking-tight text-[--color-brand]" href="<?php echo esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a>
-              <nav class="hidden md:block">
-                <?php wp_nav_menu(['theme_location'=>'primary','menu_class'=>'md:flex md:items-center md:gap-6','container'=>false,'fallback_cb'=>'__return_empty_string','link_before'=>'<span class="nav-link">','link_after'=>'</span>']); ?>
-              </nav>
-            </div>
-          </header>
+          <!doctype html><html <?php language_attributes(); ?>><head><meta charset="<?php bloginfo('charset'); ?>"><meta name="viewport" content="width=device-width, initial-scale=1"><?php wp_head(); ?></head><body <?php body_class('bg-[--color-cream] text-slate-900 font-sans'); ?>><a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 p-2 bg-white rounded" href="#main">Skip to content</a><header class="bg-white/90 backdrop-blur border-b"><div class="container px-4 py-4 flex items-center justify-between"><a class="text-xl font-extrabold tracking-tight text-[--color-brand]" href="<?php echo esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a><nav class="hidden md:block"><?php wp_nav_menu(['theme_location'=>'primary','menu_class'=>'md:flex md:items-center md:gap-6','container'=>false,'fallback_cb'=>'__return_empty_string','link_before'=>'<span class="nav-link">','link_after'=>'</span>']); ?></nav></div></header>
           PHP
-
           cat > child/footer.php <<'PHP'
-          <footer class="mt-16 bg-slate-900 text-slate-200">
-            <div class="container px-4 py-10 grid gap-6 md:grid-cols-3">
-              <div><div class="text-lg font-semibold">About</div><p class="text-sm opacity-80 mt-2">Neighbourhood coffee, fresh bakes, warm service.</p></div>
-              <div><div class="text-lg font-semibold">Hours</div><ul class="text-sm opacity-80 mt-2 space-y-1"><li>Mon to Fri 7am to 3pm</li><li>Sat to Sun 8am to 2pm</li></ul></div>
-              <div><div class="text-lg font-semibold">Find us</div><p class="text-sm opacity-80 mt-2">123 Lonsdale Street, Canberra</p></div>
-            </div>
-            <div class="border-t border-slate-800"><div class="container px-4 py-4 text-sm opacity-70 flex justify-between"><span>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?></span><span>Powered by WordPress</span></div></div>
-          </footer>
-          <?php wp_footer(); ?>
-          </body>
-          </html>
+          <footer class="mt-16 bg-slate-900 text-slate-200"><div class="container px-4 py-10 grid gap-6 md:grid-cols-3"><div><div class="text-lg font-semibold">About</div><p class="text-sm opacity-80 mt-2">Neighbourhood coffee, fresh bakes, warm service.</p></div><div><div class="text-lg font-semibold">Hours</div><ul class="text-sm opacity-80 mt-2 space-y-1"><li>Mon to Fri 7am to 3pm</li><li>Sat to Sun 8am to 2pm</li></ul></div><div><div class="text-lg font-semibold">Find us</div><p class="text-sm opacity-80 mt-2">123 Lonsdale Street, Canberra</p></div></div><div class="border-t border-slate-800"><div class="container px-4 py-4 text-sm opacity-70 flex justify-between"><span>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?></span><span>Powered by WordPress</span></div></div></footer><?php wp_footer(); ?></body></html>
           PHP
-
           cat > child/front-page.php <<'PHP'
-          <?php get_header(); ?>
-          <main id="main" class="container px-4 py-10 space-y-12">
-            <section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[--color-brand] to-[--color-accent] text-white">
-              <div class="px-6 py-16 md:px-12 md:py-24 grid md:grid-cols-2 gap-8 items-center">
-                <div>
-                  <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight">Coffee, done properly</h1>
-                  <p class="mt-4 lead text-white/90">Hand roasted beans, seasonal bakes and friendly faces in the heart of Canberra.</p>
-                  <div class="mt-8 flex gap-4">
-                    <a href="<?php echo esc_url(home_url('/menu')); ?>" class="btn-primary">View menu</a>
-                    <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn ring-1 ring-inset ring-white/60 text-white">Book a table</a>
-                  </div>
-                </div>
-                <div class="rounded-xl overflow-hidden shadow">
-                  <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/hero.jpg' ); ?>" alt="Fresh coffee" class="w-full h-full object-cover">
-                </div>
-              </div>
-            </section>
-            <section class="grid md:grid-cols-3 gap-6">
-              <article class="card"><h3 class="font-bold text-lg">House blend</h3><p class="mt-2 text-sm text-slate-600">Balanced chocolate notes with a bright citrus finish.</p></article>
-              <article class="card"><h3 class="font-bold text-lg">Daily bakes</h3><p class="mt-2 text-sm text-slate-600">Croissants, banana bread, seasonal tarts baked every morning.</p></article>
-              <article class="card"><h3 class="font-bold text-lg">Local first</h3><p class="mt-2 text-sm text-slate-600">We source dairy, flour and produce from Canberra suppliers.</p></article>
-            </section>
-            <section class="rounded-2xl bg-white p-8 shadow">
-              <h2 class="section-title">Popular this week</h2>
-              <ul class="mt-6 grid md:grid-cols-2 gap-4 text-slate-700">
-                <li class="flex items-center justify-between border-b py-5 px-4 md:px-6"><span>Flat white</span><span class="font-semibold">$4.5</span></li>
-                <li class="flex items-center justify-between border-b py-5 px-4 md:px-6"><span>Cappuccino</span><span class="font-semibold">$4.5</span></li>
-                <li class="flex items-center justify-between border-b py-5 px-4 md:px-6"><span>Almond croissant</span><span class="font-semibold">$6.0</span></li>
-                <li class="flex items-center justify-between border-b py-5 px-4 md:px-6"><span>Ham and cheese toastie</span><span class="font-semibold">$9.0</span></li>
-              </ul>
-              <a class="btn-primary mt-6 inline-block" href="<?php echo esc_url(home_url('/menu')); ?>">Full menu</a>
-            </section>
-            <section><h2 class="section-title">What customers say</h2>
-              <div class="mt-6 grid md:grid-cols-3 gap-6">
-                <blockquote class="card"><p>Best flat white in the city.</p><cite class="text-sm opacity-70">Alex</cite></blockquote>
-                <blockquote class="card"><p>Lovely staff and a proper toastie.</p><cite class="text-sm opacity-70">Renee</cite></blockquote>
-                <blockquote class="card"><p>My go to for mornings.</p><cite class="text-sm opacity-70">Sam</cite></blockquote>
-              </div>
-            </section>
-          </main>
-          <?php get_footer(); ?>
+          <?php get_header(); ?><main id="main" class="container px-4 py-10 space-y-12"><section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[--color-brand] to-[--color-accent] text-white"><div class="px-6 py-16 md:px-12 md:py-24 grid md:grid-cols-2 gap-8 items-center"><div><h1 class="text-3xl md:text-5xl font-extrabold tracking-tight">Coffee, done properly</h1><p class="mt-4 lead text-white/90">Hand roasted beans, seasonal bakes and friendly faces in the heart of Canberra.</p><div class="mt-8 flex gap-4"><a href="<?php echo esc_url(home_url('/menu')); ?>" class="btn-primary">View menu</a><a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn ring-1 ring-inset ring-white/60 text-white">Book a table</a></div></div><div class="rounded-xl overflow-hidden shadow"><img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/hero.jpg' ); ?>" alt="Fresh coffee" class="w-full h-full object-cover"></div></div></section><section class="grid md:grid-cols-3 gap-6"><article class="card"><h3 class="font-bold text-lg">House blend</h3><p class="mt-2 text-sm text-slate-600">Balanced chocolate notes with a bright citrus finish.</p></article><article class="card"><h3 class="font-bold text-lg">Daily bakes</h3><p class="mt-2 text-sm text-slate-600">Croissants, banana bread, seasonal tarts baked every morning.</p></article><article class="card"><h3 class="font-bold text-lg">Local first</h3><p class="mt-2 text-sm text-slate-600">We source dairy, flour and produce from Canberra suppliers.</p></article></section><section class="rounded-2xl bg-white p-8 shadow"><h2 class="section-title">Popular this week</h2><ul class="mt-6 grid md:grid-cols-2 gap-4 text-slate-700"><li class="flex items-center justify-between border-b py-5 px-4 md:px-6"><span>Flat white</span><span class="font-semibold">$4.5</span></li><li class="flex items-center justify-between border-b py-5 px-4 md:px-6"><span>Cappuccino</span><span class="font-semibold">$4.5</span></li><li class="flex items-center justify-between border-b py-5 px-4 md:px-6"><span>Almond croissant</span><span class="font-semibold">$6.0</span></li><li class="flex items-center justify-between border-b py-5 px-4 md:px-6"><span>Ham and cheese toastie</span><span class="font-semibold">$9.0</span></li></ul><a class="btn-primary mt-6 inline-block" href="<?php echo esc_url(home_url('/menu')); ?>">Full menu</a></section><section><h2 class="section-title">What customers say</h2><div class="mt-6 grid md:grid-cols-3 gap-6"><blockquote class="card"><p>Best flat white in the city.</p><cite class="text-sm opacity-70">Alex</cite></blockquote><blockquote class="card"><p>Lovely staff and a proper toastie.</p><cite class="text-sm opacity-70">Renee</cite></blockquote><blockquote class="card"><p>My go to for mornings.</p><cite class="text-sm opacity-70">Sam</cite></blockquote></div></section></main><?php get_footer(); ?>
           PHP
-
           cat > child/page.php <<'PHP'
-          <?php get_header(); ?>
-          <main id="main" class="container px-4 py-10">
-            <article class="bg-white rounded-xl shadow p-6">
-              <?php if (have_posts()): while (have_posts()): the_post(); ?>
-                <h1 class="text-3xl font-bold mb-4"><?php the_title(); ?></h1>
-                <div class="prose"><?php the_content(); ?></div>
-              <?php endwhile; endif; ?>
-            </article>
-          </main>
-          <?php get_footer(); ?>
+          <?php get_header(); ?><main id="main" class="container px-4 py-10"><article class="bg-white rounded-xl shadow p-6"><?php if (have_posts()): while (have_posts()): the_post(); ?><h1 class="text-3xl font-bold mb-4"><?php the_title(); ?></h1><div class="prose"><?php the_content(); ?></div><?php endwhile; endif; ?></article></main><?php get_footer(); ?>
           PHP
-
           curl -fsSL "$HERO" -o child/assets/img/hero.jpg || true
-
-          npx --yes tailwindcss --input child/assets/css/tailwind.css --output child/dist/tailwind.css --minify
+          npx --yes tailwindcss@latest --input child/assets/css/tailwind.css --output child/dist/tailwind.css --minify
           (cd child && zip -qr "../${SLUG}-child.zip" .)
 
       - name: Deploy to Cloudways and activate
