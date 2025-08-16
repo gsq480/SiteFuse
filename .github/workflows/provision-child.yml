@@ -1,4 +1,4 @@
-name: Generate name: Provision Child Theme Deploy Child Theme
+name: Generate & Deploy Child Theme
 on:
   workflow_dispatch:
     inputs:
