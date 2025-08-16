@@ -7,7 +7,6 @@ on:
       brand:  { description: "Brand colour hex eg #7A5A45",  required: true }
       accent: { description: "Accent colour hex eg #D2B48C", required: true }
       hero:   { description: "Hero image URL", required: true, default: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop" }
-
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
@@ -15,10 +14,8 @@ jobs:
       CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
       CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
       APP_PATH:       ${{ secrets.APP_PATH }}
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: SSH key and known_hosts
         run: |
@@ -27,12 +24,15 @@ jobs:
           chmod 600 ~/.ssh/cloudways_id
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
 
-      - name: Setup Node (no repo deps)
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Generate child theme and zip in clean temp dir
+      - name: Install Tailwind CLI globally (belt and braces)
+        run: npm i -g tailwindcss@4
+
+      - name: Generate child theme and zip
         env:
           SLUG:   ${{ inputs.slug }}
           NAME:   ${{ inputs.name }}
@@ -42,9 +42,7 @@ jobs:
         run: |
           set -euo pipefail
           WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
-
           mkdir -p child/assets/css child/assets/img child/dist child/parts
-
           cat > child/style.css <<CSS
           /*
           Theme Name: ${NAME} Child
@@ -53,7 +51,6 @@ jobs:
           Version: 1.0.0
           */
           CSS
-
           cat > child/functions.php <<'PHP'
           <?php
           add_action('wp_enqueue_scripts', function () {
@@ -64,7 +61,6 @@ jobs:
             wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $ver);
           });
           PHP
-
           cat > child/assets/css/tailwind.css <<CSS
           @import "tailwindcss";
           .btn { @apply inline-flex items-center justify-center rounded-lg px-5 py-2 font-semibold; }
@@ -82,7 +78,6 @@ jobs:
           .lead        { @apply text-lg text-slate-700; }
           .nav-link    { @apply hover:underline; }
           CSS
-
           cat > child/header.php <<'PHP'
           <!doctype html>
           <html <?php language_attributes(); ?>>
@@ -102,7 +97,6 @@ jobs:
             </div>
           </header>
           PHP
-
           cat > child/footer.php <<'PHP'
           <footer class="mt-16 bg-slate-900 text-slate-200">
             <div class="container px-4 py-10 grid gap-6 md:grid-cols-3">
@@ -110,17 +104,12 @@ jobs:
               <div><div class="text-lg font-semibold">Hours</div><ul class="text-sm opacity-80 mt-2 space-y-1"><li>Mon to Fri 7am to 3pm</li><li>Sat to Sun 8am to 2pm</li></ul></div>
               <div><div class="text-lg font-semibold">Find us</div><p class="text-sm opacity-80 mt-2">123 Lonsdale Street, Canberra</p></div>
             </div>
-            <div class="border-t border-slate-800">
-              <div class="container px-4 py-4 text-sm opacity-70 flex justify-between">
-                <span>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?></span><span>Powered by WordPress</span>
-              </div>
-            </div>
+            <div class="border-t border-slate-800"><div class="container px-4 py-4 text-sm opacity-70 flex justify-between"><span>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?></span><span>Powered by WordPress</span></div></div>
           </footer>
           <?php wp_footer(); ?>
           </body>
           </html>
           PHP
-
           cat > child/front-page.php <<'PHP'
           <?php get_header(); ?>
           <main id="main" class="container px-4 py-10 space-y-12">
@@ -154,8 +143,7 @@ jobs:
               </ul>
               <a class="btn-primary mt-6 inline-block" href="<?php echo esc_url(home_url('/menu')); ?>">Full menu</a>
             </section>
-            <section>
-              <h2 class="section-title">What customers say</h2>
+            <section><h2 class="section-title">What customers say</h2>
               <div class="mt-6 grid md:grid-cols-3 gap-6">
                 <blockquote class="card"><p>Best flat white in the city.</p><cite class="text-sm opacity-70">Alex</cite></blockquote>
                 <blockquote class="card"><p>Lovely staff and a proper toastie.</p><cite class="text-sm opacity-70">Renee</cite></blockquote>
@@ -165,7 +153,6 @@ jobs:
           </main>
           <?php get_footer(); ?>
           PHP
-
           cat > child/page.php <<'PHP'
           <?php get_header(); ?>
           <main id="main" class="container px-4 py-10">
@@ -178,16 +165,9 @@ jobs:
           </main>
           <?php get_footer(); ?>
           PHP
-
           curl -fsSL "$HERO" -o child/assets/img/hero.jpg || true
-
-          # absolute isolation from repo node_modules
-          export NODE_PATH=
-          export npm_config_userconfig=/dev/null
-
-          # use an isolated CLI copy that npx fetches, not your repo's
+          export NODE_PATH= npm_config_userconfig=/dev/null
           npx --yes --package tailwindcss@4 tailwindcss -i child/assets/css/tailwind.css -o child/dist/tailwind.css --minify
-
           (cd child && zip -qr "../${SLUG}-child.zip" .)
           mv "${SLUG}-child.zip" "$GITHUB_WORKSPACE/"
 
