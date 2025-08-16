@@ -1,4 +1,4 @@
-name: Provision Child Theme v2
+name: Provision Child Theme
 on:
   workflow_dispatch:
     inputs:
