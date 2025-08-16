@@ -46,7 +46,7 @@ jobs:
           SLUG:  ${{ inputs.slug }}
           NAME:  ${{ inputs.name }}
           BRAND: ${{ inputs.brand }}
-          ACCENT:${{ inputs.accent }}
+          ACCENT: ${{ inputs.accent }}
           HERO:  ${{ inputs.hero }}
         run: |
           set -eo pipefail
