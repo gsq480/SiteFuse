@@ -52,7 +52,7 @@ jobs:
           });
           PHP
           cat <<CSS > child/assets/css/tailwind.css
-          @import "npx --yes tailwindcss";
+          @import "tailwindcss";
           @theme { --color-brand: ${BRAND}; --color-accent: ${ACCENT}; --color-cream: #FFF7EC; }
           .btn { @apply inline-flex items-center justify-center rounded-lg px-5 py-2 font-semibold; }
           .container { @apply mx-auto max-w-6xl; }
