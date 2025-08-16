@@ -7,7 +7,6 @@ on:
       brand:  { description: "Brand hex colour",  required: true }
       accent: { description: "Accent hex colour", required: true }
       hero:   { description: "Hero image URL",    required: true }
-
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
@@ -16,7 +15,6 @@ jobs:
       CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
     steps:
       - uses: actions/checkout@v4
-
       - name: SSH setup
         run: |
           set -e
@@ -24,7 +22,6 @@ jobs:
           printf "%s\n" "${{ secrets.CLOUDWAYS_SSH_KEY }}" > ~/.ssh/cloudways_id
           chmod 600 ~/.ssh/cloudways_id
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
-
       - name: Generate child, build Tailwind v4, zip
         env:
           SLUG:  ${{ inputs.slug }}
@@ -34,9 +31,9 @@ jobs:
           HERO:  ${{ inputs.hero }}
         run: |
           set -euo pipefail
-          WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
+          WORKDIR="$(mktemp -d)"; cd "$WORKDIR"
           mkdir -p child/assets/css child/assets/img child/dist
-          cat > child/style.css <<CSS
+          cat <<CSS > child/style.css
           /*
           Theme Name: ${NAME} Child
           Template: sitefuse-agency
@@ -44,7 +41,7 @@ jobs:
           Version: 1.0.0
           */
           CSS
-          cat > child/functions.php <<PHP
+          cat <<PHP > child/functions.php
           <?php
           add_action("wp_enqueue_scripts", function () {
             $parent = get_template_directory_uri() . "/dist/tailwind.css";
@@ -54,7 +51,7 @@ jobs:
             wp_enqueue_style("sitefuse-child", get_stylesheet_directory_uri() . "/dist/tailwind.css", ["sitefuse-parent"], $ver);
           });
           PHP
-          cat > child/assets/css/tailwind.css <<CSS
+          cat <<CSS > child/assets/css/tailwind.css
           @import "tailwindcss";
           @theme { --color-brand: ${BRAND}; --color-accent: ${ACCENT}; --color-cream: #FFF7EC; }
           .btn { @apply inline-flex items-center justify-center rounded-lg px-5 py-2 font-semibold; }
@@ -63,16 +60,15 @@ jobs:
           .card { @apply bg-white rounded-xl shadow p-8 border border-slate-100; }
           .section-title { @apply text-2xl md:text-3xl font-extrabold; }
           CSS
-          npm_config_userconfig=/dev/null npx --yes --package tailwindcss@4 tailwindcss -i child/assets/css/tailwind.css -o child/dist/tailwind.css --minify
+          npm_config_userconfig=/dev/null npx --yes --package tailwindcss@4 tailwindcss -- -i child/assets/css/tailwind.css -o child/dist/tailwind.css --minify
           (cd child && zip -qr "../${SLUG}-child.zip" .)
           mv "${SLUG}-child.zip" "$GITHUB_WORKSPACE/"
-
       - name: Deploy to Cloudways and activate
         env:
           SLUG: ${{ inputs.slug }}
         run: |
           set -euo pipefail
-          rsync -avz -e "ssh -i ~/.ssh/cloudways_id -o StrictHostKeyChecking=yes" "${SLUG}-child.zip" "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}:/home/1504475.cloudwaysapps.com/zhudbfctnw"
+          rsync -avz -e "ssh -i ~/.ssh/cloudways_id -o StrictHostKeyChecking=yes" "${SLUG}-child.zip" "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}:/home/1504475.cloudwaysapps.com/zhudbfctnw/public_html"
           ssh -i ~/.ssh/cloudways_id "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}" bash -lc "
             set -e
             cd /home/1504475.cloudwaysapps.com/zhudbfctnw/public_html/wp-content/themes &&
