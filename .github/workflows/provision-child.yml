@@ -177,3 +177,4 @@ jobs:
           test -n "$APP_PATH" || { echo "APP_PATH secret is missing"; exit 1; }
           scp -i ~/.ssh/cloudways_id "$ZIP_NAME" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:~/"
           ssh -i ~/.ssh/cloudways_id "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "cd \"$APP_PATH\" && wp theme install ~/$ZIP_NAME --force --activate --allow-root && rm -f ~/$ZIP_NAME && wp cache flush --allow-root && wp theme status --allow-root"
+
