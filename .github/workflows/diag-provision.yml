@@ -1,0 +1,80 @@
+name: DIAG Provision
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:   { description: "Site slug",   required: true }
+      name:   { description: "Site name",   required: true }
+      brand:  { description: "Brand hex",   required: true }
+      accent: { description: "Accent hex",  required: true }
+      hero:   { description: "Hero URL",    required: true }
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
+      CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
+      CLOUDWAYS_KEY:  ${{ secrets.CLOUDWAYS_SSH_KEY }}
+      DEPLOY_PATH:    ${{ secrets.DEPLOY_PATH }}
+      APP_PATH:       ${{ secrets.APP_PATH }}
+      SLUG:   ${{ inputs.slug }}
+      NAME:   ${{ inputs.name }}
+      BRAND:  ${{ inputs.brand }}
+      ACCENT: ${{ inputs.accent }}
+      HERO:   ${{ inputs.hero }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Print inputs/secrets sanity (paths only)
+        run: |
+          echo "SLUG=$SLUG"
+          echo "DEPLOY_PATH=${DEPLOY_PATH}"
+          echo "APP_PATH=${APP_PATH}"
+          test -n "$CLOUDWAYS_HOST" && echo "CLOUDWAYS_HOST set" || (echo "CLOUDWAYS_HOST MISSING"; exit 1)
+          test -n "$CLOUDWAYS_USER" && echo "CLOUDWAYS_USER set" || (echo "CLOUDWAYS_USER MISSING"; exit 1)
+          test -n "$CLOUDWAYS_KEY"  && echo "SSH KEY set"        || (echo "SSH KEY MISSING";  exit 1)
+
+      - name: Setup SSH
+        run: |
+          set -e
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/cloudways_id
+          chmod 600 ~/.ssh/cloudways_id
+          ssh-keygen -y -f ~/.ssh/cloudways_id >/dev/null 2>&1 || { echo "SSH key unreadable"; exit 1; }
+          ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/cloudways_id -o BatchMode=yes -o ConnectTimeout=10 ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} 'echo "SSH_OK: $(whoami) on $(hostname)"; uname -a' || { echo "SSH FAILED"; exit 1; }
+
+      - name: Check remote paths and WP-CLI
+        run: |
+          set -e
+          ssh -i ~/.ssh/cloudways_id -o BatchMode=yes ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} "
+            echo 'REMOTE THEMES DIR: ' \$(dirname '${DEPLOY_PATH}') &&
+            ls -ld '${DEPLOY_PATH}' || echo 'DEPLOY_PATH missing (will be created by rsync)' &&
+            cd '${APP_PATH}' && wp --info || echo 'WP-CLI not found / APP_PATH wrong'
+          "
+
+      - name: Setup Node & Tailwind
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Tailwind availability + mini build
+        run: |
+          set -e
+          node -v && npm -v
+          npx --yes tailwindcss@4 --version
+          mkdir -p /tmp/tw && cd /tmp/tw
+          cat > in.css <<'CSS'
+          @import "tailwindcss";
+          .btn { @apply px-4 py-2 rounded bg-blue-600 text-white; }
+          CSS
+          npx --yes tailwindcss@4 -i in.css -o out.css --minify
+          wc -c out.css && head -c 200 out.css; echo
+
+      - name: Rsync DRY-RUN to remote theme folder
+        run: |
+          set -e
+          mkdir -p /tmp/child/dist && echo "/*test*/" >/tmp/child/dist/tailwind.css
+          rsync -aznv -e "ssh -i ~/.ssh/cloudways_id -o BatchMode=yes" /tmp/child/ "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}:$(dirname "${DEPLOY_PATH}")/${SLUG}-child/"
