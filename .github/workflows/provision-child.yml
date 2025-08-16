@@ -1,0 +1,21 @@
+name: Provision Child Theme
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Site slug"
+        required: true
+      name:
+        description: "Site display name"
+        required: true
+      brand:
+        description: "Brand hex colour"
+        required: true
+      accent:
+        description: "Accent hex colour"
+        required: true
+      hero:
+        description: "Hero image URL"
+        required: true
+
