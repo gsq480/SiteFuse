@@ -36,7 +36,11 @@ jobs:
           HERO:   ${{ inputs.hero }}
         run: |
           set -euo pipefail
-          WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
+          # Use a fixed workdir path that can be referenced in subsequent steps
+          WORKDIR="/tmp/child-theme-build"
+          echo "WORKDIR=$WORKDIR" >> $GITHUB_ENV
+          mkdir -p "$WORKDIR"
+          echo "Workdir: $WORKDIR"; cd "$WORKDIR"
           mkdir -p child/assets/css child/assets/img child/dist
           cat > child/style.css <<CSS
           /*
@@ -122,7 +126,8 @@ jobs:
       - name: Build CSS with Tailwind CLI
         run: |
           set -e
-          # build in the workdir created above (Actions preserves it per-step)
+          cd "$WORKDIR"
+          echo "Building CSS in: $PWD"
           tailwindcss -i child/assets/css/tailwind.css -o child/dist/tailwind.css --minify
           test -s child/dist/tailwind.css && echo "Built CSS size: $(wc -c < child/dist/tailwind.css) bytes"
       - name: Deploy child theme and activate
@@ -130,6 +135,7 @@ jobs:
           SLUG: ${{ inputs.slug }}
         run: |
           set -e
+          cd "$WORKDIR"
           THEMES_DIR="$(ssh -i ~/.ssh/cloudways_id -o BatchMode=yes ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} "dirname '${DEPLOY_PATH}'")"
           rsync -az --delete -e "ssh -i ~/.ssh/cloudways_id -o BatchMode=yes" \
             child/ "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}:${THEMES_DIR}/${SLUG}-child/"
