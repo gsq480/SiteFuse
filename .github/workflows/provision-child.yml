@@ -30,6 +30,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Clean repo node_modules
+        run: rm -rf node_modules
+
       - name: Generate child theme (Tailwind v4 zero-config, build CSS, zip)
         run: |
           set -e
