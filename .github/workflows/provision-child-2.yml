@@ -2,11 +2,11 @@ name: Provision Child Theme v2
 on:
   workflow_dispatch:
     inputs:
-      slug:   { description: "Site slug",        required: true }
-      name:   { description: "Site display name",required: true }
-      brand:  { description: "Brand hex colour", required: true }
-      accent: { description: "Accent hex colour",required: true }
-      hero:   { description: "Hero image URL",   required: true }
+      slug:   { description: "Site slug",         required: true }
+      name:   { description: "Site display name", required: true }
+      brand:  { description: "Brand hex colour",  required: true }
+      accent: { description: "Accent hex colour", required: true }
+      hero:   { description: "Hero image URL",    required: true }
 
 jobs:
   build-deploy:
@@ -19,9 +19,9 @@ jobs:
 
       - name: SSH setup
         run: |
+          set -e
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          printf "%s
-" "${{ secrets.CLOUDWAYS_SSH_KEY }}" > ~/.ssh/cloudways_id
+          printf "%s\n" "${{ secrets.CLOUDWAYS_SSH_KEY }}" > ~/.ssh/cloudways_id
           chmod 600 ~/.ssh/cloudways_id
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
 
@@ -30,7 +30,7 @@ jobs:
           SLUG:  ${{ inputs.slug }}
           NAME:  ${{ inputs.name }}
           BRAND: ${{ inputs.brand }}
-          ACCENT:${{ inputs.accent }}
+          ACCENT: ${{ inputs.accent }}
           HERO:  ${{ inputs.hero }}
         run: |
           set -euo pipefail
