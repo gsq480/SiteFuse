@@ -1,0 +1,81 @@
+name: Provision Child Theme v2
+on:
+  workflow_dispatch:
+    inputs:
+      slug:   { description: "Site slug",        required: true }
+      name:   { description: "Site display name",required: true }
+      brand:  { description: "Brand hex colour", required: true }
+      accent: { description: "Accent hex colour",required: true }
+      hero:   { description: "Hero image URL",   required: true }
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
+      CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SSH setup
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf "%s
+" "${{ secrets.CLOUDWAYS_SSH_KEY }}" > ~/.ssh/cloudways_id
+          chmod 600 ~/.ssh/cloudways_id
+          ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
+
+      - name: Generate child, build Tailwind v4, zip
+        env:
+          SLUG:  ${{ inputs.slug }}
+          NAME:  ${{ inputs.name }}
+          BRAND: ${{ inputs.brand }}
+          ACCENT:${{ inputs.accent }}
+          HERO:  ${{ inputs.hero }}
+        run: |
+          set -euo pipefail
+          WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
+          mkdir -p child/assets/css child/assets/img child/dist
+          cat > child/style.css <<CSS
+          /*
+          Theme Name: ${NAME} Child
+          Template: sitefuse-agency
+          Text Domain: ${SLUG}-child
+          Version: 1.0.0
+          */
+          CSS
+          cat > child/functions.php <<PHP
+          <?php
+          add_action("wp_enqueue_scripts", function () {
+            $parent = get_template_directory_uri() . "/dist/tailwind.css";
+            wp_enqueue_style("sitefuse-parent", $parent, [], null);
+            $child_path = get_stylesheet_directory() . "/dist/tailwind.css";
+            $ver = file_exists($child_path) ? filemtime($child_path) : null;
+            wp_enqueue_style("sitefuse-child", get_stylesheet_directory_uri() . "/dist/tailwind.css", ["sitefuse-parent"], $ver);
+          });
+          PHP
+          cat > child/assets/css/tailwind.css <<CSS
+          @import "tailwindcss";
+          @theme { --color-brand: ${BRAND}; --color-accent: ${ACCENT}; --color-cream: #FFF7EC; }
+          .btn { @apply inline-flex items-center justify-center rounded-lg px-5 py-2 font-semibold; }
+          .container { @apply mx-auto max-w-6xl; }
+          .btn-primary { @apply btn bg-[--color-brand] text-white; }
+          .card { @apply bg-white rounded-xl shadow p-8 border border-slate-100; }
+          .section-title { @apply text-2xl md:text-3xl font-extrabold; }
+          CSS
+          npm_config_userconfig=/dev/null npx --yes --package tailwindcss@4 tailwindcss -i child/assets/css/tailwind.css -o child/dist/tailwind.css --minify
+          (cd child && zip -qr "../${SLUG}-child.zip" .)
+          mv "${SLUG}-child.zip" "$GITHUB_WORKSPACE/"
+
+      - name: Deploy to Cloudways and activate
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          set -euo pipefail
+          rsync -avz -e "ssh -i ~/.ssh/cloudways_id -o StrictHostKeyChecking=yes" "${SLUG}-child.zip" "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}:/home/1504475.cloudwaysapps.com/zhudbfctnw"
+          ssh -i ~/.ssh/cloudways_id "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}" bash -lc "
+            set -e
+            cd /home/1504475.cloudwaysapps.com/zhudbfctnw/public_html/wp-content/themes &&
+            unzip -o ../../${SLUG}-child.zip -d ${SLUG}-child >/dev/null &&
+            wp theme activate ${SLUG}-child
+          "
