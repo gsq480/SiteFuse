@@ -1,1 +1,343 @@
-# Paste the workflow content here
+name: Provision Child Theme from Prompt
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Describe your website (e.g., "Modern yoga studio with earth tones")'
+        required: true
+        type: string
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: gsq480/SiteFuse
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: SSH setup
+        run: |
+          set -e
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/cloudways_id
+          chmod 600 ~/.ssh/cloudways_id
+          ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
+      
+      - name: Turn prompt into structured JSON (OpenAI)
+        id: openai
+        run: |
+          set -e
+          cat > /tmp/payload.json <<'JSON'
+          {
+            "model":"gpt-4o-mini",
+            "response_format":{"type":"json_object"},
+            "messages":[
+              {"role":"system","content":"You extract website theming fields from a customer brief and respond in strict JSON only. Fields: slug (kebab-case, <=30 chars), name (<=40 chars), brand (hex like #7A5A45), accent (hex), hero (absolute image URL), sections (array of {title, text}). If missing, make tasteful defaults."},
+              {"role":"user","content":"${{ github.event.inputs.prompt }}"}
+            ]
+          }
+          JSON
+          
+          curl -sS https://api.openai.com/v1/chat/completions \
+            -H "Authorization: Bearer $OPENAI_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload.json \
+          | jq -r '.choices[0].message.content' > brief.json
+          
+          echo "Brief JSON:"
+          cat brief.json | jq .
+          
+          # Parse with safe fallbacks
+          SLUG=$(jq -r '.slug // "new-site"' brief.json | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9-_')
+          SLUG=${SLUG%-} ; SLUG=${SLUG#-}
+          [ -n "$SLUG" ] || SLUG=new-site
+          
+          NAME=$(jq -r '.name // "New Site"' brief.json)
+          BRAND=$(jq -r '.brand // "#7A5A45"' brief.json)
+          ACCENT=$(jq -r '.accent // "#D2B48C"' brief.json)
+          HERO=$(jq -r '.hero // "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop"' brief.json)
+          
+          echo "slug=$SLUG"   >> $GITHUB_OUTPUT
+          echo "name=$NAME"   >> $GITHUB_OUTPUT
+          echo "brand=$BRAND" >> $GITHUB_OUTPUT
+          echo "accent=$ACCENT" >> $GITHUB_OUTPUT
+          echo "hero=$HERO"   >> $GITHUB_OUTPUT
+      
+      - name: Generate child theme and build CSS
+        env:
+          SLUG: ${{ steps.openai.outputs.slug }}
+          NAME: ${{ steps.openai.outputs.name }}
+          BRAND: ${{ steps.openai.outputs.brand }}
+          ACCENT: ${{ steps.openai.outputs.accent }}
+          HERO: ${{ steps.openai.outputs.hero }}
+        run: |
+          set -euo pipefail
+          WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
+          mkdir -p child/assets/css child/assets/img child/dist child/parts
+          
+          # style.css
+          cat > child/style.css <<CSS
+          /*
+          Theme Name: ${NAME} Child
+          Template: sitefuse-agency
+          Text Domain: ${SLUG}-child
+          Version: 1.0.0
+          */
+          CSS
+          
+          # functions.php
+          cat > child/functions.php <<'PHP'
+          <?php
+          add_action('wp_enqueue_scripts', function () {
+            $parent = get_template_directory_uri() . '/dist/tailwind.css';
+            wp_enqueue_style('sitefuse-parent', $parent, [], null);
+            $child_path = get_stylesheet_directory() . '/dist/tailwind.css';
+            $ver = file_exists($child_path) ? filemtime($child_path) : null;
+            wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $ver);
+          });
+          register_nav_menus(['primary' => 'Primary']);
+          PHP
+          
+          # Tailwind CSS input file
+          cat > child/assets/css/tailwind.css <<CSS
+          @tailwind base;
+          @tailwind components;
+          @tailwind utilities;
+          
+          @layer base {
+            :root {
+              --color-brand: ${BRAND};
+              --color-brand-600: ${BRAND}cc;
+              --color-accent: ${ACCENT};
+              --color-cream: #FFF7EC;
+            }
+          }
+          
+          @layer components {
+            .container { 
+              width: 100%;
+              margin-right: auto;
+              margin-left: auto;
+              padding-right: 1rem;
+              padding-left: 1rem;
+              max-width: 72rem;
+            }
+            .btn { 
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 0.5rem;
+              padding: 0.5rem 1.25rem;
+              font-weight: 600;
+            }
+            .btn-primary { 
+              background-color: var(--color-brand);
+              color: white;
+            }
+            .btn-primary:hover {
+              opacity: 0.9;
+            }
+            .card { 
+              background-color: white;
+              border-radius: 0.75rem;
+              box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+              padding: 2rem;
+              border: 1px solid rgb(241 245 249);
+            }
+            .section-title { 
+              font-size: 1.875rem;
+              font-weight: 800;
+              letter-spacing: -0.025em;
+            }
+            @media (min-width: 768px) {
+              .section-title {
+                font-size: 2.25rem;
+              }
+            }
+            .lead { 
+              font-size: 1.125rem;
+              color: rgb(71 85 105);
+            }
+            .nav-link:hover { 
+              text-decoration: underline;
+            }
+          }
+          CSS
+          
+          # Create tailwind.config.js
+          cat > child/tailwind.config.js <<JS
+          module.exports = {
+            content: ['./**/*.php'],
+            theme: {
+              extend: {
+                fontFamily: {
+                  sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Ubuntu', 'Cantarell', 'Noto Sans', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                }
+              }
+            },
+            plugins: [],
+          }
+          JS
+          
+          # header.php
+          cat > child/header.php <<'PHP'
+          <!doctype html>
+          <html <?php language_attributes(); ?>>
+          <head>
+            <meta charset="<?php bloginfo('charset'); ?>">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <?php wp_head(); ?>
+          </head>
+          <body <?php body_class('font-sans'); ?> style="background-color: var(--color-cream); color: rgb(15 23 42);">
+          <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 p-2 bg-white rounded" href="#main">Skip to content</a>
+          <header style="background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid #e5e7eb;">
+            <div class="container" style="padding-top: 1rem; padding-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+              <a style="font-size: 1.25rem; font-weight: 800; letter-spacing: -0.025em; color: var(--color-brand); text-decoration: none;" href="<?php echo esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a>
+              <nav class="hidden md:block">
+                <?php wp_nav_menu(['theme_location'=>'primary','menu_class'=>'md:flex md:items-center md:gap-6','container'=>false,'fallback_cb'=>'__return_empty_string']); ?>
+              </nav>
+            </div>
+          </header>
+          PHP
+          
+          # footer.php
+          cat > child/footer.php <<'PHP'
+          <footer style="margin-top: 4rem; background-color: rgb(15 23 42); color: rgb(226 232 240);">
+            <div class="container" style="padding-top: 2.5rem; padding-bottom: 2.5rem; display: grid; gap: 1.5rem;">
+              <div>
+                <div style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">About</div>
+                <p style="font-size: 0.875rem; opacity: 0.8;">Welcome to <?php bloginfo('name'); ?>. We're here to serve you.</p>
+              </div>
+              <div>
+                <div style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Contact</div>
+                <p style="font-size: 0.875rem; opacity: 0.8;">Get in touch with us today.</p>
+              </div>
+            </div>
+            <div style="border-top: 1px solid rgb(30 41 59);">
+              <div class="container" style="padding-top: 1rem; padding-bottom: 1rem; font-size: 0.875rem; opacity: 0.7; display: flex; justify-content: space-between;">
+                <span>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?></span>
+                <span>Powered by WordPress</span>
+              </div>
+            </div>
+          </footer>
+          <?php wp_footer(); ?>
+          </body>
+          </html>
+          PHP
+          
+          # front-page.php with OpenAI sections if present
+          echo "<?php get_header(); ?>" > child/front-page.php
+          cat >> child/front-page.php <<'PHP'
+          <main id="main" class="container" style="padding-top: 2.5rem; padding-bottom: 2.5rem;">
+            <section style="position: relative; overflow: hidden; border-radius: 1rem; background: linear-gradient(to right, var(--color-brand), var(--color-accent)); color: white; margin-bottom: 3rem;">
+              <div style="padding: 4rem 3rem;">
+                <div style="display: grid; gap: 2rem; align-items: center;">
+                  <div>
+                    <h1 class="section-title" style="color: white; margin-bottom: 1rem;"><?php bloginfo('description'); ?></h1>
+                    <p class="lead" style="color: rgba(255, 255, 255, 0.9); margin-bottom: 2rem;">Welcome to our site. Discover what we have to offer.</p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                      <a href="<?php echo esc_url(home_url('/about')); ?>" class="btn btn-primary">Learn More</a>
+                      <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn" style="border: 1px solid rgba(255, 255, 255, 0.6); color: white;">Contact Us</a>
+                    </div>
+                  </div>
+                  <div style="border-radius: 0.75rem; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+                    <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/hero.jpg' ); ?>" alt="Hero" style="width: 100%; height: 100%; object-fit: cover;">
+                  </div>
+                </div>
+              </div>
+            </section>
+          PHP
+          
+          # optional: add sections from brief.json
+          if [ -f "$GITHUB_WORKSPACE/brief.json" ]; then
+            jq -c '.sections // [] | .[]' "$GITHUB_WORKSPACE/brief.json" | while read -r row; do
+              TITLE=$(jq -r '.title // empty' <<<"$row")
+              TEXT=$(jq -r '.text // empty' <<<"$row")
+              [ -n "$TITLE" ] || continue
+              cat >> child/front-page.php <<PHP
+            <section class="card" style="margin-bottom: 2rem;">
+              <h2 class="section-title" style="margin-bottom: 1rem;">$(printf '%s' "$TITLE" | sed "s/'/\\'/g")</h2>
+              <p class="lead">$(printf '%s' "$TEXT" | sed "s/'/\\'/g")</p>
+            </section>
+          PHP
+            done
+          fi
+          
+          echo "</main>" >> child/front-page.php
+          echo "<?php get_footer(); ?>" >> child/front-page.php
+          
+          # Download hero image or create placeholder
+          if [ -n "$HERO" ] && [ "$HERO" != "null" ]; then
+            if curl -fsSL "$HERO" -o child/assets/img/hero.jpg --max-time 10; then
+              echo "Hero image downloaded successfully"
+            else
+              echo "Hero image download failed, creating placeholder"
+              # Create a simple 1x1 placeholder image using base64
+              echo "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAQICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k=" | base64 -d > child/assets/img/hero.jpg
+            fi
+          else
+            echo "No hero image URL provided, creating placeholder"
+            echo "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAQICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k=" | base64 -d > child/assets/img/hero.jpg
+          fi
+          
+          # Download and use standalone Tailwind CSS v3 CLI (no Node.js required)
+          echo "Downloading Tailwind CSS v3 standalone CLI..."
+          curl -sL https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.1/tailwindcss-linux-x64 -o tailwindcss
+          chmod +x tailwindcss
+          
+          # Build CSS using standalone CLI
+          echo "Building Tailwind CSS..."
+          cd child
+          ../tailwindcss -i ./assets/css/tailwind.css -o ./dist/tailwind.css --minify
+          
+          # Clean up config file
+          rm -f tailwind.config.js
+          
+          # Create the zip file
+          cd ..
+          zip -qr "${SLUG}-child.zip" child/
+          cp -r child "$GITHUB_WORKSPACE/${SLUG}-child"
+          
+          echo "Theme generation complete!"
+      
+      - name: Commit generated theme back to repo
+        run: |
+          set -e
+          if [ -d "${{ steps.openai.outputs.slug }}-child" ]; then
+            mkdir -p child-themes
+            mv "${{ steps.openai.outputs.slug }}-child" "child-themes/${{ steps.openai.outputs.slug }}-child"
+            git config user.name  "sitefuse-bot"
+            git config user.email "bot@users.noreply.github.com"
+            git add child-themes/${{ steps.openai.outputs.slug }}-child
+            git commit -m "chore: add generated child theme '${{ steps.openai.outputs.slug }}-child' from prompt" || echo "No changes to commit"
+            git push || echo "Push skipped"
+          else
+            echo "Theme directory not found, skipping commit"
+          fi
+      
+      - name: Deploy to Cloudways via rsync
+        if: success()
+        run: |
+          if [ -d "$GITHUB_WORKSPACE/${{ steps.openai.outputs.slug }}-child" ]; then
+            rsync -avz --delete \
+              -e "ssh -i ~/.ssh/cloudways_id -o StrictHostKeyChecking=no" \
+              "$GITHUB_WORKSPACE/${{ steps.openai.outputs.slug }}-child/" \
+              "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEPLOY_PATH/${{ steps.openai.outputs.slug }}-child/"
+            
+            echo "✅ Deployed to: $DEPLOY_PATH/${{ steps.openai.outputs.slug }}-child/"
+          else
+            echo "⚠️ Theme directory not found, skipping deployment"
+          fi
+
+env:
+  CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
+  CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
+  CLOUDWAYS_KEY: ${{ secrets.CLOUDWAYS_KEY }}
+  DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+  APP_PATH: ${{ secrets.APP_PATH }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
