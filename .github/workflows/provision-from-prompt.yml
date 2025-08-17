@@ -4,28 +4,21 @@ on:
   workflow_dispatch:
     inputs:
       prompt:
-        description: "Customer brief (free text)"
+        description: 'Describe your website (e.g., "Modern yoga studio with earth tones")'
         required: true
         type: string
-
-permissions:
-  contents: write   # allow committing generated child theme back to repo
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-    env:
-      CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
-      CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
-      CLOUDWAYS_KEY:  ${{ secrets.CLOUDWAYS_SSH_KEY }}
-      DEPLOY_PATH:    ${{ secrets.DEPLOY_PATH }}   # e.g. /home/.../public_html/wp-content/themes/sitefuse-agency
-      APP_PATH:       ${{ secrets.APP_PATH }}      # e.g. /home/.../public_html
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+        with:
+          repository: gsq480/SiteFuse
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: SSH setup
         run: |
           set -e
@@ -34,9 +27,9 @@ jobs:
           printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/cloudways_id
           chmod 600 ~/.ssh/cloudways_id
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
-
+      
       - name: Turn prompt into structured JSON (OpenAI)
-        id: brief
+        id: openai
         run: |
           set -e
           cat > /tmp/payload.json <<'JSON'
@@ -45,48 +38,53 @@ jobs:
             "response_format":{"type":"json_object"},
             "messages":[
               {"role":"system","content":"You extract website theming fields from a customer brief and respond in strict JSON only. Fields: slug (kebab-case, <=30 chars), name (<=40 chars), brand (hex like #7A5A45), accent (hex), hero (absolute image URL), sections (array of {title, text}). If missing, make tasteful defaults."},
-              {"role":"user","content":${{ toJson(inputs.prompt) }}}
+              {"role":"user","content":"${{ github.event.inputs.prompt }}"}
             ]
           }
           JSON
-
+          
           curl -sS https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
             -d @/tmp/payload.json \
           | jq -r '.choices[0].message.content' > brief.json
-
+          
           echo "Brief JSON:"
           cat brief.json | jq .
-
+          
           # Parse with safe fallbacks
           SLUG=$(jq -r '.slug // "new-site"' brief.json | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9-_')
           SLUG=${SLUG%-} ; SLUG=${SLUG#-}
           [ -n "$SLUG" ] || SLUG=new-site
-
+          
           NAME=$(jq -r '.name // "New Site"' brief.json)
           BRAND=$(jq -r '.brand // "#7A5A45"' brief.json)
           ACCENT=$(jq -r '.accent // "#D2B48C"' brief.json)
           HERO=$(jq -r '.hero // "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop"' brief.json)
-
+          
           echo "slug=$SLUG"   >> $GITHUB_OUTPUT
           echo "name=$NAME"   >> $GITHUB_OUTPUT
           echo "brand=$BRAND" >> $GITHUB_OUTPUT
           echo "accent=$ACCENT" >> $GITHUB_OUTPUT
           echo "hero=$HERO"   >> $GITHUB_OUTPUT
-
-      - name: Generate child theme, build Tailwind v4, zip
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Generate child theme, build Tailwind, zip
         env:
-          SLUG:  ${{ steps.brief.outputs.slug }}
-          NAME:  ${{ steps.brief.outputs.name }}
-          BRAND: ${{ steps.brief.outputs.brand }}
-          ACCENT: ${{ steps.brief.outputs.accent }}
-          HERO:  ${{ steps.brief.outputs.hero }}
+          SLUG: ${{ steps.openai.outputs.slug }}
+          NAME: ${{ steps.openai.outputs.name }}
+          BRAND: ${{ steps.openai.outputs.brand }}
+          ACCENT: ${{ steps.openai.outputs.accent }}
+          HERO: ${{ steps.openai.outputs.hero }}
         run: |
           set -euo pipefail
           WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
           mkdir -p child/assets/css child/assets/img child/dist child/parts
-
+          
           # style.css
           cat > child/style.css <<CSS
           /*
@@ -96,7 +94,7 @@ jobs:
           Version: 1.0.0
           */
           CSS
-
+          
           # functions.php
           cat > child/functions.php <<'PHP'
           <?php
@@ -109,26 +107,48 @@ jobs:
           });
           register_nav_menus(['primary' => 'Primary']);
           PHP
-
-          # Tailwind tokens + utilities
+          
+          # Tailwind tokens + utilities (v3 compatible)
           cat > child/assets/css/tailwind.css <<CSS
-          @import "tailwindcss";
-          @theme {
-            --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
-            --color-brand: ${BRAND};
-            --color-brand-600: color-mix(in oklab, ${BRAND} 85%, black);
-            --color-accent: ${ACCENT};
-            --color-cream: #FFF7EC;
+          @tailwind base;
+          @tailwind components;
+          @tailwind utilities;
+          
+          @layer base {
+            :root {
+              --color-brand: ${BRAND};
+              --color-brand-600: ${BRAND}cc;
+              --color-accent: ${ACCENT};
+              --color-cream: #FFF7EC;
+            }
           }
-          .container { @apply mx-auto max-w-6xl; }
-          .btn { @apply inline-flex items-center justify-center rounded-lg px-5 py-2 font-semibold; }
-          .btn-primary { @apply btn bg-[--color-brand] text-white hover:bg-[--color-brand-600]; }
-          .card { @apply bg-white rounded-xl shadow p-8 border border-slate-100; }
-          .section-title { @apply text-2xl md:text-3xl font-extrabold tracking-tight; }
-          .lead { @apply text-lg text-slate-700; }
-          .nav-link { @apply hover:underline; }
+          
+          @layer components {
+            .container { @apply mx-auto max-w-6xl; }
+            .btn { @apply inline-flex items-center justify-center rounded-lg px-5 py-2 font-semibold; }
+            .btn-primary { @apply btn bg-[--color-brand] text-white hover:opacity-90; }
+            .card { @apply bg-white rounded-xl shadow p-8 border border-slate-100; }
+            .section-title { @apply text-2xl md:text-3xl font-extrabold tracking-tight; }
+            .lead { @apply text-lg text-slate-700; }
+            .nav-link { @apply hover:underline; }
+          }
           CSS
-
+          
+          # Create tailwind.config.js
+          cat > child/tailwind.config.js <<JS
+          module.exports = {
+            content: ['./**/*.php'],
+            theme: {
+              extend: {
+                fontFamily: {
+                  sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Ubuntu', 'Cantarell', 'Noto Sans', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                }
+              }
+            },
+            plugins: [],
+          }
+          JS
+          
           # header.php
           cat > child/header.php <<'PHP'
           <!doctype html>
@@ -149,7 +169,7 @@ jobs:
             </div>
           </header>
           PHP
-
+          
           # footer.php
           cat > child/footer.php <<'PHP'
           <footer class="mt-16 bg-slate-900 text-slate-200">
@@ -164,7 +184,7 @@ jobs:
           </body>
           </html>
           PHP
-
+          
           # front-page.php with OpenAI sections if present
           echo "<?php get_header(); ?>" > child/front-page.php
           cat >> child/front-page.php <<'PHP'
@@ -185,7 +205,7 @@ jobs:
               </div>
             </section>
           PHP
-
+          
           # optional: add sections from brief.json
           jq -c '.sections // [] | .[]' "$GITHUB_WORKSPACE/brief.json" | while read -r row; do
             TITLE=$(jq -r '.title // empty' <<<"$row")
@@ -198,48 +218,61 @@ jobs:
             </section>
           PHP
           done
-
+          
           echo "<?php get_footer(); ?>" >> child/front-page.php
-
-          # assets
-          curl -fsSL "$HERO" -o child/assets/img/hero.jpg || true
-
-          # Tailwind build (isolated)
-          npm_config_userconfig=/dev/null npx --yes tailwindcss@4 \
-            -i child/assets/css/tailwind.css \
-            -o child/dist/tailwind.css \
-            --minify
-
+          
+          # assets - download hero image or use placeholder
+          if curl -fsSL "$HERO" -o child/assets/img/hero.jpg; then
+            echo "Hero image downloaded successfully"
+          else
+            echo "Hero image download failed, creating placeholder"
+            # Create a simple placeholder SVG
+            cat > child/assets/img/hero.svg <<'SVG'
+            <svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+              <rect width="1200" height="800" fill="#E5E7EB"/>
+              <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#9CA3AF" font-family="sans-serif" font-size="48">Hero Image</text>
+            </svg>
+          SVG
+          fi
+          
+          # Install Tailwind CSS v3 and build
+          cd child
+          npm init -y
+          npm install -D tailwindcss@latest
+          npx tailwindcss -i ./assets/css/tailwind.css -o ./dist/tailwind.css --minify
+          
+          # Remove node_modules and package files before zipping
+          rm -rf node_modules package*.json
+          
           # zip and also keep folder (for rsync)
-          (cd child && zip -qr "../${SLUG}-child.zip" .)
+          cd ..
+          zip -qr "${SLUG}-child.zip" child/
           cp -r child "$GITHUB_WORKSPACE/${SLUG}-child"
-
-      - name: Deploy to Cloudways and activate
-        env:
-          SLUG: ${{ steps.brief.outputs.slug }}
-        run: |
-          set -e
-          test -n "$APP_PATH" || { echo "APP_PATH secret is required"; exit 1; }
-
-          THEMES_DIR="$(ssh -i ~/.ssh/cloudways_id -o BatchMode=yes ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} "dirname '${DEPLOY_PATH}'")"
-
-          rsync -az --delete -e "ssh -i ~/.ssh/cloudways_id -o BatchMode=yes" \
-            "${SLUG}-child/" "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}:${THEMES_DIR}/${SLUG}-child/"
-
-          ssh -i ~/.ssh/cloudways_id -o BatchMode=yes ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} "
-            cd '${APP_PATH}' &&
-            wp theme enable '${SLUG}-child' --quiet || true &&
-            wp theme activate '${SLUG}-child' --quiet
-          "
-
+      
       - name: Commit generated theme back to repo (optional)
-        if: always()
         run: |
           set -e
           mkdir -p child-themes
-          mv "${{ steps.brief.outputs.slug }}-child" "child-themes/${{ steps.brief.outputs.slug }}-child"
+          mv "${{ steps.openai.outputs.slug }}-child" "child-themes/${{ steps.openai.outputs.slug }}-child"
           git config user.name  "sitefuse-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add child-themes/${{ steps.brief.outputs.slug }}-child
-          git commit -m "chore: add generated child theme '${{ steps.brief.outputs.slug }}-child' from prompt" || echo "No changes to commit"
+          git add child-themes/${{ steps.openai.outputs.slug }}-child
+          git commit -m "chore: add generated child theme '${{ steps.openai.outputs.slug }}-child' from prompt" || echo "No changes to commit"
           git push || echo "Push skipped"
+      
+      - name: Deploy to Cloudways via rsync
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/cloudways_id -o StrictHostKeyChecking=no" \
+            "$GITHUB_WORKSPACE/${{ steps.openai.outputs.slug }}-child/" \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEPLOY_PATH/${{ steps.openai.outputs.slug }}-child/"
+          
+          echo "✅ Deployed to: $DEPLOY_PATH/${{ steps.openai.outputs.slug }}-child/"
+
+env:
+  CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
+  CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
+  CLOUDWAYS_KEY: ${{ secrets.CLOUDWAYS_KEY }}
+  DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+  APP_PATH: ${{ secrets.APP_PATH }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
