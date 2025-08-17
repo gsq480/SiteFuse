@@ -80,7 +80,7 @@ jobs:
           SLUG:  ${{ steps.brief.outputs.slug }}
           NAME:  ${{ steps.brief.outputs.name }}
           BRAND: ${{ steps.brief.outputs.brand }}
-          ACCENT:${{ steps.brief.outputs.accent }}
+          ACCENT: ${{ steps.brief.outputs.accent }}
           HERO:  ${{ steps.brief.outputs.hero }}
         run: |
           set -euo pipefail
