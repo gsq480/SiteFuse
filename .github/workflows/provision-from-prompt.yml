@@ -68,12 +68,7 @@ jobs:
           echo "accent=$ACCENT" >> $GITHUB_OUTPUT
           echo "hero=$HERO"   >> $GITHUB_OUTPUT
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      
-      - name: Generate child theme, build Tailwind, zip
+      - name: Generate child theme and build CSS
         env:
           SLUG: ${{ steps.openai.outputs.slug }}
           NAME: ${{ steps.openai.outputs.name }}
@@ -108,7 +103,7 @@ jobs:
           register_nav_menus(['primary' => 'Primary']);
           PHP
           
-          # Tailwind tokens + utilities (v3 compatible)
+          # Tailwind CSS input file
           cat > child/assets/css/tailwind.css <<CSS
           @tailwind base;
           @tailwind components;
@@ -193,10 +188,10 @@ jobs:
               <div class="px-6 py-16 md:px-12 md:py-24 grid md:grid-cols-2 gap-8 items-center">
                 <div>
                   <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight"><?php bloginfo('description'); ?></h1>
-                  <p class="mt-4 lead text-white/90">Proudly Canberra — great coffee, daily bakes & friendly faces.</p>
+                  <p class="mt-4 lead text-white/90">Welcome to our site. Discover what we have to offer.</p>
                   <div class="mt-8 flex gap-4">
-                    <a href="<?php echo esc_url(home_url('/menu')); ?>" class="btn-primary">View menu</a>
-                    <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn ring-1 ring-inset ring-white/60 text-white">Book a table</a>
+                    <a href="<?php echo esc_url(home_url('/about')); ?>" class="btn-primary">Learn More</a>
+                    <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn ring-1 ring-inset ring-white/60 text-white">Contact Us</a>
                   </div>
                 </div>
                 <div class="rounded-xl overflow-hidden shadow">
@@ -207,67 +202,84 @@ jobs:
           PHP
           
           # optional: add sections from brief.json
-          jq -c '.sections // [] | .[]' "$GITHUB_WORKSPACE/brief.json" | while read -r row; do
-            TITLE=$(jq -r '.title // empty' <<<"$row")
-            TEXT=$(jq -r '.text // empty' <<<"$row")
-            [ -n "$TITLE" ] || continue
-            cat >> child/front-page.php <<PHP
+          if [ -f "$GITHUB_WORKSPACE/brief.json" ]; then
+            jq -c '.sections // [] | .[]' "$GITHUB_WORKSPACE/brief.json" | while read -r row; do
+              TITLE=$(jq -r '.title // empty' <<<"$row")
+              TEXT=$(jq -r '.text // empty' <<<"$row")
+              [ -n "$TITLE" ] || continue
+              cat >> child/front-page.php <<PHP
             <section class="rounded-2xl bg-white p-8 shadow">
               <h2 class="section-title">$(printf '%s' "$TITLE" | sed "s/'/\\'/g")</h2>
               <p class="mt-4 lead">$(printf '%s' "$TEXT" | sed "s/'/\\'/g")</p>
             </section>
           PHP
-          done
+            done
+          fi
           
           echo "<?php get_footer(); ?>" >> child/front-page.php
           
-          # assets - download hero image or use placeholder
-          if curl -fsSL "$HERO" -o child/assets/img/hero.jpg; then
-            echo "Hero image downloaded successfully"
+          # Download hero image or create placeholder
+          if [ -n "$HERO" ] && [ "$HERO" != "null" ]; then
+            if curl -fsSL "$HERO" -o child/assets/img/hero.jpg --max-time 10; then
+              echo "Hero image downloaded successfully"
+            else
+              echo "Hero image download failed, creating placeholder"
+              # Create a simple 1x1 placeholder image using base64
+              echo "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAQICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k=" | base64 -d > child/assets/img/hero.jpg
+            fi
           else
-            echo "Hero image download failed, creating placeholder"
-            # Create a simple placeholder SVG
-            cat > child/assets/img/hero.svg <<'SVG'
-            <svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
-              <rect width="1200" height="800" fill="#E5E7EB"/>
-              <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#9CA3AF" font-family="sans-serif" font-size="48">Hero Image</text>
-            </svg>
-          SVG
+            echo "No hero image URL provided, creating placeholder"
+            echo "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAQICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAA8A/9k=" | base64 -d > child/assets/img/hero.jpg
           fi
           
-          # Install Tailwind CSS v3 and build
+          # Download and use standalone Tailwind CSS CLI (no Node.js required)
+          echo "Downloading Tailwind CSS standalone CLI..."
+          curl -sL https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 -o tailwindcss
+          chmod +x tailwindcss
+          
+          # Build CSS using standalone CLI
+          echo "Building Tailwind CSS..."
           cd child
-          npm init -y
-          npm install -D tailwindcss@latest
-          npx tailwindcss -i ./assets/css/tailwind.css -o ./dist/tailwind.css --minify
+          ../tailwindcss -i ./assets/css/tailwind.css -o ./dist/tailwind.css --minify
           
-          # Remove node_modules and package files before zipping
-          rm -rf node_modules package*.json
+          # Clean up config file
+          rm -f tailwind.config.js
           
-          # zip and also keep folder (for rsync)
+          # Create the zip file
           cd ..
           zip -qr "${SLUG}-child.zip" child/
           cp -r child "$GITHUB_WORKSPACE/${SLUG}-child"
+          
+          echo "Theme generation complete!"
       
-      - name: Commit generated theme back to repo (optional)
+      - name: Commit generated theme back to repo
         run: |
           set -e
-          mkdir -p child-themes
-          mv "${{ steps.openai.outputs.slug }}-child" "child-themes/${{ steps.openai.outputs.slug }}-child"
-          git config user.name  "sitefuse-bot"
-          git config user.email "bot@users.noreply.github.com"
-          git add child-themes/${{ steps.openai.outputs.slug }}-child
-          git commit -m "chore: add generated child theme '${{ steps.openai.outputs.slug }}-child' from prompt" || echo "No changes to commit"
-          git push || echo "Push skipped"
+          if [ -d "${{ steps.openai.outputs.slug }}-child" ]; then
+            mkdir -p child-themes
+            mv "${{ steps.openai.outputs.slug }}-child" "child-themes/${{ steps.openai.outputs.slug }}-child"
+            git config user.name  "sitefuse-bot"
+            git config user.email "bot@users.noreply.github.com"
+            git add child-themes/${{ steps.openai.outputs.slug }}-child
+            git commit -m "chore: add generated child theme '${{ steps.openai.outputs.slug }}-child' from prompt" || echo "No changes to commit"
+            git push || echo "Push skipped"
+          else
+            echo "Theme directory not found, skipping commit"
+          fi
       
       - name: Deploy to Cloudways via rsync
+        if: success()
         run: |
-          rsync -avz --delete \
-            -e "ssh -i ~/.ssh/cloudways_id -o StrictHostKeyChecking=no" \
-            "$GITHUB_WORKSPACE/${{ steps.openai.outputs.slug }}-child/" \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEPLOY_PATH/${{ steps.openai.outputs.slug }}-child/"
-          
-          echo "✅ Deployed to: $DEPLOY_PATH/${{ steps.openai.outputs.slug }}-child/"
+          if [ -d "$GITHUB_WORKSPACE/${{ steps.openai.outputs.slug }}-child" ]; then
+            rsync -avz --delete \
+              -e "ssh -i ~/.ssh/cloudways_id -o StrictHostKeyChecking=no" \
+              "$GITHUB_WORKSPACE/${{ steps.openai.outputs.slug }}-child/" \
+              "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEPLOY_PATH/${{ steps.openai.outputs.slug }}-child/"
+            
+            echo "✅ Deployed to: $DEPLOY_PATH/${{ steps.openai.outputs.slug }}-child/"
+          else
+            echo "⚠️ Theme directory not found, skipping deployment"
+          fi
 
 env:
   CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
