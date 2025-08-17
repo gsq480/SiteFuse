@@ -8,25 +8,238 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write   # allow committing generated child theme back to repo
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     env:
       CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
       CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
-      CLOUDWAYS_KEY: ${{ secrets.CLOUDWAYS_SSH_KEY }}
-      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-      APP_PATH: ${{ secrets.APP_PATH }}
+      CLOUDWAYS_KEY:  ${{ secrets.CLOUDWAYS_SSH_KEY }}
+      DEPLOY_PATH:    ${{ secrets.DEPLOY_PATH }}   # e.g. /home/.../public_html/wp-content/themes/sitefuse-agency
+      APP_PATH:       ${{ secrets.APP_PATH }}      # e.g. /home/.../public_html
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Test OpenAI connection
+      - name: SSH setup
         run: |
-          echo "Testing with prompt: ${{ inputs.prompt }}"
-          echo '{"model": "gpt-4o-mini", "messages": [{"role": "user", "content": "Hello"}]}' | \
-          curl -s https://api.openai.com/v1/chat/completions \
+          set -e
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/cloudways_id
+          chmod 600 ~/.ssh/cloudways_id
+          ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
+
+      - name: Turn prompt into structured JSON (OpenAI)
+        id: brief
+        run: |
+          set -e
+          cat > /tmp/payload.json <<'JSON'
+          {
+            "model":"gpt-4o-mini",
+            "response_format":{"type":"json_object"},
+            "messages":[
+              {"role":"system","content":"You extract website theming fields from a customer brief and respond in strict JSON only. Fields: slug (kebab-case, <=30 chars), name (<=40 chars), brand (hex like #7A5A45), accent (hex), hero (absolute image URL), sections (array of {title, text}). If missing, make tasteful defaults."},
+              {"role":"user","content":${{ toJson(inputs.prompt) }}}
+            ]
+          }
+          JSON
+
+          curl -sS https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
-            -d @- | jq '.'
+            -d @/tmp/payload.json \
+          | jq -r '.choices[0].message.content' > brief.json
+
+          echo "Brief JSON:"
+          cat brief.json | jq .
+
+          # Parse with safe fallbacks
+          SLUG=$(jq -r '.slug // "new-site"' brief.json | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9-_')
+          SLUG=${SLUG%-} ; SLUG=${SLUG#-}
+          [ -n "$SLUG" ] || SLUG=new-site
+
+          NAME=$(jq -r '.name // "New Site"' brief.json)
+          BRAND=$(jq -r '.brand // "#7A5A45"' brief.json)
+          ACCENT=$(jq -r '.accent // "#D2B48C"' brief.json)
+          HERO=$(jq -r '.hero // "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop"' brief.json)
+
+          echo "slug=$SLUG"   >> $GITHUB_OUTPUT
+          echo "name=$NAME"   >> $GITHUB_OUTPUT
+          echo "brand=$BRAND" >> $GITHUB_OUTPUT
+          echo "accent=$ACCENT" >> $GITHUB_OUTPUT
+          echo "hero=$HERO"   >> $GITHUB_OUTPUT
+
+      - name: Generate child theme, build Tailwind v4, zip
+        env:
+          SLUG:  ${{ steps.brief.outputs.slug }}
+          NAME:  ${{ steps.brief.outputs.name }}
+          BRAND: ${{ steps.brief.outputs.brand }}
+          ACCENT:${{ steps.brief.outputs.accent }}
+          HERO:  ${{ steps.brief.outputs.hero }}
+        run: |
+          set -euo pipefail
+          WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
+          mkdir -p child/assets/css child/assets/img child/dist child/parts
+
+          # style.css
+          cat > child/style.css <<CSS
+          /*
+          Theme Name: ${NAME} Child
+          Template: sitefuse-agency
+          Text Domain: ${SLUG}-child
+          Version: 1.0.0
+          */
+          CSS
+
+          # functions.php
+          cat > child/functions.php <<'PHP'
+          <?php
+          add_action('wp_enqueue_scripts', function () {
+            $parent = get_template_directory_uri() . '/dist/tailwind.css';
+            wp_enqueue_style('sitefuse-parent', $parent, [], null);
+            $child_path = get_stylesheet_directory() . '/dist/tailwind.css';
+            $ver = file_exists($child_path) ? filemtime($child_path) : null;
+            wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $ver);
+          });
+          register_nav_menus(['primary' => 'Primary']);
+          PHP
+
+          # Tailwind tokens + utilities
+          cat > child/assets/css/tailwind.css <<CSS
+          @import "tailwindcss";
+          @theme {
+            --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
+            --color-brand: ${BRAND};
+            --color-brand-600: color-mix(in oklab, ${BRAND} 85%, black);
+            --color-accent: ${ACCENT};
+            --color-cream: #FFF7EC;
+          }
+          .container { @apply mx-auto max-w-6xl; }
+          .btn { @apply inline-flex items-center justify-center rounded-lg px-5 py-2 font-semibold; }
+          .btn-primary { @apply btn bg-[--color-brand] text-white hover:bg-[--color-brand-600]; }
+          .card { @apply bg-white rounded-xl shadow p-8 border border-slate-100; }
+          .section-title { @apply text-2xl md:text-3xl font-extrabold tracking-tight; }
+          .lead { @apply text-lg text-slate-700; }
+          .nav-link { @apply hover:underline; }
+          CSS
+
+          # header.php
+          cat > child/header.php <<'PHP'
+          <!doctype html>
+          <html <?php language_attributes(); ?>>
+          <head>
+            <meta charset="<?php bloginfo('charset'); ?>">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <?php wp_head(); ?>
+          </head>
+          <body <?php body_class('bg-[--color-cream] text-slate-900 font-sans'); ?>>
+          <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 p-2 bg-white rounded" href="#main">Skip to content</a>
+          <header class="bg-white/90 backdrop-blur border-b">
+            <div class="container px-4 py-4 flex items-center justify-between">
+              <a class="text-xl font-extrabold tracking-tight text-[--color-brand]" href="<?php echo esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a>
+              <nav class="hidden md:block">
+                <?php wp_nav_menu(['theme_location'=>'primary','menu_class'=>'md:flex md:items-center md:gap-6','container'=>false,'fallback_cb'=>'__return_empty_string']); ?>
+              </nav>
+            </div>
+          </header>
+          PHP
+
+          # footer.php
+          cat > child/footer.php <<'PHP'
+          <footer class="mt-16 bg-slate-900 text-slate-200">
+            <div class="container px-4 py-10 grid gap-6 md:grid-cols-3">
+              <div><div class="text-lg font-semibold">About</div><p class="text-sm opacity-80 mt-2">Neighbourhood coffee, fresh bakes, warm service.</p></div>
+              <div><div class="text-lg font-semibold">Hours</div><ul class="text-sm opacity-80 mt-2 space-y-1"><li>Mon–Fri 7–3</li><li>Sat–Sun 8–2</li></ul></div>
+              <div><div class="text-lg font-semibold">Find us</div><p class="text-sm opacity-80 mt-2">123 Lonsdale St, Canberra</p></div>
+            </div>
+            <div class="border-t border-slate-800"><div class="container px-4 py-4 text-sm opacity-70 flex justify-between"><span>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?></span><span>Powered by WordPress</span></div></div>
+          </footer>
+          <?php wp_footer(); ?>
+          </body>
+          </html>
+          PHP
+
+          # front-page.php with OpenAI sections if present
+          echo "<?php get_header(); ?>" > child/front-page.php
+          cat >> child/front-page.php <<'PHP'
+          <main id="main" class="container px-4 py-10 space-y-12">
+            <section class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[--color-brand] to-[--color-accent] text-white">
+              <div class="px-6 py-16 md:px-12 md:py-24 grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight"><?php bloginfo('description'); ?></h1>
+                  <p class="mt-4 lead text-white/90">Proudly Canberra — great coffee, daily bakes & friendly faces.</p>
+                  <div class="mt-8 flex gap-4">
+                    <a href="<?php echo esc_url(home_url('/menu')); ?>" class="btn-primary">View menu</a>
+                    <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn ring-1 ring-inset ring-white/60 text-white">Book a table</a>
+                  </div>
+                </div>
+                <div class="rounded-xl overflow-hidden shadow">
+                  <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/hero.jpg' ); ?>" alt="Hero" class="w-full h-full object-cover">
+                </div>
+              </div>
+            </section>
+          PHP
+
+          # optional: add sections from brief.json
+          jq -c '.sections // [] | .[]' "$GITHUB_WORKSPACE/brief.json" | while read -r row; do
+            TITLE=$(jq -r '.title // empty' <<<"$row")
+            TEXT=$(jq -r '.text // empty' <<<"$row")
+            [ -n "$TITLE" ] || continue
+            cat >> child/front-page.php <<PHP
+            <section class="rounded-2xl bg-white p-8 shadow">
+              <h2 class="section-title">$(printf '%s' "$TITLE" | sed "s/'/\\'/g")</h2>
+              <p class="mt-4 lead">$(printf '%s' "$TEXT" | sed "s/'/\\'/g")</p>
+            </section>
+          PHP
+          done
+
+          echo "<?php get_footer(); ?>" >> child/front-page.php
+
+          # assets
+          curl -fsSL "$HERO" -o child/assets/img/hero.jpg || true
+
+          # Tailwind build (isolated)
+          npm_config_userconfig=/dev/null npx --yes tailwindcss@4 \
+            -i child/assets/css/tailwind.css \
+            -o child/dist/tailwind.css \
+            --minify
+
+          # zip and also keep folder (for rsync)
+          (cd child && zip -qr "../${SLUG}-child.zip" .)
+          cp -r child "$GITHUB_WORKSPACE/${SLUG}-child"
+
+      - name: Deploy to Cloudways and activate
+        env:
+          SLUG: ${{ steps.brief.outputs.slug }}
+        run: |
+          set -e
+          test -n "$APP_PATH" || { echo "APP_PATH secret is required"; exit 1; }
+
+          THEMES_DIR="$(ssh -i ~/.ssh/cloudways_id -o BatchMode=yes ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} "dirname '${DEPLOY_PATH}'")"
+
+          rsync -az --delete -e "ssh -i ~/.ssh/cloudways_id -o BatchMode=yes" \
+            "${SLUG}-child/" "${CLOUDWAYS_USER}@${CLOUDWAYS_HOST}:${THEMES_DIR}/${SLUG}-child/"
+
+          ssh -i ~/.ssh/cloudways_id -o BatchMode=yes ${CLOUDWAYS_USER}@${CLOUDWAYS_HOST} "
+            cd '${APP_PATH}' &&
+            wp theme enable '${SLUG}-child' --quiet || true &&
+            wp theme activate '${SLUG}-child' --quiet
+          "
+
+      - name: Commit generated theme back to repo (optional)
+        if: always()
+        run: |
+          set -e
+          mkdir -p child-themes
+          mv "${{ steps.brief.outputs.slug }}-child" "child-themes/${{ steps.brief.outputs.slug }}-child"
+          git config user.name  "sitefuse-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add child-themes/${{ steps.brief.outputs.slug }}-child
+          git commit -m "chore: add generated child theme '${{ steps.brief.outputs.slug }}-child' from prompt" || echo "No changes to commit"
+          git push || echo "Push skipped"
