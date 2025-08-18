@@ -1,24 +1,28 @@
 {
-  "slug": "canberra-vikings-rugby",
-  "name": "Canberra Vikings Rugby Union",
-  "tagline": "Unleashing the Spirit of Rugby in Canberra",
-  "industry": "Sports",
-  "brand": "#0038A8",
-  "accent": "#FFCC00",
-  "hero": "https://images.unsplash.com/photo-1528940262278-37df9a1e3f20",
-  "description": "The Canberra Vikings Rugby Union team is dedicated to promoting the sport of rugby in the Canberra region. With a commitment to excellence on and off the field, we provide coaching for all ages and skill levels while fostering a strong sense of community and sportsmanship.",
+  "slug": "canberra-cycling-club",
+  "name": "Canberra Cycling Club",
+  "tagline": "Ride with Passion, Compete with Pride",
+  "industry": "Sports & Recreation",
+  "brand": "#ff6700",
+  "accent": "#000000",
+  "hero": "https://images.unsplash.com/photo-1553647920-6c4de0be34b2",
+  "description": "The Canberra Cycling Club is dedicated to promoting cycling in the Canberra region through social riding and competitive events. With a variety of programs and support for cyclists of all levels, we aim to foster a vibrant and inclusive cycling community.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Canberra Vikings Rugby Union",
-          "paragraph": "Join us in our quest for victory and glory, as we train hard and compete with passion. Our team is built on values of teamwork, respect, and integrity, ensuring every player feels at home."
+          "heading": "Welcome to Canberra Cycling Club",
+          "paragraphs": [
+            "Join us in exploring the beauty of Canberra through cycling. Whether you're a beginner or an experienced cyclist, we have something for everyone!"
+          ]
         },
         {
-          "heading": "Latest News",
-          "paragraph": "Stay updated with our latest fixtures, results, and announcements. Follow us on social media for real-time updates and engage with our community."
+          "heading": "Join Our Rides",
+          "paragraphs": [
+            "Participate in our weekly rides and events designed for cyclists of all levels. Experience camaraderie and the joy of cycling in stunning Canberra scenery."
+          ]
         }
       ]
     },
@@ -28,57 +32,53 @@
       "content": [
         {
           "heading": "Our Mission",
-          "paragraph": "To foster a love for rugby in Canberra by providing quality coaching and competitive opportunities for all players."
+          "paragraphs": [
+            "Our mission is to encourage and support cycling in Canberra, providing opportunities for personal growth and competitive success.",
+            "We celebrate the spirit of cycling through community events and by fostering an inclusive environment for all cyclists."
+          ]
         },
         {
-          "heading": "Our Values",
-          "paragraph": "Teamwork, Respect, Integrity, Passion – these are the values that guide the Canberra Vikings Rugby Union team."
-        },
-        {
-          "heading": "History",
-          "paragraph": "Founded in 2012, the Canberra Vikings Rugby Union team has quickly become known for its dedication to developing talent and building a community around rugby in the region."
+          "heading": "Our History",
+          "paragraphs": [
+            "Established in 1994, Canberra Cycling Club has grown into a thriving community of cyclists. We aim to bring people together through cycling and enhance the local cycling culture."
+          ]
         }
       ]
     },
     {
-      "slug": "fixtures",
-      "title": "Fixtures & Results",
-      "content": [
-        {
-          "heading": "Upcoming Matches",
-          "paragraph": "Check out our upcoming matches and support the team as we strive for victory."
-        },
-        {
-          "heading": "Results Archive",
-          "paragraph": "Look back on our past matches and compare scores, player stats, and more."
-        }
-      ]
-    },
-    {
-      "slug": "team",
-      "title": "Meet the Team",
-      "content": [
-        {
-          "heading": "Players",
-          "paragraph": "Meet our talented players who embody the spirit of the Canberra Vikings. Each player brings unique skills, passion, and dedication to the team."
-        },
-        {
-          "heading": "Coaches",
-          "paragraph": "Our experienced coaching staff guides and mentors our players, ensuring they develop both as athletes and individuals."
-        }
-      ]
-    },
-    {
-      "slug": "join-us",
-      "title": "Join the Vikings",
+      "slug": "membership",
+      "title": "Membership",
       "content": [
         {
           "heading": "Become a Member",
-          "paragraph": "We welcome players of all ages and skill levels. Sign up to join our club and become part of the Canberra Vikings family."
+          "paragraphs": [
+            "Join us and gain access to exclusive benefits, including discounts on events, merchandise, and more!",
+            "Membership options include individual, family, and junior categories to cater to all cycling enthusiasts."
+          ]
         },
         {
-          "heading": "Volunteer Opportunities",
-          "paragraph": "Interested in supporting the team? We are always looking for volunteers to help with game day operations and more."
+          "heading": "Sign Up Today!",
+          "paragraphs": [
+            "Ready to ride? Complete our easy online registration to become a part of our vibrant community today!"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "events",
+      "title": "Events",
+      "content": [
+        {
+          "heading": "Upcoming Events",
+          "paragraphs": [
+            "Stay tuned for our exciting lineup of events, including races, charity rides, and community gatherings. There's always something happening at Canberra Cycling Club!"
+          ]
+        },
+        {
+          "heading": "Event Calendar",
+          "paragraphs": [
+            "Check out our calendar for dates, locations, and details on all upcoming events. Join us and meet fellow cycling enthusiasts!"
+          ]
         }
       ]
     },
@@ -87,57 +87,88 @@
       "title": "Contact Us",
       "content": [
         {
-          "heading": "Get In Touch",
-          "paragraph": "Do you have questions? We'd love to hear from you!"
+          "heading": "Get in Touch",
+          "paragraphs": [
+            "Have questions or comments? Reach out to us and we'll be happy to assist you!"
+          ]
+        },
+        {
+          "heading": "Stay Connected",
+          "paragraphs": [
+            "Follow us on our social media channels for the latest news and updates on cycling in Canberra."
+          ]
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/home" },
-    { "label": "About Us", "url": "/about" },
-    { "label": "Fixtures & Results", "url": "/fixtures" },
-    { "label": "Meet the Team", "url": "/team" },
-    { "label": "Join Us", "url": "/join-us" },
-    { "label": "Contact", "url": "/contact" }
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "About Us",
+      "url": "/about"
+    },
+    {
+      "label": "Membership",
+      "url": "/membership"
+    },
+    {
+      "label": "Events",
+      "url": "/events"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
   ],
   "testimonials": [
     {
-      "name": "John Doe",
-      "role": "Team Captain",
-      "text": "Being part of the Canberra Vikings has been an incredible journey. The team spirit and camaraderie are unmatched!",
+      "name": "Sarah Johnson",
+      "role": "Club Member",
+      "text": "Joining the Canberra Cycling Club has been one of the best decisions of my life! The community is welcoming and the rides are always a blast.",
       "rating": 5
     },
     {
-      "name": "Jane Smith",
-      "role": "Parent",
-      "text": "I’ve seen my son grow not just as a player but as a person through the values taught at Canberra Vikings.",
-      "rating": 4
+      "name": "David Lee",
+      "role": "Competitive Cyclist",
+      "text": "The club has helped me improve my skills tremendously while providing a great support network during competitions.",
+      "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Coaching",
-      "description": "We provide high-quality coaching to players of all skill levels, focusing on skill development and teamwork.",
-      "icon": "https://img.icons8.com/ios-filled/50/000000/soccer-ball.png"
+      "title": "Group Rides",
+      "description": "Join our regular group rides designed for cyclists of all skill levels. Experience the joy of cycling in a supportive environment.",
+      "icon": "🚴‍♂️"
     },
     {
-      "title": "Community Events",
-      "description": "Join us at our community events which bring together rugby fans and families for fun and learning.",
-      "icon": "https://img.icons8.com/ios-filled/50/000000/venue.png"
+      "title": "Coaching & Training",
+      "description": "Receive tailored coaching and training programs to help you reach your cycling goals, whether for competition or recreation.",
+      "icon": "🏆"
     }
   ],
   "contact": {
     "phone": "+61 2 1234 5678",
-    "email": "info@canberravikingsrugby.com.au",
-    "address": "123 Rugby Lane, Canberra, ACT 2600, Australia"
+    "email": "info@canberracyclingclub.org.au",
+    "address": "123 Cycling Lane, Canberra, ACT 2000, Australia"
   },
   "footer": {
-    "description": "Canberra Vikings Rugby Union - Bringing together players, families, and fans to celebrate the great game of Rugby.",
+    "description": "Canberra Cycling Club - Where passion meets performance. Join our family of cycling enthusiasts.",
     "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/canberravikingsrugby" },
-      { "platform": "Twitter", "url": "https://twitter.com/canberravikingsrugby" },
-      { "platform": "Instagram", "url": "https://instagram.com/canberravikingsrugby" }
+      {
+        "platform": "Facebook",
+        "url": "https://facebook.com/canberracyclingclub"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://instagram.com/canberracyclingclub"
+      },
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/canberracycling"
+      }
     ]
   }
 }
