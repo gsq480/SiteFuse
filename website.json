@@ -1,0 +1,141 @@
+{
+  "slug": "mindful-yoga-studio",
+  "name": "Mindful Yoga Studio",
+  "tagline": "Nurture Your Body, Calm Your Mind",
+  "industry": "Yoga Studio",
+  "brand": "#4E6F6F",
+  "accent": "#C8D5B9",
+  "hero": "https://images.unsplash.com/photo-1517832558286-5cba1188e0b8",
+  "description": "At Mindful Yoga Studio, we believe in the power of yoga to transform lives. Our classes focus on mindfulness and holistic well-being while embracing the calming essence of earth tones to create a serene, inviting environment.",
+  "pages": [
+    {
+      "slug": "home",
+      "title": "Home",
+      "content": [
+        {
+          "heading": "Welcome to Mindful Yoga Studio",
+          "paragraph": "Join us at Mindful Yoga Studio, where tranquility meets community. Our studio is dedicated to providing a nurturing space for all levels of yoga practitioners, fostering physical and mental well-being."
+        },
+        {
+          "heading": "Explore Our Offerings",
+          "paragraph": "Whether you are a novice looking to embark on your yoga journey or an experienced yogi seeking to deepen your practice, we have classes and workshops tailored just for you."
+        }
+      ]
+    },
+    {
+      "slug": "about",
+      "title": "About Us",
+      "content": [
+        {
+          "heading": "Our Philosophy",
+          "paragraph": "Mindful Yoga Studio is rooted in the principles of mindfulness and connectedness. With a focus on earth elements, our classes aim to ground you in your practice and life."
+        },
+        {
+          "heading": "Our Team",
+          "paragraph": "Our dedicated team of certified instructors brings diverse backgrounds in yoga, meditation, and wellness, ensuring you receive personalized guidance and support."
+        }
+      ]
+    },
+    {
+      "slug": "classes",
+      "title": "Classes",
+      "content": [
+        {
+          "heading": "Yoga for Everyone",
+          "paragraph": "We offer a variety of classes designed for all levels, including Hatha, Vinyasa, Yin, and Restorative Yoga, with an emphasis on mindfulness and breathwork."
+        },
+        {
+          "heading": "Workshops and Events",
+          "paragraph": "Join us for special workshops focused on deepening your practice, including meditation sessions, alignment workshops, and wellness retreats."
+        }
+      ]
+    },
+    {
+      "slug": "contact",
+      "title": "Contact Us",
+      "content": [
+        {
+          "heading": "Get in Touch",
+          "paragraph": "We'd love to hear from you! Whether you have questions about classes, memberships, or anything else, feel free to reach out."
+        }
+      ]
+    }
+  ],
+  "navigation": [
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "About",
+      "url": "/about"
+    },
+    {
+      "label": "Classes",
+      "url": "/classes"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Samantha Greene",
+      "role": "Yoga Practitioner",
+      "text": "Mindful Yoga Studio has changed my life! The peaceful atmosphere and expert instruction have helped me find balance and serenity.",
+      "rating": 5
+    },
+    {
+      "name": "James Carter",
+      "role": "Wellness Coach",
+      "text": "Such a beautiful studio! The community is welcoming, and the emphasis on mindfulness greatly enhances my practice.",
+      "rating": 4
+    },
+    {
+      "name": "Maria Lopez",
+      "role": "Meditation Instructor",
+      "text": "The variety of classes offered at Mindful Yoga Studio provides endless opportunities for growth. It's more than just a yoga studio; it's a home.",
+      "rating": 5
+    }
+  ],
+  "services": [
+    {
+      "title": "Group Classes",
+      "description": "Engage in dynamic group sessions that promote physical health and mental clarity.",
+      "icon": "🏄‍♀️"
+    },
+    {
+      "title": "Private Sessions",
+      "description": "Tailored yoga sessions to meet your individual needs, perfect for personalized guidance.",
+      "icon": "🧘‍♂️"
+    },
+    {
+      "title": "Workshops & Events",
+      "description": "Join our immersive workshops and mindful events designed to deepen your practice.",
+      "icon": "🎉"
+    }
+  ],
+  "contact": {
+    "phone": "(555) 678-1234",
+    "email": "info@mindfulyogastudio.com",
+    "address": "123 Serenity Way, Mindful City, CA 90001"
+  },
+  "footer": {
+    "description": "Thank you for being part of our journey at Mindful Yoga Studio. We look forward to supporting you on your yoga path.",
+    "social_links": [
+      {
+        "platform": "Facebook",
+        "url": "https://facebook.com/mindfulyogastudio"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://instagram.com/mindfulyogastudio"
+      },
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/mindfulyogastudio"
+      }
+    ]
+  }
+}
