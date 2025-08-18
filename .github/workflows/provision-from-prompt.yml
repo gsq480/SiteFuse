@@ -45,6 +45,7 @@ jobs:
       - name: SSH setup
         run: |
           set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/id_rsa_cloudways
@@ -55,6 +56,7 @@ jobs:
         id: openai
         run: |
           set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
 
           # Enhanced prompt for comprehensive website generation
           cat > /tmp/payload.json <<'EOF'
@@ -111,6 +113,7 @@ jobs:
           HERO:     ${{ steps.openai.outputs.hero }}
         run: |
           set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
           WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
           mkdir -p child/{assets/{css,js,img},dist,templates,parts,inc}
 
@@ -835,6 +838,7 @@ jobs:
           SLUG: ${{ steps.openai.outputs.slug }}
         run: |
           set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
           mkdir -p child-themes
           rm -rf "child-themes/${SLUG}-child"
           mv "${SLUG}-child" "child-themes/${SLUG}-child"
@@ -849,6 +853,7 @@ jobs:
           SLUG: ${{ steps.openai.outputs.slug }}
         run: |
           set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
           THEME_DIR="$GITHUB_WORKSPACE/child-themes/${SLUG}-child"
           DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
 
@@ -883,17 +888,19 @@ jobs:
           TAGLINE: ${{ steps.openai.outputs.tagline }}
         run: |
           set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
           
           # Create WordPress pages and content using AI-generated data
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "
             set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
             cd '$APP_PATH'
             
             # Update site tagline
-            wp option update blogdescription '$TAGLINE' --allow-root
+            /usr/local/bin/wp option update blogdescription '$TAGLINE' --allow-root
             
             # Activate theme first to register custom post types
-            wp theme activate '${SLUG}-child' --allow-root || true
+            /usr/local/bin/wp theme activate '${SLUG}-child' --allow-root || true
             
             # Read AI-generated content
             if [ -f website.json ]; then
@@ -902,9 +909,9 @@ jobs:
               SERVICES_CONTENT=\$(jq -r '.pages[]? | select(.slug==\"services\") | .content[0].paragraphs[0] // \"We offer comprehensive solutions designed to meet your specific needs.\"' website.json)
               CONTACT_CONTENT=\$(jq -r '.pages[]? | select(.slug==\"contact\") | .content[0].paragraphs[0] // \"Ready to get started? We would love to hear from you.\"' website.json)
               
-              wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content=\"\$ABOUT_CONTENT\" --allow-root || true
-              wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content=\"\$SERVICES_CONTENT\" --allow-root || true
-              wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content=\"\$CONTACT_CONTENT\" --allow-root || true
+              /usr/local/bin/wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content=\"\$ABOUT_CONTENT\" --allow-root || true
+              /usr/local/bin/wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content=\"\$SERVICES_CONTENT\" --allow-root || true
+              /usr/local/bin/wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content=\"\$CONTACT_CONTENT\" --allow-root || true
               
               # Create services from AI data (after theme activation)
               jq -r '.services[]? | @base64' website.json 2>/dev/null | while read service; do
@@ -912,7 +919,7 @@ jobs:
                   SERVICE_DATA=\$(echo \$service | base64 -d)
                   TITLE=\$(echo \$SERVICE_DATA | jq -r '.title')
                   DESC=\$(echo \$SERVICE_DATA | jq -r '.description')
-                  wp post create --post_type=service --post_title=\"\$TITLE\" --post_status=publish --post_content=\"\$DESC\" --allow-root || true
+                  /usr/local/bin/wp post create --post_type=service --post_title=\"\$TITLE\" --post_status=publish --post_content=\"\$DESC\" --allow-root || true
                 fi
               done
               
@@ -924,7 +931,7 @@ jobs:
                   TEXT=\$(echo \$TESTIMONIAL_DATA | jq -r '.text')
                   ROLE=\$(echo \$TESTIMONIAL_DATA | jq -r '.role')
                   CONTENT=\"\$TEXT - \$ROLE\"
-                  wp post create --post_type=testimonial --post_title=\"\$NAME\" --post_status=publish --post_content=\"\$CONTENT\" --allow-root || true
+                  /usr/local/bin/wp post create --post_type=testimonial --post_title=\"\$NAME\" --post_status=publish --post_content=\"\$CONTENT\" --allow-root || true
                 fi
               done
             fi
@@ -944,17 +951,17 @@ jobs:
             CONTACT_ID=\$(wp post list --post_type=page --name=contact --fields=ID --allow-root)
             
             if [ -n \"\$ABOUT_ID\" ]; then
-              wp menu item add-post \$MENU_ID \$ABOUT_ID --allow-root || true
+              /usr/local/bin/wp menu item add-post \$MENU_ID \$ABOUT_ID --allow-root || true
             fi
             if [ -n \"\$SERVICES_ID\" ]; then
-              wp menu item add-post \$MENU_ID \$SERVICES_ID --allow-root || true
+              /usr/local/bin/wp menu item add-post \$MENU_ID \$SERVICES_ID --allow-root || true
             fi
             if [ -n \"\$CONTACT_ID\" ]; then
-              wp menu item add-post \$MENU_ID \$CONTACT_ID --allow-root || true
+              /usr/local/bin/wp menu item add-post \$MENU_ID \$CONTACT_ID --allow-root || true
             fi
             
             # Assign menu to theme location
-            wp menu location assign \$MENU_ID primary --allow-root || true
+            /usr/local/bin/wp menu location assign \$MENU_ID primary --allow-root || true
             
             echo '✅ WordPress content created successfully with AI-generated data'
           "
@@ -964,11 +971,13 @@ jobs:
           SLUG: ${{ steps.openai.outputs.slug }}
         run: |
           set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
           THEMES_PATH="$APP_PATH/wp-content/themes"
           CURRENT="${SLUG}-child"
 
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "
             set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
             cd '$THEMES_PATH'
             echo 'Before cleanup:'; ls -1 | grep -E '.*-child$' || echo '(none)'
             # delete all *-child except the current one
@@ -988,13 +997,15 @@ jobs:
           NAME: ${{ steps.openai.outputs.name }}
         run: |
           set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
             "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "
             set -euo pipefail
+            export PATH=/usr/local/bin:$PATH
             cd '$APP_PATH'
             
             # Activate the new theme
-            wp theme activate '${SLUG}-child' --allow-root
+            /usr/local/bin/wp theme activate '${SLUG}-child' --allow-root
             
             # Set front page to static and create homepage if needed
             FRONT_PAGE_ID=\$(wp post list --post_type=page --meta_key=_wp_page_template --meta_value=front-page.php --field=ID --allow-root)
@@ -1002,11 +1013,11 @@ jobs:
               FRONT_PAGE_ID=\$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --porcelain --allow-root)
             fi
             
-            wp option update show_on_front page --allow-root
-            wp option update page_on_front \$FRONT_PAGE_ID --allow-root
+            /usr/local/bin/wp option update show_on_front page --allow-root
+            /usr/local/bin/wp option update page_on_front \$FRONT_PAGE_ID --allow-root
             
             # Flush rewrite rules
-            wp rewrite flush --allow-root
+            /usr/local/bin/wp rewrite flush --allow-root
             
             echo '✅ Enhanced theme activated successfully!'
             echo 'Website URL: https://$(echo $CLOUDWAYS_HOST | cut -d'@' -f2 2>/dev/null || echo $CLOUDWAYS_HOST)'
