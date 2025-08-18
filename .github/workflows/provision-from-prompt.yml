@@ -929,19 +929,19 @@ jobs:
               done
             fi
             
-            # Handle menu creation/updating
-            EXISTING_MENU=\$(wp menu list --field=name --allow-root | grep '^Primary Menu$' || true)
-            if [ -z \"\$EXISTING_MENU\" ]; then
-              MENU_ID=\$(wp menu create 'Primary Menu' --porcelain --allow-root)
+            # Handle menu creation/updating - use unique name
+            MENU_NAME="Primary Menu ${SLUG}"
+            EXISTING_MENU=$(wp menu list --fields=name --allow-root | grep "^${MENU_NAME}$" || true)
+            if [ -z "$EXISTING_MENU" ]; then
+              MENU_ID=$(wp menu create "$MENU_NAME" --porcelain --allow-root)
             else
-              MENU_ID=\$(wp menu list --field=term_id --allow-root | head -1)
-              wp menu item delete \$MENU_ID --all --allow-root || true
+              MENU_ID=$(wp menu list --fields=term_id,name --format=csv --allow-root | grep "$MENU_NAME" | cut -d',' -f1)
             fi
             
             # Add pages to menu
-            ABOUT_ID=\$(wp post list --post_type=page --name=about --field=ID --allow-root)
-            SERVICES_ID=\$(wp post list --post_type=page --name=services --field=ID --allow-root)
-            CONTACT_ID=\$(wp post list --post_type=page --name=contact --field=ID --allow-root)
+            ABOUT_ID=\$(wp post list --post_type=page --name=about --fields=ID --allow-root)
+            SERVICES_ID=\$(wp post list --post_type=page --name=services --fields=ID --allow-root)
+            CONTACT_ID=\$(wp post list --post_type=page --name=contact --fields=ID --allow-root)
             
             if [ -n \"\$ABOUT_ID\" ]; then
               wp menu item add-post \$MENU_ID \$ABOUT_ID --allow-root || true
