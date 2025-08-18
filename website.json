@@ -1,66 +1,84 @@
 {
-  "slug": "children-yoga-studio",
-  "name": "Little Yogi Studio",
-  "tagline": "Where Fun Meets Mindfulness",
-  "industry": "Health & Wellness",
-  "brand": "#FF6F61",
-  "accent": "#FFD700",
-  "hero": "https://images.unsplash.com/photo-1594821830121-d5b5967d3fd6",
-  "description": "At Little Yogi Studio, we provide a nurturing space for children to explore their creativity, develop mindfulness, and cultivate a love for movement through the practice of yoga. Our classes focus on fun, imaginative yoga sessions designed to help kids unwind, connect, and grow.",
+  "slug": "canberra-vikings-rugby",
+  "name": "Canberra Vikings Rugby Union",
+  "tagline": "Unleashing the Spirit of Rugby in Canberra",
+  "industry": "Sports",
+  "brand": "#0038A8",
+  "accent": "#FFCC00",
+  "hero": "https://images.unsplash.com/photo-1528940262278-37df9a1e3f20",
+  "description": "The Canberra Vikings Rugby Union team is dedicated to promoting the sport of rugby in the Canberra region. With a commitment to excellence on and off the field, we provide coaching for all ages and skill levels while fostering a strong sense of community and sportsmanship.",
   "pages": [
+    {
+      "slug": "home",
+      "title": "Home",
+      "content": [
+        {
+          "heading": "Welcome to Canberra Vikings Rugby Union",
+          "paragraph": "Join us in our quest for victory and glory, as we train hard and compete with passion. Our team is built on values of teamwork, respect, and integrity, ensuring every player feels at home."
+        },
+        {
+          "heading": "Latest News",
+          "paragraph": "Stay updated with our latest fixtures, results, and announcements. Follow us on social media for real-time updates and engage with our community."
+        }
+      ]
+    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
           "heading": "Our Mission",
-          "paragraph": "At Little Yogi Studio, our mission is to empower children through yoga, helping them foster self-awareness, build confidence, and establish inner peace."
+          "paragraph": "To foster a love for rugby in Canberra by providing quality coaching and competitive opportunities for all players."
         },
         {
           "heading": "Our Values",
-          "paragraph": "We believe in cultivating a joyful and inclusive environment where every child feels valued and encouraged to express themselves."
+          "paragraph": "Teamwork, Respect, Integrity, Passion – these are the values that guide the Canberra Vikings Rugby Union team."
+        },
+        {
+          "heading": "History",
+          "paragraph": "Founded in 2012, the Canberra Vikings Rugby Union team has quickly become known for its dedication to developing talent and building a community around rugby in the region."
         }
       ]
     },
     {
-      "slug": "classes",
-      "title": "Our Classes",
+      "slug": "fixtures",
+      "title": "Fixtures & Results",
       "content": [
         {
-          "heading": "Creative Movement",
-          "paragraph": "In our Creative Movement classes, children will explore various postures and flows through storytelling, games, and creative play."
+          "heading": "Upcoming Matches",
+          "paragraph": "Check out our upcoming matches and support the team as we strive for victory."
         },
         {
-          "heading": "Mindful Moments",
-          "paragraph": "Our Mindful Moments sessions focus on breathing techniques and meditation practices tailored for young minds, promoting relaxation and emotional intelligence."
-        },
-        {
-          "heading": "Family Yoga",
-          "paragraph": "Join us for Family Yoga, where parents and children can practice together, strengthening bonds through shared movement and fun activities."
+          "heading": "Results Archive",
+          "paragraph": "Look back on our past matches and compare scores, player stats, and more."
         }
       ]
     },
     {
-      "slug": "schedule",
-      "title": "Class Schedule",
+      "slug": "team",
+      "title": "Meet the Team",
       "content": [
         {
-          "heading": "Weekly Class Schedule",
-          "paragraph": "Check out our weekly class schedule for all age groups. Classes are designed based on children’s age and experience level."
+          "heading": "Players",
+          "paragraph": "Meet our talented players who embody the spirit of the Canberra Vikings. Each player brings unique skills, passion, and dedication to the team."
         },
         {
-          "heading": "Special Events",
-          "paragraph": "We host special events like yoga parties and workshops—great for birthdays or school holidays. Stay tuned for upcoming dates!"
+          "heading": "Coaches",
+          "paragraph": "Our experienced coaching staff guides and mentors our players, ensuring they develop both as athletes and individuals."
         }
       ]
     },
     {
-      "slug": "testimonials",
-      "title": "Testimonials",
+      "slug": "join-us",
+      "title": "Join the Vikings",
       "content": [
         {
-          "heading": "What Parents Say",
-          "paragraph": "Discover how Little Yogi Studio has positively impacted kids and their families through our community of parents sharing their experiences."
+          "heading": "Become a Member",
+          "paragraph": "We welcome players of all ages and skill levels. Sign up to join our club and become part of the Canberra Vikings family."
+        },
+        {
+          "heading": "Volunteer Opportunities",
+          "paragraph": "Interested in supporting the team? We are always looking for volunteers to help with game day operations and more."
         }
       ]
     },
@@ -69,86 +87,57 @@
       "title": "Contact Us",
       "content": [
         {
-          "heading": "Get in Touch",
-          "paragraph": "We would love to hear from you! Reach out to learn more about our classes, schedule a visit, or ask any questions."
+          "heading": "Get In Touch",
+          "paragraph": "Do you have questions? We'd love to hear from you!"
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "Home",
-      "url": "/"
-    },
-    {
-      "label": "About Us",
-      "url": "/about"
-    },
-    {
-      "label": "Classes",
-      "url": "/classes"
-    },
-    {
-      "label": "Schedule",
-      "url": "/schedule"
-    },
-    {
-      "label": "Testimonials",
-      "url": "/testimonials"
-    },
-    {
-      "label": "Contact",
-      "url": "/contact"
-    }
+    { "label": "Home", "url": "/home" },
+    { "label": "About Us", "url": "/about" },
+    { "label": "Fixtures & Results", "url": "/fixtures" },
+    { "label": "Meet the Team", "url": "/team" },
+    { "label": "Join Us", "url": "/join-us" },
+    { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Jessica Martin",
-      "role": "Parent",
-      "text": "Little Yogi Studio has been a wonderful experience for my daughter. She comes home excited about the poses and practices mindfulness!",
+      "name": "John Doe",
+      "role": "Team Captain",
+      "text": "Being part of the Canberra Vikings has been an incredible journey. The team spirit and camaraderie are unmatched!",
       "rating": 5
     },
     {
-      "name": "Roberto Garcia",
+      "name": "Jane Smith",
       "role": "Parent",
-      "text": "Absolutely love the creative classes! My son enjoys every session and has become more focused and relaxed.",
+      "text": "I’ve seen my son grow not just as a player but as a person through the values taught at Canberra Vikings.",
       "rating": 4
-    },
-    {
-      "name": "Emily Chen",
-      "role": "Parent",
-      "text": "The instructors are fabulous, and the atmosphere is warm and welcoming. Highly recommend!",
-      "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Yoga Classes for Kids",
-      "description": "Engaging classes tailored to promote physical activity and mindfulness, encouraging kids to connect with their bodies and emotions.",
-      "icon": "🧘‍♀️"
+      "title": "Coaching",
+      "description": "We provide high-quality coaching to players of all skill levels, focusing on skill development and teamwork.",
+      "icon": "https://img.icons8.com/ios-filled/50/000000/soccer-ball.png"
     },
     {
-      "title": "Parent Workshops",
-      "description": "Workshops designed for parents to learn childhood mindfulness techniques they can practice at home.",
-      "icon": "👪"
-    },
-    {
-      "title": "Birthday Parties",
-      "description": "Celebrate your child's special day with a unique yoga-themed birthday party, complete with fun games and activities.",
-      "icon": "🎉"
+      "title": "Community Events",
+      "description": "Join us at our community events which bring together rugby fans and families for fun and learning.",
+      "icon": "https://img.icons8.com/ios-filled/50/000000/venue.png"
     }
   ],
   "contact": {
-    "phone": "(123) 456-7890",
-    "email": "info@littleyogistudio.com",
-    "address": "123 Yoga Lane, Mindful City, State, 12345"
+    "phone": "+61 2 1234 5678",
+    "email": "info@canberravikingsrugby.com.au",
+    "address": "123 Rugby Lane, Canberra, ACT 2600, Australia"
   },
   "footer": {
-    "description": "Join us at Little Yogi Studio for fun, interactive, and mindful yoga sessions designed for children. Let's grow together!",
-    "social_links": {
-      "facebook": "https://www.facebook.com/littleyogistudio",
-      "instagram": "https://www.instagram.com/littleyogistudio",
-      "twitter": "https://twitter.com/littleyogistudio"
-    }
+    "description": "Canberra Vikings Rugby Union - Bringing together players, families, and fans to celebrate the great game of Rugby.",
+    "social_links": [
+      { "platform": "Facebook", "url": "https://facebook.com/canberravikingsrugby" },
+      { "platform": "Twitter", "url": "https://twitter.com/canberravikingsrugby" },
+      { "platform": "Instagram", "url": "https://instagram.com/canberravikingsrugby" }
+    ]
   }
 }
