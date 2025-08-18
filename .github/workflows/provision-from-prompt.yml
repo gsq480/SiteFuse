@@ -912,11 +912,25 @@ jobs:
             MENU_ID=""
             cd '$APP_PATH'
             
+            # Initialize all variables to prevent unbound variable errors
+            ABOUT_EXISTS=""
+            SERVICES_EXISTS=""
+            CONTACT_EXISTS=""
+            HOME_EXISTS=""
+            ABOUT_CONTENT=""
+            SERVICES_CONTENT=""
+            CONTACT_CONTENT=""
+            MENU_NAME=""
+            EXISTING_MENU=""
+            MENU_ID=""
+            ABOUT_ID=""
+            SERVICES_ID=""
+            CONTACT_ID=""            
             # Update site tagline
-            wp option update blogdescription '$TAGLINE' --allow-root
+            /usr/local/bin/wp option update blogdescription '$TAGLINE' --allow-root
             
             # Activate theme first to register custom post types
-            wp theme activate '${SLUG}-child' --allow-root || true
+            /usr/local/bin/wp theme activate '${SLUG}-child' --allow-root || true
             
             # Read AI-generated content
             if [ -f website.json ]; then
@@ -926,27 +940,27 @@ jobs:
               ABOUT_EXISTS=$(wp post list --post_type=page --name=about --fields=ID --allow-root | head -1)
               if [ -z "$ABOUT_EXISTS" ]; then
                 ABOUT_CONTENT=$(jq -r '.pages[]? | select(.slug=="about") | .content[0].paragraphs[0] // "We are passionate professionals dedicated to delivering exceptional results."' website.json)
-                wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content="$ABOUT_CONTENT" --allow-root || true
+                /usr/local/bin/wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content="$ABOUT_CONTENT" --allow-root || true
               fi
               
               # Services page
               SERVICES_EXISTS=$(wp post list --post_type=page --name=services --fields=ID --allow-root | head -1)
               if [ -z "$SERVICES_EXISTS" ]; then
                 SERVICES_CONTENT=$(jq -r '.pages[]? | select(.slug=="services") | .content[0].paragraphs[0] // "We offer comprehensive solutions designed to meet your specific needs."' website.json)
-                wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content="$SERVICES_CONTENT" --allow-root || true
+                /usr/local/bin/wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content="$SERVICES_CONTENT" --allow-root || true
               fi
               
               # Contact page
               CONTACT_EXISTS=$(wp post list --post_type=page --name=contact --fields=ID --allow-root | head -1)
               if [ -z "$CONTACT_EXISTS" ]; then
                 CONTACT_CONTENT=$(jq -r '.pages[]? | select(.slug=="contact") | .content[0].paragraphs[0] // "Ready to get started? We would love to hear from you."' website.json)
-                wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content="$CONTACT_CONTENT" --allow-root || true
+                /usr/local/bin/wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content="$CONTACT_CONTENT" --allow-root || true
               fi
               
               # Home page - check if it exists
               HOME_EXISTS=$(wp post list --post_type=page --name=home --fields=ID --allow-root | head -1)
               if [ -z "$HOME_EXISTS" ]; then
-                wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --allow-root || true
+                /usr/local/bin/wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --allow-root || true
               fi
             fi
             
@@ -991,6 +1005,20 @@ jobs:
             export PATH=/usr/local/bin:$PATH
             cd '$APP_PATH'
             
+            # Initialize all variables to prevent unbound variable errors
+            ABOUT_EXISTS=""
+            SERVICES_EXISTS=""
+            CONTACT_EXISTS=""
+            HOME_EXISTS=""
+            ABOUT_CONTENT=""
+            SERVICES_CONTENT=""
+            CONTACT_CONTENT=""
+            MENU_NAME=""
+            EXISTING_MENU=""
+            MENU_ID=""
+            ABOUT_ID=""
+            SERVICES_ID=""
+            CONTACT_ID=""            
             # Activate the new theme
             /usr/local/bin/wp theme activate '${SLUG}-child' --allow-root
             
