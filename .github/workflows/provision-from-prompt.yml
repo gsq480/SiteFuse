@@ -50,23 +50,18 @@ jobs:
             ]
           }
           JSON
-
           curl -sS https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
             -d @/tmp/payload.json \
           | jq -r '.choices[0].message.content' > brief.json
-
           echo "Brief JSON:" && cat brief.json | jq .
-
           SLUG=$(jq -r '.slug // "new-site"' brief.json | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9-_')
           SLUG=${SLUG%-}; SLUG=${SLUG#-}; [ -n "$SLUG" ] || SLUG=new-site
-
           NAME=$(jq -r '.name // "New Site"' brief.json)
           BRAND=$(jq -r '.brand // "#7A5A45"' brief.json)
           ACCENT=$(jq -r '.accent // "#D2B48C"' brief.json)
           HERO=$(jq -r '.hero // "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop"' brief.json)
-
           echo "slug=$SLUG"     >> $GITHUB_OUTPUT
           echo "name=$NAME"     >> $GITHUB_OUTPUT
           echo "brand=$BRAND"   >> $GITHUB_OUTPUT
@@ -84,7 +79,6 @@ jobs:
           set -euo pipefail
           WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
           mkdir -p child/assets/css child/assets/img child/dist child/parts
-
           # style.css
           cat > child/style.css <<CSS
           /*
@@ -94,7 +88,6 @@ jobs:
           Version: 1.0.0
           */
           CSS
-
           # functions.php
           cat > child/functions.php <<'PHP'
           <?php
@@ -107,13 +100,11 @@ jobs:
           });
           register_nav_menus(['primary' => 'Primary']);
           PHP
-
           # Tailwind
           cat > child/assets/css/tailwind.css <<CSS
           @tailwind base;
           @tailwind components;
           @tailwind utilities;
-
           @layer base {
             :root {
               --color-brand: ${BRAND};
@@ -123,24 +114,18 @@ jobs:
             }
           }
           CSS
-
           cat > child/tailwind.config.js <<JS
           module.exports = { content: ['./**/*.php'], theme: { extend: {} }, plugins: [] }
           JS
-
-          # header/footer/front-page.php etc (unchanged) ...
-
           # HERO download with safe fallback
           if [ -n "$HERO" ] && [ "$HERO" != "null" ]; then
             curl -fsSL "$HERO" -o child/assets/img/hero.jpg --max-time 10 || true
           fi
           if [ ! -s child/assets/img/hero.jpg ]; then
             echo "⚠️ HERO image failed, using fallback"
-            # 1x1 transparent PNG
             echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBg9Jzi10AAAAASUVORK5CYII=" \
               | base64 -d > child/assets/img/hero.jpg
           fi
-
           echo "Building Tailwind CSS..."
           curl -sL https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.1/tailwindcss-linux-x64 -o tailwindcss
           chmod +x tailwindcss
@@ -156,11 +141,12 @@ jobs:
           set -e
           if [ -d "${{ steps.openai.outputs.slug }}-child" ]; then
             mkdir -p child-themes
+            rm -rf "child-themes/${{ steps.openai.outputs.slug }}-child"
             mv "${{ steps.openai.outputs.slug }}-child" "child-themes/${{ steps.openai.outputs.slug }}-child"
             git config user.name  "sitefuse-bot"
             git config user.email "bot@users.noreply.github.com"
             git add child-themes/${{ steps.openai.outputs.slug }}-child
-            git commit -m "chore: add generated child theme '${{ steps.openai.outputs.slug }}-child' from prompt" || echo "No changes to commit"
+            git commit -m "chore: update generated child theme '${{ steps.openai.outputs.slug }}-child' from prompt" || echo "No changes to commit"
             git push || echo "Push skipped"
           else
             echo "Theme directory not found, skipping commit"
@@ -171,16 +157,13 @@ jobs:
           set -e
           THEME_DIR="child-themes/${{ steps.openai.outputs.slug }}-child"
           DEST="$APP_PATH/wp-content/themes/${{ steps.openai.outputs.slug }}-child"
-
           if [ -d "$GITHUB_WORKSPACE/$THEME_DIR" ]; then
             ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
               "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$DEST'"
-
             rsync -avz --delete \
               -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" \
               "$GITHUB_WORKSPACE/$THEME_DIR/" \
               "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEST/"
-
             echo "✅ Deployed to: $DEST/"
           else
             echo "⚠️ Theme directory not found locally, skipping deployment"
