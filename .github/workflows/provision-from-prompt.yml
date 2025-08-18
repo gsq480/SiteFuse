@@ -902,6 +902,15 @@ jobs:
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -c "
             set -euo pipefail
             cd '$APP_PATH'
+
+            # Debug: Check wp-cli availability
+            echo 'Checking wp-cli location...'
+            which wp || echo 'wp not in PATH'
+            ls -la /usr/local/bin/wp || echo '/usr/local/bin/wp not found'
+            ls -la /usr/bin/wp || echo '/usr/bin/wp not found'
+            find /usr -name wp -type f 2>/dev/null || echo 'wp not found anywhere in /usr'
+            
+            # Initialize all variables to prevent unbound variable errors
             
             # Initialize all variables to prevent unbound variable errors
             ABOUT_EXISTS=""
