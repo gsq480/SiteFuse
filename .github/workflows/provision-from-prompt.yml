@@ -1,12 +1,28 @@
-name: Provision Child Theme from Prompt
+name: Enhanced Child Theme from Prompt
 
 on:
   workflow_dispatch:
     inputs:
       prompt:
-        description: 'Describe your website (e.g., "Modern yoga studio with earth tones")'
+        description: 'Describe your website (e.g., "Modern yoga studio with earth tones and mindfulness focus")'
         required: true
         type: string
+      industry:
+        description: 'Industry type'
+        required: false
+        type: choice
+        options:
+          - 'auto-detect'
+          - 'restaurant'
+          - 'yoga-studio'
+          - 'law-firm'
+          - 'photography'
+          - 'consulting'
+          - 'medical'
+          - 'retail'
+          - 'real-estate'
+          - 'technology'
+        default: 'auto-detect'
 
 jobs:
   build-deploy:
@@ -35,80 +51,167 @@ jobs:
           chmod 600 ~/.ssh/id_rsa_cloudways
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
 
-      - name: Turn prompt into structured JSON (OpenAI)
+      - name: Generate comprehensive website structure with AI
         id: openai
         run: |
           set -euo pipefail
 
-          cat > /tmp/payload.json <<'JSON'
+          # Enhanced prompt for comprehensive website generation
+          cat > /tmp/payload.json <<JSON
           {
             "model":"gpt-4o-mini",
             "response_format":{"type":"json_object"},
             "messages":[
-              {"role":"system","content":"You extract website theming fields from a customer brief and respond in strict JSON only. Fields: slug (kebab-case, <=30 chars), name (<=40 chars), brand (hex like #7A5A45), accent (hex), hero (absolute image URL), sections (array of {title, text}). If missing, make tasteful defaults."},
-              {"role":"user","content":"${{ github.event.inputs.prompt }}"}
+              {
+                "role":"system",
+                "content":"You are a professional web designer creating complete website structures. Generate a comprehensive website plan with all content. Return JSON with: slug (kebab-case, <=30 chars), name (business name, <=40 chars), tagline (compelling tagline), industry (detected industry), brand (primary hex color), accent (secondary hex color), hero (high-quality Unsplash image URL), description (2-3 sentences about the business), pages (array of page objects with: slug, title, content array of sections with heading and paragraphs), navigation (array of nav items with label and url), testimonials (array with name, role, text, rating), services (array with title, description, icon), contact (object with phone, email, address), footer (object with description, social links). Make content realistic, detailed, and industry-appropriate. Use real business copy, not placeholder text."
+              },
+              {
+                "role":"user",
+                "content":"Create a complete website for: ${{ github.event.inputs.prompt }}. Industry hint: ${{ github.event.inputs.industry }}"
+              }
             ]
           }
-          JSON
+JSON
 
           curl -sS https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
             -d @/tmp/payload.json \
-          | jq -r '.choices[0].message.content' > brief.json
+          | jq -r '.choices[0].message.content' > website.json
 
-          echo "Brief JSON:" && cat brief.json | jq .
+          echo "Generated website structure:" && cat website.json | jq .
 
-          SLUG=$(jq -r '.slug // "new-site"' brief.json | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9-_')
+          # Extract core variables
+          SLUG=$(jq -r '.slug // "new-site"' website.json | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9-_')
           SLUG=${SLUG%-}; SLUG=${SLUG#-}; [ -n "$SLUG" ] || SLUG=new-site
 
-          NAME=$(jq -r '.name // "New Site"' brief.json)
-          BRAND=$(jq -r '.brand // "#7A5A45"' brief.json)
-          ACCENT=$(jq -r '.accent // "#D2B48C"' brief.json)
-          HERO=$(jq -r '.hero // "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop"' brief.json)
+          NAME=$(jq -r '.name // "New Site"' website.json)
+          TAGLINE=$(jq -r '.tagline // "Welcome to our website"' website.json)
+          INDUSTRY=$(jq -r '.industry // "general"' website.json)
+          BRAND=$(jq -r '.brand // "#2563eb"' website.json)
+          ACCENT=$(jq -r '.accent // "#3b82f6"' website.json)
+          HERO=$(jq -r '.hero // "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"' website.json)
 
-          echo "slug=$SLUG"     >> $GITHUB_OUTPUT
-          echo "name=$NAME"     >> $GITHUB_OUTPUT
-          echo "brand=$BRAND"   >> $GITHUB_OUTPUT
-          echo "accent=$ACCENT" >> $GITHUB_OUTPUT
-          echo "hero=$HERO"     >> $GITHUB_OUTPUT
+          echo "slug=$SLUG"         >> $GITHUB_OUTPUT
+          echo "name=$NAME"         >> $GITHUB_OUTPUT
+          echo "tagline=$TAGLINE"   >> $GITHUB_OUTPUT
+          echo "industry=$INDUSTRY" >> $GITHUB_OUTPUT
+          echo "brand=$BRAND"       >> $GITHUB_OUTPUT
+          echo "accent=$ACCENT"     >> $GITHUB_OUTPUT
+          echo "hero=$HERO"         >> $GITHUB_OUTPUT
 
-      - name: Generate child theme and build CSS
+      - name: Generate enhanced WordPress theme
         env:
-          SLUG:   ${{ steps.openai.outputs.slug }}
-          NAME:   ${{ steps.openai.outputs.name }}
-          BRAND:  ${{ steps.openai.outputs.brand }}
-          ACCENT: ${{ steps.openai.outputs.accent }}
-          HERO:   ${{ steps.openai.outputs.hero }}
+          SLUG:     ${{ steps.openai.outputs.slug }}
+          NAME:     ${{ steps.openai.outputs.name }}
+          TAGLINE:  ${{ steps.openai.outputs.tagline }}
+          INDUSTRY: ${{ steps.openai.outputs.industry }}
+          BRAND:    ${{ steps.openai.outputs.brand }}
+          ACCENT:   ${{ steps.openai.outputs.accent }}
+          HERO:     ${{ steps.openai.outputs.hero }}
         run: |
           set -euo pipefail
           WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
-          mkdir -p child/assets/css child/assets/img child/dist child/parts
+          mkdir -p child/{assets/{css,js,img},dist,templates,parts,inc}
 
-          # style.css
+          # Enhanced style.css with theme info
           cat > child/style.css <<CSS
           /*
-          Theme Name: ${NAME} Child
+          Theme Name: ${NAME}
+          Description: Professional ${INDUSTRY} website built with SiteFuse
           Template: sitefuse-base
           Text Domain: ${SLUG}-child
           Version: 1.0.0
           */
           CSS
 
-          # functions.php
+          # Enhanced functions.php with custom post types and features
           cat > child/functions.php <<'PHP'
           <?php
+          // Theme setup
           add_action('wp_enqueue_scripts', function () {
             $parent = get_template_directory_uri() . '/dist/tailwind.css';
             wp_enqueue_style('sitefuse-parent', $parent, [], null);
             $child_path = get_stylesheet_directory() . '/dist/tailwind.css';
             $ver = file_exists($child_path) ? filemtime($child_path) : null;
             wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $ver);
+            wp_enqueue_script('sitefuse-js', get_stylesheet_directory_uri() . '/assets/js/theme.js', [], $ver, true);
           });
-          register_nav_menus(['primary' => 'Primary']);
+
+          // Register navigation menus
+          register_nav_menus([
+            'primary' => 'Primary Navigation',
+            'footer' => 'Footer Navigation'
+          ]);
+
+          // Add theme support
+          add_theme_support('post-thumbnails');
+          add_theme_support('custom-logo');
+          add_theme_support('title-tag');
+          add_theme_support('html5', ['search-form', 'comment-form', 'comment-list', 'gallery', 'caption']);
+
+          // Custom post types
+          add_action('init', function() {
+            // Testimonials
+            register_post_type('testimonial', [
+              'labels' => [
+                'name' => 'Testimonials',
+                'singular_name' => 'Testimonial'
+              ],
+              'public' => true,
+              'supports' => ['title', 'editor', 'thumbnail'],
+              'menu_icon' => 'dashicons-format-quote'
+            ]);
+
+            // Services
+            register_post_type('service', [
+              'labels' => [
+                'name' => 'Services',
+                'singular_name' => 'Service'
+              ],
+              'public' => true,
+              'supports' => ['title', 'editor', 'thumbnail', 'excerpt'],
+              'menu_icon' => 'dashicons-admin-tools'
+            ]);
+
+            // Portfolio/Gallery
+            register_post_type('portfolio', [
+              'labels' => [
+                'name' => 'Portfolio',
+                'singular_name' => 'Portfolio Item'
+              ],
+              'public' => true,
+              'supports' => ['title', 'editor', 'thumbnail'],
+              'menu_icon' => 'dashicons-portfolio'
+            ]);
+          });
+
+          // Custom fields helper
+          function get_business_info($field) {
+            $info = get_option('business_info', []);
+            return $info[$field] ?? '';
+          }
+
+          // Contact form shortcode
+          add_shortcode('contact_form', function() {
+            ob_start();
+            ?>
+            <form class="contact-form space-y-4" action="#" method="post">
+              <div class="grid md:grid-cols-2 gap-4">
+                <input type="text" name="name" placeholder="Your Name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand">
+                <input type="email" name="email" placeholder="Your Email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand">
+              </div>
+              <input type="text" name="subject" placeholder="Subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand">
+              <textarea name="message" rows="5" placeholder="Your Message" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"></textarea>
+              <button type="submit" class="btn btn-primary w-full">Send Message</button>
+            </form>
+            <?php
+            return ob_get_clean();
+          });
           PHP
 
-          # Tailwind source (lean)
+          # Enhanced Tailwind CSS with modern components
           cat > child/assets/css/tailwind.css <<CSS
           @tailwind base;
           @tailwind components;
@@ -117,64 +220,307 @@ jobs:
           @layer base {
             :root {
               --color-brand: ${BRAND};
-              --color-brand-600: ${BRAND}cc;
+              --color-brand-600: ${BRAND}dd;
+              --color-brand-700: ${BRAND}bb;
               --color-accent: ${ACCENT};
-              --color-cream: #FFF7EC;
+              --color-cream: #fefaf6;
+              --color-dark: #1f2937;
+              --color-gray: #6b7280;
             }
+            
+            html { scroll-behavior: smooth; }
+            body { line-height: 1.7; }
           }
 
           @layer components {
-            .container { width: 100%; margin-inline: auto; padding-inline: 1rem; max-width: 72rem; }
-            .btn { display: inline-flex; align-items: center; justify-content: center; border-radius: .5rem; padding: .5rem 1.25rem; font-weight: 600; }
-            .btn-primary { background-color: var(--color-brand); color: white; }
-            .btn-primary:hover { opacity: .9; }
-            .card { background: white; border-radius: .75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,.1); padding: 2rem; border: 1px solid rgb(241 245 249); }
-            .section-title { font-size: 1.875rem; font-weight: 800; letter-spacing: -0.025em; }
-            @media (min-width:768px){ .section-title{ font-size: 2.25rem; } }
-            .lead { font-size: 1.125rem; color: rgb(71 85 105); }
-            .nav-link:hover { text-decoration: underline; }
+            .container { 
+              width: 100%; 
+              margin-inline: auto; 
+              padding-inline: 1rem; 
+              max-width: 80rem; 
+            }
+            
+            .btn { 
+              display: inline-flex; 
+              align-items: center; 
+              justify-content: center; 
+              border-radius: .75rem; 
+              padding: .875rem 2rem; 
+              font-weight: 600;
+              transition: all 0.3s ease;
+              text-decoration: none;
+            }
+            
+            .btn-primary { 
+              background: linear-gradient(135deg, var(--color-brand), var(--color-accent));
+              color: white; 
+              box-shadow: 0 4px 15px rgba(0,0,0,.1);
+            }
+            .btn-primary:hover { 
+              transform: translateY(-2px);
+              box-shadow: 0 8px 25px rgba(0,0,0,.15);
+            }
+            
+            .btn-secondary {
+              background: white;
+              color: var(--color-brand);
+              border: 2px solid var(--color-brand);
+            }
+            .btn-secondary:hover {
+              background: var(--color-brand);
+              color: white;
+              transform: translateY(-2px);
+            }
+            
+            .card { 
+              background: white; 
+              border-radius: 1rem; 
+              box-shadow: 0 20px 40px rgba(0,0,0,.08); 
+              padding: 2.5rem; 
+              border: 1px solid rgb(241 245 249);
+              transition: all 0.3s ease;
+            }
+            .card:hover {
+              transform: translateY(-5px);
+              box-shadow: 0 30px 60px rgba(0,0,0,.12);
+            }
+            
+            .section-title { 
+              font-size: 2.5rem; 
+              font-weight: 800; 
+              letter-spacing: -0.025em;
+              line-height: 1.2;
+              margin-bottom: 1rem;
+            }
+            @media (min-width:768px) { .section-title { font-size: 3rem; } }
+            
+            .section-subtitle {
+              font-size: 1.25rem;
+              color: var(--color-gray);
+              margin-bottom: 3rem;
+              max-width: 42rem;
+              margin-left: auto;
+              margin-right: auto;
+            }
+            
+            .hero-section {
+              background: linear-gradient(135deg, var(--color-brand), var(--color-accent));
+              position: relative;
+              overflow: hidden;
+            }
+            .hero-section::before {
+              content: '';
+              position: absolute;
+              inset: 0;
+              background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            }
+            
+            .service-icon {
+              width: 4rem;
+              height: 4rem;
+              background: linear-gradient(135deg, var(--color-brand), var(--color-accent));
+              border-radius: .75rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-bottom: 1.5rem;
+              color: white;
+              font-size: 1.5rem;
+            }
+            
+            .testimonial-card {
+              background: var(--color-cream);
+              border-left: 4px solid var(--color-brand);
+            }
+            
+            .nav-link { 
+              color: var(--color-dark);
+              font-weight: 500;
+              text-decoration: none;
+              padding: .5rem 1rem;
+              border-radius: .5rem;
+              transition: all 0.3s ease;
+            }
+            .nav-link:hover { 
+              background: var(--color-cream);
+              color: var(--color-brand);
+            }
+            
+            .footer-section {
+              background: var(--color-dark);
+              color: rgb(226 232 240);
+            }
+            
+            .animate-fade-in {
+              animation: fadeIn 0.8s ease-out;
+            }
+            
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(20px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            
+            .focus\\:ring-brand:focus {
+              ring-color: var(--color-brand);
+            }
           }
           CSS
 
-          # Tailwind config
-          cat > child/tailwind.config.js <<'JS'
-          module.exports = {
-            content: ['./**/*.php'],
-            theme: { extend: {} },
-            plugins: [],
-          }
+          # Modern JavaScript for interactions
+          cat > child/assets/js/theme.js <<'JS'
+          document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+              anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              });
+            });
+            
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            if (mobileMenuBtn && mobileMenu) {
+              mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+              });
+            }
+            
+            // Intersection Observer for animations
+            const observerOptions = {
+              threshold: 0.1,
+              rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('animate-fade-in');
+                }
+              });
+            }, observerOptions);
+            
+            document.querySelectorAll('.card, .service-item, .testimonial-card').forEach(el => {
+              observer.observe(el);
+            });
+            
+            // Contact form handling
+            const contactForm = document.querySelector('.contact-form');
+            if (contactForm) {
+              contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your message! We will get back to you soon.');
+              });
+            }
+          });
           JS
 
-          # Header / Footer / Front page (kept simple)
+          # Enhanced header with mobile menu
           cat > child/header.php <<'PHP'
           <!doctype html>
           <html <?php language_attributes(); ?>>
           <head>
             <meta charset="<?php bloginfo('charset'); ?>">
             <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="description" content="<?php bloginfo('description'); ?>">
             <?php wp_head(); ?>
           </head>
-          <body <?php body_class('font-sans'); ?> style="background-color: var(--color-cream); color: rgb(15 23 42);">
-          <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 p-2 bg-white rounded" href="#main">Skip to content</a>
-          <header style="background-color: rgba(255,255,255,.9); backdrop-filter: blur(12px); border-bottom: 1px solid #e5e7eb;">
-            <div class="container" style="padding: 1rem 0; display:flex; align-items:center; justify-content:space-between;">
-              <a style="font-size:1.25rem; font-weight:800; letter-spacing:-.025em; color:var(--color-brand); text-decoration:none;" href="<?php echo esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a>
-              <nav class="hidden md:block">
-                <?php wp_nav_menu(['theme_location'=>'primary','menu_class'=>'md:flex md:items-center md:gap-6','container'=>false,'fallback_cb'=>'__return_empty_string']); ?>
-              </nav>
+          <body <?php body_class('font-sans antialiased'); ?> style="background-color: var(--color-cream); color: var(--color-dark);">
+          <a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 btn btn-primary z-50" href="#main">Skip to content</a>
+          
+          <header class="sticky top-0 z-40" style="background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid #e5e7eb;">
+            <div class="container">
+              <div class="flex items-center justify-between h-20">
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="flex items-center space-x-2">
+                  <?php if (has_custom_logo()): ?>
+                    <?php the_custom_logo(); ?>
+                  <?php else: ?>
+                    <span style="font-size:1.5rem; font-weight:800; letter-spacing:-.025em; color:var(--color-brand);"><?php bloginfo('name'); ?></span>
+                  <?php endif; ?>
+                </a>
+                
+                <nav class="hidden lg:flex items-center space-x-1">
+                  <?php wp_nav_menu([
+                    'theme_location' => 'primary',
+                    'menu_class' => 'flex items-center space-x-1',
+                    'container' => false,
+                    'link_class' => 'nav-link',
+                    'fallback_cb' => '__return_empty_string'
+                  ]); ?>
+                </nav>
+                
+                <button class="lg:hidden mobile-menu-btn p-2 rounded-lg" style="color: var(--color-brand);">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                  </svg>
+                </button>
+              </div>
+              
+              <div class="mobile-menu hidden lg:hidden py-4 border-t border-gray-200">
+                <?php wp_nav_menu([
+                  'theme_location' => 'primary',
+                  'menu_class' => 'flex flex-col space-y-2',
+                  'container' => false,
+                  'link_class' => 'nav-link block',
+                  'fallback_cb' => '__return_empty_string'
+                ]); ?>
+              </div>
             </div>
           </header>
           PHP
 
+          # Enhanced footer
           cat > child/footer.php <<'PHP'
-          <footer style="margin-top: 4rem; background-color: rgb(15 23 42); color: rgb(226 232 240);">
-            <div class="container" style="padding: 2.5rem 0; display: grid; gap: 1.5rem;">
-              <div><div style="font-size:1.125rem; font-weight:600; margin-bottom:.5rem;">About</div><p style="font-size:.875rem; opacity:.8;">Welcome to <?php bloginfo('name'); ?>.</p></div>
-              <div><div style="font-size:1.125rem; font-weight:600; margin-bottom:.5rem;">Contact</div><p style="font-size:.875rem; opacity:.8;">Get in touch with us today.</p></div>
+          <footer class="footer-section mt-20">
+            <div class="container py-16">
+              <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                  <h3 class="text-xl font-bold mb-4" style="color: var(--color-accent);"><?php bloginfo('name'); ?></h3>
+                  <p class="text-gray-300 mb-6 max-w-md"><?php bloginfo('description'); ?></p>
+                  <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                  <?php wp_nav_menu([
+                    'theme_location' => 'footer',
+                    'menu_class' => 'space-y-2',
+                    'container' => false,
+                    'link_class' => 'text-gray-300 hover:text-white block transition-colors',
+                    'fallback_cb' => '__return_empty_string'
+                  ]); ?>
+                </div>
+                
+                <div>
+                  <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                  <div class="space-y-2 text-gray-300">
+                    <p>📞 <span id="phone">(555) 123-4567</span></p>
+                    <p>✉️ <span id="email">hello@<?php echo str_replace(' ', '', strtolower(get_bloginfo('name'))); ?>.com</span></p>
+                    <p>📍 <span id="address">123 Business St, City, State 12345</span></p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div style="border-top:1px solid rgb(30 41 59);">
-              <div class="container" style="padding:1rem 0; font-size:.875rem; opacity:.7; display:flex; justify-content:space-between;">
-                <span>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?></span><span>Powered by WordPress</span>
+            
+            <div class="border-t border-gray-700">
+              <div class="container py-6">
+                <div class="flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
+                  <p>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. All rights reserved.</p>
+                  <p>Powered by <a href="https://wordpress.org" class="hover:text-white">WordPress</a> & <span style="color: var(--color-accent);">SiteFuse</span></p>
+                </div>
               </div>
             </div>
           </footer>
@@ -183,54 +529,291 @@ jobs:
           </html>
           PHP
 
+          # Generate dynamic front page based on AI content
           echo "<?php get_header(); ?>" > child/front-page.php
-          cat >> child/front-page.php <<'PHP'
-          <main id="main" class="container" style="padding: 2.5rem 0;">
-            <section style="position:relative; overflow:hidden; border-radius:1rem; background:linear-gradient(to right, var(--color-brand), var(--color-accent)); color:white; margin-bottom:3rem;">
-              <div style="padding: 4rem 3rem;">
-                <div style="display:grid; gap:2rem; align-items:center;">
-                  <div>
-                    <h1 class="section-title" style="color:white; margin-bottom:1rem;"><?php bloginfo('description'); ?></h1>
-                    <p class="lead" style="color:rgba(255,255,255,.9); margin-bottom:2rem;">Welcome to our site. Discover what we have to offer.</p>
-                    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-                      <a href="<?php echo esc_url(home_url('/about')); ?>" class="btn btn-primary">Learn More</a>
-                      <a href="<?php echo esc_url(home_url('/contact')); ?>" class="btn" style="border:1px solid rgba(255,255,255,.6); color:white;">Contact Us</a>
+          cat >> child/front-page.php <<'FRONTPAGE'
+          <main id="main">
+            <!-- Hero Section -->
+            <section class="hero-section relative py-20 lg:py-32">
+              <div class="container relative z-10">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                  <div class="text-white">
+                    <h1 class="section-title text-white mb-6">
+                      <?php echo get_bloginfo('description') ?: 'Welcome to ' . get_bloginfo('name'); ?>
+                    </h1>
+                    <p class="text-xl text-white/90 mb-8 leading-relaxed">
+                      <?php
+                      $website_data = json_decode(file_get_contents(get_template_directory() . '/../../website.json'), true);
+                      echo esc_html($website_data['description'] ?? 'Discover excellence in every detail. We\'re committed to providing you with exceptional service and results that exceed your expectations.');
+                      ?>
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                      <a href="#services" class="btn btn-secondary">Our Services</a>
+                      <a href="#contact" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3);">Get In Touch</a>
                     </div>
                   </div>
-                  <div style="border-radius:.75rem; overflow:hidden; box-shadow:0 20px 25px -5px rgba(0,0,0,.1);">
-                    <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/hero.jpg' ); ?>" alt="Hero" style="width:100%; height:100%; object-fit:cover;">
+                  <div class="relative">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                      <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/hero.jpg'); ?>" 
+                           alt="Hero Image" 
+                           class="w-full h-96 lg:h-[500px] object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
                   </div>
                 </div>
               </div>
             </section>
-          PHP
 
-          if [ -f "$GITHUB_WORKSPACE/brief.json" ]; then
-            jq -c '.sections // [] | .[]' "$GITHUB_WORKSPACE/brief.json" | while read -r row; do
-              TITLE=$(jq -r '.title // empty' <<<"$row"); TEXT=$(jq -r '.text // empty' <<<"$row")
-              [ -n "$TITLE" ] || continue
-              cat >> child/front-page.php <<PHP
-            <section class="card" style="margin-bottom: 2rem;">
-              <h2 class="section-title" style="margin-bottom: 1rem;">$(printf '%s' "$TITLE" | sed "s/'/\\'/g")</h2>
-              <p class="lead">$(printf '%s' "$TEXT" | sed "s/'/\\'/g")</p>
+            <!-- Services Section -->
+            <section id="services" class="py-20" style="background: white;">
+              <div class="container">
+                <div class="text-center mb-16">
+                  <h2 class="section-title">Our Services</h2>
+                  <p class="section-subtitle">We offer comprehensive solutions tailored to your needs</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                  <?php
+                  $website_data = json_decode(file_get_contents(get_template_directory() . '/../../website.json'), true);
+                  $services = $website_data['services'] ?? [
+                    ['title' => 'Strategic Planning', 'description' => 'Comprehensive planning and strategy development to help you achieve your goals efficiently and effectively.', 'icon' => '🎯'],
+                    ['title' => 'Expert Implementation', 'description' => 'Professional implementation of solutions with attention to detail and commitment to excellence in every project.', 'icon' => '⚡'],
+                    ['title' => 'Ongoing Support', 'description' => 'Continuous support and optimization to ensure your success and adapt to changing needs over time.', 'icon' => '🚀']
+                  ];
+                  foreach ($services as $service): ?>
+                    <div class="service-item text-center">
+                      <div class="service-icon mx-auto"><?php echo esc_html($service['icon']); ?></div>
+                      <h3 class="text-xl font-semibold mb-4"><?php echo esc_html($service['title']); ?></h3>
+                      <p class="text-gray-600 leading-relaxed"><?php echo esc_html($service['description']); ?></p>
+                    </div>
+                  <?php endforeach; ?>
+                </div>
+              </div>
             </section>
-          PHP
-            done
-          fi
 
-          echo "</main>" >> child/front-page.php
+            <!-- About Section -->
+            <section id="about" class="py-20" style="background: var(--color-cream);">
+              <div class="container">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                  <div>
+                    <h2 class="section-title mb-6">About <?php bloginfo('name'); ?></h2>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                      We are passionate professionals dedicated to delivering exceptional results. With years of experience and a commitment to excellence, we work closely with our clients to understand their unique needs and provide tailored solutions.
+                    </p>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                      Our team combines expertise, innovation, and personalized service to help you achieve your goals. We believe in building lasting relationships based on trust, quality, and results.
+                    </p>
+                    <div class="flex items-center space-x-8">
+                      <div class="text-center">
+                        <div class="text-3xl font-bold" style="color: var(--color-brand);">500+</div>
+                        <div class="text-sm text-gray-600">Happy Clients</div>
+                      </div>
+                      <div class="text-center">
+                        <div class="text-3xl font-bold" style="color: var(--color-brand);">10+</div>
+                        <div class="text-sm text-gray-600">Years Experience</div>
+                      </div>
+                      <div class="text-center">
+                        <div class="text-3xl font-bold" style="color: var(--color-brand);">98%</div>
+                        <div class="text-sm text-gray-600">Success Rate</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="relative">
+                    <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/about.jpg'); ?>" 
+                         alt="About Us" 
+                         class="rounded-2xl shadow-xl w-full h-96 object-cover">
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Testimonials Section -->
+            <section class="py-20" style="background: white;">
+              <div class="container">
+                <div class="text-center mb-16">
+                  <h2 class="section-title">What Our Clients Say</h2>
+                  <p class="section-subtitle">Don't just take our word for it - hear from our satisfied clients</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                  <?php
+                  $testimonials = $website_data['testimonials'] ?? [
+                    ['name' => 'Sarah Johnson', 'role' => 'Business Owner', 'text' => 'Exceptional service and outstanding results. The team went above and beyond to ensure our project was a success. Highly recommended!', 'rating' => 5],
+                    ['name' => 'Michael Chen', 'role' => 'Marketing Director', 'text' => 'Professional, reliable, and innovative. They understood our vision and delivered exactly what we needed. Great communication throughout.', 'rating' => 5],
+                    ['name' => 'Lisa Rodriguez', 'role' => 'Startup Founder', 'text' => 'Amazing experience from start to finish. The attention to detail and commitment to quality is unmatched. Will definitely work with them again.', 'rating' => 5]
+                  ];
+                  foreach ($testimonials as $testimonial): ?>
+                    <div class="testimonial-card card">
+                      <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+                        <div>
+                          <h4 class="font-semibold"><?php echo esc_html($testimonial['name']); ?></h4>
+                          <p class="text-sm text-gray-600"><?php echo esc_html($testimonial['role']); ?></p>
+                        </div>
+                      </div>
+                      <p class="text-gray-600 italic">"<?php echo esc_html($testimonial['text']); ?>"</p>
+                      <div class="flex mt-4" style="color: var(--color-accent);">
+                        <?php echo str_repeat('⭐', $testimonial['rating']); ?>
+                      </div>
+                    </div>
+                  <?php endforeach; ?>
+                </div>
+              </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="py-20" style="background: var(--color-cream);">
+              <div class="container">
+                <div class="text-center mb-16">
+                  <h2 class="section-title">Get In Touch</h2>
+                  <p class="section-subtitle">Ready to start your project? We'd love to hear from you</p>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-12">
+                  <div>
+                    <div class="space-y-6">
+                      <?php
+                      $contact = $website_data['contact'] ?? [
+                        'address' => '123 Business Street, City, State 12345',
+                        'phone' => '(555) 123-4567',
+                        'email' => 'hello@business.com'
+                      ];
+                      ?>
+                      <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: var(--color-brand); color: white;">📍</div>
+                        <div>
+                          <h4 class="font-semibold mb-1">Visit Us</h4>
+                          <p class="text-gray-600"><?php echo esc_html($contact['address']); ?></p>
+                        </div>
+                      </div>
+                      <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: var(--color-brand); color: white;">📞</div>
+                        <div>
+                          <h4 class="font-semibold mb-1">Call Us</h4>
+                          <p class="text-gray-600"><?php echo esc_html($contact['phone']); ?></p>
+                        </div>
+                      </div>
+                      <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: var(--color-brand); color: white;">✉️</div>
+                        <div>
+                          <h4 class="font-semibold mb-1">Email Us</h4>
+                          <p class="text-gray-600"><?php echo esc_html($contact['email']); ?></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <?php echo do_shortcode('[contact_form]'); ?>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </main>
+FRONTPAGE
           echo "<?php get_footer(); ?>" >> child/front-page.php
 
-          # Try HERO image; if fails, multiple fallbacks then tiny PNG
+          # Generate additional page templates
+          cat > child/page-about.php <<'PHP'
+          <?php get_header(); ?>
+          <main id="main" class="py-20">
+            <div class="container">
+              <div class="max-w-4xl mx-auto">
+                <h1 class="section-title text-center mb-8"><?php the_title(); ?></h1>
+                <div class="prose prose-lg max-w-none">
+                  <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+                    <?php the_content(); ?>
+                  <?php endwhile; endif; ?>
+                </div>
+              </div>
+            </div>
+          </main>
+          <?php get_footer(); ?>
+          PHP
+
+          cat > child/page-services.php <<'PHP'
+          <?php get_header(); ?>
+          <main id="main" class="py-20">
+            <div class="container">
+              <h1 class="section-title text-center mb-16"><?php the_title(); ?></h1>
+              <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <?php
+                $services = get_posts(['post_type' => 'service', 'numberposts' => -1]);
+                foreach ($services as $service) : setup_postdata($service); ?>
+                  <div class="card">
+                    <?php if (has_post_thumbnail($service->ID)) : ?>
+                      <img src="<?php echo get_the_post_thumbnail_url($service->ID, 'medium'); ?>" 
+                           alt="<?php echo get_the_title($service->ID); ?>" 
+                           class="w-full h-48 object-cover rounded-lg mb-4">
+                    <?php endif; ?>
+                    <h3 class="text-xl font-semibold mb-3"><?php echo get_the_title($service->ID); ?></h3>
+                    <p class="text-gray-600"><?php echo get_the_excerpt($service->ID); ?></p>
+                  </div>
+                <?php endforeach; wp_reset_postdata(); ?>
+              </div>
+            </div>
+          </main>
+          <?php get_footer(); ?>
+          PHP
+
+          cat > child/page-contact.php <<'PHP'
+          <?php get_header(); ?>
+          <main id="main" class="py-20">
+            <div class="container">
+              <h1 class="section-title text-center mb-16"><?php the_title(); ?></h1>
+              <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                <div class="card">
+                  <?php echo do_shortcode('[contact_form]'); ?>
+                </div>
+                <div class="space-y-8">
+                  <div>
+                    <h3 class="text-xl font-semibold mb-4">Contact Information</h3>
+                    <div class="space-y-4">
+                      <p class="flex items-center space-x-3">
+                        <span class="text-xl">📍</span>
+                        <span>123 Business Street, City, State 12345</span>
+                      </p>
+                      <p class="flex items-center space-x-3">
+                        <span class="text-xl">📞</span>
+                        <span>(555) 123-4567</span>
+                      </p>
+                      <p class="flex items-center space-x-3">
+                        <span class="text-xl">✉️</span>
+                        <span>hello@<?php echo str_replace(' ', '', strtolower(get_bloginfo('name'))); ?>.com</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-semibold mb-4">Business Hours</h3>
+                    <div class="space-y-2 text-gray-600">
+                      <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                      <p>Saturday: 10:00 AM - 4:00 PM</p>
+                      <p>Sunday: Closed</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+          <?php get_footer(); ?>
+          PHP
+
+          # Download hero and about images with multiple fallbacks
+          echo "Downloading hero image..."
           if [ -n "$HERO" ] && [ "$HERO" != "null" ]; then
-            curl -fsSL "$HERO" -o child/assets/img/hero.jpg --max-time 10 || true
+            curl -fsSL "$HERO" -o child/assets/img/hero.jpg --max-time 15 || true
           fi
+          
           if [ ! -s child/assets/img/hero.jpg ]; then
-            curl -fsSL "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop&crop=center" -o child/assets/img/hero.jpg --max-time 10 || \
-            curl -fsSL "https://via.placeholder.com/1200x800/7A5A45/FFFFFF?text=Hero+Image" -o child/assets/img/hero.jpg --max-time 10 || \
-            echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" \
-              | base64 -d > child/assets/img/hero.jpg
+            echo "Trying fallback hero images..."
+            curl -fsSL "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop" -o child/assets/img/hero.jpg --max-time 10 || \
+            curl -fsSL "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1200&h=800&fit=crop" -o child/assets/img/hero.jpg --max-time 10 || \
+            curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&h=800&fit=crop" -o child/assets/img/hero.jpg --max-time 10 || \
+            curl -fsSL "https://via.placeholder.com/1200x800/2563eb/FFFFFF?text=Hero+Image" -o child/assets/img/hero.jpg --max-time 10 || \
+            echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" | base64 -d > child/assets/img/hero.jpg
           fi
+
+          echo "Downloading about image..."
+          curl -fsSL "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop" -o child/assets/img/about.jpg --max-time 10 || \
+          curl -fsSL "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&h=600&fit=crop" -o child/assets/img/about.jpg --max-time 10 || \
+          curl -fsSL "https://via.placeholder.com/800x600/7A5A45/FFFFFF?text=About+Us" -o child/assets/img/about.jpg --max-time 10 || \
+          echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" | base64 -d > child/assets/img/about.jpg
 
           echo "Downloading Tailwind CSS v3 standalone CLI..."
           curl -sL https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.1/tailwindcss-linux-x64 -o tailwindcss
@@ -246,7 +829,7 @@ jobs:
           rm -rf "$GITHUB_WORKSPACE/${SLUG}-child"
           cp -r child "$GITHUB_WORKSPACE/${SLUG}-child"
           zip -qr "${SLUG}-child.zip" child/
-          echo "Theme generation complete!"
+          echo "Enhanced theme generation complete!"
 
       - name: Commit generated theme back to repo
         env:
@@ -258,8 +841,8 @@ jobs:
           mv "${SLUG}-child" "child-themes/${SLUG}-child"
           git config user.name  "sitefuse-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add "child-themes/${SLUG}-child"
-          git commit -m "chore: add generated child theme '${SLUG}-child' from prompt" || echo "No changes to commit"
+          git add "child-themes/${SLUG}-child" website.json
+          git commit -m "chore: add enhanced child theme '${SLUG}-child' with AI-generated content" || echo "No changes to commit"
           git push || echo "Push skipped"
 
       - name: Deploy to Cloudways via rsync
@@ -282,10 +865,87 @@ jobs:
               "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEST/"
 
             echo "✅ Deployed to: $DEST/"
+            
+            # Also deploy website.json for theme templates to read
+            rsync -avz \
+              -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" \
+              "$GITHUB_WORKSPACE/website.json" \
+              "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
+              
           else
             echo "⚠️ Theme directory not found locally, skipping deployment"
             exit 1
           fi
+
+      - name: Create WordPress pages and content
+        env:
+          SLUG: ${{ steps.openai.outputs.slug }}
+          NAME: ${{ steps.openai.outputs.name }}
+          TAGLINE: ${{ steps.openai.outputs.tagline }}
+        run: |
+          set -euo pipefail
+          
+          # Create WordPress pages and content using AI-generated data
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "
+            set -euo pipefail
+            cd '$APP_PATH'
+            
+            # Update site tagline
+            wp option update blogdescription '$TAGLINE' --allow-root
+            
+            # Read AI-generated content
+            if [ -f website.json ]; then
+              # Create main pages with AI content
+              ABOUT_CONTENT=\$(jq -r '.pages[] | select(.slug==\"about\") | .content[0].paragraphs[0] // \"We are passionate professionals dedicated to delivering exceptional results.\"' website.json)
+              SERVICES_CONTENT=\$(jq -r '.pages[] | select(.slug==\"services\") | .content[0].paragraphs[0] // \"We offer comprehensive solutions designed to meet your specific needs.\"' website.json)
+              CONTACT_CONTENT=\$(jq -r '.pages[] | select(.slug==\"contact\") | .content[0].paragraphs[0] // \"Ready to get started? We would love to hear from you.\"' website.json)
+              
+              wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content=\"\$ABOUT_CONTENT\" --allow-root || true
+              wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content=\"\$SERVICES_CONTENT\" --allow-root || true
+              wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content=\"\$CONTACT_CONTENT\" --allow-root || true
+              
+              # Create services from AI data
+              jq -r '.services[]? | @base64' website.json | while read service; do
+                SERVICE_DATA=\$(echo \$service | base64 -d)
+                TITLE=\$(echo \$SERVICE_DATA | jq -r '.title')
+                DESC=\$(echo \$SERVICE_DATA | jq -r '.description')
+                wp post create --post_type=service --post_title=\"\$TITLE\" --post_status=publish --post_content=\"\$DESC\" --allow-root || true
+              done
+              
+              # Create testimonials from AI data
+              jq -r '.testimonials[]? | @base64' website.json | while read testimonial; do
+                TESTIMONIAL_DATA=\$(echo \$testimonial | base64 -d)
+                NAME=\$(echo \$TESTIMONIAL_DATA | jq -r '.name')
+                TEXT=\$(echo \$TESTIMONIAL_DATA | jq -r '.text')
+                ROLE=\$(echo \$TESTIMONIAL_DATA | jq -r '.role')
+                CONTENT=\"\$TEXT - \$ROLE\"
+                wp post create --post_type=testimonial --post_title=\"\$NAME\" --post_status=publish --post_content=\"\$CONTENT\" --allow-root || true
+              done
+            fi
+            
+            # Create navigation menu
+            MENU_ID=\$(wp menu create 'Primary Menu' --porcelain --allow-root)
+            
+            # Add pages to menu
+            ABOUT_ID=\$(wp post list --post_type=page --name=about --field=ID --allow-root)
+            SERVICES_ID=\$(wp post list --post_type=page --name=services --field=ID --allow-root)
+            CONTACT_ID=\$(wp post list --post_type=page --name=contact --field=ID --allow-root)
+            
+            if [ -n \"\$ABOUT_ID\" ]; then
+              wp menu item add-post \$MENU_ID \$ABOUT_ID --allow-root
+            fi
+            if [ -n \"\$SERVICES_ID\" ]; then
+              wp menu item add-post \$MENU_ID \$SERVICES_ID --allow-root
+            fi
+            if [ -n \"\$CONTACT_ID\" ]; then
+              wp menu item add-post \$MENU_ID \$CONTACT_ID --allow-root
+            fi
+            
+            # Assign menu to theme location
+            wp menu location assign \$MENU_ID primary --allow-root
+            
+            echo '✅ WordPress content created successfully with AI-generated data'
+          "
 
       - name: Cleanup old child themes on server (keep only current)
         env:
@@ -298,7 +958,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "
             set -euo pipefail
             cd '$THEMES_PATH'
-            echo 'Before cleanup:'; ls -1 | grep -E '.*-child$' || echo '(none)'
+            echo 'Before cleanup:'; ls -1 | grep -E '.*-child || echo '(none)'
             # delete all *-child except the current one
             for d in */ ; do
               d=\${d%/}
@@ -307,14 +967,35 @@ jobs:
                 rm -rf -- \"\$d\"
               fi
             done
-            echo 'After cleanup:'; ls -1 | grep -E '.*-child$' || echo '(none)'
+            echo 'After cleanup:'; ls -1 | grep -E '.*-child || echo '(none)'
           "
 
-      - name: Activate Theme
+      - name: Activate Theme and Final Setup
         env:
           SLUG: ${{ steps.openai.outputs.slug }}
+          NAME: ${{ steps.openai.outputs.name }}
         run: |
           set -euo pipefail
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "cd '$APP_PATH' && wp theme activate '${SLUG}-child' --allow-root || (wp theme list --allow-root; exit 1)"
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "
+            set -euo pipefail
+            cd '$APP_PATH'
+            
+            # Activate the new theme
+            wp theme activate '${SLUG}-child' --allow-root
+            
+            # Set front page to static and create homepage if needed
+            FRONT_PAGE_ID=\$(wp post list --post_type=page --meta_key=_wp_page_template --meta_value=front-page.php --field=ID --allow-root)
+            if [ -z \"\$FRONT_PAGE_ID\" ]; then
+              FRONT_PAGE_ID=\$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --porcelain --allow-root)
+            fi
+            
+            wp option update show_on_front page --allow-root
+            wp option update page_on_front \$FRONT_PAGE_ID --allow-root
+            
+            # Flush rewrite rules
+            wp rewrite flush --allow-root
+            
+            echo '✅ Enhanced theme activated successfully!'
+            echo 'Website URL: https://$(echo $CLOUDWAYS_HOST | cut -d'@' -f2 2>/dev/null || echo $CLOUDWAYS_HOST)'
+          "
