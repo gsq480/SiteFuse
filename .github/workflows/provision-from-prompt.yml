@@ -998,3 +998,4 @@ jobs:
             echo '✅ Enhanced theme activated successfully!'
             echo 'Website URL: https://$(echo $CLOUDWAYS_HOST | cut -d'@' -f2 2>/dev/null || echo $CLOUDWAYS_HOST)'
           "
+# Test validation
