@@ -705,7 +705,7 @@ jobs:
               </div>
             </section>
           </main>
-FRONTPAGE
+          FRONTPAGE
           echo "<?php get_footer(); ?>" >> child/front-page.php
 
           # Generate additional page templates
