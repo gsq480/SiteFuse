@@ -892,38 +892,51 @@ jobs:
             # Update site tagline
             wp option update blogdescription '$TAGLINE' --allow-root
             
+            # Activate theme first to register custom post types
+            wp theme activate '${SLUG}-child' --allow-root || true
+            
             # Read AI-generated content
             if [ -f website.json ]; then
               # Create main pages with AI content
-              ABOUT_CONTENT=\$(jq -r '.pages[] | select(.slug==\"about\") | .content[0].paragraphs[0] // \"We are passionate professionals dedicated to delivering exceptional results.\"' website.json)
-              SERVICES_CONTENT=\$(jq -r '.pages[] | select(.slug==\"services\") | .content[0].paragraphs[0] // \"We offer comprehensive solutions designed to meet your specific needs.\"' website.json)
-              CONTACT_CONTENT=\$(jq -r '.pages[] | select(.slug==\"contact\") | .content[0].paragraphs[0] // \"Ready to get started? We would love to hear from you.\"' website.json)
+              ABOUT_CONTENT=\$(jq -r '.pages[]? | select(.slug==\"about\") | .content[0].paragraphs[0] // \"We are passionate professionals dedicated to delivering exceptional results.\"' website.json)
+              SERVICES_CONTENT=\$(jq -r '.pages[]? | select(.slug==\"services\") | .content[0].paragraphs[0] // \"We offer comprehensive solutions designed to meet your specific needs.\"' website.json)
+              CONTACT_CONTENT=\$(jq -r '.pages[]? | select(.slug==\"contact\") | .content[0].paragraphs[0] // \"Ready to get started? We would love to hear from you.\"' website.json)
               
               wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content=\"\$ABOUT_CONTENT\" --allow-root || true
               wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content=\"\$SERVICES_CONTENT\" --allow-root || true
               wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content=\"\$CONTACT_CONTENT\" --allow-root || true
               
-              # Create services from AI data
-              jq -r '.services[]? | @base64' website.json | while read service; do
-                SERVICE_DATA=\$(echo \$service | base64 -d)
-                TITLE=\$(echo \$SERVICE_DATA | jq -r '.title')
-                DESC=\$(echo \$SERVICE_DATA | jq -r '.description')
-                wp post create --post_type=service --post_title=\"\$TITLE\" --post_status=publish --post_content=\"\$DESC\" --allow-root || true
+              # Create services from AI data (after theme activation)
+              jq -r '.services[]? | @base64' website.json 2>/dev/null | while read service; do
+                if [ -n \"\$service\" ]; then
+                  SERVICE_DATA=\$(echo \$service | base64 -d)
+                  TITLE=\$(echo \$SERVICE_DATA | jq -r '.title')
+                  DESC=\$(echo \$SERVICE_DATA | jq -r '.description')
+                  wp post create --post_type=service --post_title=\"\$TITLE\" --post_status=publish --post_content=\"\$DESC\" --allow-root || true
+                fi
               done
               
-              # Create testimonials from AI data
-              jq -r '.testimonials[]? | @base64' website.json | while read testimonial; do
-                TESTIMONIAL_DATA=\$(echo \$testimonial | base64 -d)
-                NAME=\$(echo \$TESTIMONIAL_DATA | jq -r '.name')
-                TEXT=\$(echo \$TESTIMONIAL_DATA | jq -r '.text')
-                ROLE=\$(echo \$TESTIMONIAL_DATA | jq -r '.role')
-                CONTENT=\"\$TEXT - \$ROLE\"
-                wp post create --post_type=testimonial --post_title=\"\$NAME\" --post_status=publish --post_content=\"\$CONTENT\" --allow-root || true
+              # Create testimonials from AI data (after theme activation)
+              jq -r '.testimonials[]? | @base64' website.json 2>/dev/null | while read testimonial; do
+                if [ -n \"\$testimonial\" ]; then
+                  TESTIMONIAL_DATA=\$(echo \$testimonial | base64 -d)
+                  NAME=\$(echo \$TESTIMONIAL_DATA | jq -r '.name')
+                  TEXT=\$(echo \$TESTIMONIAL_DATA | jq -r '.text')
+                  ROLE=\$(echo \$TESTIMONIAL_DATA | jq -r '.role')
+                  CONTENT=\"\$TEXT - \$ROLE\"
+                  wp post create --post_type=testimonial --post_title=\"\$NAME\" --post_status=publish --post_content=\"\$CONTENT\" --allow-root || true
+                fi
               done
             fi
             
-            # Create navigation menu
-            MENU_ID=\$(wp menu create 'Primary Menu' --porcelain --allow-root)
+            # Handle menu creation/updating
+            EXISTING_MENU=\$(wp menu list --field=name --allow-root | grep '^Primary Menu$' || true)
+            if [ -z \"\$EXISTING_MENU\" ]; then
+              MENU_ID=\$(wp menu create 'Primary Menu' --porcelain --allow-root)
+            else
+              MENU_ID=\$(wp menu list --field=term_id --allow-root | head -1)
+              wp menu item delete \$MENU_ID --all --allow-root || true
+            fi
             
             # Add pages to menu
             ABOUT_ID=\$(wp post list --post_type=page --name=about --field=ID --allow-root)
@@ -931,17 +944,17 @@ jobs:
             CONTACT_ID=\$(wp post list --post_type=page --name=contact --field=ID --allow-root)
             
             if [ -n \"\$ABOUT_ID\" ]; then
-              wp menu item add-post \$MENU_ID \$ABOUT_ID --allow-root
+              wp menu item add-post \$MENU_ID \$ABOUT_ID --allow-root || true
             fi
             if [ -n \"\$SERVICES_ID\" ]; then
-              wp menu item add-post \$MENU_ID \$SERVICES_ID --allow-root
+              wp menu item add-post \$MENU_ID \$SERVICES_ID --allow-root || true
             fi
             if [ -n \"\$CONTACT_ID\" ]; then
-              wp menu item add-post \$MENU_ID \$CONTACT_ID --allow-root
+              wp menu item add-post \$MENU_ID \$CONTACT_ID --allow-root || true
             fi
             
             # Assign menu to theme location
-            wp menu location assign \$MENU_ID primary --allow-root
+            wp menu location assign \$MENU_ID primary --allow-root || true
             
             echo '✅ WordPress content created successfully with AI-generated data'
           "
