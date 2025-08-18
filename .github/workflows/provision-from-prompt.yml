@@ -888,91 +888,60 @@ jobs:
           TAGLINE: ${{ steps.openai.outputs.tagline }}
         run: |
           set -euo pipefail
-            # Initialize variables
-            MENU_NAME="Primary Menu ${SLUG}"
-            EXISTING_MENU=""
-            MENU_ID=""
-            export PATH=/usr/local/bin:$PATH
           
           # Create WordPress pages and content using AI-generated data
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" << 'REMOTE_SCRIPT'
             set -euo pipefail
-            # Initialize variables
-            MENU_NAME="Primary Menu ${SLUG}"
-            EXISTING_MENU=""
-            MENU_ID=""
-            export PATH=/usr/local/bin:$PATH
-            cd '$APP_PATH'
+            cd "$APP_PATH"
             
             # Update site tagline
-            /usr/local/bin/wp option update blogdescription '$TAGLINE' --allow-root
+            /usr/local/bin/wp option update blogdescription "$TAGLINE" --allow-root
             
             # Activate theme first to register custom post types
-            /usr/local/bin/wp theme activate '${SLUG}-child' --allow-root || true
+            /usr/local/bin/wp theme activate "${SLUG}-child" --allow-root || true
             
             # Read AI-generated content
             if [ -f website.json ]; then
               # Create main pages with AI content
-              ABOUT_CONTENT=\$(jq -r '.pages[]? | select(.slug==\"about\") | .content[0].paragraphs[0] // \"We are passionate professionals dedicated to delivering exceptional results.\"' website.json)
-              SERVICES_CONTENT=\$(jq -r '.pages[]? | select(.slug==\"services\") | .content[0].paragraphs[0] // \"We offer comprehensive solutions designed to meet your specific needs.\"' website.json)
-              CONTACT_CONTENT=\$(jq -r '.pages[]? | select(.slug==\"contact\") | .content[0].paragraphs[0] // \"Ready to get started? We would love to hear from you.\"' website.json)
+              ABOUT_CONTENT=$(jq -r '.pages[]? | select(.slug=="about") | .content[0].paragraphs[0] // "We are passionate professionals dedicated to delivering exceptional results."' website.json)
+              /usr/local/bin/wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content="$ABOUT_CONTENT" --allow-root || true
               
-              /usr/local/bin/wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content=\"\$ABOUT_CONTENT\" --allow-root || true
-              /usr/local/bin/wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content=\"\$SERVICES_CONTENT\" --allow-root || true
-              /usr/local/bin/wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content=\"\$CONTACT_CONTENT\" --allow-root || true
+              SERVICES_CONTENT=$(jq -r '.pages[]? | select(.slug=="services") | .content[0].paragraphs[0] // "We offer comprehensive solutions designed to meet your specific needs."' website.json)
+              /usr/local/bin/wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content="$SERVICES_CONTENT" --allow-root || true
               
-              # Create services from AI data (after theme activation)
-              jq -r '.services[]? | @base64' website.json 2>/dev/null | while read service; do
-                if [ -n \"\$service\" ]; then
-                  SERVICE_DATA=\$(echo \$service | base64 -d)
-                  TITLE=\$(echo \$SERVICE_DATA | jq -r '.title')
-                  DESC=\$(echo \$SERVICE_DATA | jq -r '.description')
-                  /usr/local/bin/wp post create --post_type=service --post_title=\"\$TITLE\" --post_status=publish --post_content=\"\$DESC\" --allow-root || true
-                fi
-              done
-              
-              # Create testimonials from AI data (after theme activation)
-              jq -r '.testimonials[]? | @base64' website.json 2>/dev/null | while read testimonial; do
-                if [ -n \"\$testimonial\" ]; then
-                  TESTIMONIAL_DATA=\$(echo \$testimonial | base64 -d)
-                  NAME=\$(echo \$TESTIMONIAL_DATA | jq -r '.name')
-                  TEXT=\$(echo \$TESTIMONIAL_DATA | jq -r '.text')
-                  ROLE=\$(echo \$TESTIMONIAL_DATA | jq -r '.role')
-                  CONTENT=\"\$TEXT - \$ROLE\"
-                  /usr/local/bin/wp post create --post_type=testimonial --post_title=\"\$NAME\" --post_status=publish --post_content=\"\$CONTENT\" --allow-root || true
-                fi
-              done
+              CONTACT_CONTENT=$(jq -r '.pages[]? | select(.slug=="contact") | .content[0].paragraphs[0] // "Ready to get started? We would love to hear from you."' website.json)
+              /usr/local/bin/wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content="$CONTACT_CONTENT" --allow-root || true
             fi
             
             # Handle menu creation/updating - use unique name
             MENU_NAME="Primary Menu ${SLUG}"
-            EXISTING_MENU=$(wp menu list --fields=name --allow-root | grep "^${MENU_NAME}$" || true)
+            EXISTING_MENU=$(/usr/local/bin/wp menu list --fields=name --allow-root 2>/dev/null | grep "^${MENU_NAME}$" || true)
             if [ -z "$EXISTING_MENU" ]; then
-              MENU_ID=$(wp menu create "$MENU_NAME" --porcelain --allow-root)
+              MENU_ID=$(/usr/local/bin/wp menu create "$MENU_NAME" --porcelain --allow-root)
             else
-              MENU_ID=$(wp menu list --fields=term_id,name --format=csv --allow-root | grep "$MENU_NAME" | cut -d',' -f1)
+              MENU_ID=$(/usr/local/bin/wp menu list --fields=term_id,name --format=csv --allow-root 2>/dev/null | grep "$MENU_NAME" | cut -d',' -f1 || echo "1")
             fi
             
             # Add pages to menu
-            ABOUT_ID=\$(wp post list --post_type=page --name=about --fields=ID --allow-root)
-            SERVICES_ID=\$(wp post list --post_type=page --name=services --fields=ID --allow-root)
-            CONTACT_ID=\$(wp post list --post_type=page --name=contact --fields=ID --allow-root)
+            ABOUT_ID=$(/usr/local/bin/wp post list --post_type=page --name=about --fields=ID --allow-root | head -1)
+            SERVICES_ID=$(/usr/local/bin/wp post list --post_type=page --name=services --fields=ID --allow-root | head -1)
+            CONTACT_ID=$(/usr/local/bin/wp post list --post_type=page --name=contact --fields=ID --allow-root | head -1)
             
-            if [ -n \"\$ABOUT_ID\" ]; then
-              /usr/local/bin/wp menu item add-post \$MENU_ID \$ABOUT_ID --allow-root || true
+            if [ -n "$ABOUT_ID" ]; then
+              /usr/local/bin/wp menu item add-post "$MENU_ID" "$ABOUT_ID" --allow-root || true
             fi
-            if [ -n \"\$SERVICES_ID\" ]; then
-              /usr/local/bin/wp menu item add-post \$MENU_ID \$SERVICES_ID --allow-root || true
+            if [ -n "$SERVICES_ID" ]; then
+              /usr/local/bin/wp menu item add-post "$MENU_ID" "$SERVICES_ID" --allow-root || true
             fi
-            if [ -n \"\$CONTACT_ID\" ]; then
-              /usr/local/bin/wp menu item add-post \$MENU_ID \$CONTACT_ID --allow-root || true
+            if [ -n "$CONTACT_ID" ]; then
+              /usr/local/bin/wp menu item add-post "$MENU_ID" "$CONTACT_ID" --allow-root || true
             fi
             
             # Assign menu to theme location
-            /usr/local/bin/wp menu location assign \$MENU_ID primary --allow-root || true
+            /usr/local/bin/wp menu location assign "$MENU_ID" primary --allow-root || true
             
             echo '✅ WordPress content created successfully with AI-generated data'
-          "
+          REMOTE_SCRIPT
 
       - name: Cleanup old child themes on server (keep only current)
         env:
