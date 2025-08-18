@@ -4,10 +4,10 @@
 
 @layer base {
   :root {
-    --color-brand: #d5c8a0;
-    --color-brand-600: #d5c8a0dd;
-    --color-brand-700: #d5c8a0bb;
-    --color-accent: #a88d6d;
+    --color-brand: #8E735B;
+    --color-brand-600: #8E735Bdd;
+    --color-brand-700: #8E735Bbb;
+    --color-accent: #DCB76A;
     --color-cream: #fefaf6;
     --color-dark: #1f2937;
     --color-gray: #6b7280;

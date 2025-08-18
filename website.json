@@ -1,1 +1,130 @@
-null
+{
+  "slug": "modern-yoga-studio",
+  "name": "EarthFlow Yoga",
+  "tagline": "Find Your Center in Every Breath",
+  "industry": "Health & Wellness",
+  "brand": "#8E735B",
+  "accent": "#DCB76A",
+  "hero": "https://images.unsplash.com/photo-1562520878-b4734e79b1c1",
+  "description": "At EarthFlow Yoga, we celebrate the harmony of mind and body through mindful practices rooted in nature. Our studio is designed to create a tranquil environment where you can rejuvenate your spirit and find balance in your daily life.",
+  "pages": [
+    {
+      "slug": "home",
+      "title": "Home",
+      "content": [
+        {
+          "heading": "Welcome to EarthFlow Yoga",
+          "paragraphs": [
+            "Discover a sanctuary where your inner peace can flourish. Our modern yoga studio embraces earth tones and natural materials, fostering a calming atmosphere conducive to mindfulness and relaxation.",
+            "Join our community of yogis of all levels and embark on a journey of self-discovery and holistic wellness."
+          ]
+        },
+        {
+          "heading": "Our Philosophy",
+          "paragraphs": [
+            "At EarthFlow Yoga, we believe that yoga is more than just a physical practice; it is a lifestyle that promotes mental clarity and emotional wellbeing.",
+            "Our classes incorporate various styles of yoga, including Hatha, Vinyasa, and Meditation, encouraging each individual to connect with their intuition and cultivate mindfulness."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "about",
+      "title": "About Us",
+      "content": [
+        {
+          "heading": "A Journey of Mindfulness",
+          "paragraphs": [
+            "Founded in 2023, EarthFlow Yoga was established with the intention of creating a peaceful retreat for individuals seeking balance. Our skilled instructors are certified and passionate about sharing the transformative power of yoga."
+          ]
+        },
+        {
+          "heading": "Meet Our Team",
+          "paragraphs": [
+            "Our diverse team of instructors brings a variety of styles and perspectives to support your yoga journey. Each brings unique experiences and insights to help cultivate your practice."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "services",
+      "title": "Our Services",
+      "content": [
+        {
+          "heading": "Yoga Classes",
+          "paragraphs": [
+            "We offer a range of classes suitable for all levels, from beginners to advanced practitioners. Whether you're looking to deepen your practice or just starting, we have something for everyone."
+          ]
+        },
+        {
+          "heading": "Workshops and Events",
+          "paragraphs": [
+            "Join our monthly workshops that explore various themes of yoga and mindfulness. Special events include guest instructors and community retreats designed to enhance your experience."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "contact",
+      "title": "Contact Us",
+      "content": [
+        {
+          "heading": "Get In Touch",
+          "paragraphs": [
+            "Have questions? We would love to hear from you! Reach out to us via phone, email, or visit us in person."
+          ]
+        }
+      ]
+    }
+  ],
+  "navigation": [
+    { "label": "Home", "url": "/home" },
+    { "label": "About Us", "url": "/about" },
+    { "label": "Services", "url": "/services" },
+    { "label": "Contact", "url": "/contact" }
+  ],
+  "testimonials": [
+    {
+      "name": "Sarah Johnson",
+      "role": "Graphic Designer",
+      "text": "EarthFlow Yoga has transformed my approach to wellness. The calming atmosphere and knowledgeable instructors have helped me reconnect with my inner self.",
+      "rating": 5
+    },
+    {
+      "name": "Michael Wong",
+      "role": "IT Specialist",
+      "text": "I’ve experienced a significant change in my stress levels since joining. The classes are perfectly paced, and I've met some amazing people!",
+      "rating": 4
+    }
+  ],
+  "services": [
+    {
+      "title": "Hatha Yoga",
+      "description": "A gentle introduction to the most basic yoga postures. Ideal for beginners.",
+      "icon": "🧘🏽"
+    },
+    {
+      "title": "Vinyasa Flow",
+      "description": "A dynamic style of yoga that blends movement with breath, perfect for those looking to build strength.",
+      "icon": "🌊"
+    },
+    {
+      "title": "Meditation Classes",
+      "description": "Sessions designed to cultivate mindfulness and relaxation through guided practices.",
+      "icon": "🕉️"
+    }
+  ],
+  "contact": {
+    "phone": "+1 (555) 123-4567",
+    "email": "info@earthflowyoga.com",
+    "address": "123 Serenity Lane, Smithville, ST 12345"
+  },
+  "footer": {
+    "description": "Join us at EarthFlow Yoga, where tranquility meets mindfulness. Let's embark on this journey together.",
+    "social_links": [
+      { "platform": "Facebook", "url": "https://facebook.com/earthflowyoga" },
+      { "platform": "Instagram", "url": "https://instagram.com/earthflowyoga" },
+      { "platform": "Twitter", "url": "https://twitter.com/earthflowyoga" }
+    ]
+  }
+}
