@@ -1,24 +1,24 @@
 {
-  "slug": "mindful-yoga-studio",
-  "name": "Mindful Yoga Studio",
-  "tagline": "Find Your Balance with Nature",
+  "slug": "modern-yoga-studio",
+  "name": "ZenFlow Yoga Studio",
+  "tagline": "Cultivate Mindfulness and Balance",
   "industry": "Health & Wellness",
-  "brand": "#8B5A2B",
-  "accent": "#D9CBAF",
-  "hero": "https://images.unsplash.com/photo-1512956751908-1bccf0cbffe7",
-  "description": "At Mindful Yoga Studio, we offer a sanctuary for healing and growth through the ancient practice of yoga. Our classes are designed to cultivate mindfulness while connecting deeply with one's surroundings using earthy tones that resonate with nature.",
+  "brand": "#4A7023",
+  "accent": "#E3B04D",
+  "hero": "https://images.unsplash.com/photo-1567082173066-5b3b09641e10",
+  "description": "ZenFlow Yoga Studio is a serene space designed to help you reconnect with your body and mind. We offer a variety of classes focusing on mindfulness, flexibility, and strength, all within a calming environment inspired by earth tones. Join us on a journey towards inner peace and well-being.",
   "pages": [
     {
       "slug": "home",
-      "title": "Home",
+      "title": "Welcome to ZenFlow",
       "content": [
         {
-          "heading": "Welcome to Mindful Yoga Studio",
-          "paragraph": "Join us for immersive yoga experiences that promote mental clarity and physical wellness. Our classes are tailored for all levels, incorporating elements of mindfulness and nature."
+          "heading": "Find Your Center",
+          "paragraph": "At ZenFlow, we believe that yoga is for everyone. Our expertly trained instructors guide you through practices that promote physical and mental health. Explore our offerings and find a class that resonates with your journey."
         },
         {
           "heading": "Our Philosophy",
-          "paragraph": "We believe in the healing power of nature and mindfulness. Our studio provides a nurturing and grounding environment, with classes designed to align your body and mind."
+          "paragraph": "Mindfulness is at the core of what we do. Through each session, we emphasize the connection between breath, movement, and presence, helping you cultivate harmony in your daily life."
         }
       ]
     },
@@ -27,125 +27,101 @@
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Story",
-          "paragraph": "Founded by a group of passionate yoga instructors, Mindful Yoga Studio is dedicated to creating a holistic approach to wellness. We integrate the beauty of the natural world into our practice and community."
+          "heading": "Our Mission",
+          "paragraph": "ZenFlow Yoga Studio aims to create a supportive community where individuals can explore their personal practice, enhance their wellness journey, and connect with like-minded people."
         },
         {
           "heading": "Meet Our Instructors",
-          "paragraph": "Our experienced instructors bring a diverse range of styles and backgrounds. Each instructor embodies our mission to inspire and empower individuals through mindful movement."
+          "paragraph": "Our certified instructors bring a wealth of experience and passion for yoga. Each teacher has a unique style, ensuring that you’ll find someone who inspires you."
         }
       ]
     },
     {
       "slug": "classes",
-      "title": "Classes",
+      "title": "Classes & Schedule",
       "content": [
         {
           "heading": "Class Offerings",
-          "paragraph": "We offer a variety of classes suitable for all levels. From gentle Hatha to energizing Vinyasa, find your flow with us."
+          "paragraph": "We offer a diverse range of classes to accommodate all levels, including Hatha, Vinyasa, Yin, and Restorative yoga. Whether you are a beginner or an advanced practitioner, you will find the perfect class for you."
         },
         {
-          "heading": "Schedule and Registration",
-          "paragraph": "Check our class schedule for upcoming sessions and reserve your spot today. Join our community and transform your practice!"
+          "heading": "Weekly Schedule",
+          "paragraph": "Check out our updated weekly class schedule, which includes morning and evening sessions for your convenience. Book your spot online and prepare to embark on a uplifting journey."
         }
       ]
     },
     {
       "slug": "services",
-      "title": "Services",
+      "title": "Wellness Services",
       "content": [
         {
-          "heading": "Private Sessions",
-          "paragraph": "Experience individualized attention and tailored practices to meet your needs. Schedule a private session to deepen your practice.",
-        "icon": "🧘‍♀️"
-        },
+          "heading": "Additional Services",
+          "paragraph": "In addition to yoga classes, we offer meditation workshops, personal training, and wellness retreats designed to help you deepen your practice and enhance your overall well-being."
+        }
+      ]
+    },
+    {
+      "slug": "testimonials",
+      "title": "What Our Clients Say",
+      "content": [
         {
-          "heading": "Workshops",
-          "paragraph": "Join our workshops focused on specific techniques and themes, such as mindfulness meditation and breathwork.",
-          "icon": "📚"
-        },
-        {
-          "heading": "Corporate Yoga",
-          "paragraph": "Enhance workplace wellness with our corporate yoga programs designed to reduce stress and increase productivity.",
-          "icon": "🏢"
+          "heading": "Client Experiences",
+          "paragraph": "Discover how ZenFlow has transformed the lives of our clients through their yoga journey. Read their testimonials and find out how you might also benefit."
         }
       ]
     },
     {
       "slug": "contact",
-      "title": "Contact Us",
+      "title": "Get in Touch",
       "content": [
         {
-          "heading": "Get in Touch",
-          "paragraph": "We’d love to hear from you! For questions about our classes, workshops, or anything else, don't hesitate to contact us."
+          "heading": "We'd Love to Hear from You",
+          "paragraph": "For questions about classes, workshops, or to book a private session, please reach out to us!"
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "Home",
-      "url": "/"
-    },
-    {
-      "label": "About",
-      "url": "/about"
-    },
-    {
-      "label": "Classes",
-      "url": "/classes"
-    },
-    {
-      "label": "Services",
-      "url": "/services"
-    },
-    {
-      "label": "Contact",
-      "url": "/contact"
-    }
+    { "label": "Home", "url": "/home" },
+    { "label": "About", "url": "/about" },
+    { "label": "Classes", "url": "/classes" },
+    { "label": "Wellness Services", "url": "/services" },
+    { "label": "Testimonials", "url": "/testimonials" },
+    { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
-    {
-      "name": "Sophia Tran",
-      "role": "Yoga Enthusiast",
-      "text": "Mindful Yoga Studio has transformed my practice and taught me to connect deeper with myself and nature.",
-      "rating": 5
-    },
-    {
-      "name": "Marcus Lee",
-      "role": "Corporate Client",
-      "text": "The corporate yoga program has brought my team closer and reduced our stress levels significantly. Highly recommend!",
-      "rating": 4
-    }
+    { "name": "Sarah Thompson", "role": "Yoga Enthusiast", "text": "ZenFlow transformed my practice and my life. The instructors are incredibly supportive and knowledgeable.", "rating": 5 },
+    { "name": "Michael Chang", "role": "Beginner Yogi", "text": "I felt welcomed from the very first class. It's a peaceful environment that encourages you to grow.", "rating": 4 },
+    { "name": "Emily Rivera", "role": "Wellness Coach", "text": "The mindfulness focus at ZenFlow has helped my clients immensely. I highly recommend their classes.", "rating": 5 }
   ],
   "services": [
     {
-      "title": "Private Sessions",
-      "description": "Experience one-on-one attention to deepen your practice and cater to your specific needs.",
+      "title": "Yoga Classes",
+      "description": "Regular classes tailored for all skill levels, focusing on mindfulness and technique.",
       "icon": "🧘‍♀️"
     },
     {
-      "title": "Workshops",
-      "description": "Participate in workshops focusing on mindfulness, meditation, and advanced yoga techniques.",
-      "icon": "📚"
+      "title": "Meditation Workshops",
+      "description": "Deepen your practice with guided meditation sessions and mindfulness training.",
+      "icon": "🧘‍♂️"
     },
     {
-      "title": "Corporate Yoga Programs",
-      "description": "Bring the benefits of yoga into the workplace for employee well-being and productivity.",
-      "icon": "🏢"
+      "title": "Wellness Retreats",
+      "description": "Join us for immersive retreats that combine yoga, meditation, and community.",
+      "icon": "🏞️"
     }
   ],
   "contact": {
-    "phone": "(555) 123-4567",
-    "email": "info@mindfulyogastudio.com",
-    "address": "123 Serenity Way, Mindful City, ST 12345"
+    "phone": "+1 (555) 018-2023",
+    "email": "info@zenflowyoga.com",
+    "address": "123 Peace Road, Relax City, State, 12345"
   },
   "footer": {
-    "description": "Mindful Yoga Studio - Your sanctuary for wellness and mindfulness.",
-    "social_links": {
-      "facebook": "https://facebook.com/mindfulyogastudio",
-      "instagram": "https://instagram.com/mindfulyogastudio",
-      "twitter": "https://twitter.com/mindfulyoga"
-    }
+    "description": "Join the ZenFlow community and embrace a mindful lifestyle. Follow us on social media for updates on classes and events.",
+    "social_links": [
+      { "platform": "Facebook", "url": "https://facebook.com/zenflowyoga" },
+      { "platform": "Instagram", "url": "https://instagram.com/zenflowyoga" },
+      { "platform": "Twitter", "url": "https://twitter.com/zenflowyoga" }
+    ]
   }
 }
