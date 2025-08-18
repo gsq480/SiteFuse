@@ -44,7 +44,7 @@ jobs:
           HOST: ${{ secrets.CLOUDWAYS_HOST }}
           USER: ${{ secrets.CLOUDWAYS_USER }}
         run: |
-          ssh -i ~/.ssh/id_rsa "$USER@$HOST" 'mkdir -p "/home/1504475.cloudwaysapps.com/zhudbfctnw/public_html/wp-content/themes/sitefuse-agency"'
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" 'mkdir -p "/home/1504475.cloudwaysapps.com/zhudbfctnw/public_html/wp-content/themes/sitefuse-agency"'
 
       - name: Rsync theme to Cloudways
         env:
@@ -56,15 +56,15 @@ jobs:
           rsync -rlvz --delete \
             --exclude ".git/" --exclude ".github/" --exclude "node_modules/" --exclude ".DS_Store" \
             --no-perms --no-owner --no-group --omit-dir-times --no-times \
-            -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes -o BatchMode=yes" \
-            "$SRC" "$USER@$HOST:$DEST"
+            -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no -o BatchMode=yes" \
+            "$SRC" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEST"
 
       - name: Activate theme and flush cache
         env:
           HOST: ${{ secrets.CLOUDWAYS_HOST }}
           USER: ${{ secrets.CLOUDWAYS_USER }}
         run: |
-          ssh -i ~/.ssh/id_rsa "$USER@$HOST" '
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" '
             cd /home/1504475.cloudwaysapps.com/zhudbfctnw/public_html &&
             wp theme activate sitefuse-agency --allow-root || true &&
             wp cache flush --allow-root || true &&
