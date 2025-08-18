@@ -250,7 +250,7 @@ jobs:
           fi
 
       - name: Deploy to Cloudways via rsync
-        if: success()
+        # if: success()
         run: |
           THEME_DIR="child-themes/${{ steps.openai.outputs.slug }}-child"
           if [ -d "$GITHUB_WORKSPACE/$THEME_DIR" ]; then
@@ -264,7 +264,7 @@ jobs:
           fi
 
       - name: Activate Theme
-        if: success()
+        # if: success()
         run: |
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
             $CLOUDWAYS_USER@$CLOUDWAYS_HOST \
