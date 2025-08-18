@@ -1,24 +1,24 @@
 {
-  "slug": "modern-yoga-studio",
-  "name": "ZenFlow Yoga Studio",
-  "tagline": "Cultivate Mindfulness and Balance",
-  "industry": "Health & Wellness",
-  "brand": "#4A7023",
-  "accent": "#E3B04D",
-  "hero": "https://images.unsplash.com/photo-1567082173066-5b3b09641e10",
-  "description": "ZenFlow Yoga Studio is a serene space designed to help you reconnect with your body and mind. We offer a variety of classes focusing on mindfulness, flexibility, and strength, all within a calming environment inspired by earth tones. Join us on a journey towards inner peace and well-being.",
+  "slug": "modern-yoga-for-kids",
+  "name": "Playful Roots Yoga",
+  "tagline": "Mindful Movements for Little Ones",
+  "industry": "Yoga Studio",
+  "brand": "#C7B299",
+  "accent": "#A7C6A6",
+  "hero": "https://images.unsplash.com/photo-1603736803329-b94e2c428f90",
+  "description": "Playful Roots Yoga is a modern studio dedicated to introducing children to the joys of mindfulness and yoga in a fun, supportive environment. Our classes are designed to inspire young minds, promote physical wellbeing, and cultivate emotional balance through playful movement and earth-toned aesthetics.",
   "pages": [
     {
       "slug": "home",
-      "title": "Welcome to ZenFlow",
+      "title": "Home",
       "content": [
         {
-          "heading": "Find Your Center",
-          "paragraph": "At ZenFlow, we believe that yoga is for everyone. Our expertly trained instructors guide you through practices that promote physical and mental health. Explore our offerings and find a class that resonates with your journey."
+          "heading": "Welcome to Playful Roots Yoga",
+          "paragraph": "Discover a nurturing space where children can explore yoga through fun, interactive sessions. Our experienced instructors blend mindfulness techniques with engaging activities tailored to young learners."
         },
         {
           "heading": "Our Philosophy",
-          "paragraph": "Mindfulness is at the core of what we do. Through each session, we emphasize the connection between breath, movement, and presence, helping you cultivate harmony in your daily life."
+          "paragraph": "At Playful Roots Yoga, we believe in fostering creativity and mindfulness in children. We use natural elements, soothing colors, and playful designs to create an inviting atmosphere that encourages exploration."
         }
       ]
     },
@@ -28,100 +28,116 @@
       "content": [
         {
           "heading": "Our Mission",
-          "paragraph": "ZenFlow Yoga Studio aims to create a supportive community where individuals can explore their personal practice, enhance their wellness journey, and connect with like-minded people."
+          "paragraph": "To cultivate a love for yoga and mindfulness in children, equipping them with skills to nurture their body, mind, and spirit."
         },
         {
-          "heading": "Meet Our Instructors",
-          "paragraph": "Our certified instructors bring a wealth of experience and passion for yoga. Each teacher has a unique style, ensuring that you’ll find someone who inspires you."
+          "heading": "Meet the Team",
+          "paragraph": "Our instructors are not just yoga enthusiasts; they are trained professionals with experience in child development and education. They're passionate about helping children thrive through movement and mindfulness."
         }
       ]
     },
     {
       "slug": "classes",
-      "title": "Classes & Schedule",
+      "title": "Classes",
       "content": [
         {
-          "heading": "Class Offerings",
-          "paragraph": "We offer a diverse range of classes to accommodate all levels, including Hatha, Vinyasa, Yin, and Restorative yoga. Whether you are a beginner or an advanced practitioner, you will find the perfect class for you."
+          "heading": "Yoga for Beginners (Ages 3-5)",
+          "paragraph": "Introducing young children to the basics of yoga through games and stories, promoting foundational skills and body awareness."
         },
         {
-          "heading": "Weekly Schedule",
-          "paragraph": "Check out our updated weekly class schedule, which includes morning and evening sessions for your convenience. Book your spot online and prepare to embark on a uplifting journey."
-        }
-      ]
-    },
-    {
-      "slug": "services",
-      "title": "Wellness Services",
-      "content": [
+          "heading": "Mindful Explorers (Ages 6-10)",
+          "paragraph": "A playful program that combines yoga poses with mindfulness practices, enhancing focus and emotional regulation."
+        },
         {
-          "heading": "Additional Services",
-          "paragraph": "In addition to yoga classes, we offer meditation workshops, personal training, and wellness retreats designed to help you deepen your practice and enhance your overall well-being."
+          "heading": "Tween Yoga (Ages 11-13)",
+          "paragraph": "A space for tweens to navigate their growing bodies and minds through yoga, fostering confidence and community."
         }
       ]
     },
     {
       "slug": "testimonials",
-      "title": "What Our Clients Say",
+      "title": "Testimonials",
       "content": [
         {
-          "heading": "Client Experiences",
-          "paragraph": "Discover how ZenFlow has transformed the lives of our clients through their yoga journey. Read their testimonials and find out how you might also benefit."
+          "heading": "What Parents Say",
+          "paragraph": "Playful Roots Yoga has transformed my child's confidence! The instructors are incredibly nurturing, and the environment feels so calming and inviting."
+        },
+        {
+          "heading": "Our Community Impact",
+          "paragraph": "The mindfulness techniques have helped my daughter manage her emotions better. I can see a positive change in her daily interactions."
         }
       ]
     },
     {
       "slug": "contact",
-      "title": "Get in Touch",
+      "title": "Contact Us",
       "content": [
         {
-          "heading": "We'd Love to Hear from You",
-          "paragraph": "For questions about classes, workshops, or to book a private session, please reach out to us!"
+          "heading": "Get in Touch",
+          "paragraph": "We would love to hear from you! Whether you have questions about our classes or want to enroll your child, feel free to reach out."
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/home" },
-    { "label": "About", "url": "/about" },
-    { "label": "Classes", "url": "/classes" },
-    { "label": "Wellness Services", "url": "/services" },
-    { "label": "Testimonials", "url": "/testimonials" },
-    { "label": "Contact", "url": "/contact" }
+    {
+      "label": "Home",
+      "url": "/home"
+    },
+    {
+      "label": "About",
+      "url": "/about"
+    },
+    {
+      "label": "Classes",
+      "url": "/classes"
+    },
+    {
+      "label": "Testimonials",
+      "url": "/testimonials"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
   ],
   "testimonials": [
-    { "name": "Sarah Thompson", "role": "Yoga Enthusiast", "text": "ZenFlow transformed my practice and my life. The instructors are incredibly supportive and knowledgeable.", "rating": 5 },
-    { "name": "Michael Chang", "role": "Beginner Yogi", "text": "I felt welcomed from the very first class. It's a peaceful environment that encourages you to grow.", "rating": 4 },
-    { "name": "Emily Rivera", "role": "Wellness Coach", "text": "The mindfulness focus at ZenFlow has helped my clients immensely. I highly recommend their classes.", "rating": 5 }
+    {
+      "name": "Sarah Jane",
+      "role": "Parent",
+      "text": "Playful Roots Yoga has transformed my child's confidence! The instructors are incredibly nurturing, and the environment feels so calming and inviting.",
+      "rating": 5
+    },
+    {
+      "name": "Michael Thompson",
+      "role": "Child Psychologist",
+      "text": "The mindfulness techniques have helped my daughter manage her emotions better. I can see a positive change in her daily interactions.",
+      "rating": 5
+    }
   ],
   "services": [
     {
       "title": "Yoga Classes",
-      "description": "Regular classes tailored for all skill levels, focusing on mindfulness and technique.",
-      "icon": "🧘‍♀️"
+      "description": "Engaging yoga classes designed specifically for children, focusing on fun, creativity, and mindfulness.",
+      "icon": "🏋️‍♀️"
     },
     {
-      "title": "Meditation Workshops",
-      "description": "Deepen your practice with guided meditation sessions and mindfulness training.",
+      "title": "Mindfulness Workshops",
+      "description": "Interactive workshops that teach children techniques to practice mindfulness in their daily lives.",
       "icon": "🧘‍♂️"
-    },
-    {
-      "title": "Wellness Retreats",
-      "description": "Join us for immersive retreats that combine yoga, meditation, and community.",
-      "icon": "🏞️"
     }
   ],
   "contact": {
-    "phone": "+1 (555) 018-2023",
-    "email": "info@zenflowyoga.com",
-    "address": "123 Peace Road, Relax City, State, 12345"
+    "phone": "+1-555-0123",
+    "email": "info@playfulrootsyoga.com",
+    "address": "123 Mindful Lane, Happy Town, ST 12345"
   },
   "footer": {
-    "description": "Join the ZenFlow community and embrace a mindful lifestyle. Follow us on social media for updates on classes and events.",
-    "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/zenflowyoga" },
-      { "platform": "Instagram", "url": "https://instagram.com/zenflowyoga" },
-      { "platform": "Twitter", "url": "https://twitter.com/zenflowyoga" }
-    ]
+    "description": "Join us in nurturing your child's mind, body, and spirit through the joyful practice of yoga.",
+    "social_links": {
+      "facebook": "https://www.facebook.com/playfulrootsyoga",
+      "instagram": "https://www.instagram.com/playfulrootsyoga",
+      "twitter": "https://twitter.com/playfulroots"
+    }
   }
 }
