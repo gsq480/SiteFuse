@@ -1,28 +1,24 @@
 {
   "slug": "canberra-cycling-club",
   "name": "Canberra Cycling Club",
-  "tagline": "Ride with Passion, Compete with Pride",
+  "tagline": "Ride, Race, and Revel in Cycling!",
   "industry": "Sports & Recreation",
-  "brand": "#ff6700",
-  "accent": "#000000",
-  "hero": "https://images.unsplash.com/photo-1553647920-6c4de0be34b2",
-  "description": "The Canberra Cycling Club is dedicated to promoting cycling in the Canberra region through social riding and competitive events. With a variety of programs and support for cyclists of all levels, we aim to foster a vibrant and inclusive cycling community.",
+  "brand": "#004A1D",
+  "accent": "#FFCC00",
+  "hero": "https://images.unsplash.com/photo-1501961159663-29c6c3774a3c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDF8fGN5Y2xpbmd8ZW58MHx8fHwxNjQ0MTk1MjI0&ixlib=rb-4.0.3&q=80&w=1080",
+  "description": "The Canberra Cycling Club is dedicated to promoting cycling as a sport and lifestyle. We offer a variety of activities for cyclists of all levels, from casual rides to competitive racing. Join us to connect with other cycling enthusiasts and explore the beautiful routes around Canberra.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Canberra Cycling Club",
-          "paragraphs": [
-            "Join us in exploring the beauty of Canberra through cycling. Whether you're a beginner or an experienced cyclist, we have something for everyone!"
-          ]
+          "heading": "Welcome to the Canberra Cycling Club!",
+          "paragraph": "Join our community of passionate cyclists where everyone—from beginners to elite racers—can find their place. Our mission is to promote cycling as a sport and a healthy lifestyle while fostering camaraderie among riders."
         },
         {
-          "heading": "Join Our Rides",
-          "paragraphs": [
-            "Participate in our weekly rides and events designed for cyclists of all levels. Experience camaraderie and the joy of cycling in stunning Canberra scenery."
-          ]
+          "heading": "Upcoming events and rides",
+          "paragraph": "Stay tuned for our upcoming rides and events! Whether you're looking to participate in road races, mountain biking, or social rides, we have something for you."
         }
       ]
     },
@@ -31,36 +27,12 @@
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Mission",
-          "paragraphs": [
-            "Our mission is to encourage and support cycling in Canberra, providing opportunities for personal growth and competitive success.",
-            "We celebrate the spirit of cycling through community events and by fostering an inclusive environment for all cyclists."
-          ]
+          "heading": "Our Vision and Mission",
+          "paragraph": "At the Canberra Cycling Club, we aim to inspire and elevate the cycling community through organized events, training, and advocacy. Our mission is to promote cycling in the region and welcome all skill levels."
         },
         {
-          "heading": "Our History",
-          "paragraphs": [
-            "Established in 1994, Canberra Cycling Club has grown into a thriving community of cyclists. We aim to bring people together through cycling and enhance the local cycling culture."
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "membership",
-      "title": "Membership",
-      "content": [
-        {
-          "heading": "Become a Member",
-          "paragraphs": [
-            "Join us and gain access to exclusive benefits, including discounts on events, merchandise, and more!",
-            "Membership options include individual, family, and junior categories to cater to all cycling enthusiasts."
-          ]
-        },
-        {
-          "heading": "Sign Up Today!",
-          "paragraphs": [
-            "Ready to ride? Complete our easy online registration to become a part of our vibrant community today!"
-          ]
+          "heading": "Meet Our Team",
+          "paragraph": "Our dedicated team of volunteers and cycling enthusiasts are here to ensure a great experience for all members. From coaches to event organizers, we work tirelessly to create an inclusive cycling environment."
         }
       ]
     },
@@ -70,15 +42,25 @@
       "content": [
         {
           "heading": "Upcoming Events",
-          "paragraphs": [
-            "Stay tuned for our exciting lineup of events, including races, charity rides, and community gatherings. There's always something happening at Canberra Cycling Club!"
-          ]
+          "paragraph": "Check out our calendar for the latest events happening in and around Canberra. Join races, workshops, and social rides and encourage others by participating."
         },
         {
-          "heading": "Event Calendar",
-          "paragraphs": [
-            "Check out our calendar for dates, locations, and details on all upcoming events. Join us and meet fellow cycling enthusiasts!"
-          ]
+          "heading": "Event Registration",
+          "paragraph": "Registration for events is easy! Browse through our upcoming events and secure your spot to participate in exciting rides."
+        }
+      ]
+    },
+    {
+      "slug": "membership",
+      "title": "Membership",
+      "content": [
+        {
+          "heading": "Become a Member",
+          "paragraph": "Join the Canberra Cycling Club to unlock exclusive access to events, training sessions, and community resources. As a member, you also support cycling initiatives in the Canberra region."
+        },
+        {
+          "heading": "Renew Membership",
+          "paragraph": "Existing members can easily renew their membership through our online portal. Thank you for being a part of our community!"
         }
       ]
     },
@@ -88,87 +70,55 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraphs": [
-            "Have questions or comments? Reach out to us and we'll be happy to assist you!"
-          ]
-        },
-        {
-          "heading": "Stay Connected",
-          "paragraphs": [
-            "Follow us on our social media channels for the latest news and updates on cycling in Canberra."
-          ]
+          "paragraph": "We would love to hear from you! Whether you have questions about membership or events, feel free to reach out."
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "Home",
-      "url": "/"
-    },
-    {
-      "label": "About Us",
-      "url": "/about"
-    },
-    {
-      "label": "Membership",
-      "url": "/membership"
-    },
-    {
-      "label": "Events",
-      "url": "/events"
-    },
-    {
-      "label": "Contact",
-      "url": "/contact"
-    }
+    { "label": "Home", "url": "/" },
+    { "label": "About", "url": "/about" },
+    { "label": "Events", "url": "/events" },
+    { "label": "Membership", "url": "/membership" },
+    { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Sarah Johnson",
+      "name": "Sarah Jones",
       "role": "Club Member",
-      "text": "Joining the Canberra Cycling Club has been one of the best decisions of my life! The community is welcoming and the rides are always a blast.",
+      "text": "Joining the Canberra Cycling Club has transformed my biking experience. I've made countless friends and improved my skills dramatically!",
       "rating": 5
     },
     {
-      "name": "David Lee",
-      "role": "Competitive Cyclist",
-      "text": "The club has helped me improve my skills tremendously while providing a great support network during competitions.",
+      "name": "Tom Williams",
+      "role": "Event Organizer",
+      "text": "The community here is amazing! Everyone is supportive and enthusiastic about cycling. It makes organizing events a joy!",
       "rating": 5
     }
   ],
   "services": [
     {
       "title": "Group Rides",
-      "description": "Join our regular group rides designed for cyclists of all skill levels. Experience the joy of cycling in a supportive environment.",
+      "description": "Join our weekly group rides for people of all skill levels. Whether you're a beginner or an experienced rider, there's a place for you.",
       "icon": "🚴‍♂️"
     },
     {
-      "title": "Coaching & Training",
-      "description": "Receive tailored coaching and training programs to help you reach your cycling goals, whether for competition or recreation.",
+      "title": "Competitive Racing",
+      "description": "Participate in competitive cycling events ranging from local races to national competitions. Test your skills and get involved in the competitive circuit.",
       "icon": "🏆"
     }
   ],
   "contact": {
     "phone": "+61 2 1234 5678",
     "email": "info@canberracyclingclub.org.au",
-    "address": "123 Cycling Lane, Canberra, ACT 2000, Australia"
+    "address": "123 Cycling Lane, Canberra, ACT, 2600"
   },
   "footer": {
-    "description": "Canberra Cycling Club - Where passion meets performance. Join our family of cycling enthusiasts.",
+    "description": "Join us in promoting cycling in Canberra. Connect, race, and enjoy the wonderful experience of cycling!",
     "social_links": [
-      {
-        "platform": "Facebook",
-        "url": "https://facebook.com/canberracyclingclub"
-      },
-      {
-        "platform": "Instagram",
-        "url": "https://instagram.com/canberracyclingclub"
-      },
-      {
-        "platform": "Twitter",
-        "url": "https://twitter.com/canberracycling"
-      }
+      { "platform": "Facebook", "url": "https://www.facebook.com/canberracyclingclub" },
+      { "platform": "Instagram", "url": "https://www.instagram.com/canberracyclingclub" },
+      { "platform": "Twitter", "url": "https://twitter.com/canberracycling" }
     ]
   }
 }
