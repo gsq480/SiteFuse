@@ -957,7 +957,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "
             set -euo pipefail
             cd '$THEMES_PATH'
-            echo 'Before cleanup:'; ls -1 | grep -E '.*-child || echo '(none)'
+            echo 'Before cleanup:'; ls -1 | grep -E '.*-child$' || echo '(none)'
             # delete all *-child except the current one
             for d in */ ; do
               d=\${d%/}
@@ -966,7 +966,7 @@ jobs:
                 rm -rf -- \"\$d\"
               fi
             done
-            echo 'After cleanup:'; ls -1 | grep -E '.*-child || echo '(none)'
+            echo 'After cleanup:'; ls -1 | grep -E '.*-child$' || echo '(none)'
           "
 
       - name: Activate Theme and Final Setup
