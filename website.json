@@ -1,12 +1,12 @@
 {
   "slug": "mindful-yoga-studio",
   "name": "Mindful Yoga Studio",
-  "tagline": "Nurture Your Body, Calm Your Mind",
-  "industry": "Yoga Studio",
-  "brand": "#4E6F6F",
-  "accent": "#C8D5B9",
-  "hero": "https://images.unsplash.com/photo-1517832558286-5cba1188e0b8",
-  "description": "At Mindful Yoga Studio, we believe in the power of yoga to transform lives. Our classes focus on mindfulness and holistic well-being while embracing the calming essence of earth tones to create a serene, inviting environment.",
+  "tagline": "Find Your Balance with Nature",
+  "industry": "Health & Wellness",
+  "brand": "#8B5A2B",
+  "accent": "#D9CBAF",
+  "hero": "https://images.unsplash.com/photo-1512956751908-1bccf0cbffe7",
+  "description": "At Mindful Yoga Studio, we offer a sanctuary for healing and growth through the ancient practice of yoga. Our classes are designed to cultivate mindfulness while connecting deeply with one's surroundings using earthy tones that resonate with nature.",
   "pages": [
     {
       "slug": "home",
@@ -14,11 +14,11 @@
       "content": [
         {
           "heading": "Welcome to Mindful Yoga Studio",
-          "paragraph": "Join us at Mindful Yoga Studio, where tranquility meets community. Our studio is dedicated to providing a nurturing space for all levels of yoga practitioners, fostering physical and mental well-being."
+          "paragraph": "Join us for immersive yoga experiences that promote mental clarity and physical wellness. Our classes are tailored for all levels, incorporating elements of mindfulness and nature."
         },
         {
-          "heading": "Explore Our Offerings",
-          "paragraph": "Whether you are a novice looking to embark on your yoga journey or an experienced yogi seeking to deepen your practice, we have classes and workshops tailored just for you."
+          "heading": "Our Philosophy",
+          "paragraph": "We believe in the healing power of nature and mindfulness. Our studio provides a nurturing and grounding environment, with classes designed to align your body and mind."
         }
       ]
     },
@@ -27,12 +27,12 @@
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Philosophy",
-          "paragraph": "Mindful Yoga Studio is rooted in the principles of mindfulness and connectedness. With a focus on earth elements, our classes aim to ground you in your practice and life."
+          "heading": "Our Story",
+          "paragraph": "Founded by a group of passionate yoga instructors, Mindful Yoga Studio is dedicated to creating a holistic approach to wellness. We integrate the beauty of the natural world into our practice and community."
         },
         {
-          "heading": "Our Team",
-          "paragraph": "Our dedicated team of certified instructors brings diverse backgrounds in yoga, meditation, and wellness, ensuring you receive personalized guidance and support."
+          "heading": "Meet Our Instructors",
+          "paragraph": "Our experienced instructors bring a diverse range of styles and backgrounds. Each instructor embodies our mission to inspire and empower individuals through mindful movement."
         }
       ]
     },
@@ -41,12 +41,33 @@
       "title": "Classes",
       "content": [
         {
-          "heading": "Yoga for Everyone",
-          "paragraph": "We offer a variety of classes designed for all levels, including Hatha, Vinyasa, Yin, and Restorative Yoga, with an emphasis on mindfulness and breathwork."
+          "heading": "Class Offerings",
+          "paragraph": "We offer a variety of classes suitable for all levels. From gentle Hatha to energizing Vinyasa, find your flow with us."
         },
         {
-          "heading": "Workshops and Events",
-          "paragraph": "Join us for special workshops focused on deepening your practice, including meditation sessions, alignment workshops, and wellness retreats."
+          "heading": "Schedule and Registration",
+          "paragraph": "Check our class schedule for upcoming sessions and reserve your spot today. Join our community and transform your practice!"
+        }
+      ]
+    },
+    {
+      "slug": "services",
+      "title": "Services",
+      "content": [
+        {
+          "heading": "Private Sessions",
+          "paragraph": "Experience individualized attention and tailored practices to meet your needs. Schedule a private session to deepen your practice.",
+        "icon": "🧘‍♀️"
+        },
+        {
+          "heading": "Workshops",
+          "paragraph": "Join our workshops focused on specific techniques and themes, such as mindfulness meditation and breathwork.",
+          "icon": "📚"
+        },
+        {
+          "heading": "Corporate Yoga",
+          "paragraph": "Enhance workplace wellness with our corporate yoga programs designed to reduce stress and increase productivity.",
+          "icon": "🏢"
         }
       ]
     },
@@ -56,7 +77,7 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "We'd love to hear from you! Whether you have questions about classes, memberships, or anything else, feel free to reach out."
+          "paragraph": "We’d love to hear from you! For questions about our classes, workshops, or anything else, don't hesitate to contact us."
         }
       ]
     }
@@ -75,67 +96,56 @@
       "url": "/classes"
     },
     {
+      "label": "Services",
+      "url": "/services"
+    },
+    {
       "label": "Contact",
       "url": "/contact"
     }
   ],
   "testimonials": [
     {
-      "name": "Samantha Greene",
-      "role": "Yoga Practitioner",
-      "text": "Mindful Yoga Studio has changed my life! The peaceful atmosphere and expert instruction have helped me find balance and serenity.",
+      "name": "Sophia Tran",
+      "role": "Yoga Enthusiast",
+      "text": "Mindful Yoga Studio has transformed my practice and taught me to connect deeper with myself and nature.",
       "rating": 5
     },
     {
-      "name": "James Carter",
-      "role": "Wellness Coach",
-      "text": "Such a beautiful studio! The community is welcoming, and the emphasis on mindfulness greatly enhances my practice.",
+      "name": "Marcus Lee",
+      "role": "Corporate Client",
+      "text": "The corporate yoga program has brought my team closer and reduced our stress levels significantly. Highly recommend!",
       "rating": 4
-    },
-    {
-      "name": "Maria Lopez",
-      "role": "Meditation Instructor",
-      "text": "The variety of classes offered at Mindful Yoga Studio provides endless opportunities for growth. It's more than just a yoga studio; it's a home.",
-      "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Group Classes",
-      "description": "Engage in dynamic group sessions that promote physical health and mental clarity.",
-      "icon": "🏄‍♀️"
-    },
-    {
       "title": "Private Sessions",
-      "description": "Tailored yoga sessions to meet your individual needs, perfect for personalized guidance.",
-      "icon": "🧘‍♂️"
+      "description": "Experience one-on-one attention to deepen your practice and cater to your specific needs.",
+      "icon": "🧘‍♀️"
     },
     {
-      "title": "Workshops & Events",
-      "description": "Join our immersive workshops and mindful events designed to deepen your practice.",
-      "icon": "🎉"
+      "title": "Workshops",
+      "description": "Participate in workshops focusing on mindfulness, meditation, and advanced yoga techniques.",
+      "icon": "📚"
+    },
+    {
+      "title": "Corporate Yoga Programs",
+      "description": "Bring the benefits of yoga into the workplace for employee well-being and productivity.",
+      "icon": "🏢"
     }
   ],
   "contact": {
-    "phone": "(555) 678-1234",
+    "phone": "(555) 123-4567",
     "email": "info@mindfulyogastudio.com",
-    "address": "123 Serenity Way, Mindful City, CA 90001"
+    "address": "123 Serenity Way, Mindful City, ST 12345"
   },
   "footer": {
-    "description": "Thank you for being part of our journey at Mindful Yoga Studio. We look forward to supporting you on your yoga path.",
-    "social_links": [
-      {
-        "platform": "Facebook",
-        "url": "https://facebook.com/mindfulyogastudio"
-      },
-      {
-        "platform": "Instagram",
-        "url": "https://instagram.com/mindfulyogastudio"
-      },
-      {
-        "platform": "Twitter",
-        "url": "https://twitter.com/mindfulyogastudio"
-      }
-    ]
+    "description": "Mindful Yoga Studio - Your sanctuary for wellness and mindfulness.",
+    "social_links": {
+      "facebook": "https://facebook.com/mindfulyogastudio",
+      "instagram": "https://instagram.com/mindfulyogastudio",
+      "twitter": "https://twitter.com/mindfulyoga"
+    }
   }
 }
