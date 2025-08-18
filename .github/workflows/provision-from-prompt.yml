@@ -928,28 +928,28 @@ jobs:
               # Create main pages with AI content (check for existing pages first)
               
               # About page
-              ABOUT_EXISTS=$(wp post list --post_type=page --name=about --fields=ID --allow-root | head -1)
+              ABOUT_EXISTS=$(/usr/local/bin/wp post list --post_type=page --name=about --fields=ID --allow-root | head -1)
               if [ -z "$ABOUT_EXISTS" ]; then
                 ABOUT_CONTENT=$(jq -r '.pages[]? | select(.slug=="about") | .content[0].paragraphs[0] // "We are passionate professionals dedicated to delivering exceptional results."' website.json)
                 /usr/local/bin/wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content="$ABOUT_CONTENT" --allow-root || true
               fi
               
               # Services page
-              SERVICES_EXISTS=$(wp post list --post_type=page --name=services --fields=ID --allow-root | head -1)
+              SERVICES_EXISTS=$(/usr/local/bin/wp post list --post_type=page --name=services --fields=ID --allow-root | head -1)
               if [ -z "$SERVICES_EXISTS" ]; then
                 SERVICES_CONTENT=$(jq -r '.pages[]? | select(.slug=="services") | .content[0].paragraphs[0] // "We offer comprehensive solutions designed to meet your specific needs."' website.json)
                 /usr/local/bin/wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content="$SERVICES_CONTENT" --allow-root || true
               fi
               
               # Contact page
-              CONTACT_EXISTS=$(wp post list --post_type=page --name=contact --fields=ID --allow-root | head -1)
+              CONTACT_EXISTS=$(/usr/local/bin/wp post list --post_type=page --name=contact --fields=ID --allow-root | head -1)
               if [ -z "$CONTACT_EXISTS" ]; then
                 CONTACT_CONTENT=$(jq -r '.pages[]? | select(.slug=="contact") | .content[0].paragraphs[0] // "Ready to get started? We would love to hear from you."' website.json)
                 /usr/local/bin/wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content="$CONTACT_CONTENT" --allow-root || true
               fi
               
               # Home page - check if it exists
-              HOME_EXISTS=$(wp post list --post_type=page --name=home --fields=ID --allow-root | head -1)
+              HOME_EXISTS=$(/usr/local/bin/wp post list --post_type=page --name=home --fields=ID --allow-root | head -1)
               if [ -z "$HOME_EXISTS" ]; then
                 /usr/local/bin/wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --allow-root || true
               fi
@@ -1011,9 +1011,9 @@ jobs:
             /usr/local/bin/wp theme activate '${SLUG}-child' --allow-root
             
             # Set front page to static and create homepage if needed
-            FRONT_PAGE_ID=\$(wp post list --post_type=page --meta_key=_wp_page_template --meta_value=front-page.php --field=ID --allow-root)
+            FRONT_PAGE_ID=\$(/usr/local/bin/wp post list --post_type=page --meta_key=_wp_page_template --meta_value=front-page.php --field=ID --allow-root)
             if [ -z \"\$FRONT_PAGE_ID\" ]; then
-              FRONT_PAGE_ID=\$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --porcelain --allow-root)
+              FRONT_PAGE_ID=\$(/usr/local/bin/wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --porcelain --allow-root)
             fi
             
             /usr/local/bin/wp option update show_on_front page --allow-root
