@@ -57,7 +57,7 @@ jobs:
           set -euo pipefail
 
           # Enhanced prompt for comprehensive website generation
-          cat > /tmp/payload.json <<JSON
+          cat > /tmp/payload.json <<'EOF'
           {
             "model":"gpt-4o-mini",
             "response_format":{"type":"json_object"},
