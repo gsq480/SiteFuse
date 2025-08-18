@@ -1,38 +1,30 @@
 {
-  "slug": "modern-yoga-for-kids",
-  "name": "Playful Roots Yoga",
-  "tagline": "Mindful Movements for Little Ones",
+  "slug": "modern-yoga-studio",
+  "name": "Tranquil Flow Yoga",
+  "tagline": "Embrace Mindfulness, Experience Balance",
   "industry": "Yoga Studio",
-  "brand": "#C7B299",
-  "accent": "#A7C6A6",
-  "hero": "https://images.unsplash.com/photo-1603736803329-b94e2c428f90",
-  "description": "Playful Roots Yoga is a modern studio dedicated to introducing children to the joys of mindfulness and yoga in a fun, supportive environment. Our classes are designed to inspire young minds, promote physical wellbeing, and cultivate emotional balance through playful movement and earth-toned aesthetics.",
+  "brand": "#d5c8a0",
+  "accent": "#a88d6d",
+  "hero": "https://images.unsplash.com/photo-1524391252468-384b9b425bc4",
+  "description": "At Tranquil Flow Yoga, we provide a serene environment for modern yogis to connect with their inner selves. Our mindful practices and earth-toned ambiance foster peace, balance, and wellness for all levels of practitioners.",
   "pages": [
-    {
-      "slug": "home",
-      "title": "Home",
-      "content": [
-        {
-          "heading": "Welcome to Playful Roots Yoga",
-          "paragraph": "Discover a nurturing space where children can explore yoga through fun, interactive sessions. Our experienced instructors blend mindfulness techniques with engaging activities tailored to young learners."
-        },
-        {
-          "heading": "Our Philosophy",
-          "paragraph": "At Playful Roots Yoga, we believe in fostering creativity and mindfulness in children. We use natural elements, soothing colors, and playful designs to create an inviting atmosphere that encourages exploration."
-        }
-      ]
-    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Mission",
-          "paragraph": "To cultivate a love for yoga and mindfulness in children, equipping them with skills to nurture their body, mind, and spirit."
+          "heading": "Our Philosophy",
+          "paragraphs": [
+            "Tranquil Flow Yoga was born from a passion for wellness and mindfulness. We believe that yoga is a journey towards self-discovery, and our mission is to provide a welcoming space for practitioners of all levels.",
+            "Our experienced instructors guide students through a variety of classes rooted in mindfulness and respect for nature, using only eco-friendly materials."
+          ]
         },
         {
-          "heading": "Meet the Team",
-          "paragraph": "Our instructors are not just yoga enthusiasts; they are trained professionals with experience in child development and education. They're passionate about helping children thrive through movement and mindfulness."
+          "heading": "Our Studio",
+          "paragraphs": [
+            "Our studio embodies a minimalist, earthy aesthetic designed to elevate your yoga experience. Features include natural light, eco-friendly Yoga mats, and organic materials that envelop our space in tranquility.",
+            "We invite you to explore our tranquil environment and experience yoga in a way that aligns with nature."
+          ]
         }
       ]
     },
@@ -41,30 +33,37 @@
       "title": "Classes",
       "content": [
         {
-          "heading": "Yoga for Beginners (Ages 3-5)",
-          "paragraph": "Introducing young children to the basics of yoga through games and stories, promoting foundational skills and body awareness."
-        },
-        {
-          "heading": "Mindful Explorers (Ages 6-10)",
-          "paragraph": "A playful program that combines yoga poses with mindfulness practices, enhancing focus and emotional regulation."
-        },
-        {
-          "heading": "Tween Yoga (Ages 11-13)",
-          "paragraph": "A space for tweens to navigate their growing bodies and minds through yoga, fostering confidence and community."
+          "heading": "Our Offerings",
+          "paragraphs": [
+            "We offer a range of classes tailored to all levels, including Vinyasa, Hatha, Yin, and Restorative yoga. Each class emphasizes mindfulness and breath awareness, helping you cultivate a deeper connection with your body and mind.",
+            "With intimate class sizes, our dedicated instructors provide personalized guidance to ensure your practice is safe and enriching."
+          ]
         }
       ]
     },
     {
-      "slug": "testimonials",
-      "title": "Testimonials",
+      "slug": "schedule",
+      "title": "Class Schedule",
       "content": [
         {
-          "heading": "What Parents Say",
-          "paragraph": "Playful Roots Yoga has transformed my child's confidence! The instructors are incredibly nurturing, and the environment feels so calming and inviting."
-        },
+          "heading": "Weekly Schedule",
+          "paragraphs": [
+            "Check our schedule for class times and availability. We offer morning and evening classes, ensuring you have the flexibility to find your ideal practice time.",
+            "Please reserve your spot in advance, as spaces are limited!"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "teachers",
+      "title": "Meet Our Instructors",
+      "content": [
         {
-          "heading": "Our Community Impact",
-          "paragraph": "The mindfulness techniques have helped my daughter manage her emotions better. I can see a positive change in her daily interactions."
+          "heading": "Our Team",
+          "paragraphs": [
+            "Our team of certified instructors brings diverse backgrounds, expertise, and teaching styles to Tranquil Flow Yoga, passionate about sharing the transformative benefits of yoga.",
+            "From alignment-based practices to mindfulness coaching, each instructor supports you on your personal yoga journey."
+          ]
         }
       ]
     },
@@ -73,71 +72,60 @@
       "title": "Contact Us",
       "content": [
         {
-          "heading": "Get in Touch",
-          "paragraph": "We would love to hear from you! Whether you have questions about our classes or want to enroll your child, feel free to reach out."
+          "heading": "Get In Touch",
+          "paragraphs": [
+            "Have questions about our classes or services? We'd love to hear from you!",
+            "You can reach us via phone or email, or stop by the studio to say hello!"
+          ]
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "Home",
-      "url": "/home"
-    },
-    {
-      "label": "About",
-      "url": "/about"
-    },
-    {
-      "label": "Classes",
-      "url": "/classes"
-    },
-    {
-      "label": "Testimonials",
-      "url": "/testimonials"
-    },
-    {
-      "label": "Contact",
-      "url": "/contact"
-    }
+    { "label": "Home", "url": "/" },
+    { "label": "About", "url": "/about" },
+    { "label": "Classes", "url": "/classes" },
+    { "label": "Schedule", "url": "/schedule" },
+    { "label": "Teachers", "url": "/teachers" },
+    { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Sarah Jane",
-      "role": "Parent",
-      "text": "Playful Roots Yoga has transformed my child's confidence! The instructors are incredibly nurturing, and the environment feels so calming and inviting.",
+      "name": "Emma Johnson",
+      "role": "Yoga Practitioner",
+      "text": "Tranquil Flow Yoga has transformed my practice and brought balance into my life. The instructors are genuinely supportive and knowledgeable.",
       "rating": 5
     },
     {
-      "name": "Michael Thompson",
-      "role": "Child Psychologist",
-      "text": "The mindfulness techniques have helped my daughter manage her emotions better. I can see a positive change in her daily interactions.",
+      "name": "Liam Smith",
+      "role": "Yoga Enthusiast",
+      "text": "A beautiful, calming environment with fantastic classes! I always look forward to attending my sessions.",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Yoga Classes",
-      "description": "Engaging yoga classes designed specifically for children, focusing on fun, creativity, and mindfulness.",
-      "icon": "🏋️‍♀️"
+      "title": "Vinyasa Flow Classes",
+      "description": "A dynamic and energetic class that links breath with movement to create a flowing sequence.",
+      "icon": "https://img.icons8.com/color/48/000000/yoga.png"
     },
     {
-      "title": "Mindfulness Workshops",
-      "description": "Interactive workshops that teach children techniques to practice mindfulness in their daily lives.",
-      "icon": "🧘‍♂️"
+      "title": "Restorative Yoga",
+      "description": "Slow-paced and gentle yoga poses that support relaxation and healing.",
+      "icon": "https://img.icons8.com/color/48/000000/yoga.png"
     }
   ],
   "contact": {
-    "phone": "+1-555-0123",
-    "email": "info@playfulrootsyoga.com",
-    "address": "123 Mindful Lane, Happy Town, ST 12345"
+    "phone": "+123-456-7890",
+    "email": "info@tranquilflowyoga.com",
+    "address": "123 Peaceful St, Harmony City, HC 54321"
   },
   "footer": {
-    "description": "Join us in nurturing your child's mind, body, and spirit through the joyful practice of yoga.",
-    "social_links": {
-      "facebook": "https://www.facebook.com/playfulrootsyoga",
-      "instagram": "https://www.instagram.com/playfulrootsyoga",
-      "twitter": "https://twitter.com/playfulroots"
-    }
+    "description": "Join us at Tranquil Flow Yoga to embark on a mindful journey of self-exploration and wellness.",
+    "social_links": [
+      { "platform": "Facebook", "url": "https://facebook.com/tranquilflowyoga" },
+      { "platform": "Instagram", "url": "https://instagram.com/tranquilflowyoga" },
+      { "platform": "Twitter", "url": "https://twitter.com/tranquilflowyoga" }
+    ]
   }
 }
