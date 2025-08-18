@@ -888,11 +888,19 @@ jobs:
           TAGLINE: ${{ steps.openai.outputs.tagline }}
         run: |
           set -euo pipefail
+            # Initialize variables
+            MENU_NAME="Primary Menu ${SLUG}"
+            EXISTING_MENU=""
+            MENU_ID=""
             export PATH=/usr/local/bin:$PATH
           
           # Create WordPress pages and content using AI-generated data
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "
             set -euo pipefail
+            # Initialize variables
+            MENU_NAME="Primary Menu ${SLUG}"
+            EXISTING_MENU=""
+            MENU_ID=""
             export PATH=/usr/local/bin:$PATH
             cd '$APP_PATH'
             
