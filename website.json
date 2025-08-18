@@ -1,84 +1,84 @@
 {
-  "slug": "modern-yoga-studio",
-  "name": "Serene Flow Studio",
-  "tagline": "Find Your Inner Peace",
-  "industry": "yoga-studio",
-  "brand": "#A68B5B",
-  "accent": "#D3C6B5",
-  "hero": "https://images.unsplash.com/photo-1547416124-4578b40331ee",
-  "description": "Serene Flow Studio is a modern yoga haven, thoughtfully designed to resonate with the tranquility of nature. We specialize in mindfulness practices to help you reconnect with your inner self and cultivate a peaceful lifestyle through yoga.",
+  "slug": "canberra-vikings-rugby",
+  "name": "Canberra Vikings Rugby Union",
+  "tagline": "Unleashing the Spirit of Rugby in Canberra",
+  "industry": "Sports",
+  "brand": "#0038A8",
+  "accent": "#FFCC00",
+  "hero": "https://images.unsplash.com/photo-1528940262278-37df9a1e3f20",
+  "description": "The Canberra Vikings Rugby Union team is dedicated to promoting the sport of rugby in the Canberra region. With a commitment to excellence on and off the field, we provide coaching for all ages and skill levels while fostering a strong sense of community and sportsmanship.",
   "pages": [
+    {
+      "slug": "home",
+      "title": "Home",
+      "content": [
+        {
+          "heading": "Welcome to Canberra Vikings Rugby Union",
+          "paragraph": "Join us in our quest for victory and glory, as we train hard and compete with passion. Our team is built on values of teamwork, respect, and integrity, ensuring every player feels at home."
+        },
+        {
+          "heading": "Latest News",
+          "paragraph": "Stay updated with our latest fixtures, results, and announcements. Follow us on social media for real-time updates and engage with our community."
+        }
+      ]
+    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Welcome to Serene Flow",
-          "paragraphs": [
-            "At Serene Flow Studio, we believe yoga is a journey of self-discovery. Our expert instructors guide you through rejuvenating classes in a peaceful setting that embraces earth tones and natural elements.",
-            "We are passionate about fostering a community of kindness, health, and mindfulness, encouraging each student to grow at their own pace."
-          ]
+          "heading": "Our Mission",
+          "paragraph": "To foster a love for rugby in Canberra by providing quality coaching and competitive opportunities for all players."
         },
         {
-          "heading": "Our Philosophy",
-          "paragraphs": [
-            "Our approach blends traditional yoga practices with modern mindfulness techniques to ensure a holistic experience. We aim to empower individuals with tools to cultivate awareness and balance in daily life."
-          ]
+          "heading": "Our Values",
+          "paragraph": "Teamwork, Respect, Integrity, Passion – these are the values that guide the Canberra Vikings Rugby Union team."
+        },
+        {
+          "heading": "History",
+          "paragraph": "Founded in 2012, the Canberra Vikings Rugby Union team has quickly become known for its dedication to developing talent and building a community around rugby in the region."
         }
       ]
     },
     {
-      "slug": "classes",
-      "title": "Our Classes",
+      "slug": "fixtures",
+      "title": "Fixtures & Results",
       "content": [
         {
-          "heading": "Explore Our Offerings",
-          "paragraphs": [
-            "We offer a variety of yoga classes suitable for all levels, including Hatha, Vinyasa, Restorative, and Yin Yoga. Each class is designed to promote physical strength, flexibility, and mental clarity."
-          ]
+          "heading": "Upcoming Matches",
+          "paragraph": "Check out our upcoming matches and support the team as we strive for victory."
         },
         {
-          "heading": "Schedule",
-          "paragraphs": [
-            "Join us for daily classes ranging from morning energizers to evening wind-down sessions. Check our online calendar for class times and availability.",
-            "Special workshops and retreats are also available throughout the year to deepen your practice."
-          ]
+          "heading": "Results Archive",
+          "paragraph": "Look back on our past matches and compare scores, player stats, and more."
         }
       ]
     },
     {
-      "slug": "instructors",
-      "title": "Meet Our Instructors",
+      "slug": "team",
+      "title": "Meet the Team",
       "content": [
         {
-          "heading": "Expert Guidance",
-          "paragraphs": [
-            "Our team of certified yoga instructors bring a wealth of knowledge and experience. Each instructor embodies the essence of mindfulness and is committed to guiding you through your wellness journey."
-          ]
+          "heading": "Players",
+          "paragraph": "Meet our talented players who embody the spirit of the Canberra Vikings. Each player brings unique skills, passion, and dedication to the team."
         },
         {
-          "heading": "Staff Profiles",
-          "paragraphs": [
-            "Get to know our instructors, their qualifications, and personal yoga journeys. Each instructor is dedicated to creating a nurturing environment for all practitioners."
-          ]
+          "heading": "Coaches",
+          "paragraph": "Our experienced coaching staff guides and mentors our players, ensuring they develop both as athletes and individuals."
         }
       ]
     },
     {
-      "slug": "mindfulness",
-      "title": "Mindfulness Focus",
+      "slug": "join-us",
+      "title": "Join the Vikings",
       "content": [
         {
-          "heading": "Integrating Mindfulness",
-          "paragraphs": [
-            "At Serene Flow, mindfulness is at the core of every class. We incorporate meditation and breathwork to help you cultivate presence and connect mind and body."
-          ]
+          "heading": "Become a Member",
+          "paragraph": "We welcome players of all ages and skill levels. Sign up to join our club and become part of the Canberra Vikings family."
         },
         {
-          "heading": "Mindfulness Workshops",
-          "paragraphs": [
-            "Join our mindfulness workshops to learn techniques that can help you manage stress and enhance focus, both on and off the mat."
-          ]
+          "heading": "Volunteer Opportunities",
+          "paragraph": "Interested in supporting the team? We are always looking for volunteers to help with game day operations and more."
         }
       ]
     },
@@ -87,70 +87,57 @@
       "title": "Contact Us",
       "content": [
         {
-          "heading": "We’d Love to Hear From You!",
-          "paragraphs": [
-            "If you have any questions about our classes or would like to learn more about our studio, please get in touch. We are here to support your yoga journey."
-          ]
+          "heading": "Get In Touch",
+          "paragraph": "Do you have questions? We'd love to hear from you!"
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/" },
-    { "label": "About", "url": "/about" },
-    { "label": "Classes", "url": "/classes" },
-    { "label": "Instructors", "url": "/instructors" },
-    { "label": "Mindfulness", "url": "/mindfulness" },
+    { "label": "Home", "url": "/home" },
+    { "label": "About Us", "url": "/about" },
+    { "label": "Fixtures & Results", "url": "/fixtures" },
+    { "label": "Meet the Team", "url": "/team" },
+    { "label": "Join Us", "url": "/join-us" },
     { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Emma Williams",
-      "role": "Yoga Enthusiast",
-      "text": "Serene Flow has transformed my life. The mindfulness practices have helped me cope with stress and find balance.",
+      "name": "John Doe",
+      "role": "Team Captain",
+      "text": "Being part of the Canberra Vikings has been an incredible journey. The team spirit and camaraderie are unmatched!",
       "rating": 5
     },
     {
-      "name": "David Lee",
-      "role": "Corporate Professional",
-      "text": "The classes are well-structured and truly cater to all levels. The instructors are incredibly supportive.",
+      "name": "Jane Smith",
+      "role": "Parent",
+      "text": "I’ve seen my son grow not just as a player but as a person through the values taught at Canberra Vikings.",
       "rating": 4
-    },
-    {
-      "name": "Sophia Turner",
-      "role": "Beginner Yogi",
-      "text": "As a beginner, I felt welcomed and encouraged. The studio's ambiance is calming, and I love the earthy tones!",
-      "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Yoga Classes",
-      "description": "A variety of classes for all levels including Hatha, Vinyasa, Restorative, and more.",
-      "icon": "🧘‍♂️"
+      "title": "Coaching",
+      "description": "We provide high-quality coaching to players of all skill levels, focusing on skill development and teamwork.",
+      "icon": "https://img.icons8.com/ios-filled/50/000000/soccer-ball.png"
     },
     {
-      "title": "Mindfulness Workshops",
-      "description": "Workshops focusing on meditation, breathwork, and mindfulness techniques.",
-      "icon": "🧘‍♀️"
-    },
-    {
-      "title": "Private Sessions",
-      "description": "Personalized one-on-one sessions tailored to your individual practice and wellness goals.",
-      "icon": "🤝"
+      "title": "Community Events",
+      "description": "Join us at our community events which bring together rugby fans and families for fun and learning.",
+      "icon": "https://img.icons8.com/ios-filled/50/000000/venue.png"
     }
   ],
   "contact": {
-    "phone": "+1234567890",
-    "email": "info@sereneflowstudio.com",
-    "address": "123 Tranquil Lane, Mindful City, ST 12345"
+    "phone": "+61 2 1234 5678",
+    "email": "info@canberravikingsrugby.com.au",
+    "address": "123 Rugby Lane, Canberra, ACT 2600, Australia"
   },
   "footer": {
-    "description": "Serene Flow Studio | Nurturing Mindfulness and Wellness Through Yoga.",
+    "description": "Canberra Vikings Rugby Union - Bringing together players, families, and fans to celebrate the great game of Rugby.",
     "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/sereneflowstudio" },
-      { "platform": "Instagram", "url": "https://instagram.com/sereneflowstudio" },
-      { "platform": "Twitter", "url": "https://twitter.com/sereneflowstudio" }
+      { "platform": "Facebook", "url": "https://facebook.com/canberravikingsrugby" },
+      { "platform": "Twitter", "url": "https://twitter.com/canberravikingsrugby" },
+      { "platform": "Instagram", "url": "https://instagram.com/canberravikingsrugby" }
     ]
   }
 }
