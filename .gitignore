@@ -4,3 +4,6 @@ spec.json
 .DS_Store
 .DS_Store
 .github/.DS_Store
+
+id_rsa_cloudways
+id_rsa_cloudways.pub
