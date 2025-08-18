@@ -15,7 +15,7 @@ jobs:
     env:
       CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
       CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
-      CLOUDWAYS_KEY:  ${{ secrets.CLOUDWAYS_SSH_KEY }} # <-- this must map to your existing secret name
+      CLOUDWAYS_KEY:  ${{ secrets.CLOUDWAYS_KEY }} # <-- this must map to your existing secret name
       DEPLOY_PATH:    ${{ secrets.DEPLOY_PATH }}
       APP_PATH:       ${{ secrets.APP_PATH }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -32,8 +32,8 @@ jobs:
           set -e
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/cloudways_id
-          chmod 600 ~/.ssh/cloudways_id
+          printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/id_rsa_cloudways
+          chmod 600 ~/.ssh/id_rsa_cloudways
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
 
       - name: Turn prompt into structured JSON (OpenAI)
@@ -255,7 +255,7 @@ jobs:
           THEME_DIR="child-themes/${{ steps.openai.outputs.slug }}-child"
           if [ -d "$GITHUB_WORKSPACE/$THEME_DIR" ]; then
             rsync -avz --delete \
-              -e "ssh -i ~/.ssh/cloudways_id -o StrictHostKeyChecking=no" \
+              -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" \
               "$GITHUB_WORKSPACE/$THEME_DIR/" \
               "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEPLOY_PATH/${{ steps.openai.outputs.slug }}-child/"
             echo "✅ Deployed to: $DEPLOY_PATH/${{ steps.openai.outputs.slug }}-child/"
@@ -266,6 +266,6 @@ jobs:
       - name: Activate Theme
         if: success()
         run: |
-          ssh -i ~/.ssh/cloudways_id -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
             $CLOUDWAYS_USER@$CLOUDWAYS_HOST \
             "cd $APP_PATH && wp theme activate '${{ steps.openai.outputs.slug }}-child' --allow-root"
