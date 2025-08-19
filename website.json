@@ -1,75 +1,63 @@
 {
-  "slug": "modern-yoga-studio",
-  "name": "Zen Flow Yoga",
-  "tagline": "Embrace Your Mind, Body, and Spirit",
-  "industry": "Health & Wellness",
-  "brand": "#6A4A3A",
-  "accent": "#C8BEB0",
-  "hero": "https://images.unsplash.com/photo-1541451614-6e66f6351c3d",
-  "description": "At Zen Flow Yoga, we provide a serene and inviting space for yoga enthusiasts of all levels to cultivate mindfulness and physical strength. Our classes incorporate earth tones and natural materials to create a harmonious atmosphere where you can reconnect with yourself.",
+  "slug": "canberra-cycling-club",
+  "name": "Canberra Cycling Club",
+  "tagline": "Ride, Race, and Connect with Passion.",
+  "industry": "Sports",
+  "brand": "#007A33",
+  "accent": "#FAFAFA",
+  "hero": "https://images.unsplash.com/photo-1584511037978-428b32b25206",
+  "description": "The Canberra Cycling Club fosters a welcoming cycling community, promoting healthy living through cycling in Canberra. Whether you're a seasoned rider or just starting out, join us for races, social rides, and events that connect cyclists across the Canberra region.",
   "pages": [
-    {
-      "slug": "home",
-      "title": "Home",
-      "content": [
-        {
-          "heading": "Welcome to Zen Flow Yoga",
-          "paragraphs": [
-            "Discover the tranquility of our modern yoga studio, designed to inspire your inner peace and well-being. We offer various classes tailored to different skill levels, all while promoting a deep connection to mindfulness and relaxation."
-          ]
-        },
-        {
-          "heading": "Our Philosophy",
-          "paragraphs": [
-            "At Zen Flow, we believe in nurturing the body, mind, and spirit through holistic practices. Our approach combines traditional yoga techniques with modern insights into mindfulness and well-being."
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "classes",
-      "title": "Classes",
-      "content": [
-        {
-          "heading": "Yoga Classes for Every Level",
-          "paragraphs": [
-            "Join our diverse class schedule, which includes Vinyasa, Hatha, Yin, and Restorative yoga. Whether you're a newcomer or an experienced yogi, we have something for everyone."
-          ]
-        },
-        {
-          "heading": "Specialty Workshops",
-          "paragraphs": [
-            "From mindfulness meditation to yoga for athletes, our workshops offer unique opportunities to deepen your practice and enhance your understanding of yoga."
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "instructors",
-      "title": "Our Instructors",
-      "content": [
-        {
-          "heading": "Meet Our Experts",
-          "paragraphs": [
-            "Our team of certified instructors brings a wealth of experience and knowledge to every class. Dedicated to helping you succeed, they provide personalized guidance and encouragement."
-          ]
-        }
-      ]
-    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Who We Are",
+          "heading": "Our Mission",
           "paragraphs": [
-            "Zen Flow Yoga was founded with the mission to create a welcoming space for all who seek to improve their physical and mental well-being. We emphasize inclusivity, mindfulness, and compassion in every class."
+            "At the Canberra Cycling Club, we aim to provide a safe and inclusive environment for cyclists of all ages and abilities. Our mission is to promote cycling as a sport and recreational activity in our beautiful city."
           ]
         },
         {
-          "heading": "Our Space",
+          "heading": "Our History",
           "paragraphs": [
-            "Designed with natural materials and soothing earth tones, our studio promotes a calming atmosphere perfect for yoga and meditation."
+            "Founded in 1975, the Canberra Cycling Club has a rich history of bringing together cycling enthusiasts from all walks of life. Over the years, we've grown into a vibrant community that shares a love for cycling and competition."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "events",
+      "title": "Events",
+      "content": [
+        {
+          "heading": "Upcoming Races",
+          "paragraphs": [
+            "Stay updated with our schedule of racing events, including criteriums, time trials, and more. We host races suitable for all skill levels, and we encourage everyone to participate!"
+          ]
+        },
+        {
+          "heading": "Social Rides",
+          "paragraphs": [
+            "Join us for our weekly social rides! Our community gatherings foster friendship among cyclists while enjoying the stunning scenery of Canberra. All riders are welcome."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "membership",
+      "title": "Membership",
+      "content": [
+        {
+          "heading": "Join Us",
+          "paragraphs": [
+            "Become a member of the Canberra Cycling Club and enjoy exclusive benefits, such as entry discounts for events, access to our training programs, and a supportive network of fellow cyclists."
+          ]
+        },
+        {
+          "heading": "Membership Tiers",
+          "paragraphs": [
+            "We offer various membership tiers to accommodate different needs, whether you’re a recreational rider or a competitive cyclist. Check our membership page for details."
           ]
         }
       ]
@@ -81,7 +69,7 @@
         {
           "heading": "Get in Touch",
           "paragraphs": [
-            "Whether you have questions about our classes or would like to learn more about our studio, we’d love to hear from you! Reach out through the details below."
+            "We'd love to hear from you! Reach out with any inquiries about memberships, events, or cycling in general."
           ]
         }
       ]
@@ -90,19 +78,19 @@
   "navigation": [
     {
       "label": "Home",
-      "url": "/home"
-    },
-    {
-      "label": "Classes",
-      "url": "/classes"
-    },
-    {
-      "label": "Instructors",
-      "url": "/instructors"
+      "url": "/"
     },
     {
       "label": "About Us",
       "url": "/about"
+    },
+    {
+      "label": "Events",
+      "url": "/events"
+    },
+    {
+      "label": "Membership",
+      "url": "/membership"
     },
     {
       "label": "Contact",
@@ -111,61 +99,41 @@
   ],
   "testimonials": [
     {
-      "name": "Emily Johnson",
-      "role": "Yoga Practitioner",
-      "text": "Zen Flow is my happy place! The instructors truly care and the atmosphere is unmatched.",
+      "name": "John Doe",
+      "role": "Member",
+      "text": "Joining the Canberra Cycling Club has transformed my cycling experience! The community is fantastic.",
       "rating": 5
     },
     {
-      "name": "Michael Lee",
-      "role": "Customer",
-      "text": "I have taken several classes here, and I've noticed a significant improvement in my mindfulness and flexibility.",
-      "rating": 4
-    },
-    {
-      "name": "Sarah Adams",
-      "role": "Yoga Teacher",
-      "text": "As a teacher, I appreciate the welcoming community and professional environment at Zen Flow Yoga.",
+      "name": "Jane Smith",
+      "role": "Coordinator",
+      "text": "We are proud of our diverse membership and the impactful events we organize throughout the year.",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Yoga Classes",
-      "description": "Enjoy a variety of yoga classes from beginners to advanced levels, tailored to meet your individual needs.",
-      "icon": "🧘‍♀️"
+      "title": "Training Programs",
+      "description": "Join our structured training programs designed to improve your cycling skills, whether you’re a beginner or looking to compete.",
+      "icon": "🏆"
     },
     {
-      "title": "Mindfulness Workshops",
-      "description": "Engage in workshops focused on mindfulness techniques and practices for everyday life.",
-      "icon": "🧘"
-    },
-    {
-      "title": "Private Sessions",
-      "description": "Receive personalized attention and tailored yoga practices in a one-on-one setting.",
-      "icon": "👤"
+      "title": "Weekly Group Rides",
+      "description": "Participate in our weekly group rides to enjoy cycling alongside others, explore new routes, and make new friends.",
+      "icon": "🚴"
     }
   ],
   "contact": {
-    "phone": "+1 (555) 123-4567",
-    "email": "info@zenflowyoga.com",
-    "address": "123 Mindful Way, Serenity City, ST 12345"
+    "phone": "+61 2 1234 5678",
+    "email": "info@canberracyclingclub.org.au",
+    "address": "123 Cycling Blvd, Canberra, ACT, Australia"
   },
   "footer": {
-    "description": "Zen Flow Yoga - Where Mindfulness Meets Movement",
-    "social_links": [
-      {
-        "platform": "Facebook",
-        "url": "https://facebook.com/zenflowyoga"
-      },
-      {
-        "platform": "Instagram",
-        "url": "https://instagram.com/zenflowyoga"
-      },
-      {
-        "platform": "Twitter",
-        "url": "https://twitter.com/zenflowyoga"
-      }
-    ]
+    "description": "Explore the joy of cycling with Canberra Cycling Club! Join us to embark on your cycling journey today.",
+    "social_links": {
+      "facebook": "https://www.facebook.com/canberracyclingclub",
+      "twitter": "https://twitter.com/canberracycling",
+      "instagram": "https://www.instagram.com/canberracyclingclub"
+    }
   }
 }
