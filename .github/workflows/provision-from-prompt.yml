@@ -899,7 +899,6 @@ jobs:
           
           echo "✅ WordPress content created successfully"
 
-          "
 
       - name: Cleanup old child themes on server (keep only current)
         env:
