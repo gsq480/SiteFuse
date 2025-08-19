@@ -1,30 +1,24 @@
 {
-  "slug": "active-essence",
-  "name": "Active Essence Fitness Studio",
-  "tagline": "Ignite Your Passion, Transform Your Life",
-  "industry": "Fitness",
-  "brand": "#FF6F61",
-  "accent": "#4A90E2",
-  "hero": "https://images.unsplash.com/photo-1500041084951-2c36e8c6a2ae",
-  "description": "Active Essence Fitness Studio is your ultimate destination for boutique fitness classes designed to energize and inspire. With a modern and clean design, our studio offers a range of classes led by passionate instructors in an uplifting atmosphere.",
+  "slug": "modern-yoga-studio",
+  "name": "EarthFlow Yoga",
+  "tagline": "Find your balance, nurture your soul.",
+  "industry": "Health & Wellness",
+  "brand": "#474B31",
+  "accent": "#B2A36D",
+  "hero": "https://images.unsplash.com/photo-1515032255737-b0c6dc404f2b",
+  "description": "At EarthFlow Yoga, we offer a serene environment for individuals seeking to enrich their lives through mindfulness and yoga practice. Our commitment to sustainability and wellness programs cultivates a community rooted in love and support.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Active Essence",
-          "paragraphs": [
-            "At Active Essence, we believe that fitness should be a joyful journey. Our boutique studio focuses on creating a supportive community where every individual can thrive and reach their fitness goals.",
-            "Join us for an array of innovative classes tailored for all fitness levels. From high-intensity interval training to calming yoga flows, we have something for everyone."
-          ]
+          "heading": "Welcome to EarthFlow Yoga",
+          "paragraph": "Join us in a tranquil space dedicated to wellbeing, mindfulness, and personal growth. Our classes are designed for all levels and incorporate principles that connect body, mind, and spirit."
         },
         {
-          "heading": "Why Choose Us?",
-          "paragraphs": [
-            "Our studio is equipped with state-of-the-art facilities and designed with your comfort in mind. Experience personalized fitness journeys in small class sizes, where you'll receive individual attention from our expert trainers.",
-            "We prioritize health and wellness in everything we do, making your fitness experience not just a workout but a lifestyle."
-          ]
+          "heading": "Our Philosophy",
+          "paragraph": "We believe in the harmony of self-discovery and nature. Our teachings promote a sustainable lifestyle, encouraging you to flow through life positively and peacefully."
         }
       ]
     },
@@ -33,16 +27,12 @@
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Mission",
-          "paragraphs": [
-            "Our mission at Active Essence is to empower individuals to enhance their fitness journey through tailored classes and a supportive community. We aim to make fitness accessible, enjoyable, and inspiring."
-          ]
+          "heading": "Our Story",
+          "paragraph": "EarthFlow Yoga was founded on the belief that yoga is a journey to inner peace and balance. We combine traditional yoga practices with modern mindfulness techniques in an eco-friendly setting."
         },
         {
-          "heading": "Meet the Team",
-          "paragraphs": [
-            "Our dedicated team of fitness professionals is here to motivate and guide you. With diverse backgrounds in health and wellness, they bring unique expertise to each class."
-          ]
+          "heading": "Meet Our Team",
+          "paragraph": "Our certified instructors are not only passionate practitioners but also dedicated advocates for the holistic lifestyle. They bring expertise, warmth, and nurturing guidance to every class."
         }
       ]
     },
@@ -51,25 +41,26 @@
       "title": "Classes",
       "content": [
         {
-          "heading": "Explore Our Class Offerings",
-          "paragraphs": [
-            "We offer a variety of fitness classes including:",
-            "1. High-Intensity Interval Training (HIIT): Get your heart pumping with this dynamic workout.",
-            "2. Yoga Flow: Connect your mind and body in this rejuvenating class.",
-            "3. Strength Training: Build muscle and strength with guided workouts."
-          ]
+          "heading": "Yoga Offerings",
+          "paragraph": "Explore our wide range of classes from beginner to advanced levels; we offer Hatha, Vinyasa, Restorative, and Yin Yoga, each designed to cater to your unique flow and rhythm."
+        },
+        {
+          "heading": "Mindfulness Workshops",
+          "paragraph": "Participate in our monthly workshops focused on mindfulness practices, meditation, and wellness, all aimed at cultivating awareness both on and off the mat."
         }
       ]
     },
     {
-      "slug": "testimonials",
-      "title": "Testimonials",
+      "slug": "schedule",
+      "title": "Class Schedule",
       "content": [
         {
-          "heading": "What Our Members Say",
-          "paragraphs": [
-            "Hear from our community about their experiences at Active Essence Fitness Studio."
-          ]
+          "heading": "Weekly Schedule",
+          "paragraph": "Check out our class schedule and find the perfect time for your yoga practice. We offer classes daily across morning and evening slots to accommodate all lifestyles."
+        },
+        {
+          "heading": "Book a Class",
+          "paragraph": "Easily book your classes online or contact us if you have any questions. Your journey to a more balanced life starts with one step."
         }
       ]
     },
@@ -79,57 +70,88 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraphs": [
-            "We'd love to hear from you! Reach out for class schedules, pricing, or any questions you may have. Our friendly team is here to assist you."
-          ]
+          "paragraph": "We're here to support your yoga journey. Reach out to us with any questions or to learn more about our offerings."
+        },
+        {
+          "heading": "Connect with Us",
+          "paragraph": "Visit us, call, or email, and follow us on social media to stay updated on classes and workshops."
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/home" },
-    { "label": "About", "url": "/about" },
-    { "label": "Classes", "url": "/classes" },
-    { "label": "Testimonials", "url": "/testimonials" },
-    { "label": "Contact", "url": "/contact" }
+    {
+      "label": "Home",
+      "url": "/home"
+    },
+    {
+      "label": "About Us",
+      "url": "/about"
+    },
+    {
+      "label": "Classes",
+      "url": "/classes"
+    },
+    {
+      "label": "Schedule",
+      "url": "/schedule"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
   ],
   "testimonials": [
     {
-      "name": "Emily Johnson",
-      "role": "Fitness Enthusiast",
-      "text": "Active Essence has completely changed my fitness journey. The instructors are incredibly knowledgeable and supportive!",
+      "name": "Laura Taylor",
+      "role": "Yoga Practitioner",
+      "text": "EarthFlow Yoga has transformed my approach to mindfulness and self-care. The instructors are incredibly supportive!",
       "rating": 5
     },
     {
-      "name": "Michael Lee",
-      "role": "Personal Trainer",
-      "text": "This studio really stands out with its community vibe. The energy is contagious, and the classes are top-notch!",
+      "name": "James Robinson",
+      "role": "Wellness Enthusiast",
+      "text": "The atmosphere at EarthFlow is peaceful and welcoming. I leave every class feeling rejuvenated and inspired.",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Personal Training",
-      "description": "One-on-one training tailored to your individual fitness needs and goals.",
-      "icon": "🏋️"
+      "title": "Group Yoga Classes",
+      "description": "Join our community in group classes designed for all levels to enhance your yoga practice in a supportive setting.",
+      "icon": "🧘"
     },
     {
-      "title": "Group Classes",
-      "description": "Join our energetic classes that cater to various fitness levels. Fun and motivation in a group setting!",
-      "icon": "🧘"
+      "title": "Private Sessions",
+      "description": "Receive personalized instruction tailored to your specific needs and goals during private yoga sessions.",
+      "icon": "👥"
+    },
+    {
+      "title": "Mindfulness Workshops",
+      "description": "Participate in immersive workshops focusing on meditation, breathing techniques, and holistic living.",
+      "icon": "🌱"
     }
   ],
   "contact": {
-    "phone": "(123) 456-7890",
-    "email": "info@activeessence.com",
-    "address": "123 Fitness Lane, Wellness City, CA 90210"
+    "phone": "+1 (555) 123-4567",
+    "email": "info@earthflowyoga.com",
+    "address": "123 Mindfulness Ave, Wellness City, CA 90210"
   },
   "footer": {
-    "description": "Join us at Active Essence Fitness Studio where we help you ignite your passion for fitness. Stay active, stay healthy!",
+    "description": "Thank you for choosing EarthFlow Yoga! We look forward to accompanying you on your journey to wellness.",
     "social_links": [
-      { "platform": "Facebook", "url": "https://www.facebook.com/activeessence" },
-      { "platform": "Instagram", "url": "https://www.instagram.com/activeessence" },
-      { "platform": "Twitter", "url": "https://www.twitter.com/activeessence" }
+      {
+        "platform": "Facebook",
+        "url": "https://facebook.com/earthflowyoga"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://instagram.com/earthflowyoga"
+      },
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/earthflowyoga"
+      }
     ]
   }
 }
