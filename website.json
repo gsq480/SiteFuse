@@ -1,62 +1,76 @@
 {
   "slug": "modern-yoga-studio",
-  "name": "Earthflow Yoga",
-  "tagline": "Embrace Mindfulness, Flow with Nature",
+  "name": "Zen Flow Yoga",
+  "tagline": "Embrace Your Mind, Body, and Spirit",
   "industry": "Health & Wellness",
-  "brand": "#A78B65",
-  "accent": "#E3C8B0",
-  "hero": "https://unsplash.com/photos/Xk1_qXlUbPs",
-  "description": "At Earthflow Yoga, we blend natural aesthetics with mindful practices to create a space where you can reconnect with yourself and the world around you. Our studio is designed with earth tones and nurtures a calming environment perfect for yogis of all levels.",
+  "brand": "#6A4A3A",
+  "accent": "#C8BEB0",
+  "hero": "https://images.unsplash.com/photo-1541451614-6e66f6351c3d",
+  "description": "At Zen Flow Yoga, we provide a serene and inviting space for yoga enthusiasts of all levels to cultivate mindfulness and physical strength. Our classes incorporate earth tones and natural materials to create a harmonious atmosphere where you can reconnect with yourself.",
   "pages": [
     {
-      "slug": "about",
-      "title": "About Us",
+      "slug": "home",
+      "title": "Home",
       "content": [
         {
-          "heading": "Our Philosophy",
-          "paragraph": "At Earthflow Yoga, we believe in the power of mindful movement and breath. Our mission is to guide you on a journey of self-discovery and personal growth, enhancing your overall well-being through yoga."
+          "heading": "Welcome to Zen Flow Yoga",
+          "paragraphs": [
+            "Discover the tranquility of our modern yoga studio, designed to inspire your inner peace and well-being. We offer various classes tailored to different skill levels, all while promoting a deep connection to mindfulness and relaxation."
+          ]
         },
         {
-          "heading": "Our Space",
-          "paragraph": "Nestled in a tranquil setting, our studio is thoughtfully designed with natural materials and earth tones that promote relaxation and connection with nature."
+          "heading": "Our Philosophy",
+          "paragraphs": [
+            "At Zen Flow, we believe in nurturing the body, mind, and spirit through holistic practices. Our approach combines traditional yoga techniques with modern insights into mindfulness and well-being."
+          ]
         }
       ]
     },
     {
       "slug": "classes",
-      "title": "Classes & Schedule",
+      "title": "Classes",
       "content": [
         {
-          "heading": "What We Offer",
-          "paragraph": "We offer a variety of classes that cater to all levels, from gentle restorative yoga to vigorous power yoga. Each class is designed to increase your strength, flexibility, and mindfulness."
+          "heading": "Yoga Classes for Every Level",
+          "paragraphs": [
+            "Join our diverse class schedule, which includes Vinyasa, Hatha, Yin, and Restorative yoga. Whether you're a newcomer or an experienced yogi, we have something for everyone."
+          ]
         },
         {
-          "heading": "Class Schedule",
-          "paragraph": "Check out our current class schedule to find the perfect time for you to step onto the mat and join our welcoming community."
+          "heading": "Specialty Workshops",
+          "paragraphs": [
+            "From mindfulness meditation to yoga for athletes, our workshops offer unique opportunities to deepen your practice and enhance your understanding of yoga."
+          ]
         }
       ]
     },
     {
       "slug": "instructors",
-      "title": "Meet Our Instructors",
+      "title": "Our Instructors",
       "content": [
         {
-          "heading": "Highly Trained Professionals",
-          "paragraph": "Our instructors are certified, passionate, and dedicated to helping you achieve your goals. They create a supportive atmosphere that allows you to flourish in your practice."
-        },
-        {
-          "heading": "Get to Know Them",
-          "paragraph": "Learn more about the backgrounds and teaching styles of our instructors to find the right fit for your journey."
+          "heading": "Meet Our Experts",
+          "paragraphs": [
+            "Our team of certified instructors brings a wealth of experience and knowledge to every class. Dedicated to helping you succeed, they provide personalized guidance and encouragement."
+          ]
         }
       ]
     },
     {
-      "slug": "blog",
-      "title": "Blog",
+      "slug": "about",
+      "title": "About Us",
       "content": [
         {
-          "heading": "Mindful Insights",
-          "paragraph": "Explore our blog for thoughtful articles on yoga, mindfulness, and wellness. Find tips to enhance your practice and reading materials to inspire your journey."
+          "heading": "Who We Are",
+          "paragraphs": [
+            "Zen Flow Yoga was founded with the mission to create a welcoming space for all who seek to improve their physical and mental well-being. We emphasize inclusivity, mindfulness, and compassion in every class."
+          ]
+        },
+        {
+          "heading": "Our Space",
+          "paragraphs": [
+            "Designed with natural materials and soothing earth tones, our studio promotes a calming atmosphere perfect for yoga and meditation."
+          ]
         }
       ]
     },
@@ -66,67 +80,92 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "We’d love to hear from you! Whether you have questions about our classes or want to share your experience, feel free to reach out."
+          "paragraphs": [
+            "Whether you have questions about our classes or would like to learn more about our studio, we’d love to hear from you! Reach out through the details below."
+          ]
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/" },
-    { "label": "About", "url": "/about" },
-    { "label": "Classes", "url": "/classes" },
-    { "label": "Instructors", "url": "/instructors" },
-    { "label": "Blog", "url": "/blog" },
-    { "label": "Contact", "url": "/contact" }
+    {
+      "label": "Home",
+      "url": "/home"
+    },
+    {
+      "label": "Classes",
+      "url": "/classes"
+    },
+    {
+      "label": "Instructors",
+      "url": "/instructors"
+    },
+    {
+      "label": "About Us",
+      "url": "/about"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
   ],
   "testimonials": [
     {
-      "name": "Samantha Lee",
+      "name": "Emily Johnson",
       "role": "Yoga Practitioner",
-      "text": "Earthflow Yoga has transformed my life. The classes not only challenge my body but also soothe my mind. Highly recommend!",
+      "text": "Zen Flow is my happy place! The instructors truly care and the atmosphere is unmatched.",
       "rating": 5
     },
     {
-      "name": "Daniel Green",
-      "role": "Beginner Yogi",
-      "text": "I felt welcomed from the moment I stepped in. The instructors are friendly and knowledgeable, making yoga accessible for everyone.",
+      "name": "Michael Lee",
+      "role": "Customer",
+      "text": "I have taken several classes here, and I've noticed a significant improvement in my mindfulness and flexibility.",
       "rating": 4
     },
     {
-      "name": "Rachel P.",
+      "name": "Sarah Adams",
       "role": "Yoga Teacher",
-      "text": "As an experienced yogi, I appreciate the mindfulness approach at Earthflow. It's a beautiful community that truly encourages growth.",
+      "text": "As a teacher, I appreciate the welcoming community and professional environment at Zen Flow Yoga.",
       "rating": 5
     }
   ],
   "services": [
     {
       "title": "Yoga Classes",
-      "description": "Various yoga classes tailored to all levels. Join us for a serene experience focused on breath and movement.",
-      "icon": "yoga"
+      "description": "Enjoy a variety of yoga classes from beginners to advanced levels, tailored to meet your individual needs.",
+      "icon": "🧘‍♀️"
     },
     {
-      "title": "Workshops",
-      "description": "Deepen your practice with our specialized workshops, covering topics from advanced techniques to meditation.",
-      "icon": "workshop"
+      "title": "Mindfulness Workshops",
+      "description": "Engage in workshops focused on mindfulness techniques and practices for everyday life.",
+      "icon": "🧘"
     },
     {
       "title": "Private Sessions",
-      "description": "Personalized yoga sessions to help you meet individual goals, tailored specifically to your needs.",
-      "icon": "private"
+      "description": "Receive personalized attention and tailored yoga practices in a one-on-one setting.",
+      "icon": "👤"
     }
   ],
   "contact": {
     "phone": "+1 (555) 123-4567",
-    "email": "info@earthflowyoga.com",
-    "address": "123 Tranquil Lane, Mindfulness City, ST 12345"
+    "email": "info@zenflowyoga.com",
+    "address": "123 Mindful Way, Serenity City, ST 12345"
   },
   "footer": {
-    "description": "Join our community and embark on a journey of holistic wellness and mindful living at Earthflow Yoga.",
-    "social_links": {
-      "facebook": "https://www.facebook.com/earthflowyoga",
-      "instagram": "https://www.instagram.com/earthflowyoga",
-      "twitter": "https://twitter.com/earthflowyoga"
-    }
+    "description": "Zen Flow Yoga - Where Mindfulness Meets Movement",
+    "social_links": [
+      {
+        "platform": "Facebook",
+        "url": "https://facebook.com/zenflowyoga"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://instagram.com/zenflowyoga"
+      },
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/zenflowyoga"
+      }
+    ]
   }
 }
