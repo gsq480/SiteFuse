@@ -45,7 +45,6 @@ jobs:
       - name: SSH setup
         run: |
           set -euo pipefail
-            export PATH=/usr/local/bin:$PATH
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/id_rsa_cloudways
@@ -56,7 +55,6 @@ jobs:
         id: openai
         run: |
           set -euo pipefail
-            export PATH=/usr/local/bin:$PATH
 
           # Enhanced prompt for comprehensive website generation
           cat > /tmp/payload.json <<'EOF'
@@ -113,7 +111,6 @@ jobs:
           HERO:     ${{ steps.openai.outputs.hero }}
         run: |
           set -euo pipefail
-            export PATH=/usr/local/bin:$PATH
           WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
           mkdir -p child/{assets/{css,js,img},dist,templates,parts,inc}
 
@@ -838,7 +835,6 @@ jobs:
           SLUG: ${{ steps.openai.outputs.slug }}
         run: |
           set -euo pipefail
-            export PATH=/usr/local/bin:$PATH
           mkdir -p child-themes
           rm -rf "child-themes/${SLUG}-child"
           mv "${SLUG}-child" "child-themes/${SLUG}-child"
@@ -853,7 +849,6 @@ jobs:
           SLUG: ${{ steps.openai.outputs.slug }}
         run: |
           set -euo pipefail
-            export PATH=/usr/local/bin:$PATH
           THEME_DIR="$GITHUB_WORKSPACE/child-themes/${SLUG}-child"
           DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
 
@@ -995,11 +990,9 @@ jobs:
           NAME: ${{ steps.openai.outputs.name }}
         run: |
           set -euo pipefail
-            export PATH=/usr/local/bin:$PATH
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
             "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -lc "
             set -euo pipefail
-            export PATH=/usr/local/bin:$PATH
             cd '$APP_PATH'
             
             # Initialize all variables to prevent unbound variable errors
