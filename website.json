@@ -1,24 +1,30 @@
 {
-  "slug": "modern-yoga-studio",
-  "name": "Zenith Yoga Studio",
-  "tagline": "Find Your Balance Within",
-  "industry": "Health & Wellness",
-  "brand": "#A89F91",
-  "accent": "#4B8E8D",
-  "hero": "https://images.unsplash.com/photo-1572327838323-68d80cd8c382",
-  "description": "Zenith Yoga Studio offers a serene space for people to explore yoga, mindfulness, and personal growth. With a focus on sustainable practices and earthy aesthetics, we guide you on your journey to inner peace and physical well-being.",
+  "slug": "active-essence",
+  "name": "Active Essence Fitness Studio",
+  "tagline": "Ignite Your Passion, Transform Your Life",
+  "industry": "Fitness",
+  "brand": "#FF6F61",
+  "accent": "#4A90E2",
+  "hero": "https://images.unsplash.com/photo-1500041084951-2c36e8c6a2ae",
+  "description": "Active Essence Fitness Studio is your ultimate destination for boutique fitness classes designed to energize and inspire. With a modern and clean design, our studio offers a range of classes led by passionate instructors in an uplifting atmosphere.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Zenith Yoga",
-          "paragraph": "At Zenith Yoga Studio, we believe in the transformative power of yoga and mindfulness. Our studio is designed to be a reflection of nature's calming essence, where individuals can unwind and reconnect with themselves."
+          "heading": "Welcome to Active Essence",
+          "paragraphs": [
+            "At Active Essence, we believe that fitness should be a joyful journey. Our boutique studio focuses on creating a supportive community where every individual can thrive and reach their fitness goals.",
+            "Join us for an array of innovative classes tailored for all fitness levels. From high-intensity interval training to calming yoga flows, we have something for everyone."
+          ]
         },
         {
-          "heading": "Our Philosophy",
-          "paragraph": "We incorporate mindfulness practices into our classes to not only improve physical strength but to enhance mental clarity and emotional resilience. Join us in fostering a community that values wellness and connection."
+          "heading": "Why Choose Us?",
+          "paragraphs": [
+            "Our studio is equipped with state-of-the-art facilities and designed with your comfort in mind. Experience personalized fitness journeys in small class sizes, where you'll receive individual attention from our expert trainers.",
+            "We prioritize health and wellness in everything we do, making your fitness experience not just a workout but a lifestyle."
+          ]
         }
       ]
     },
@@ -27,12 +33,16 @@
       "title": "About Us",
       "content": [
         {
-          "heading": "Who We Are",
-          "paragraph": "Founded in 2023, Zenith Yoga Studio was created by a team of passionate yogis dedicated to spreading the benefits of yoga and mindfulness. Our instructors are trained in various styles and committed to guiding each student on their personal path."
+          "heading": "Our Mission",
+          "paragraphs": [
+            "Our mission at Active Essence is to empower individuals to enhance their fitness journey through tailored classes and a supportive community. We aim to make fitness accessible, enjoyable, and inspiring."
+          ]
         },
         {
-          "heading": "Our Mission",
-          "paragraph": "To create a welcoming and inclusive environment where everyone can explore their practice without judgment. We prioritize sustainability, using eco-friendly materials and offering community classes to ensure accessibility."
+          "heading": "Meet the Team",
+          "paragraphs": [
+            "Our dedicated team of fitness professionals is here to motivate and guide you. With diverse backgrounds in health and wellness, they bring unique expertise to each class."
+          ]
         }
       ]
     },
@@ -42,25 +52,24 @@
       "content": [
         {
           "heading": "Explore Our Class Offerings",
-          "paragraph": "We offer a variety of classes geared toward all levels, from beginners to advanced practitioners. Each class is designed to promote balance, strength, and mindfulness."
-        },
-        {
-          "heading": "Class Schedule",
-          "paragraph": "Visit our class schedule page to find the best times to join us for invigorating yoga sessions, calming meditations, and community workshops."
+          "paragraphs": [
+            "We offer a variety of fitness classes including:",
+            "1. High-Intensity Interval Training (HIIT): Get your heart pumping with this dynamic workout.",
+            "2. Yoga Flow: Connect your mind and body in this rejuvenating class.",
+            "3. Strength Training: Build muscle and strength with guided workouts."
+          ]
         }
       ]
     },
     {
-      "slug": "services",
-      "title": "Services",
+      "slug": "testimonials",
+      "title": "Testimonials",
       "content": [
         {
-          "heading": "Private Sessions",
-          "paragraph": "Our experienced instructors offer one-on-one sessions tailored to your needs, allowing for personalized guidance and adjustments in your practice."
-        },
-        {
-          "heading": "Workshops",
-          "paragraph": "Join our seasonal workshops focusing on specific themes such as mindfulness, breath work, and yoga for stress relief."
+          "heading": "What Our Members Say",
+          "paragraphs": [
+            "Hear from our community about their experiences at Active Essence Fitness Studio."
+          ]
         }
       ]
     },
@@ -70,75 +79,57 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "We’d love to hear from you! Reach out with any questions or to schedule a tour of our studio."
+          "paragraphs": [
+            "We'd love to hear from you! Reach out for class schedules, pricing, or any questions you may have. Our friendly team is here to assist you."
+          ]
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "Home",
-      "url": "/home"
-    },
-    {
-      "label": "About Us",
-      "url": "/about"
-    },
-    {
-      "label": "Classes",
-      "url": "/classes"
-    },
-    {
-      "label": "Services",
-      "url": "/services"
-    },
-    {
-      "label": "Contact",
-      "url": "/contact"
-    }
+    { "label": "Home", "url": "/home" },
+    { "label": "About", "url": "/about" },
+    { "label": "Classes", "url": "/classes" },
+    { "label": "Testimonials", "url": "/testimonials" },
+    { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
       "name": "Emily Johnson",
-      "role": "Yoga Enthusiast",
-      "text": "Zenith Yoga has transformed my practice! The instructors are incredibly knowledgeable and supportive.",
+      "role": "Fitness Enthusiast",
+      "text": "Active Essence has completely changed my fitness journey. The instructors are incredibly knowledgeable and supportive!",
       "rating": 5
     },
     {
-      "name": "Mark Stevens",
-      "role": "Recent Graduate",
-      "text": "The mindful meditation class has changed my perspective on life. I've found inner peace like never before.",
-      "rating": 4
+      "name": "Michael Lee",
+      "role": "Personal Trainer",
+      "text": "This studio really stands out with its community vibe. The energy is contagious, and the classes are top-notch!",
+      "rating": 5
     }
   ],
   "services": [
     {
+      "title": "Personal Training",
+      "description": "One-on-one training tailored to your individual fitness needs and goals.",
+      "icon": "🏋️"
+    },
+    {
       "title": "Group Classes",
-      "description": "Join our diverse group classes designed for all skill levels, focusing on mindfulness and physical well-being.",
-      "icon": "🌿"
-    },
-    {
-      "title": "Wellness Workshops",
-      "description": "Participate in our workshops aimed at integrating wellness practices into your daily life.",
-      "icon": "🧘‍♂️"
-    },
-    {
-      "title": "Yoga Teacher Training",
-      "description": "Pursue your passion for yoga by becoming a certified instructor through our comprehensive training program.",
-      "icon": "📚"
+      "description": "Join our energetic classes that cater to various fitness levels. Fun and motivation in a group setting!",
+      "icon": "🧘"
     }
   ],
   "contact": {
-    "phone": "+1 (555) 555-0199",
-    "email": "info@zenithyoga.com",
-    "address": "123 Serenity Lane, Mindful City, MA 12345"
+    "phone": "(123) 456-7890",
+    "email": "info@activeessence.com",
+    "address": "123 Fitness Lane, Wellness City, CA 90210"
   },
   "footer": {
-    "description": "Zenith Yoga Studio is dedicated to cultivating mindfulness and wellness in a serene space dedicated to your personal growth.",
-    "socialLinks": {
-      "facebook": "https://www.facebook.com/zenithyogastudio",
-      "instagram": "https://www.instagram.com/zenithyoga",
-      "twitter": "https://twitter.com/zenithyoga"
-    }
+    "description": "Join us at Active Essence Fitness Studio where we help you ignite your passion for fitness. Stay active, stay healthy!",
+    "social_links": [
+      { "platform": "Facebook", "url": "https://www.facebook.com/activeessence" },
+      { "platform": "Instagram", "url": "https://www.instagram.com/activeessence" },
+      { "platform": "Twitter", "url": "https://www.twitter.com/activeessence" }
+    ]
   }
 }
