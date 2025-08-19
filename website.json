@@ -1,62 +1,64 @@
 {
-  "slug": "modern-yoga-studio",
-  "name": "Earthflow Yoga",
-  "tagline": "Embrace Mindfulness, Flow with Nature",
-  "industry": "Health & Wellness",
-  "brand": "#A78B65",
-  "accent": "#E3C8B0",
-  "hero": "https://unsplash.com/photos/Xk1_qXlUbPs",
-  "description": "At Earthflow Yoga, we blend natural aesthetics with mindful practices to create a space where you can reconnect with yourself and the world around you. Our studio is designed with earth tones and nurtures a calming environment perfect for yogis of all levels.",
+  "slug": "canberra-cycling-club",
+  "name": "Canberra Cycling Club",
+  "tagline": "Ride, Race, and Connect with Passion.",
+  "industry": "Sports",
+  "brand": "#007A33",
+  "accent": "#FAFAFA",
+  "hero": "https://images.unsplash.com/photo-1584511037978-428b32b25206",
+  "description": "The Canberra Cycling Club fosters a welcoming cycling community, promoting healthy living through cycling in Canberra. Whether you're a seasoned rider or just starting out, join us for races, social rides, and events that connect cyclists across the Canberra region.",
   "pages": [
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Philosophy",
-          "paragraph": "At Earthflow Yoga, we believe in the power of mindful movement and breath. Our mission is to guide you on a journey of self-discovery and personal growth, enhancing your overall well-being through yoga."
+          "heading": "Our Mission",
+          "paragraphs": [
+            "At the Canberra Cycling Club, we aim to provide a safe and inclusive environment for cyclists of all ages and abilities. Our mission is to promote cycling as a sport and recreational activity in our beautiful city."
+          ]
         },
         {
-          "heading": "Our Space",
-          "paragraph": "Nestled in a tranquil setting, our studio is thoughtfully designed with natural materials and earth tones that promote relaxation and connection with nature."
+          "heading": "Our History",
+          "paragraphs": [
+            "Founded in 1975, the Canberra Cycling Club has a rich history of bringing together cycling enthusiasts from all walks of life. Over the years, we've grown into a vibrant community that shares a love for cycling and competition."
+          ]
         }
       ]
     },
     {
-      "slug": "classes",
-      "title": "Classes & Schedule",
+      "slug": "events",
+      "title": "Events",
       "content": [
         {
-          "heading": "What We Offer",
-          "paragraph": "We offer a variety of classes that cater to all levels, from gentle restorative yoga to vigorous power yoga. Each class is designed to increase your strength, flexibility, and mindfulness."
+          "heading": "Upcoming Races",
+          "paragraphs": [
+            "Stay updated with our schedule of racing events, including criteriums, time trials, and more. We host races suitable for all skill levels, and we encourage everyone to participate!"
+          ]
         },
         {
-          "heading": "Class Schedule",
-          "paragraph": "Check out our current class schedule to find the perfect time for you to step onto the mat and join our welcoming community."
+          "heading": "Social Rides",
+          "paragraphs": [
+            "Join us for our weekly social rides! Our community gatherings foster friendship among cyclists while enjoying the stunning scenery of Canberra. All riders are welcome."
+          ]
         }
       ]
     },
     {
-      "slug": "instructors",
-      "title": "Meet Our Instructors",
+      "slug": "membership",
+      "title": "Membership",
       "content": [
         {
-          "heading": "Highly Trained Professionals",
-          "paragraph": "Our instructors are certified, passionate, and dedicated to helping you achieve your goals. They create a supportive atmosphere that allows you to flourish in your practice."
+          "heading": "Join Us",
+          "paragraphs": [
+            "Become a member of the Canberra Cycling Club and enjoy exclusive benefits, such as entry discounts for events, access to our training programs, and a supportive network of fellow cyclists."
+          ]
         },
         {
-          "heading": "Get to Know Them",
-          "paragraph": "Learn more about the backgrounds and teaching styles of our instructors to find the right fit for your journey."
-        }
-      ]
-    },
-    {
-      "slug": "blog",
-      "title": "Blog",
-      "content": [
-        {
-          "heading": "Mindful Insights",
-          "paragraph": "Explore our blog for thoughtful articles on yoga, mindfulness, and wellness. Find tips to enhance your practice and reading materials to inspire your journey."
+          "heading": "Membership Tiers",
+          "paragraphs": [
+            "We offer various membership tiers to accommodate different needs, whether you’re a recreational rider or a competitive cyclist. Check our membership page for details."
+          ]
         }
       ]
     },
@@ -66,67 +68,72 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "We’d love to hear from you! Whether you have questions about our classes or want to share your experience, feel free to reach out."
+          "paragraphs": [
+            "We'd love to hear from you! Reach out with any inquiries about memberships, events, or cycling in general."
+          ]
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/" },
-    { "label": "About", "url": "/about" },
-    { "label": "Classes", "url": "/classes" },
-    { "label": "Instructors", "url": "/instructors" },
-    { "label": "Blog", "url": "/blog" },
-    { "label": "Contact", "url": "/contact" }
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "About Us",
+      "url": "/about"
+    },
+    {
+      "label": "Events",
+      "url": "/events"
+    },
+    {
+      "label": "Membership",
+      "url": "/membership"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
   ],
   "testimonials": [
     {
-      "name": "Samantha Lee",
-      "role": "Yoga Practitioner",
-      "text": "Earthflow Yoga has transformed my life. The classes not only challenge my body but also soothe my mind. Highly recommend!",
+      "name": "John Doe",
+      "role": "Member",
+      "text": "Joining the Canberra Cycling Club has transformed my cycling experience! The community is fantastic.",
       "rating": 5
     },
     {
-      "name": "Daniel Green",
-      "role": "Beginner Yogi",
-      "text": "I felt welcomed from the moment I stepped in. The instructors are friendly and knowledgeable, making yoga accessible for everyone.",
-      "rating": 4
-    },
-    {
-      "name": "Rachel P.",
-      "role": "Yoga Teacher",
-      "text": "As an experienced yogi, I appreciate the mindfulness approach at Earthflow. It's a beautiful community that truly encourages growth.",
+      "name": "Jane Smith",
+      "role": "Coordinator",
+      "text": "We are proud of our diverse membership and the impactful events we organize throughout the year.",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Yoga Classes",
-      "description": "Various yoga classes tailored to all levels. Join us for a serene experience focused on breath and movement.",
-      "icon": "yoga"
+      "title": "Training Programs",
+      "description": "Join our structured training programs designed to improve your cycling skills, whether you’re a beginner or looking to compete.",
+      "icon": "🏆"
     },
     {
-      "title": "Workshops",
-      "description": "Deepen your practice with our specialized workshops, covering topics from advanced techniques to meditation.",
-      "icon": "workshop"
-    },
-    {
-      "title": "Private Sessions",
-      "description": "Personalized yoga sessions to help you meet individual goals, tailored specifically to your needs.",
-      "icon": "private"
+      "title": "Weekly Group Rides",
+      "description": "Participate in our weekly group rides to enjoy cycling alongside others, explore new routes, and make new friends.",
+      "icon": "🚴"
     }
   ],
   "contact": {
-    "phone": "+1 (555) 123-4567",
-    "email": "info@earthflowyoga.com",
-    "address": "123 Tranquil Lane, Mindfulness City, ST 12345"
+    "phone": "+61 2 1234 5678",
+    "email": "info@canberracyclingclub.org.au",
+    "address": "123 Cycling Blvd, Canberra, ACT, Australia"
   },
   "footer": {
-    "description": "Join our community and embark on a journey of holistic wellness and mindful living at Earthflow Yoga.",
+    "description": "Explore the joy of cycling with Canberra Cycling Club! Join us to embark on your cycling journey today.",
     "social_links": {
-      "facebook": "https://www.facebook.com/earthflowyoga",
-      "instagram": "https://www.instagram.com/earthflowyoga",
-      "twitter": "https://twitter.com/earthflowyoga"
+      "facebook": "https://www.facebook.com/canberracyclingclub",
+      "twitter": "https://twitter.com/canberracycling",
+      "instagram": "https://www.instagram.com/canberracyclingclub"
     }
   }
 }
