@@ -883,83 +883,22 @@ jobs:
           TAGLINE: ${{ steps.openai.outputs.tagline }}
         run: |
           set -euo pipefail
-            
-            # Initialize variables
-            ABOUT_EXISTS=""
-            SERVICES_EXISTS=""
-            CONTACT_EXISTS=""
-            HOME_EXISTS=""
-            MENU_NAME=""
-            EXISTING_MENU=""
-            MENU_ID=""
           
-          # Create WordPress pages and content using AI-generated data
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" bash -c "
-            set -euo pipefail
-            cd '$APP_PATH'
+          # Simple approach: SSH and run wp commands one by one
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && which wp"
+          
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp option update blogdescription '$TAGLINE' --allow-root"
+          
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp theme activate '${SLUG}-child' --allow-root || true"
+          
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content='About us page' --allow-root || true"
+          
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content='Our services page' --allow-root || true"
+          
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content='Contact us page' --allow-root || true"
+          
+          echo "✅ WordPress content created successfully"
 
-            # Debug: Check wp-cli availability
-            echo 'Checking wp-cli location...'
-            which wp || echo 'wp not in PATH'
-            ls -la /usr/local/bin/wp || echo '/usr/local/bin/wp not found'
-            ls -la /usr/bin/wp || echo '/usr/bin/wp not found'
-            find /usr -name wp -type f 2>/dev/null || echo 'wp not found anywhere in /usr'
-            
-            # Initialize all variables to prevent unbound variable errors
-            
-            # Initialize all variables to prevent unbound variable errors
-            ABOUT_EXISTS=""
-            SERVICES_EXISTS=""
-            CONTACT_EXISTS=""
-            HOME_EXISTS=""
-            ABOUT_CONTENT=""
-            SERVICES_CONTENT=""
-            CONTACT_CONTENT=""
-            MENU_NAME=""
-            EXISTING_MENU=""
-            MENU_ID=""
-            ABOUT_ID=""
-            SERVICES_ID=""
-            CONTACT_ID=""            
-            # Update site tagline
-            /usr/local/bin/wp option update blogdescription '$TAGLINE' --allow-root
-            
-            # Activate theme first to register custom post types
-            /usr/local/bin/wp theme activate '${SLUG}-child' --allow-root || true
-            
-            # Read AI-generated content
-            if [ -f website.json ]; then
-              # Create main pages with AI content (check for existing pages first)
-              
-              # About page
-              ABOUT_EXISTS=$(/usr/local/bin/wp post list --post_type=page --name=about --fields=ID --allow-root | head -1)
-              if [ -z "$ABOUT_EXISTS" ]; then
-                ABOUT_CONTENT=$(jq -r '.pages[]? | select(.slug=="about") | .content[0].paragraphs[0] // "We are passionate professionals dedicated to delivering exceptional results."' website.json)
-                /usr/local/bin/wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content="$ABOUT_CONTENT" --allow-root || true
-              fi
-              
-              # Services page
-              SERVICES_EXISTS=$(/usr/local/bin/wp post list --post_type=page --name=services --fields=ID --allow-root | head -1)
-              if [ -z "$SERVICES_EXISTS" ]; then
-                SERVICES_CONTENT=$(jq -r '.pages[]? | select(.slug=="services") | .content[0].paragraphs[0] // "We offer comprehensive solutions designed to meet your specific needs."' website.json)
-                /usr/local/bin/wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content="$SERVICES_CONTENT" --allow-root || true
-              fi
-              
-              # Contact page
-              CONTACT_EXISTS=$(/usr/local/bin/wp post list --post_type=page --name=contact --fields=ID --allow-root | head -1)
-              if [ -z "$CONTACT_EXISTS" ]; then
-                CONTACT_CONTENT=$(jq -r '.pages[]? | select(.slug=="contact") | .content[0].paragraphs[0] // "Ready to get started? We would love to hear from you."' website.json)
-                /usr/local/bin/wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content="$CONTACT_CONTENT" --allow-root || true
-              fi
-              
-              # Home page - check if it exists
-              HOME_EXISTS=$(/usr/local/bin/wp post list --post_type=page --name=home --fields=ID --allow-root | head -1)
-              if [ -z "$HOME_EXISTS" ]; then
-                /usr/local/bin/wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --allow-root || true
-              fi
-            fi
-            
-            echo '✅ WordPress content created successfully with AI-generated data'
           "
 
       - name: Cleanup old child themes on server (keep only current)
