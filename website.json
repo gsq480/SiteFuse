@@ -1,24 +1,52 @@
 {
-  "slug": "canberra-flower-shop",
-  "name": "Canberra Blooms",
-  "tagline": "Your Local Floral Haven",
-  "industry": "Floral & Gifts",
-  "brand": "#FF6F61",
-  "accent": "#6DBE45",
-  "hero": "https://images.unsplash.com/photo-1552201153-b8347f4003b1",
-  "description": "Canberra Blooms is your premier flower shop, offering a stunning selection of fresh flowers and unique arrangements for any occasion. Our expert florists are dedicated to bringing joy and beauty to your life with our floral creations.",
+  "slug": "kids-party-retail",
+  "name": "Party Pals",
+  "tagline": "Creating Magical Moments for Your Little Ones",
+  "industry": "retail",
+  "brand": "#FF5733",
+  "accent": "#C70039",
+  "hero": "https://images.unsplash.com/photo-1564503108280-a3a5e7c87b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080",
+  "description": "Party Pals is your one-stop shop for all things kids' parties! We offer a wide variety of themed decorations, party supplies, and custom solutions to make your child's celebration unforgettable. Transform ordinary moments into extraordinary memories with us!",
   "pages": [
+    {
+      "slug": "home",
+      "title": "Home",
+      "content": [
+        {
+          "heading": "Welcome to Party Pals!",
+          "paragraph": "We believe that every child's party should be a magical experience. From intricate decorations to fun party favors, our mission is to provide high-quality products that bring joy and excitement to your celebrations."
+        },
+        {
+          "heading": "Browse Our Collections",
+          "paragraph": "Explore our extensive range of themed parties, from princesses and superheroes to dinosaurs and outer space, each curated to ignite your child's imagination."
+        }
+      ]
+    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Who We Are",
-          "paragraph": "Founded in 2020, Canberra Blooms is a family-owned flower shop serving the Canberra community with passion and dedication. We take pride in sourcing our flowers from local growers, ensuring the highest quality and freshness."
+          "heading": "Our Story",
+          "paragraph": "Established in 2020, Party Pals was born from a love for celebrations and the joy they bring to children. Our passionate team is dedicated to creating the ultimate party experience that leaves lasting impressions and smiles."
         },
         {
-          "heading": "Our Mission",
-          "paragraph": "Our mission is to provide beautiful floral arrangements that make every occasion special. Whether it's a wedding, anniversary, or just because, we are committed to exceeding your expectations."
+          "heading": "Why Choose Us?",
+          "paragraph": "At Party Pals, we pride ourselves on our exceptional customer service, unique product offerings, and commitment to quality. Your child's happiness is our top priority."
+        }
+      ]
+    },
+    {
+      "slug": "shop",
+      "title": "Shop",
+      "content": [
+        {
+          "heading": "Explore Our Products",
+          "paragraph": "From decorations and tableware to balloons and party bags, we offer a vast selection of products that cater to all age groups and themes. Find everything you need to throw the perfect party under one roof!"
+        },
+        {
+          "heading": "Best Sellers",
+          "paragraph": "Check out our best-selling items that customers love! These popular products are tried and tested, ensuring you pick items that other parents adore."
         }
       ]
     },
@@ -27,26 +55,12 @@
       "title": "Our Services",
       "content": [
         {
-          "heading": "Custom Floral Arrangements",
-          "paragraph": "We specialize in custom floral designs tailored to your specific needs. From vibrant bouquets to elegant centerpieces, our expert florists will work with you to create the perfect arrangement."
+          "heading": "Custom Party Planning",
+          "paragraph": "Let our experienced team assist you in planning the most spectacular party tailored to your child's interests and preferences. We offer consultation services to make your vision come to life!"
         },
         {
-          "heading": "Delivery Service",
-          "paragraph": "Enjoy convenient flower delivery across Canberra. We ensure that your blooms arrive fresh and on time, bringing smiles to your loved ones' faces."
-        },
-        {
-          "heading": "Event Floral Design",
-          "paragraph": "Let us help you create an unforgettable ambiance for your special events. From weddings to corporate gatherings, we provide stunning floral décor that fits your theme and style."
-        }
-      ]
-    },
-    {
-      "slug": "gallery",
-      "title": "Gallery",
-      "content": [
-        {
-          "heading": "Our Floral Creations",
-          "paragraph": "Browse through our gallery showcasing some of our best floral arrangements. Each piece is crafted with love, creativity, and attention to detail, reflecting our commitment to quality."
+          "heading": "Delivery & Set-Up",
+          "paragraph": "Need help setting up? Our delivery and set-up service ensures that your party area is seamlessly transformed before your guests arrive, allowing you to enjoy the festivities stress-free."
         }
       ]
     },
@@ -56,75 +70,66 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "Have a question or want to place an order? Reach out to us via phone or email, or visit us at our shop in Canberra. We look forward to assisting you!"
+          "paragraph": "Have questions? We're here to help! Reach out to us via phone or email, or visit our store to receive personalized assistance with all your party needs."
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "Home",
-      "url": "/"
-    },
-    {
-      "label": "About",
-      "url": "/about"
-    },
-    {
-      "label": "Services",
-      "url": "/services"
-    },
-    {
-      "label": "Gallery",
-      "url": "/gallery"
-    },
-    {
-      "label": "Contact",
-      "url": "/contact"
-    }
+    { "label": "Home", "url": "/home" },
+    { "label": "About Us", "url": "/about" },
+    { "label": "Shop", "url": "/shop" },
+    { "label": "Services", "url": "/services" },
+    { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Sarah Johnson",
-      "role": "Wedding Planner",
-      "text": "Working with Canberra Blooms was a dream! They created the most beautiful floral arrangements for my client’s wedding.",
+      "name": "Jessica Taylor",
+      "role": "Happy Parent",
+      "text": "Party Pals made my daughter's birthday unforgettable! The decorations were beautiful, and the service was exceptional.",
       "rating": 5
     },
     {
-      "name": "Mark Thompson",
-      "role": "Customer",
-      "text": "Absolutely loved the bouquet I received! The flowers were fresh and beautifully arranged.",
-      "rating": 4.5
+      "name": "Mark Johnson",
+      "role": "Birthday Planner",
+      "text": "I've worked with many party supply companies, and Party Pals clearly stands out. Their quality and attention to detail are unmatched.",
+      "rating": 5
+    },
+    {
+      "name": "Linda Green",
+      "role": "Satisfied Customer",
+      "text": "From the planning to the execution, everything was perfect. I recommend Party Pals to anyone looking to throw a fantastic party!",
+      "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Fresh Floral Bouquets",
-      "description": "Handpicked flowers arranged beautifully for any occasion.",
-      "icon": "🌺"
+      "title": "Themed Party Supplies",
+      "description": "Discover a wide range of party supplies tailored to different themes including decor, gift bags, and more!",
+      "icon": "🎈"
     },
     {
-      "title": "Wedding Flowers",
-      "description": "Elegant floral arrangements to enhance your wedding day.",
-      "icon": "💍"
+      "title": "Event Consultation",
+      "description": "Get expert advice on planning and executing the perfect celebration for your child.",
+      "icon": "🗓️"
     },
     {
-      "title": "Sympathy Flowers",
-      "description": "Tastefully designed arrangements to express your condolences.",
-      "icon": "🌹"
+      "title": "Custom Decorations",
+      "description": "We offer customized decoration services that match your child's unique party theme.",
+      "icon": "🎨"
     }
   ],
   "contact": {
-    "phone": "02 1234 5678",
-    "email": "info@canberrablooms.com.au",
-    "address": "123 Flower St, Canberra, ACT 2600, Australia"
+    "phone": "+1-800-555-0199",
+    "email": "info@partypals.com",
+    "address": "123 Party Lane, Fun City, CA 90210"
   },
   "footer": {
-    "description": "Canberra Blooms - Bringing Nature's Beauty to You.",
-    "social_links": {
-      "facebook": "https://facebook.com/canberrablooms",
-      "instagram": "https://instagram.com/canberrablooms",
-      "twitter": "https://twitter.com/canberrablooms"
-    }
+    "description": "Party Pals is dedicated to creating unforgettable experiences for children through beautiful and quality party supplies. Join us in celebrating every child's special day!",
+    "social_links": [
+      { "platform": "Facebook", "url": "https://facebook.com/partypals" },
+      { "platform": "Instagram", "url": "https://instagram.com/partypals" },
+      { "platform": "Twitter", "url": "https://twitter.com/partypals" }
+    ]
   }
 }
