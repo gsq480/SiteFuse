@@ -1,28 +1,24 @@
 {
-  "slug": "canberra-cycling-club",
-  "name": "Canberra Cycling Club",
-  "tagline": "Ride Together, Ride Stronger",
-  "industry": "Sports & Recreation",
-  "brand": "#008C45",
-  "accent": "#F7A80D",
-  "hero": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
-  "description": "The Canberra Cycling Club is dedicated to promoting cycling as a beautiful sport and community. We provide opportunities for all cyclists—be it beginners or seasoned riders—to connect, compete, and explore the joy of cycling in Canberra.",
+  "slug": "modern-yoga-studio",
+  "name": "Zenith Yoga Studio",
+  "tagline": "Find Your Balance Within",
+  "industry": "Health & Wellness",
+  "brand": "#A89F91",
+  "accent": "#4B8E8D",
+  "hero": "https://images.unsplash.com/photo-1572327838323-68d80cd8c382",
+  "description": "Zenith Yoga Studio offers a serene space for people to explore yoga, mindfulness, and personal growth. With a focus on sustainable practices and earthy aesthetics, we guide you on your journey to inner peace and physical well-being.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Canberra Cycling Club",
-          "paragraphs": [
-            "Join us in our mission to foster a vibrant cycling community in Canberra. Whether your interest lies in recreational riding or competitive racing, we have something for everyone."
-          ]
+          "heading": "Welcome to Zenith Yoga",
+          "paragraph": "At Zenith Yoga Studio, we believe in the transformative power of yoga and mindfulness. Our studio is designed to be a reflection of nature's calming essence, where individuals can unwind and reconnect with themselves."
         },
         {
-          "heading": "Join Our Community",
-          "paragraphs": [
-            "Our events range from social rides to competitive races, welcoming cyclists of all levels. Become a member and enjoy exclusive benefits, training sessions, and club events."
-          ]
+          "heading": "Our Philosophy",
+          "paragraph": "We incorporate mindfulness practices into our classes to not only improve physical strength but to enhance mental clarity and emotional resilience. Join us in fostering a community that values wellness and connection."
         }
       ]
     },
@@ -31,52 +27,40 @@
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Story",
-          "paragraphs": [
-            "Founded in 1992, Canberra Cycling Club has grown to become a community hub for cycling enthusiasts across the ACT. Our goal is to promote cycling as a sport, a form of transportation, and as a means for social interaction."
-          ]
+          "heading": "Who We Are",
+          "paragraph": "Founded in 2023, Zenith Yoga Studio was created by a team of passionate yogis dedicated to spreading the benefits of yoga and mindfulness. Our instructors are trained in various styles and committed to guiding each student on their personal path."
         },
         {
           "heading": "Our Mission",
-          "paragraphs": [
-            "We aim to create a welcoming environment for all cyclists, providing coaching, races, and community rides that enhance the cycling experience while promoting healthy lifestyles."
-          ]
+          "paragraph": "To create a welcoming and inclusive environment where everyone can explore their practice without judgment. We prioritize sustainability, using eco-friendly materials and offering community classes to ensure accessibility."
         }
       ]
     },
     {
-      "slug": "events",
-      "title": "Events",
+      "slug": "classes",
+      "title": "Classes",
       "content": [
         {
-          "heading": "Upcoming Races",
-          "paragraphs": [
-            "Check out our calendar for upcoming races and social rides. Whether you’re aiming for competition or just for fun, there’s an event waiting for you."
-          ]
+          "heading": "Explore Our Class Offerings",
+          "paragraph": "We offer a variety of classes geared toward all levels, from beginners to advanced practitioners. Each class is designed to promote balance, strength, and mindfulness."
         },
         {
-          "heading": "Past Events Highlights",
-          "paragraphs": [
-            "Take a look at our previous events that brought our cycling community together. Enjoy the camaraderie and sport that our events foster. Don't miss out on the thrilling highlights!"
-          ]
+          "heading": "Class Schedule",
+          "paragraph": "Visit our class schedule page to find the best times to join us for invigorating yoga sessions, calming meditations, and community workshops."
         }
       ]
     },
     {
-      "slug": "membership",
-      "title": "Membership",
+      "slug": "services",
+      "title": "Services",
       "content": [
         {
-          "heading": "Join Us",
-          "paragraphs": [
-            "Become a member of the Canberra Cycling Club and unlock exclusive access to training resources, community events, and discounts at partner stores. Experience the joy of cycling with us!"
-          ]
+          "heading": "Private Sessions",
+          "paragraph": "Our experienced instructors offer one-on-one sessions tailored to your needs, allowing for personalized guidance and adjustments in your practice."
         },
         {
-          "heading": "Membership Benefits",
-          "paragraphs": [
-            "Members receive a monthly newsletter, access to members-only events, exclusive merchandise, and a chance to be part of a dynamic cycling community."
-          ]
+          "heading": "Workshops",
+          "paragraph": "Join our seasonal workshops focusing on specific themes such as mindfulness, breath work, and yoga for stress relief."
         }
       ]
     },
@@ -86,57 +70,75 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraphs": [
-            "Have questions or want to learn more about the club? Reach out to us—we'd love to hear from you!"
-          ]
+          "paragraph": "We’d love to hear from you! Reach out with any questions or to schedule a tour of our studio."
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/home" },
-    { "label": "About", "url": "/about" },
-    { "label": "Events", "url": "/events" },
-    { "label": "Membership", "url": "/membership" },
-    { "label": "Contact", "url": "/contact" }
+    {
+      "label": "Home",
+      "url": "/home"
+    },
+    {
+      "label": "About Us",
+      "url": "/about"
+    },
+    {
+      "label": "Classes",
+      "url": "/classes"
+    },
+    {
+      "label": "Services",
+      "url": "/services"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
   ],
   "testimonials": [
     {
-      "name": "John Doe",
-      "role": "Club Member",
-      "text": "Being a part of the Canberra Cycling Club transformed my cycling experience completely. The community support is fantastic!",
+      "name": "Emily Johnson",
+      "role": "Yoga Enthusiast",
+      "text": "Zenith Yoga has transformed my practice! The instructors are incredibly knowledgeable and supportive.",
       "rating": 5
     },
     {
-      "name": "Jane Smith",
-      "role": "Event Participant",
-      "text": "I love the events hosted by the club; they are organized and bring together cycling enthusiasts from all over Canberra!",
+      "name": "Mark Stevens",
+      "role": "Recent Graduate",
+      "text": "The mindful meditation class has changed my perspective on life. I've found inner peace like never before.",
       "rating": 4
     }
   ],
   "services": [
     {
-      "title": "Group Rides",
-      "description": "Join our scheduled rides that cater to all skill levels. Enjoy the company of fellow cyclists while exploring scenic routes.",
-      "icon": "🚴"
+      "title": "Group Classes",
+      "description": "Join our diverse group classes designed for all skill levels, focusing on mindfulness and physical well-being.",
+      "icon": "🌿"
     },
     {
-      "title": "Coaching & Training",
-      "description": "Our professional coaches offer training sessions for riders looking to improve their skills, fitness, and performance.",
-      "icon": "🏆"
+      "title": "Wellness Workshops",
+      "description": "Participate in our workshops aimed at integrating wellness practices into your daily life.",
+      "icon": "🧘‍♂️"
+    },
+    {
+      "title": "Yoga Teacher Training",
+      "description": "Pursue your passion for yoga by becoming a certified instructor through our comprehensive training program.",
+      "icon": "📚"
     }
   ],
   "contact": {
-    "phone": "+61 2 1234 5678",
-    "email": "contact@canberracyclingclub.org.au",
-    "address": "123 Cycling Lane, Canberra ACT 2600, Australia"
+    "phone": "+1 (555) 555-0199",
+    "email": "info@zenithyoga.com",
+    "address": "123 Serenity Lane, Mindful City, MA 12345"
   },
   "footer": {
-    "description": "Join the Canberra Cycling Club and pedal towards a healthier, more connected future.",
-    "socialLinks": [
-      { "platform": "Facebook", "url": "https://facebook.com/CanberraCyclingClub" },
-      { "platform": "Twitter", "url": "https://twitter.com/CanberraCycling" },
-      { "platform": "Instagram", "url": "https://instagram.com/CanberraCyclingClub" }
-    ]
+    "description": "Zenith Yoga Studio is dedicated to cultivating mindfulness and wellness in a serene space dedicated to your personal growth.",
+    "socialLinks": {
+      "facebook": "https://www.facebook.com/zenithyogastudio",
+      "instagram": "https://www.instagram.com/zenithyoga",
+      "twitter": "https://twitter.com/zenithyoga"
+    }
   }
 }
