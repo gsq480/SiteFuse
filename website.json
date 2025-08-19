@@ -1,24 +1,24 @@
 {
-  "slug": "modern-yoga-studio",
-  "name": "Tranquil Flow Yoga",
-  "tagline": "Find Your Ground, Embrace Your Calm",
-  "industry": "Health & Wellness",
-  "brand": "#7d9d6d",
-  "accent": "#f2e8d5",
-  "hero": "https://images.unsplash.com/photo-1516225966260-4eb5985eb10b",
-  "description": "Tranquil Flow Yoga is a modern yoga studio that embraces mindfulness and earthy aesthetics. Our mission is to cultivate peace and grounding through diverse yoga practices in a serene environment.",
+  "slug": "local-flower-shop",
+  "name": "Bloom & Blossom",
+  "tagline": "Fresh Arrangements, Bright Colors!",
+  "industry": "Retail",
+  "brand": "#FF6F61",
+  "accent": "#00BFFF",
+  "hero": "https://images.unsplash.com/photo-1559161909-40c8a1a4a12d",
+  "description": "Bloom & Blossom is your local flower shop that delivers vibrant floral arrangements for every occasion. Our mission is to bring joy and beauty into your life with fresh flowers that brighten your day.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Tranquil Flow",
-          "paragraph": "At Tranquil Flow Yoga, we offer a harmonious space where you can connect with your inner self and the earth around you. Join us to explore various yoga styles and mindfulness techniques tailored for all experience levels."
+          "heading": "Welcome to Bloom & Blossom",
+          "paragraph": "At Bloom & Blossom, we take pride in creating stunning floral arrangements tailored to your needs. Our expert florists use the freshest blooms to ensure every bouquet tells a story."
         },
         {
-          "heading": "Our Philosophy",
-          "paragraph": "We believe in the transformative power of yoga and mindfulness. Our classes are designed not just to improve physical fitness but also to enhance mental clarity and emotional well-being. With earth tones and calming ambience, our studio is a sanctuary for your mind and body."
+          "heading": "Why Choose Us?",
+          "paragraph": "We focus on quality, creativity, and customer satisfaction. Whether you're celebrating a special occasion or just want to brighten someone's day, we’ve got the perfect flowers for you!"
         }
       ]
     },
@@ -27,40 +27,40 @@
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Journey",
-          "paragraph": "Founded in 2023, Tranquil Flow Yoga was born from a desire to create a mindful community. Our instructors are experienced practitioners who are passionate about fostering a deep connection between mind, body, and earth."
+          "heading": "Our Story",
+          "paragraph": "Bloom & Blossom was founded in 2015 by flower enthusiast Sarah Green. With a passion for floral design and a commitment to using locally sourced blooms, our shop has become a beloved part of the community."
         },
         {
-          "heading": "Meet the Team",
-          "paragraph": "Our team comprises certified yoga instructors with diverse backgrounds, ensuring a wide range of classes from Hatha to Vinyasa, each focusing on mindfulness and personal growth."
-        }
-      ]
-    },
-    {
-      "slug": "classes",
-      "title": "Classes",
-      "content": [
-        {
-          "heading": "Class Offerings",
-          "paragraph": "Explore our range of classes designed to suit all levels. Whether you are a beginner seeking to discover yoga or an experienced practitioner looking for deepened practice, we have something for everyone."
-        },
-        {
-          "heading": "Schedule",
-          "paragraph": "Join us for our weekly classes. From gentle mindfulness practices to energizing flows, check out our schedule to find the perfect class for you."
+          "heading": "Our Mission",
+          "paragraph": "To provide fresh, beautiful flowers that enhance all of life’s moments. We believe in sustainability and work with local growers to minimize our environmental footprint."
         }
       ]
     },
     {
       "slug": "services",
-      "title": "Services",
+      "title": "Our Services",
       "content": [
         {
-          "heading": "Private Sessions",
-          "paragraph": "Get personalized guidance through one-on-one yoga sessions tailored to your unique needs and goals."
+          "heading": "Custom Floral Arrangements",
+          "paragraph": "We offer personalized floral designs for weddings, corporate events, and all celebrations. Our florists work with you to create unique arrangements that reflect your style."
         },
         {
-          "heading": "Workshops & Events",
-          "paragraph": "Participate in our mindfulness workshops and special events that delve deeper into yoga philosophies and practices."
+          "heading": "Same-Day Delivery",
+          "paragraph": "Need flowers in a hurry? We provide same-day delivery services to ensure your fresh blooms arrive on time. Just place your order by noon, and we'll take care of the rest!"
+        },
+        {
+          "heading": "Floral Subscription",
+          "paragraph": "Enjoy beautiful flowers regularly with our subscription service. Choosehow often you’d like to receive fresh blooms, and we’ll deliver them right to your door!"
+        }
+      ]
+    },
+    {
+      "slug": "gallery",
+      "title": "Gallery",
+      "content": [
+        {
+          "heading": "Our Floral Creations",
+          "paragraph": "Explore our gallery to see some of our favorite arrangements! From elegant bouquets to vibrant centerpieces, our creations are perfect for any occasion."
         }
       ]
     },
@@ -70,55 +70,65 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "Have questions? Interested in booking a class or workshop? We're here to help! Reach out to us through the contact details below."
+          "paragraph": "Have questions or want to place an order? Reach out to us using the information below."
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/home" },
+    { "label": "Home", "url": "/" },
     { "label": "About", "url": "/about" },
-    { "label": "Classes", "url": "/classes" },
     { "label": "Services", "url": "/services" },
+    { "label": "Gallery", "url": "/gallery" },
     { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Anna Smith",
-      "role": "Yoga Practitioner",
-      "text": "Tranquil Flow Yoga has transformed my practice. The atmosphere is soothing and the instructors are incredibly knowledgeable.",
+      "name": "Jane Doe",
+      "role": "Wedding Planner",
+      "text": "Bloom & Blossom provided the most beautiful arrangements for my clients' weddings. Every bouquet was stunning and made the day even more special.",
       "rating": 5
     },
     {
-      "name": "James Low",
-      "role": "Participant in Workshops",
-      "text": "The workshops here are enlightening and truly help in deepening my understanding of mindfulness.",
-      "rating": 4
+      "name": "Mark Smith",
+      "role": "Regular Customer",
+      "text": "I love getting flowers from Bloom & Blossom! The quality is unmatched, and their customer service is always friendly and helpful.",
+      "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Yoga Classes",
-      "description": "Diverse classes ranging from Hatha to Vinyasa focusing on mindfulness and personal growth.",
-      "icon": "🧘"
+      "title": "Floral Design",
+      "description": "Expertly crafted floral arrangements perfect for any event.",
+      "icon": "🌺"
     },
     {
-      "title": "Mindfulness Workshops",
-      "description": "Workshops to enhance your mindfulness practice and integrate it into daily life.",
-      "icon": "🧠"
+      "title": "Event Services",
+      "description": "Complete floral services for weddings, corporate events, and special occasions.",
+      "icon": "🎉"
+    },
+    {
+      "title": "Delivery Service",
+      "description": "Convenient same-day delivery to surprise your loved ones.",
+      "icon": "📦"
+    },
+    {
+      "title": "Subscription Service",
+      "description": "Regular delivery of beautiful fresh flowers to your home.",
+      "icon": "💐"
     }
   ],
   "contact": {
-    "phone": "+123-456-7890",
-    "email": "info@tranquilflowyoga.com",
-    "address": "123 Meditation Way, Mindful City, CA 90001"
+    "phone": "(123) 456-7890",
+    "email": "info@bloomandblossom.com",
+    "address": "123 Flower St, Bloomtown, XY 12345"
   },
   "footer": {
-    "description": "Tranquil Flow Yoga - Your journey to mindfulness and wellness begins here.",
+    "description": "Bloom & Blossom - Bringing Color and Joy to Your Life!",
     "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/tranquilflowyoga" },
-      { "platform": "Instagram", "url": "https://instagram.com/tranquilflowyoga" },
-      { "platform": "Twitter", "url": "https://twitter.com/tranquilflowyoga" }
+      { "platform": "Facebook", "url": "https://facebook.com/bloomandblossom" },
+      { "platform": "Instagram", "url": "https://instagram.com/bloomandblossom" },
+      { "platform": "Twitter", "url": "https://twitter.com/bloomandblossom" }
     ]
   }
 }
