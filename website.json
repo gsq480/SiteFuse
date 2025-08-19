@@ -1,38 +1,24 @@
 {
-  "slug": "local-flower-shop",
-  "name": "Bloom & Blossom",
-  "tagline": "Fresh Arrangements, Bright Colors!",
-  "industry": "Retail",
+  "slug": "canberra-flower-shop",
+  "name": "Canberra Blooms",
+  "tagline": "Your Local Floral Haven",
+  "industry": "Floral & Gifts",
   "brand": "#FF6F61",
-  "accent": "#00BFFF",
-  "hero": "https://images.unsplash.com/photo-1559161909-40c8a1a4a12d",
-  "description": "Bloom & Blossom is your local flower shop that delivers vibrant floral arrangements for every occasion. Our mission is to bring joy and beauty into your life with fresh flowers that brighten your day.",
+  "accent": "#6DBE45",
+  "hero": "https://images.unsplash.com/photo-1552201153-b8347f4003b1",
+  "description": "Canberra Blooms is your premier flower shop, offering a stunning selection of fresh flowers and unique arrangements for any occasion. Our expert florists are dedicated to bringing joy and beauty to your life with our floral creations.",
   "pages": [
-    {
-      "slug": "home",
-      "title": "Home",
-      "content": [
-        {
-          "heading": "Welcome to Bloom & Blossom",
-          "paragraph": "At Bloom & Blossom, we take pride in creating stunning floral arrangements tailored to your needs. Our expert florists use the freshest blooms to ensure every bouquet tells a story."
-        },
-        {
-          "heading": "Why Choose Us?",
-          "paragraph": "We focus on quality, creativity, and customer satisfaction. Whether you're celebrating a special occasion or just want to brighten someone's day, we’ve got the perfect flowers for you!"
-        }
-      ]
-    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Story",
-          "paragraph": "Bloom & Blossom was founded in 2015 by flower enthusiast Sarah Green. With a passion for floral design and a commitment to using locally sourced blooms, our shop has become a beloved part of the community."
+          "heading": "Who We Are",
+          "paragraph": "Founded in 2020, Canberra Blooms is a family-owned flower shop serving the Canberra community with passion and dedication. We take pride in sourcing our flowers from local growers, ensuring the highest quality and freshness."
         },
         {
           "heading": "Our Mission",
-          "paragraph": "To provide fresh, beautiful flowers that enhance all of life’s moments. We believe in sustainability and work with local growers to minimize our environmental footprint."
+          "paragraph": "Our mission is to provide beautiful floral arrangements that make every occasion special. Whether it's a wedding, anniversary, or just because, we are committed to exceeding your expectations."
         }
       ]
     },
@@ -42,15 +28,15 @@
       "content": [
         {
           "heading": "Custom Floral Arrangements",
-          "paragraph": "We offer personalized floral designs for weddings, corporate events, and all celebrations. Our florists work with you to create unique arrangements that reflect your style."
+          "paragraph": "We specialize in custom floral designs tailored to your specific needs. From vibrant bouquets to elegant centerpieces, our expert florists will work with you to create the perfect arrangement."
         },
         {
-          "heading": "Same-Day Delivery",
-          "paragraph": "Need flowers in a hurry? We provide same-day delivery services to ensure your fresh blooms arrive on time. Just place your order by noon, and we'll take care of the rest!"
+          "heading": "Delivery Service",
+          "paragraph": "Enjoy convenient flower delivery across Canberra. We ensure that your blooms arrive fresh and on time, bringing smiles to your loved ones' faces."
         },
         {
-          "heading": "Floral Subscription",
-          "paragraph": "Enjoy beautiful flowers regularly with our subscription service. Choosehow often you’d like to receive fresh blooms, and we’ll deliver them right to your door!"
+          "heading": "Event Floral Design",
+          "paragraph": "Let us help you create an unforgettable ambiance for your special events. From weddings to corporate gatherings, we provide stunning floral décor that fits your theme and style."
         }
       ]
     },
@@ -60,7 +46,7 @@
       "content": [
         {
           "heading": "Our Floral Creations",
-          "paragraph": "Explore our gallery to see some of our favorite arrangements! From elegant bouquets to vibrant centerpieces, our creations are perfect for any occasion."
+          "paragraph": "Browse through our gallery showcasing some of our best floral arrangements. Each piece is crafted with love, creativity, and attention to detail, reflecting our commitment to quality."
         }
       ]
     },
@@ -70,65 +56,75 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "Have questions or want to place an order? Reach out to us using the information below."
+          "paragraph": "Have a question or want to place an order? Reach out to us via phone or email, or visit us at our shop in Canberra. We look forward to assisting you!"
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/" },
-    { "label": "About", "url": "/about" },
-    { "label": "Services", "url": "/services" },
-    { "label": "Gallery", "url": "/gallery" },
-    { "label": "Contact", "url": "/contact" }
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "About",
+      "url": "/about"
+    },
+    {
+      "label": "Services",
+      "url": "/services"
+    },
+    {
+      "label": "Gallery",
+      "url": "/gallery"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
   ],
   "testimonials": [
     {
-      "name": "Jane Doe",
+      "name": "Sarah Johnson",
       "role": "Wedding Planner",
-      "text": "Bloom & Blossom provided the most beautiful arrangements for my clients' weddings. Every bouquet was stunning and made the day even more special.",
+      "text": "Working with Canberra Blooms was a dream! They created the most beautiful floral arrangements for my client’s wedding.",
       "rating": 5
     },
     {
-      "name": "Mark Smith",
-      "role": "Regular Customer",
-      "text": "I love getting flowers from Bloom & Blossom! The quality is unmatched, and their customer service is always friendly and helpful.",
-      "rating": 5
+      "name": "Mark Thompson",
+      "role": "Customer",
+      "text": "Absolutely loved the bouquet I received! The flowers were fresh and beautifully arranged.",
+      "rating": 4.5
     }
   ],
   "services": [
     {
-      "title": "Floral Design",
-      "description": "Expertly crafted floral arrangements perfect for any event.",
+      "title": "Fresh Floral Bouquets",
+      "description": "Handpicked flowers arranged beautifully for any occasion.",
       "icon": "🌺"
     },
     {
-      "title": "Event Services",
-      "description": "Complete floral services for weddings, corporate events, and special occasions.",
-      "icon": "🎉"
+      "title": "Wedding Flowers",
+      "description": "Elegant floral arrangements to enhance your wedding day.",
+      "icon": "💍"
     },
     {
-      "title": "Delivery Service",
-      "description": "Convenient same-day delivery to surprise your loved ones.",
-      "icon": "📦"
-    },
-    {
-      "title": "Subscription Service",
-      "description": "Regular delivery of beautiful fresh flowers to your home.",
-      "icon": "💐"
+      "title": "Sympathy Flowers",
+      "description": "Tastefully designed arrangements to express your condolences.",
+      "icon": "🌹"
     }
   ],
   "contact": {
-    "phone": "(123) 456-7890",
-    "email": "info@bloomandblossom.com",
-    "address": "123 Flower St, Bloomtown, XY 12345"
+    "phone": "02 1234 5678",
+    "email": "info@canberrablooms.com.au",
+    "address": "123 Flower St, Canberra, ACT 2600, Australia"
   },
   "footer": {
-    "description": "Bloom & Blossom - Bringing Color and Joy to Your Life!",
-    "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/bloomandblossom" },
-      { "platform": "Instagram", "url": "https://instagram.com/bloomandblossom" },
-      { "platform": "Twitter", "url": "https://twitter.com/bloomandblossom" }
-    ]
+    "description": "Canberra Blooms - Bringing Nature's Beauty to You.",
+    "social_links": {
+      "facebook": "https://facebook.com/canberrablooms",
+      "instagram": "https://instagram.com/canberrablooms",
+      "twitter": "https://twitter.com/canberrablooms"
+    }
   }
 }
