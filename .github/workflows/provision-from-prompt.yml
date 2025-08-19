@@ -840,6 +840,13 @@ jobs:
           
           ../tailwindcss -i ./assets/css/tailwind.css -o ./dist/tailwind.css --minify
 
+          # Move back to workdir and rename to expected directory name
+          cd ..
+          mv child "${SLUG}-child"
+
+          # Copy the generated theme to the main workspace
+          cp -r "${SLUG}-child" "$GITHUB_WORKSPACE/"
+
       - name: Commit generated theme back to repo
         env:
           SLUG: ${{ steps.openai.outputs.slug }}
