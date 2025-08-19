@@ -1,66 +1,62 @@
 {
   "slug": "modern-yoga-studio",
-  "name": "EarthFlow Yoga",
-  "tagline": "Find your balance, nurture your soul.",
+  "name": "Earthflow Yoga",
+  "tagline": "Embrace Mindfulness, Flow with Nature",
   "industry": "Health & Wellness",
-  "brand": "#474B31",
-  "accent": "#B2A36D",
-  "hero": "https://images.unsplash.com/photo-1515032255737-b0c6dc404f2b",
-  "description": "At EarthFlow Yoga, we offer a serene environment for individuals seeking to enrich their lives through mindfulness and yoga practice. Our commitment to sustainability and wellness programs cultivates a community rooted in love and support.",
+  "brand": "#A78B65",
+  "accent": "#E3C8B0",
+  "hero": "https://unsplash.com/photos/Xk1_qXlUbPs",
+  "description": "At Earthflow Yoga, we blend natural aesthetics with mindful practices to create a space where you can reconnect with yourself and the world around you. Our studio is designed with earth tones and nurtures a calming environment perfect for yogis of all levels.",
   "pages": [
-    {
-      "slug": "home",
-      "title": "Home",
-      "content": [
-        {
-          "heading": "Welcome to EarthFlow Yoga",
-          "paragraph": "Join us in a tranquil space dedicated to wellbeing, mindfulness, and personal growth. Our classes are designed for all levels and incorporate principles that connect body, mind, and spirit."
-        },
-        {
-          "heading": "Our Philosophy",
-          "paragraph": "We believe in the harmony of self-discovery and nature. Our teachings promote a sustainable lifestyle, encouraging you to flow through life positively and peacefully."
-        }
-      ]
-    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Story",
-          "paragraph": "EarthFlow Yoga was founded on the belief that yoga is a journey to inner peace and balance. We combine traditional yoga practices with modern mindfulness techniques in an eco-friendly setting."
+          "heading": "Our Philosophy",
+          "paragraph": "At Earthflow Yoga, we believe in the power of mindful movement and breath. Our mission is to guide you on a journey of self-discovery and personal growth, enhancing your overall well-being through yoga."
         },
         {
-          "heading": "Meet Our Team",
-          "paragraph": "Our certified instructors are not only passionate practitioners but also dedicated advocates for the holistic lifestyle. They bring expertise, warmth, and nurturing guidance to every class."
+          "heading": "Our Space",
+          "paragraph": "Nestled in a tranquil setting, our studio is thoughtfully designed with natural materials and earth tones that promote relaxation and connection with nature."
         }
       ]
     },
     {
       "slug": "classes",
-      "title": "Classes",
+      "title": "Classes & Schedule",
       "content": [
         {
-          "heading": "Yoga Offerings",
-          "paragraph": "Explore our wide range of classes from beginner to advanced levels; we offer Hatha, Vinyasa, Restorative, and Yin Yoga, each designed to cater to your unique flow and rhythm."
+          "heading": "What We Offer",
+          "paragraph": "We offer a variety of classes that cater to all levels, from gentle restorative yoga to vigorous power yoga. Each class is designed to increase your strength, flexibility, and mindfulness."
         },
         {
-          "heading": "Mindfulness Workshops",
-          "paragraph": "Participate in our monthly workshops focused on mindfulness practices, meditation, and wellness, all aimed at cultivating awareness both on and off the mat."
+          "heading": "Class Schedule",
+          "paragraph": "Check out our current class schedule to find the perfect time for you to step onto the mat and join our welcoming community."
         }
       ]
     },
     {
-      "slug": "schedule",
-      "title": "Class Schedule",
+      "slug": "instructors",
+      "title": "Meet Our Instructors",
       "content": [
         {
-          "heading": "Weekly Schedule",
-          "paragraph": "Check out our class schedule and find the perfect time for your yoga practice. We offer classes daily across morning and evening slots to accommodate all lifestyles."
+          "heading": "Highly Trained Professionals",
+          "paragraph": "Our instructors are certified, passionate, and dedicated to helping you achieve your goals. They create a supportive atmosphere that allows you to flourish in your practice."
         },
         {
-          "heading": "Book a Class",
-          "paragraph": "Easily book your classes online or contact us if you have any questions. Your journey to a more balanced life starts with one step."
+          "heading": "Get to Know Them",
+          "paragraph": "Learn more about the backgrounds and teaching styles of our instructors to find the right fit for your journey."
+        }
+      ]
+    },
+    {
+      "slug": "blog",
+      "title": "Blog",
+      "content": [
+        {
+          "heading": "Mindful Insights",
+          "paragraph": "Explore our blog for thoughtful articles on yoga, mindfulness, and wellness. Find tips to enhance your practice and reading materials to inspire your journey."
         }
       ]
     },
@@ -70,88 +66,67 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "We're here to support your yoga journey. Reach out to us with any questions or to learn more about our offerings."
-        },
-        {
-          "heading": "Connect with Us",
-          "paragraph": "Visit us, call, or email, and follow us on social media to stay updated on classes and workshops."
+          "paragraph": "We’d love to hear from you! Whether you have questions about our classes or want to share your experience, feel free to reach out."
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "Home",
-      "url": "/home"
-    },
-    {
-      "label": "About Us",
-      "url": "/about"
-    },
-    {
-      "label": "Classes",
-      "url": "/classes"
-    },
-    {
-      "label": "Schedule",
-      "url": "/schedule"
-    },
-    {
-      "label": "Contact",
-      "url": "/contact"
-    }
+    { "label": "Home", "url": "/" },
+    { "label": "About", "url": "/about" },
+    { "label": "Classes", "url": "/classes" },
+    { "label": "Instructors", "url": "/instructors" },
+    { "label": "Blog", "url": "/blog" },
+    { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Laura Taylor",
+      "name": "Samantha Lee",
       "role": "Yoga Practitioner",
-      "text": "EarthFlow Yoga has transformed my approach to mindfulness and self-care. The instructors are incredibly supportive!",
+      "text": "Earthflow Yoga has transformed my life. The classes not only challenge my body but also soothe my mind. Highly recommend!",
       "rating": 5
     },
     {
-      "name": "James Robinson",
-      "role": "Wellness Enthusiast",
-      "text": "The atmosphere at EarthFlow is peaceful and welcoming. I leave every class feeling rejuvenated and inspired.",
+      "name": "Daniel Green",
+      "role": "Beginner Yogi",
+      "text": "I felt welcomed from the moment I stepped in. The instructors are friendly and knowledgeable, making yoga accessible for everyone.",
+      "rating": 4
+    },
+    {
+      "name": "Rachel P.",
+      "role": "Yoga Teacher",
+      "text": "As an experienced yogi, I appreciate the mindfulness approach at Earthflow. It's a beautiful community that truly encourages growth.",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Group Yoga Classes",
-      "description": "Join our community in group classes designed for all levels to enhance your yoga practice in a supportive setting.",
-      "icon": "🧘"
+      "title": "Yoga Classes",
+      "description": "Various yoga classes tailored to all levels. Join us for a serene experience focused on breath and movement.",
+      "icon": "yoga"
+    },
+    {
+      "title": "Workshops",
+      "description": "Deepen your practice with our specialized workshops, covering topics from advanced techniques to meditation.",
+      "icon": "workshop"
     },
     {
       "title": "Private Sessions",
-      "description": "Receive personalized instruction tailored to your specific needs and goals during private yoga sessions.",
-      "icon": "👥"
-    },
-    {
-      "title": "Mindfulness Workshops",
-      "description": "Participate in immersive workshops focusing on meditation, breathing techniques, and holistic living.",
-      "icon": "🌱"
+      "description": "Personalized yoga sessions to help you meet individual goals, tailored specifically to your needs.",
+      "icon": "private"
     }
   ],
   "contact": {
     "phone": "+1 (555) 123-4567",
     "email": "info@earthflowyoga.com",
-    "address": "123 Mindfulness Ave, Wellness City, CA 90210"
+    "address": "123 Tranquil Lane, Mindfulness City, ST 12345"
   },
   "footer": {
-    "description": "Thank you for choosing EarthFlow Yoga! We look forward to accompanying you on your journey to wellness.",
-    "social_links": [
-      {
-        "platform": "Facebook",
-        "url": "https://facebook.com/earthflowyoga"
-      },
-      {
-        "platform": "Instagram",
-        "url": "https://instagram.com/earthflowyoga"
-      },
-      {
-        "platform": "Twitter",
-        "url": "https://twitter.com/earthflowyoga"
-      }
-    ]
+    "description": "Join our community and embark on a journey of holistic wellness and mindful living at Earthflow Yoga.",
+    "social_links": {
+      "facebook": "https://www.facebook.com/earthflowyoga",
+      "instagram": "https://www.instagram.com/earthflowyoga",
+      "twitter": "https://twitter.com/earthflowyoga"
+    }
   }
 }
