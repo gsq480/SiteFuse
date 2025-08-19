@@ -1,64 +1,66 @@
 {
-  "slug": "canberra-cycling-club",
-  "name": "Canberra Cycling Club",
-  "tagline": "Ride, Race, and Connect with Passion.",
-  "industry": "Sports",
-  "brand": "#007A33",
-  "accent": "#FAFAFA",
-  "hero": "https://images.unsplash.com/photo-1584511037978-428b32b25206",
-  "description": "The Canberra Cycling Club fosters a welcoming cycling community, promoting healthy living through cycling in Canberra. Whether you're a seasoned rider or just starting out, join us for races, social rides, and events that connect cyclists across the Canberra region.",
+  "slug": "modern-yoga-studio",
+  "name": "Tranquil Flow Yoga",
+  "tagline": "Find Your Ground, Embrace Your Calm",
+  "industry": "Health & Wellness",
+  "brand": "#7d9d6d",
+  "accent": "#f2e8d5",
+  "hero": "https://images.unsplash.com/photo-1516225966260-4eb5985eb10b",
+  "description": "Tranquil Flow Yoga is a modern yoga studio that embraces mindfulness and earthy aesthetics. Our mission is to cultivate peace and grounding through diverse yoga practices in a serene environment.",
   "pages": [
+    {
+      "slug": "home",
+      "title": "Home",
+      "content": [
+        {
+          "heading": "Welcome to Tranquil Flow",
+          "paragraph": "At Tranquil Flow Yoga, we offer a harmonious space where you can connect with your inner self and the earth around you. Join us to explore various yoga styles and mindfulness techniques tailored for all experience levels."
+        },
+        {
+          "heading": "Our Philosophy",
+          "paragraph": "We believe in the transformative power of yoga and mindfulness. Our classes are designed not just to improve physical fitness but also to enhance mental clarity and emotional well-being. With earth tones and calming ambience, our studio is a sanctuary for your mind and body."
+        }
+      ]
+    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Mission",
-          "paragraphs": [
-            "At the Canberra Cycling Club, we aim to provide a safe and inclusive environment for cyclists of all ages and abilities. Our mission is to promote cycling as a sport and recreational activity in our beautiful city."
-          ]
+          "heading": "Our Journey",
+          "paragraph": "Founded in 2023, Tranquil Flow Yoga was born from a desire to create a mindful community. Our instructors are experienced practitioners who are passionate about fostering a deep connection between mind, body, and earth."
         },
         {
-          "heading": "Our History",
-          "paragraphs": [
-            "Founded in 1975, the Canberra Cycling Club has a rich history of bringing together cycling enthusiasts from all walks of life. Over the years, we've grown into a vibrant community that shares a love for cycling and competition."
-          ]
+          "heading": "Meet the Team",
+          "paragraph": "Our team comprises certified yoga instructors with diverse backgrounds, ensuring a wide range of classes from Hatha to Vinyasa, each focusing on mindfulness and personal growth."
         }
       ]
     },
     {
-      "slug": "events",
-      "title": "Events",
+      "slug": "classes",
+      "title": "Classes",
       "content": [
         {
-          "heading": "Upcoming Races",
-          "paragraphs": [
-            "Stay updated with our schedule of racing events, including criteriums, time trials, and more. We host races suitable for all skill levels, and we encourage everyone to participate!"
-          ]
+          "heading": "Class Offerings",
+          "paragraph": "Explore our range of classes designed to suit all levels. Whether you are a beginner seeking to discover yoga or an experienced practitioner looking for deepened practice, we have something for everyone."
         },
         {
-          "heading": "Social Rides",
-          "paragraphs": [
-            "Join us for our weekly social rides! Our community gatherings foster friendship among cyclists while enjoying the stunning scenery of Canberra. All riders are welcome."
-          ]
+          "heading": "Schedule",
+          "paragraph": "Join us for our weekly classes. From gentle mindfulness practices to energizing flows, check out our schedule to find the perfect class for you."
         }
       ]
     },
     {
-      "slug": "membership",
-      "title": "Membership",
+      "slug": "services",
+      "title": "Services",
       "content": [
         {
-          "heading": "Join Us",
-          "paragraphs": [
-            "Become a member of the Canberra Cycling Club and enjoy exclusive benefits, such as entry discounts for events, access to our training programs, and a supportive network of fellow cyclists."
-          ]
+          "heading": "Private Sessions",
+          "paragraph": "Get personalized guidance through one-on-one yoga sessions tailored to your unique needs and goals."
         },
         {
-          "heading": "Membership Tiers",
-          "paragraphs": [
-            "We offer various membership tiers to accommodate different needs, whether you’re a recreational rider or a competitive cyclist. Check our membership page for details."
-          ]
+          "heading": "Workshops & Events",
+          "paragraph": "Participate in our mindfulness workshops and special events that delve deeper into yoga philosophies and practices."
         }
       ]
     },
@@ -68,72 +70,55 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraphs": [
-            "We'd love to hear from you! Reach out with any inquiries about memberships, events, or cycling in general."
-          ]
+          "paragraph": "Have questions? Interested in booking a class or workshop? We're here to help! Reach out to us through the contact details below."
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "Home",
-      "url": "/"
-    },
-    {
-      "label": "About Us",
-      "url": "/about"
-    },
-    {
-      "label": "Events",
-      "url": "/events"
-    },
-    {
-      "label": "Membership",
-      "url": "/membership"
-    },
-    {
-      "label": "Contact",
-      "url": "/contact"
-    }
+    { "label": "Home", "url": "/home" },
+    { "label": "About", "url": "/about" },
+    { "label": "Classes", "url": "/classes" },
+    { "label": "Services", "url": "/services" },
+    { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "John Doe",
-      "role": "Member",
-      "text": "Joining the Canberra Cycling Club has transformed my cycling experience! The community is fantastic.",
+      "name": "Anna Smith",
+      "role": "Yoga Practitioner",
+      "text": "Tranquil Flow Yoga has transformed my practice. The atmosphere is soothing and the instructors are incredibly knowledgeable.",
       "rating": 5
     },
     {
-      "name": "Jane Smith",
-      "role": "Coordinator",
-      "text": "We are proud of our diverse membership and the impactful events we organize throughout the year.",
-      "rating": 5
+      "name": "James Low",
+      "role": "Participant in Workshops",
+      "text": "The workshops here are enlightening and truly help in deepening my understanding of mindfulness.",
+      "rating": 4
     }
   ],
   "services": [
     {
-      "title": "Training Programs",
-      "description": "Join our structured training programs designed to improve your cycling skills, whether you’re a beginner or looking to compete.",
-      "icon": "🏆"
+      "title": "Yoga Classes",
+      "description": "Diverse classes ranging from Hatha to Vinyasa focusing on mindfulness and personal growth.",
+      "icon": "🧘"
     },
     {
-      "title": "Weekly Group Rides",
-      "description": "Participate in our weekly group rides to enjoy cycling alongside others, explore new routes, and make new friends.",
-      "icon": "🚴"
+      "title": "Mindfulness Workshops",
+      "description": "Workshops to enhance your mindfulness practice and integrate it into daily life.",
+      "icon": "🧠"
     }
   ],
   "contact": {
-    "phone": "+61 2 1234 5678",
-    "email": "info@canberracyclingclub.org.au",
-    "address": "123 Cycling Blvd, Canberra, ACT, Australia"
+    "phone": "+123-456-7890",
+    "email": "info@tranquilflowyoga.com",
+    "address": "123 Meditation Way, Mindful City, CA 90001"
   },
   "footer": {
-    "description": "Explore the joy of cycling with Canberra Cycling Club! Join us to embark on your cycling journey today.",
-    "social_links": {
-      "facebook": "https://www.facebook.com/canberracyclingclub",
-      "twitter": "https://twitter.com/canberracycling",
-      "instagram": "https://www.instagram.com/canberracyclingclub"
-    }
+    "description": "Tranquil Flow Yoga - Your journey to mindfulness and wellness begins here.",
+    "social_links": [
+      { "platform": "Facebook", "url": "https://facebook.com/tranquilflowyoga" },
+      { "platform": "Instagram", "url": "https://instagram.com/tranquilflowyoga" },
+      { "platform": "Twitter", "url": "https://twitter.com/tranquilflowyoga" }
+    ]
   }
 }
