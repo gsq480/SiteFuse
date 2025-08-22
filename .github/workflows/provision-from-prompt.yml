@@ -599,19 +599,7 @@ jobs:
                       <?php echo esc_html($website_data["description"] ?? "We are passionate professionals..."); ?>
                     </p>
                     <p class="text-gray-600 mb-8 leading-relaxed">
-                      <?php echo esc_html($website_data["description"] ?? "Our team combines expertise, innovation, and personalized service to help you achieve your goals. We believe in building lasting relationships based on trust, quality, and results."); 
-$about_content = ""; 
-if (isset($website_data["pages"])) { 
-  foreach ($website_data["pages"] as $page) { 
-    if ($page["slug"] === "about" <?php echo esc_html($website_data["description"] ?? "Our team combines expertise, innovation, and personalized service to help you achieve your goals. We believe in building lasting relationships based on trust, quality, and results."); ?><?php echo esc_html($website_data["description"] ?? "Our team combines expertise, innovation, and personalized service to help you achieve your goals. We believe in building lasting relationships based on trust, quality, and results."); ?> isset($page["content"][0]["paragraph"])) { 
-      $about_content = $page["content"][0]["paragraph"]; 
-      break; 
-    } 
-  } 
-} 
-echo esc_html($about_content ?: "<?php echo esc_html($website_data["description"] ?? "Our team combines expertise, innovation, and personalized service to help you achieve your goals. We believe in building lasting relationships based on trust, quality, and results."); ?>"); 
-?>"); ?>
-                    </p>
+                      Our team combines expertise, innovation, and personalized service to help you achieve your goals. We believe in building lasting relationships based on trust, quality, and results.                    </p>
                     <div class="flex items-center space-x-8">
                       <div class="text-center">
                         <div class="text-3xl font-bold" style="color: var(--color-brand);">500+</div>
