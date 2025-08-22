@@ -1,56 +1,70 @@
 {
-  "slug": "swedish-book-store-canberra",
-  "name": "Swedish Reads",
-  "tagline": "Your portal to a world of Swedish literature",
-  "industry": "Retail - Bookstore",
-  "brand": "#009B77",
-  "accent": "#FF5A00",
-  "hero": "https://images.unsplash.com/photo-1529176819061-c39b973e4edb",
-  "description": "Swedish Reads is a boutique bookstore located in the heart of Canberra, dedicated to offering a diverse selection of Swedish literature, children's books, and unique Scandinavian gifts. Our cozy atmosphere invites you to explore the rich literary traditions of Sweden while enjoying a fresh coffee.",
+  "slug": "local-canberra-kids-swim-school",
+  "name": "Fun Colours Swim School",
+  "tagline": "Making Waves with Smiles!",
+  "industry": "Education/Children's Activities",
+  "brand": "#FF5733",
+  "accent": "#FFC300",
+  "hero": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
+  "description": "Fun Colours Swim School is dedicated to teaching children in Canberra how to swim in a safe and enjoyable environment. Our passionate instructors utilize innovative methods that make learning to swim a fun experience for kids of all ages and skill levels.",
   "pages": [
-    {
-      "slug": "home",
-      "title": "Welcome to Swedish Reads",
-      "content": [
-        {
-          "heading": "Discover the Magic of Swedish Literature",
-          "paragraph": "At Swedish Reads, we curate a collection of literary gems from Sweden's finest authors, spanning genres from fiction and non-fiction to poetry and memoirs."
-        },
-        {
-          "heading": "Community and Culture",
-          "paragraph": "Join us for our events celebrating Swedish culture, such as book readings, language workshops, and traditional fika gatherings."
-        }
-      ]
-    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Story",
-          "paragraph": "Founded by a team of avid readers and Swedish culture enthusiasts, Swedish Reads aims to create a cultural hub for the local community, intertwining the love for reading with the charm of Swedish traditions."
+          "heading": "Our Mission",
+          "paragraph": "At Fun Colours Swim School, our mission is to instill confidence and water safety skills in children while they have fun. Our primary goal is to create a positive and encouraging atmosphere for swimmers of all abilities."
         },
         {
-          "heading": "Meet the Team",
-          "paragraph": "Our knowledgeable staff are passionate about books and are always ready to help you find your next great read or gift."
+          "heading": "Our Team",
+          "paragraph": "Our dedicated team of certified swimming instructors has over 10 years of experience in teaching children. Each instructor is trained in water safety and child development to ensure a nurturing environment for learning."
         }
       ]
     },
     {
-      "slug": "services",
-      "title": "Our Services",
+      "slug": "programs",
+      "title": "Programs",
       "content": [
         {
-          "heading": "Book Recommendations",
-          "paragraph": "Our team offers personalized book recommendations to match your interests, making it easy to find the perfect title."
+          "heading": "Group Lessons",
+          "paragraph": "Our group lessons cater to various age groups and skill levels, promoting teamwork and social interaction while developing swimming skills."
         },
         {
-          "heading": "Events and Workshops",
-          "paragraph": "We host regular events including author readings, Swedish language classes, and community discussions."
+          "heading": "Private Lessons",
+          "paragraph": "For those who prefer individualized attention, we offer private lessons tailored to meet specific needs and goals."
         },
         {
-          "heading": "Gift Vouchers",
-          "paragraph": "Our gift vouchers are perfect for any occasion, allowing your loved ones to explore our collection at their own pace."
+          "heading": "Competitive Training",
+          "paragraph": "Our competitive training program helps aspiring young swimmers refine their techniques and prepare for local competitions."
+        }
+      ]
+    },
+    {
+      "slug": "schedule",
+      "title": "Class Schedule",
+      "content": [
+        {
+          "heading": "Weekly Classes",
+          "paragraph": "Classes are conducted weekly from Monday to Saturday, with varying time slots for different age groups. Check our website for the latest schedule and availability."
+        },
+        {
+          "heading": "Holiday Camps",
+          "paragraph": "Join our exciting holiday camps where kids will engage in swimming drills, competitions, and fun activities!"
+        }
+      ]
+    },
+    {
+      "slug": "registration",
+      "title": "Registration",
+      "content": [
+        {
+          "heading": "Enroll Now",
+          "paragraph": "Ready to dive in? Fill out our online registration form to secure a spot for your child at Fun Colours Swim School."
+        },
+        {
+          "heading": "Payment Information",
+          "paragraph": "We offer flexible payment options, including online payments and subscription plans, to make enrolling your child hassle-free."
         }
       ]
     },
@@ -59,104 +73,90 @@
       "title": "Contact Us",
       "content": [
         {
-          "heading": "Get in Touch",
-          "paragraph": "Have questions or want to know more about our collection? Feel free to reach out to us via the contact details below or visit us in-store."
-        },
-        {
-          "heading": "Location",
-          "paragraph": "You can find us at 123 Book Lane, Canberra, ACT 2601."
-        }
-      ]
-    },
-    {
-      "slug": "testimonials",
-      "title": "What Our Customers Say",
-      "content": [
-        {
-          "heading": "Customer Reviews",
-          "paragraph": "Hear from our happy readers about their experiences at Swedish Reads."
+          "heading": "Get In Touch",
+          "paragraph": "For any inquiries, feel free to contact us via phone or email. We are here to help you with all your questions regarding our programs."
         }
       ]
     }
   ],
   "navigation": [
     {
-      "label": "Home",
-      "url": "/"
-    },
-    {
       "label": "About Us",
       "url": "/about"
     },
     {
-      "label": "Services",
-      "url": "/services"
+      "label": "Programs",
+      "url": "/programs"
+    },
+    {
+      "label": "Class Schedule",
+      "url": "/schedule"
+    },
+    {
+      "label": "Registration",
+      "url": "/registration"
     },
     {
       "label": "Contact",
       "url": "/contact"
-    },
-    {
-      "label": "Testimonials",
-      "url": "/testimonials"
     }
   ],
   "testimonials": [
     {
-      "name": "Anna Svensson",
-      "role": "Customer",
-      "text": "Swedish Reads is my favorite bookstore in Canberra! The selection and the atmosphere are absolutely charming.",
+      "name": "Sarah Johnson",
+      "role": "Parent",
+      "text": "My daughter has loved every lesson at Fun Colours! The instructors are so patient and encouraging.",
       "rating": 5
     },
     {
-      "name": "Oliver Beck",
-      "role": "Local Author",
-      "text": "As a writer, I appreciate the support Swedish Reads gives to local authors and the literary community.",
+      "name": "Tom Reynolds",
+      "role": "Parent",
+      "text": "The holiday camps are fantastic! My son had a blast and improved his swimming skills immensely.",
       "rating": 5
     },
     {
-      "name": "Greta Lindholm",
-      "role": "Book Enthusiast",
-      "text": "I love attending the book readings at Swedish Reads. They always feature fascinating topics and superb guests.",
-      "rating": 4
+      "name": "Emily Clarke",
+      "role": "Student",
+      "text": "I had so much fun learning to swim! The teachers are really nice and make it enjoyable.",
+      "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Personalized Book Recommendations",
-      "description": "Our expert staff provide tailored suggestions to help you discover new favorite authors and titles.",
-      "icon": "📚"
+      "title": "Swimming Instruction",
+      "description": "Comprehensive swimming lessons for kids of all ages, focusing on safety and skill development.",
+      "icon": "swim"
     },
     {
-      "title": "Cultural Events",
-      "description": "Participate in seasonal events, workshops, and community gatherings that celebrate Swedish literature and culture.",
-      "icon": "🎉"
+      "title": "Water Safety Education",
+      "description": "Empowering children with essential water safety knowledge to prevent accidents.",
+      "icon": "safety"
     },
     {
-      "title": "Online Ordering",
-      "description": "Enjoy secure online ordering from the comfort of your home for convenient pickup or delivery.",
-      "icon": "🛒"
+      "title": "Competitive Swim Coaching",
+      "description": "Expert guidance for young athletes looking to excel in swim competitions.",
+      "icon": "medal"
     }
   ],
   "contact": {
-    "phone": "+61 2 1234 5678",
-    "email": "info@swedishreads.com.au",
-    "address": "123 Book Lane, Canberra, ACT 2601"
+    "phone": "+61 2 9555 1234",
+    "email": "info@funcoloursswimschool.com.au",
+    "address": "456 Swim Lane, Canberra, ACT, 2600, Australia"
   },
   "footer": {
-    "description": "Thank you for supporting local independent bookstores! Your love for books inspires us every day.",
+    "description": "Join us at Fun Colours Swim School, where we make learning to swim a fun and exciting adventure!",
     "social_links": [
       {
         "platform": "Facebook",
-        "url": "https://facebook.com/swedishreads"
+        "url": "https://facebook.com/funcoloursswimschool"
       },
       {
         "platform": "Instagram",
-        "url": "https://instagram.com/swedishreads"
+        "url": "https://instagram.com/funcoloursswimschool"
       },
       {
         "platform": "Twitter",
-        "url": "https://twitter.com/swedishreads"
+        "url": "https://twitter.com/funcoloursswim"
       }
     ]
   }
