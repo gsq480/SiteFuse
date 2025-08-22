@@ -534,24 +534,21 @@ jobs:
           <?php
           $website_data = json_decode(file_get_contents(ABSPATH . 'website.json'), true);
           
-          // Use AI-generated hero section
-          $heroSection = $website_data['heroSection'] ?? ['layout' => 'default'];
-          echo $heroSection['customHTML'] ?? '<section class="hero-section">Default Hero</section>';
-          
-          // Use AI-generated custom sections
-          $customSections = $website_data['customSections'] ?? [];
-          foreach ($customSections as $section) {
-            echo $section['html'] ?? '';
-          }
-          
-          // Fallback to basic template if no custom sections
-          if (empty($customSections)) {
-            echo '<main>Basic fallback content</main>';
+          // Use AI-generated complete homepage layout if available
+          if (!empty($website_data['homepageLayout'])) {
+            echo $website_data['homepageLayout'];
+          } else {
+            // Fallback: use individual sections
+            if (!empty($website_data['heroSection']['customHTML'])) {
+              echo $website_data['heroSection']['customHTML'];
+            }
+            foreach ($website_data['customSections'] ?? [] as $section) {
+              echo $section['html'] ?? '';
+            }
           }
           ?>
           FRONTPAGE
-          echo "<?php get_footer(); ?>" >> child/front-page.php
-          # Generate additional page templates
+          echo "<?php get_footer(); ?>" >> child/front-page.php          # Generate additional page templates
           cat > child/page-about.php <<'PHP'
           <?php get_header(); ?>
           <main id="main" class="py-20">
