@@ -1,71 +1,84 @@
 {
-  "slug": "kids-party-catering",
-  "name": "Little Chefs Party Catering",
-  "tagline": "Creating Magical Moments Through Delicious Food",
-  "industry": "Catering",
+  "slug": "kids-jumping-castle-catering-canberra",
+  "name": "Jump & Play Canberra",
+  "tagline": "The Ultimate Jumping Castle Experience for Kids in Canberra!",
+  "industry": "Kids Entertainment / Party Rentals",
   "designTheme": "playful",
   "colorPalette": {
     "primary": "#FF6F61",
-    "secondary": "#6BBFBD",
-    "accent": "#FFC107",
-    "background": "#FCE4EC",
-    "text": "#37474F"
+    "secondary": "#D5C7E6",
+    "accent": "#FFB74D",
+    "background": "#E1F5FE",
+    "text": "#2C3E50"
   },
   "typography": {
     "headingFont": "'Poppins', sans-serif",
     "bodyFont": "'Roboto', sans-serif",
-    "accentFont": "'Lobster', cursive"
+    "accentFont": "'Dancing Script', cursive"
   },
   "heroSection": {
-    "customHTML": "<div class='relative bg-cover bg-center h-screen' style='background-image: url(https://example.com/kids-party-bg.jpg);'>\n  <div class='absolute inset-0 bg-black opacity-50'></div>\n  <div class='flex items-center justify-center h-full'>\n    <div class='text-white text-center'>\n      <h1 class='text-5xl font-bold mb-4'>Little Chefs Party Catering</h1>\n      <p class='text-xl mb-8'>Unforgettable Parties Filled with Flavor!</p>\n      <a href='#services' class='bg-yellow-400 text-black font-semibold py-2 px-6 rounded-full shadow-md hover:bg-yellow-500 transition ease-in-out duration-200'>Explore Our Services</a>\n    </div>\n  </div>\n</div>"
+    "customHTML": "<div class='flex items-center justify-center h-screen bg-gradient-to-r from-primary to-accent text-white p-5'>\n  <div class='text-center'>\n    <h1 class='text-5xl font-bold mb-4'>Jump into Fun!</h1>\n    <p class='text-xl mb-8'>Amazing Jumping Castles for Your Child’s Magical Day.</p>\n    <a class='bg-white text-primary font-semibold py-2 px-6 rounded-full shadow-lg hover:shadow-2xl transition-all' href='#services'>Book Now</a>\n  </div>\n</div>"
   },
   "customSections": [
     {
-      "title": "What We Offer",
-      "html": "<div class='py-16 px-4 text-center bg-white'>\n  <h2 class='text-3xl font-semibold'>Delicious Catering Packages</h2>\n  <div class='grid grid-cols-1 md:grid-cols-3 gap-6 mt-8'>\n    <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n      <h3 class='text-xl font-bold'>Mini Muffin & Cake Pops</h3>\n      <p class='mt-2'>Affordably delightful treats for all ages!</p>\n    </div>\n    <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n      <h3 class='text-xl font-bold'>Tasty Finger Foods</h3>\n      <p class='mt-2'>Enjoyable bites, easy to eat, and fun!</p>\n    </div>\n    <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n      <h3 class='text-xl font-bold'>Themed Birthday Cakes</h3>\n      <p class='mt-2'>Customize your cake for a magical experience!</p>\n    </div>\n  </div>\n</div>"
-    },
-    {
       "title": "Why Choose Us?",
-      "html": "<div class='py-16 px-4 text-center bg-pink-100'>\n  <h2 class='text-3xl font-semibold'>A Recipe for Fun!</h2>\n  <p class='mt-4 text-lg'>We specialize in customizing menus for your child's unique taste and party theme.</p>\n  <ul class='mt-8 space-y-4'>\n    <li class='text-left'><span class='font-semibold'>✔ Fresh Ingredients</span> - We only use the freshest of ingredients to ensure quality.</li>\n    <li class='text-left'><span class='font-semibold'>✔ Creative Presentation</span> - Our food looks as good as it tastes!</li>\n    <li class='text-left'><span class='font-semibold'>✔ Responsive Service</span> - Our team is there to cater to your needs.</li>\n  </ul>\n</div>"
+      "customHTML": "<div class='container mx-auto py-16 px-5'>\n  <h2 class='text-4xl font-bold text-center mb-8'>Why Choose Jump & Play?</h2>\n  <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>\n    <div class='bg-white p-6 rounded-lg shadow-md transform transition-all hover:-translate-y-2'>\n      <h3 class='text-2xl font-semibold'>Fully Insured</h3>\n      <p class='text-gray-600'>Safety is our priority. We are fully insured for peace of mind.</p>\n    </div>\n    <div class='bg-white p-6 rounded-lg shadow-md transform transition-all hover:-translate-y-2'>\n      <h3 class='text-2xl font-semibold'>On-Time Delivery</h3>\n      <p class='text-gray-600'>We promise timely setup and pickup for your event.</p>\n    </div>\n    <div class='bg-white p-6 rounded-lg shadow-md transform transition-all hover:-translate-y-2'>\n      <h3 class='text-2xl font-semibold'>Variety of Choices</h3>\n      <p class='text-gray-600'>Choose from a fun selection of jumping castles!</p>\n    </div>\n  </div>\n</div>"
     },
     {
-      "title": "Happy Customers",
-      "html": "<div class='py-16 px-4 text-center'>\n  <h2 class='text-3xl font-semibold'>What Parents Say</h2>\n  <div class='grid grid-cols-1 md:grid-cols-2 gap-8 mt-8'>\n    <div class='bg-white p-5 rounded-lg shadow-lg'>\n      <p class='italic'>\"The food was a hit! The kids loved the mini muffin decoration, and it brightened our party!\"</p>\n      <p class='mt-2 font-bold'>- Sarah M.</p>\n    </div>\n    <div class='bg-white p-5 rounded-lg shadow-lg'>\n      <p class='italic'>\"Fantastic service and delicious food! It made my son's birthday even more special!\"</p>\n      <p class='mt-2 font-bold'>- John D.</p>\n    </div>\n  </div>\n</div>"
+      "title": "Our Jumping Castles",
+      "customHTML": "<div class='bg-gray-100 py-16'>\n  <div class='container mx-auto px-5'>\n    <h2 class='text-4xl font-bold text-center mb-8'>Explore Our Castles</h2>\n    <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>\n      <div class='bg-white rounded-lg overflow-hidden shadow-lg'>\n        <img src='https://example.com/castle1.jpg' alt='Castle 1' class='w-full h-40 object-cover'>\n        <div class='p-4'>\n          <h3 class='font-semibold text-lg'>Princess Castle</h3>\n          <p class='text-gray-600'>Perfect for your little princesses!</p>\n        </div>\n      </div>\n      <div class='bg-white rounded-lg overflow-hidden shadow-lg'>\n        <img src='https://example.com/castle2.jpg' alt='Castle 2' class='w-full h-40 object-cover'>\n        <div class='p-4'>\n          <h3 class='font-semibold text-lg'>Pirate Ship</h3>\n          <p class='text-gray-600'>Ahoy matey, let’s jump into the adventure!</p>\n        </div>\n      </div>\n      <div class='bg-white rounded-lg overflow-hidden shadow-lg'>\n        <img src='https://example.com/castle3.jpg' alt='Castle 3' class='w-full h-40 object-cover'>\n        <div class='p-4'>\n          <h3 class='font-semibold text-lg'>Dinosaur Kingdom</h3>\n          <p class='text-gray-600'>Jump big with our dino castle!</p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>"
+    },
+    {
+      "title": "Customer Testimonials",
+      "customHTML": "<div class='py-16 px-5'>\n  <h2 class='text-4xl font-bold text-center mb-8'>What Our Customers Say</h2>\n  <div class='flex flex-col space-y-6'>\n    <div class='border-l-4 border-primary pl-4'><p class='italic'>“Jump & Play made my son’s birthday unforgettable! Highly recommend!” - Sarah B.</p></div>\n    <div class='border-l-4 border-primary pl-4'><p class='italic'>“The service was amazing and the kids had a blast! Thank you!” - Mark R.</p></div>\n    <div class='border-l-4 border-primary pl-4'><p class='italic'>“Wonderful experience from start to finish.” - Jessica K.</p></div>\n  </div>\n</div>"
     }
   ],
   "services": [
     {
-      "title": "Themed Catering Services",
-      "description": "Customize your party menu around your theme (e.g. unicorns, dinosaurs, etc.). Perfect for kids of all ages!"
+      "serviceName": "Jumping Castle Rental",
+      "serviceDescription": "Rent our vibrant and fun jumping castles for your parties. Choose from a variety of themes."
     },
     {
-      "title": "Delivery and Setup",
-      "description": "We provide delivery and setup, so you can relax and enjoy the party!"
+      "serviceName": "Event Packages",
+      "serviceDescription": "Customized party packages including castles, party supplies, and more."
     },
     {
-      "title": "Event Coordination",
-      "description": "Stress-free planning with our expert event coordinators." 
+      "serviceName": "Setup and Safety",
+      "serviceDescription": "Professional setup and monitoring to ensure a safe and fun environment for everyone."
     }
   ],
   "testimonials": [
     {
-      "name": "Emily R.",
-      "feedback": "Little Chefs made my daughter's party unforgettable! The themed cake was gorgeous and delicious!"
+      "customerName": "Sarah B.",
+      "content": "Jump & Play made my son’s birthday unforgettable! Highly recommend!"
     },
     {
-      "name": "Brian K.",
-      "feedback": "Amazing service and happy kids! We loved the finger foods!"
+      "customerName": "Mark R.",
+      "content": "The service was amazing, and the kids had a blast! Thank you!"
+    },
+    {
+      "customerName": "Jessica K.",
+      "content": "Wonderful experience from start to finish."
     }
   ],
   "contact": {
-    "phone": "+1 234 567 8900",
-    "email": "info@littlechefscatering.com",
-    "address": "123 Fun Street, Kidsville, KK 90210",
-    "contactFormHTML": "<form class='space-y-4'>\n  <input type='text' placeholder='Your Name' class='p-2 border border-gray-300 rounded-md w-full' required>\n  <input type='email' placeholder='Your Email' class='p-2 border border-gray-300 rounded-md w-full' required>\n  <textarea rows='4' placeholder='Your Message' class='p-2 border border-gray-300 rounded-md w-full' required></textarea>\n  <button type='submit' class='bg-FF6F61 text-white py-2 px-4 rounded-md hover:bg-FF8160'>Send Message</button>\n</form>"
+    "phone": "+61 2 1234 5678",
+    "email": "info@jumpandplaycanberra.com.au",
+    "formHTML": "<form class='bg-white p-8 rounded-lg shadow-lg'>\n  <h2 class='text-2xl font-bold mb-4'>Get in Touch!</h2>\n  <input type='text' class='border border-gray-300 rounded-lg w-full p-2 mb-4' placeholder='Your Name'>\n  <input type='email' class='border border-gray-300 rounded-lg w-full p-2 mb-4' placeholder='Your Email'>\n  <textarea class='border border-gray-300 rounded-lg w-full p-2 mb-4' rows='4' placeholder='Your Message'></textarea>\n  <button type='submit' class='bg-primary text-white py-2 px-4 rounded-lg hover:bg-accent transition-all'>Send Message</button>\n</form>"
   },
   "footer": {
-    "html": "<div class='bg-gray-800 text-white py-6 text-center'>\n  <p>&copy; 2023 Little Chefs Party Catering. All rights reserved.</p>\n  <div class='flex justify-center space-x-4 mt-2'>\n    <a href='#' class='hover:text-yellow-400'>Facebook</a>\n    <a href='#' class='hover:text-yellow-400'>Instagram</a>\n  </div>\n</div>"
+    "socialMedia": [
+      {
+        "platform": "Facebook",
+        "link": "https://facebook.com/jumpandplaycanberra"
+      },
+      {
+        "platform": "Instagram",
+        "link": "https://instagram.com/jumpandplaycanberra"
+      }
+    ],
+    "copyright": "© 2023 Jump & Play Canberra. All rights reserved."
   },
-  "homepageLayout": "<div class='container mx-auto'>\n  <section id='hero'>\n    <!-- Hero Section -->\n    <div class='relative bg-cover bg-center h-screen' style='background-image: url(https://example.com/kids-party-bg.jpg);'>\n      <div class='absolute inset-0 bg-black opacity-50'></div>\n      <div class='flex items-center justify-center h-full'>\n        <div class='text-white text-center'>\n          <h1 class='text-5xl font-bold mb-4'>Little Chefs Party Catering</h1>\n          <p class='text-xl mb-8'>Unforgettable Parties Filled with Flavor!</p>\n          <a href='#services' class='bg-yellow-400 text-black font-semibold py-2 px-6 rounded-full shadow-md hover:bg-yellow-500 transition ease-in-out duration-200'>Explore Our Services</a>\n        </div>\n      </div>\n    </div>\n  </section>\n\n  <section id='about' class='py-16 px-4 text-center bg-white'>\n    <h2 class='text-3xl font-semibold'>Delicious Catering Packages</h2>\n    <div class='grid grid-cols-1 md:grid-cols-3 gap-6 mt-8'>\n      <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n        <h3 class='text-xl font-bold'>Mini Muffin & Cake Pops</h3>\n        <p class='mt-2'>Affordably delightful treats for all ages!</p>\n      </div>\n      <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n        <h3 class='text-xl font-bold'>Tasty Finger Foods</h3>\n        <p class='mt-2'>Enjoyable bites, easy to eat, and fun!</p>\n      </div>\n      <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n        <h3 class='text-xl font-bold'>Themed Birthday Cakes</h3>\n        <p class='mt-2'>Customize your cake for a magical experience!</p>\n      </div>\n    </div>\n  </section>\n\n  <section id='testimonials' class='py-16 px-4 text-center'>\n    <h2 class='text-3xl font-semibold'>What Parents Say</h2>\n    <div class='grid grid-cols-1 md:grid-cols-2 gap-8 mt-8'>\n      <div class='bg-white p-5 rounded-lg shadow-lg'>\n        <p class='italic'>\"The food was a hit! The kids loved the mini muffin decoration, and it brightened our party!\"</p>\n        <p class='mt-2 font-bold'>- Sarah M.</p>\n      </div>\n      <div class='bg-white p-5 rounded-lg shadow-lg'>\n        <p class='italic'>\"Fantastic service and delicious food! It made my son's birthday even more special!\"</p>\n        <p class='mt-2 font-bold'>- John D.</p>\n      </div>\n    </div>\n  </section>\n\n  <section id='contact' class='py-16 px-4 text-center bg-pink-100'>\n    <h2 class='text-3xl font-semibold'>Get in Touch!</h2>\n    <p class='mt-4'>We’d love to hear from you! Fill out the form below to get started.</p>\n    <div class='mt-8'>\n      <form class='space-y-4'>\n        <input type='text' placeholder='Your Name' class='p-2 border border-gray-300 rounded-md w-full' required>\n        <input type='email' placeholder='Your Email' class='p-2 border border-gray-300 rounded-md w-full' required>\n        <textarea rows='4' placeholder='Your Message' class='p-2 border border-gray-300 rounded-md w-full' required></textarea>\n        <button type='submit' class='bg-FF6F61 text-white py-2 px-4 rounded-md hover:bg-FF8160'>Send Message</button>\n      </form>\n    </div>\n  </section>\n\n  <footer>\n    <div class='bg-gray-800 text-white py-6 text-center'>\n      <p>&copy; 2023 Little Chefs Party Catering. All rights reserved.</p>\n      <div class='flex justify-center space-x-4 mt-2'>\n        <a href='#' class='hover:text-yellow-400'>Facebook</a>\n        <a href='#' class='hover:text-yellow-400'>Instagram</a>\n      </div>\n    </div>\n  </footer>\n</div>",
-  "servicesPageLayout": "<div class='container mx-auto'>\n  <section id='services' class='py-16 px-4 text-center'>\n    <h2 class='text-4xl font-semibold mb-8'>Our Services</h2>\n    <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>\n      {{#each services}}  \n      <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n        <h3 class='text-2xl font-bold'>{{this.title}}</h3>\n        <p class='mt-2'>{{this.description}}</p>\n      </div>\n      {{/each}}\n    </div>\n  </section>\n</div>"
+  "homepageLayout": "<div>\n  <header class='bg-primary text-white p-4 text-center'>\n    <h1 class='text-3xl font-bold'>Jump & Play Canberra</h1>\n    <p class='text-lg'>Jumping Castles for Every Celebration!</p>\n  </header>\n  <main>\n    <!-- Hero Section -->\n    {{{heroSection.customHTML}}}\n    <!-- Why Choose Us Section -->\n    {{{customSections[0].customHTML}}}\n    <!-- Our Jumping Castles Section -->\n    {{{customSections[1].customHTML}}}\n    <!-- Customer Testimonials Section -->\n    {{{customSections[2].customHTML}}}\n  </main>\n  <footer class='bg-gray-200 p-4 text-center'>\n    <p>&copy; 2023 Jump & Play Canberra. All rights reserved.</p>\n    <div class='flex justify-center space-x-4'>\n      <a href='{{footer.socialMedia[0].link}}' target='_blank'>Facebook</a>\n      <a href='{{footer.socialMedia[1].link}}' target='_blank'>Instagram</a>\n    </div>\n  </footer>\n</div>",
+  "servicesPageLayout": "<div class='container mx-auto py-16 px-5'>\n  <h2 class='text-4xl font-bold mb-8'>Our Services</h2>\n  <div class='space-y-8'>\n    {{#each services}}<div class='border border-gray-300 p-4 rounded-lg'>\n      <h3 class='text-2xl font-semibold'>{{serviceName}}</h3>\n      <p>{{serviceDescription}}</p>\n    </div>{{/each}}\n  </div>\n</div>"
 }
