@@ -599,7 +599,7 @@ jobs:
                       <?php echo esc_html($website_data["description"] ?? "We are passionate professionals..."); ?>
                     </p>
                     <p class="text-gray-600 mb-8 leading-relaxed">
-                      Our team combines expertise, innovation, and personalized service to help you achieve your goals. We believe in building lasting relationships based on trust, quality, and results.
+                      <?php echo esc_html($website_data["pages"][0]["content"][0]["paragraph"] ?? "Our team combines expertise, innovation, and personalized service to help you achieve your goals. We believe in building lasting relationships based on trust, quality, and results."); ?>
                     </p>
                     <div class="flex items-center space-x-8">
                       <div class="text-center">
