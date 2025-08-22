@@ -1,24 +1,24 @@
 {
-  "slug": "local-flower-shop",
-  "name": "Bloom & Blossom",
-  "tagline": "Fresh Arrangements, Bright Colors!",
-  "industry": "Retail",
-  "brand": "#FF6F61",
-  "accent": "#00BFFF",
-  "hero": "https://images.unsplash.com/photo-1559161909-40c8a1a4a12d",
-  "description": "Bloom & Blossom is your local flower shop that delivers vibrant floral arrangements for every occasion. Our mission is to bring joy and beauty into your life with fresh flowers that brighten your day.",
+  "slug": "kids-party-retail",
+  "name": "Party Pals",
+  "tagline": "Creating Magical Moments for Your Little Ones",
+  "industry": "retail",
+  "brand": "#FF5733",
+  "accent": "#C70039",
+  "hero": "https://images.unsplash.com/photo-1564503108280-a3a5e7c87b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080",
+  "description": "Party Pals is your one-stop shop for all things kids' parties! We offer a wide variety of themed decorations, party supplies, and custom solutions to make your child's celebration unforgettable. Transform ordinary moments into extraordinary memories with us!",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Bloom & Blossom",
-          "paragraph": "At Bloom & Blossom, we take pride in creating stunning floral arrangements tailored to your needs. Our expert florists use the freshest blooms to ensure every bouquet tells a story."
+          "heading": "Welcome to Party Pals!",
+          "paragraph": "We believe that every child's party should be a magical experience. From intricate decorations to fun party favors, our mission is to provide high-quality products that bring joy and excitement to your celebrations."
         },
         {
-          "heading": "Why Choose Us?",
-          "paragraph": "We focus on quality, creativity, and customer satisfaction. Whether you're celebrating a special occasion or just want to brighten someone's day, we’ve got the perfect flowers for you!"
+          "heading": "Browse Our Collections",
+          "paragraph": "Explore our extensive range of themed parties, from princesses and superheroes to dinosaurs and outer space, each curated to ignite your child's imagination."
         }
       ]
     },
@@ -28,11 +28,25 @@
       "content": [
         {
           "heading": "Our Story",
-          "paragraph": "Bloom & Blossom was founded in 2015 by flower enthusiast Sarah Green. With a passion for floral design and a commitment to using locally sourced blooms, our shop has become a beloved part of the community."
+          "paragraph": "Established in 2020, Party Pals was born from a love for celebrations and the joy they bring to children. Our passionate team is dedicated to creating the ultimate party experience that leaves lasting impressions and smiles."
         },
         {
-          "heading": "Our Mission",
-          "paragraph": "To provide fresh, beautiful flowers that enhance all of life’s moments. We believe in sustainability and work with local growers to minimize our environmental footprint."
+          "heading": "Why Choose Us?",
+          "paragraph": "At Party Pals, we pride ourselves on our exceptional customer service, unique product offerings, and commitment to quality. Your child's happiness is our top priority."
+        }
+      ]
+    },
+    {
+      "slug": "shop",
+      "title": "Shop",
+      "content": [
+        {
+          "heading": "Explore Our Products",
+          "paragraph": "From decorations and tableware to balloons and party bags, we offer a vast selection of products that cater to all age groups and themes. Find everything you need to throw the perfect party under one roof!"
+        },
+        {
+          "heading": "Best Sellers",
+          "paragraph": "Check out our best-selling items that customers love! These popular products are tried and tested, ensuring you pick items that other parents adore."
         }
       ]
     },
@@ -41,26 +55,12 @@
       "title": "Our Services",
       "content": [
         {
-          "heading": "Custom Floral Arrangements",
-          "paragraph": "We offer personalized floral designs for weddings, corporate events, and all celebrations. Our florists work with you to create unique arrangements that reflect your style."
+          "heading": "Custom Party Planning",
+          "paragraph": "Let our experienced team assist you in planning the most spectacular party tailored to your child's interests and preferences. We offer consultation services to make your vision come to life!"
         },
         {
-          "heading": "Same-Day Delivery",
-          "paragraph": "Need flowers in a hurry? We provide same-day delivery services to ensure your fresh blooms arrive on time. Just place your order by noon, and we'll take care of the rest!"
-        },
-        {
-          "heading": "Floral Subscription",
-          "paragraph": "Enjoy beautiful flowers regularly with our subscription service. Choosehow often you’d like to receive fresh blooms, and we’ll deliver them right to your door!"
-        }
-      ]
-    },
-    {
-      "slug": "gallery",
-      "title": "Gallery",
-      "content": [
-        {
-          "heading": "Our Floral Creations",
-          "paragraph": "Explore our gallery to see some of our favorite arrangements! From elegant bouquets to vibrant centerpieces, our creations are perfect for any occasion."
+          "heading": "Delivery & Set-Up",
+          "paragraph": "Need help setting up? Our delivery and set-up service ensures that your party area is seamlessly transformed before your guests arrive, allowing you to enjoy the festivities stress-free."
         }
       ]
     },
@@ -70,65 +70,66 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "Have questions or want to place an order? Reach out to us using the information below."
+          "paragraph": "Have questions? We're here to help! Reach out to us via phone or email, or visit our store to receive personalized assistance with all your party needs."
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/" },
-    { "label": "About", "url": "/about" },
+    { "label": "Home", "url": "/home" },
+    { "label": "About Us", "url": "/about" },
+    { "label": "Shop", "url": "/shop" },
     { "label": "Services", "url": "/services" },
-    { "label": "Gallery", "url": "/gallery" },
     { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Jane Doe",
-      "role": "Wedding Planner",
-      "text": "Bloom & Blossom provided the most beautiful arrangements for my clients' weddings. Every bouquet was stunning and made the day even more special.",
+      "name": "Jessica Taylor",
+      "role": "Happy Parent",
+      "text": "Party Pals made my daughter's birthday unforgettable! The decorations were beautiful, and the service was exceptional.",
       "rating": 5
     },
     {
-      "name": "Mark Smith",
-      "role": "Regular Customer",
-      "text": "I love getting flowers from Bloom & Blossom! The quality is unmatched, and their customer service is always friendly and helpful.",
+      "name": "Mark Johnson",
+      "role": "Birthday Planner",
+      "text": "I've worked with many party supply companies, and Party Pals clearly stands out. Their quality and attention to detail are unmatched.",
+      "rating": 5
+    },
+    {
+      "name": "Linda Green",
+      "role": "Satisfied Customer",
+      "text": "From the planning to the execution, everything was perfect. I recommend Party Pals to anyone looking to throw a fantastic party!",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Floral Design",
-      "description": "Expertly crafted floral arrangements perfect for any event.",
-      "icon": "🌺"
+      "title": "Themed Party Supplies",
+      "description": "Discover a wide range of party supplies tailored to different themes including decor, gift bags, and more!",
+      "icon": "🎈"
     },
     {
-      "title": "Event Services",
-      "description": "Complete floral services for weddings, corporate events, and special occasions.",
-      "icon": "🎉"
+      "title": "Event Consultation",
+      "description": "Get expert advice on planning and executing the perfect celebration for your child.",
+      "icon": "🗓️"
     },
     {
-      "title": "Delivery Service",
-      "description": "Convenient same-day delivery to surprise your loved ones.",
-      "icon": "📦"
-    },
-    {
-      "title": "Subscription Service",
-      "description": "Regular delivery of beautiful fresh flowers to your home.",
-      "icon": "💐"
+      "title": "Custom Decorations",
+      "description": "We offer customized decoration services that match your child's unique party theme.",
+      "icon": "🎨"
     }
   ],
   "contact": {
-    "phone": "(123) 456-7890",
-    "email": "info@bloomandblossom.com",
-    "address": "123 Flower St, Bloomtown, XY 12345"
+    "phone": "+1-800-555-0199",
+    "email": "info@partypals.com",
+    "address": "123 Party Lane, Fun City, CA 90210"
   },
   "footer": {
-    "description": "Bloom & Blossom - Bringing Color and Joy to Your Life!",
+    "description": "Party Pals is dedicated to creating unforgettable experiences for children through beautiful and quality party supplies. Join us in celebrating every child's special day!",
     "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/bloomandblossom" },
-      { "platform": "Instagram", "url": "https://instagram.com/bloomandblossom" },
-      { "platform": "Twitter", "url": "https://twitter.com/bloomandblossom" }
+      { "platform": "Facebook", "url": "https://facebook.com/partypals" },
+      { "platform": "Instagram", "url": "https://instagram.com/partypals" },
+      { "platform": "Twitter", "url": "https://twitter.com/partypals" }
     ]
   }
 }
