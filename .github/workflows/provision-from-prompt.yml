@@ -534,22 +534,28 @@ jobs:
           <?php
           $website_data = json_decode(file_get_contents(ABSPATH . 'website.json'), true);
           
-          // Use AI-generated complete homepage layout if available
-          if (!empty($website_data['homepageLayout'])) {
-            echo $website_data['homepageLayout'];
+          // Safely output AI-generated homepage layout
+          $homepageLayout = $website_data['homepageLayout'] ?? '';
+          if (!empty($homepageLayout)) {
+            echo wp_kses_post($homepageLayout);
           } else {
             // Fallback: use individual sections
-            if (!empty($website_data['heroSection']['customHTML'])) {
-              echo $website_data['heroSection']['customHTML'];
+            $heroHTML = $website_data['heroSection']['customHTML'] ?? '';
+            if (!empty($heroHTML)) {
+              echo wp_kses_post($heroHTML);
             }
-            foreach ($website_data['customSections'] ?? [] as $section) {
-              echo $section['html'] ?? '';
+            
+            $customSections = $website_data['customSections'] ?? [];
+            foreach ($customSections as $section) {
+              $sectionHTML = $section['html'] ?? '';
+              if (!empty($sectionHTML)) {
+                echo wp_kses_post($sectionHTML);
+              }
             }
           }
           ?>
           FRONTPAGE
-          echo "<?php get_footer(); ?>" >> child/front-page.php          # Generate additional page templates
-          cat > child/page-about.php <<'PHP'
+          echo "<?php get_footer(); ?>" >> child/front-page.php          cat > child/page-about.php <<'PHP'
           <?php get_header(); ?>
           <main id="main" class="py-20">
             <div class="container">
