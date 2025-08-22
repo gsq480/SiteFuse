@@ -922,6 +922,8 @@ jobs:
           # Update site tagline
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp option update blogdescription '$TAGLINE' --allow-root"
           
+          # Update site name
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp option update blogname '$NAME' --allow-root"          
           # Activate theme
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp theme activate '"${SLUG}-child"' --allow-root || true"
           
