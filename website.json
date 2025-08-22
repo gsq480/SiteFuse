@@ -1,24 +1,24 @@
 {
-  "slug": "fun-kids-party-canberra",
-  "name": "Canberra Party Fun",
-  "tagline": "Creating Unforgettable Memories for Kids!",
-  "industry": "Event Planning",
-  "brand": "#FFB74D",
-  "accent": "#FF9800",
-  "hero": "https://images.unsplash.com/photo-1563861462283-b74c9cf0de81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080",
-  "description": "Canberra Party Fun specializes in organizing exciting and memorable birthday parties for kids of all ages. Our vibrant themes, engaging activities, and dedicated staff ensure every celebration is a joyful experience for children and a stress-free event for parents.",
+  "slug": "canberra-ipad-shop",
+  "name": "Canberra iPad Hub",
+  "tagline": "Your one-stop shop for all things iPad!",
+  "industry": "Retail",
+  "brand": "#3C4D6A",
+  "accent": "#F4B400",
+  "hero": "https://images.unsplash.com/photo-1586310190186-9cd05cd5b6e6",
+  "description": "Welcome to Canberra iPad Hub, the leading destination for the latest iPads and accessories in the heart of Australia's capital. We offer a wide range of products and exceptional customer service to help you find the perfect iPad for your needs.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Canberra Party Fun!",
-          "paragraph": "We are your go-to party planning experts dedicated to making your children's birthdays unforgettable. From themed parties to fun activities, we bring the joy to every celebration!"
+          "heading": "Welcome to Canberra iPad Hub",
+          "paragraph": "Discover the latest iPad models, accessories, and expert advice right here in Canberra. Our knowledgeable staff is ready to assist you in finding the best device for your lifestyle."
         },
         {
           "heading": "Why Choose Us?",
-          "paragraph": "With years of experience, a passion for fun, and an extensive range of services, we ensure every event is tailored to your needs. Our friendly team is here to make your next party a huge success!"
+          "paragraph": "We pride ourselves on offering a comprehensive selection of the latest iPads, unbeatable prices, and outstanding customer service. Join our community of satisfied customers today!"
         }
       ]
     },
@@ -28,39 +28,31 @@
       "content": [
         {
           "heading": "Our Story",
-          "paragraph": "Founded in 2020, Canberra Party Fun emerged from a desire to create magical moments for children. We understand the importance of fun and ensure every detail is covered with care."
+          "paragraph": "Founded in 2023, Canberra iPad Hub was born out of a passion for technology and a desire to serve the local community. Our mission is to provide an inclusive space for Apple enthusiasts and newcomers alike."
         },
         {
-          "heading": "Our Mission",
-          "paragraph": "Our mission is to deliver safe, enjoyable, and unforgettable experiences by providing high-quality party planning services that bring dreams to life."
+          "heading": "Our Team",
+          "paragraph": "Our dedicated team of Apple certified experts is here to provide you with personalized assistance for your iPad selection, troubleshooting, and accessories."
+        }
+      ]
+    },
+    {
+      "slug": "products",
+      "title": "Products",
+      "content": [
+        {
+          "heading": "Browse Our Range",
+          "paragraph": "Explore our extensive collection of iPads, from the latest models to budget-friendly options, along with a variety of accessories to enhance your experience."
         }
       ]
     },
     {
       "slug": "services",
-      "title": "Our Services",
+      "title": "Services",
       "content": [
         {
-          "heading": "Party Packages",
-          "paragraph": "Choose from a variety of themed party packages tailored to your child's interests! We cater to both small and large gatherings."
-        },
-        {
-          "heading": "Entertainment & Activities",
-          "paragraph": "We provide professional entertainers, games, crafts, and more to keep the kids engaged and having fun throughout the event."
-        },
-        {
-          "heading": "Catering & Goodies",
-          "paragraph": "Delicious catering options are available, including kid-friendly menus, cakes, and party treats that everyone will enjoy!"
-        }
-      ]
-    },
-    {
-      "slug": "testimonials",
-      "title": "Testimonials",
-      "content": [
-        {
-          "heading": "What Our Clients Say",
-          "paragraph": "Hear from parents who have trusted us to create magical experiences for their children!"
+          "heading": "What We Offer",
+          "paragraph": "Our services include expert consultations, device setup, software guidance, and after-purchase support to make your iPad experience seamless."
         }
       ]
     },
@@ -69,8 +61,8 @@
       "title": "Contact Us",
       "content": [
         {
-          "heading": "Get in Touch!",
-          "paragraph": "Have questions or need more information? We'd love to hear from you! Reach out through the form below or contact us directly."
+          "heading": "Get in Touch",
+          "paragraph": "We’re here to help! Whether you have questions about our products or need assistance, feel free to reach out through the contact information below."
         }
       ]
     }
@@ -85,71 +77,63 @@
       "url": "/about"
     },
     {
+      "label": "Products",
+      "url": "/products"
+    },
+    {
       "label": "Services",
       "url": "/services"
     },
     {
-      "label": "Testimonials",
-      "url": "/testimonials"
-    },
-    {
-      "label": "Contact Us",
+      "label": "Contact",
       "url": "/contact"
     }
   ],
   "testimonials": [
     {
-      "name": "Samantha Johnson",
-      "role": "Parent",
-      "text": "Canberra Party Fun made my son's 7th birthday magical! The staff was professional and the kids had a blast!",
+      "name": "Sarah Johnson",
+      "role": "Happy Customer",
+      "text": "I had an amazing experience at Canberra iPad Hub! The staff were so helpful in choosing the perfect iPad for my needs.",
       "rating": 5
     },
     {
-      "name": "Michael Wilson",
-      "role": "Parent",
-      "text": "Amazing service! They took care of everything, from the decorations to the cake. Highly recommend!",
-      "rating": 5
-    },
-    {
-      "name": "Emily Brown",
-      "role": "Parent",
-      "text": "My daughter loved her princess party! The entertainer was fantastic and kept the kids engaged throughout. We will definitely book again!",
-      "rating": 5
+      "name": "Michael Lee",
+      "role": "Tech Enthusiast",
+      "text": "A fantastic selection of products and knowledgeable staff made my purchase easy and enjoyable. Highly recommend!",
+      "rating": 4
     }
   ],
   "services": [
     {
-      "title": "Themed Party Packages",
-      "description": "Choose from superheroes, princesses, animals, and more. Each package comes with decorations and activities tailored to the theme."
+      "title": "Device Setup",
+      "description": "Allow us to assist you with setting up your new iPad, from installation to personalization.",
+      "icon": "📱"
     },
     {
-      "title": "Live Entertainment",
-      "description": "We offer clowns, magicians, and face painters to make each party unique and entertaining."
-    },
-    {
-      "title": "Catering",
-      "description": "Delicious food options, including pizzas, snacks, and custom cakes, to keep all your young guests happy."
+      "title": "Technical Support",
+      "description": "Need help? Our team is on standby to assist you with any technical difficulties you may encounter.",
+      "icon": "🛠"
     }
   ],
   "contact": {
-    "phone": "+61 2 1234 5678",
-    "email": "info@canberrapartyfun.com.au",
-    "address": "123 Fun St, Canberra, ACT 2600, Australia"
+    "phone": "+61 2 5555 1234",
+    "email": "support@canberraipad.com.au",
+    "address": "123 Tech Street, Canberra, ACT 2600, Australia"
   },
   "footer": {
-    "description": "Thank you for choosing Canberra Party Fun! We look forward to making your child's day extraordinary.",
+    "description": "Canberra iPad Hub is dedicated to providing top-notch service and products. Visit us for all your iPad needs!",
     "social_links": [
       {
         "platform": "Facebook",
-        "url": "https://facebook.com/canberrapartyfun"
+        "url": "https://facebook.com/canberraipad"
       },
       {
         "platform": "Instagram",
-        "url": "https://instagram.com/canberrapartyfun"
+        "url": "https://instagram.com/canberraipad"
       },
       {
         "platform": "Twitter",
-        "url": "https://twitter.com/canberrapartyfun"
+        "url": "https://twitter.com/canberraipad"
       }
     ]
   }
