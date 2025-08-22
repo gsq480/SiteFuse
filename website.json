@@ -1,35 +1,24 @@
 {
-  "slug": "local-art-gallery",
-  "name": "Creative Canvas Gallery",
-  "tagline": "Where Art Meets Imagination",
-  "industry": "Art Gallery",
-  "brand": "#4A90E2",
-  "accent": "#D8C349",
-  "hero": "https://images.unsplash.com/photo-1581926621701-7c18f3b0dbf8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fGFydCUyMGdhbGxlcnl8ZW58MHx8fHwxNjIyMDI1MTQw&ixlib=rb-4.0.3&q=80&w=1080",
-  "description": "Creative Canvas Gallery is a vibrant art destination dedicated to showcasing contemporary artists and their stunning works. Our modern space is designed to inspire creativity and spark conversation, making it the perfect place to explore the beauty of art in a refreshing environment.",
+  "slug": "modern-bookstore",
+  "name": "Nook & Cranny Books",
+  "tagline": "Your Cozy Escape into Literature",
+  "industry": "Retail - Books",
+  "brand": "#a0522d", 
+  "accent": "#d2b48c",
+  "hero": "https://images.unsplash.com/photo-1513353897536-13d3d6a7003e",
+  "description": "Nook & Cranny Books is your go-to destination for new and classic literature nestled in a warm, inviting atmosphere. Explore our carefully curated selection of books while enjoying our cozy reading nooks, designed for you to lose track of time in your next great read.",
   "pages": [
     {
       "slug": "home",
-      "title": "Home",
+      "title": "Welcome to Nook & Cranny Books",
       "content": [
         {
-          "heading": "Welcome to Creative Canvas",
-          "paragraphs": [
-            "Discover a unique collection of contemporary art at Creative Canvas Gallery. We celebrate local talent and provide a platform for artists to display their work in innovative ways.",
-            "Join us for our upcoming exhibitions and experience the heartbeat of our creative community."
-          ]
+          "heading": "A World of Literature Awaits You",
+          "paragraph": "Step into our bookstore, where the smell of fresh pages meets warm earth tones. Whether you are seeking a riveting novel or a thoughtful non-fiction title, our collection is curated to inspire."
         },
         {
-          "heading": "Our Mission",
-          "paragraphs": [
-            "Our gallery is committed to supporting emerging artists and enriching our local culture through art. We aim to create an inclusive space that highlights diverse perspectives and artistic expressions."
-          ]
-        },
-        {
-          "heading": "Visit Us",
-          "paragraphs": [
-            "Explore our gallery located in the heart of downtown. Immerse yourself in our curated collections, attend workshops, and participate in community events."
-          ]
+          "heading": "Cozy Reading Nooks",
+          "paragraph": "Take a break in any of our cozy reading corners. With soft lighting and comfortable chairs, you'll feel right at home as you dive into the pages of your next favorite book."
         }
       ]
     },
@@ -38,112 +27,83 @@
       "title": "About Us",
       "content": [
         {
+          "heading": "Our Mission",
+          "paragraph": "At Nook & Cranny Books, we believe that every book has a story and every reader deserves a haven for discovery. Our mission is to create a welcoming space for readers of all ages and backgrounds."
+        },
+        {
           "heading": "Our Story",
-          "paragraphs": [
-            "Founded in 2020, Creative Canvas Gallery was born from a passion for visual arts and a desire to connect people through creativity. Our gallery serves as a beacon for artists and art lovers alike."
-          ]
-        },
-        {
-          "heading": "Meet Our Team",
-          "paragraphs": [
-            "Our dedicated team of art curators and creative minds works tirelessly to elevate the voice of local artists. We strive to foster an engaging space for both artists and visitors."
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "exhibitions",
-      "title": "Exhibitions",
-      "content": [
-        {
-          "heading": "Current Exhibitions",
-          "paragraphs": [
-            "Explore our latest exhibitions featuring talented local artists. Each showcase is thoughtfully curated to highlight unique artistic voices and stimulate dialogue."
-          ]
-        },
-        {
-          "heading": "Upcoming Events",
-          "paragraphs": [
-            "Stay tuned for details on upcoming exhibitions and events such as artist talks, workshops, and community gatherings."
-          ]
+          "paragraph": "Founded in 2022 by a group of passionate book lovers, Nook & Cranny strives to foster community through the written word. We host authors, book clubs, and events that connect readers with the stories they love."
         }
       ]
     },
     {
       "slug": "services",
-      "title": "Services",
+      "title": "Our Services",
       "content": [
         {
-          "heading": "Art Consultation",
-          "paragraphs": [
-            "Our expert team offers personalized consultation services to help you select the perfect artworks for your space, whether it’s a home, office, or public installation."
-          ]
+          "heading": "Book Recommendations",
+          "paragraph": "Our knowledgeable staff is here to help you find your next great read. We offer personalized recommendations based on your interests and past favorites."
         },
         {
-          "heading": "Workshops",
-          "paragraphs": [
-            "Join one of our art workshops led by talented instructors. Experience hands-on learning and unleash your inner artist in a friendly and supportive environment."
-          ]
+          "heading": "Book Clubs & Events",
+          "paragraph": "Join our community! Participate in book clubs and author signings, or just gather with fellow readers to discuss your favorite stories."
         }
       ]
     },
     {
       "slug": "contact",
-      "title": "Contact Us",
+      "title": "Get In Touch",
       "content": [
         {
-          "heading": "Get in Touch",
-          "paragraphs": [
-            "We’d love to hear from you! Reach out to us for inquiries about exhibitions, events, or any questions."
-          ]
+          "heading": "We're Here to Help!",
+          "paragraph": "Whether you have questions about our books, events, or just want to chat, don’t hesitate to reach out!"
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/home" },
+    { "label": "Home", "url": "/" },
     { "label": "About", "url": "/about" },
-    { "label": "Exhibitions", "url": "/exhibitions" },
     { "label": "Services", "url": "/services" },
     { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Emily Johnson",
-      "role": "Local Artist",
-      "text": "Creative Canvas Gallery provided me the platform to showcase my work and connect with art lovers. The supportive environment has truly inspired my creativity!",
+      "name": "Emily Smith",
+      "role": "Local Author",
+      "text": "Nook & Cranny is a true gem! The atmosphere makes every visit special.",
       "rating": 5
     },
     {
-      "name": "Michael Green",
-      "role": "Art Enthusiast",
-      "text": "A refreshing place to experience contemporary art. The exhibitions are thoughtfully curated, and the staff is incredibly knowledgeable.",
+      "name": "James Taylor",
+      "role": "Frequent Customer",
+      "text": "I always find the perfect book here. And I love the cozy reading nooks!",
       "rating": 4
     }
   ],
   "services": [
     {
-      "title": "Art Consultation",
-      "description": "Personalized guidance to choose the right artwork for residential or commercial spaces.",
-      "icon": "🖼️"
+      "title": "Personalized Book Styling",
+      "description": "Let our staff create a curated selection just for you based on your reading preferences.",
+      "icon": "📚"
     },
     {
-      "title": "Art Workshops",
-      "description": "Hands-on workshops led by experienced artists for all skill levels.",
-      "icon": "🎨"
+      "title": "Literary Events",
+      "description": "Attend our events featuring renowned authors and engaging workshops.",
+      "icon": "✍️"
     }
   ],
   "contact": {
-    "phone": "+1 555-0123",
-    "email": "info@creativecanvasgallery.com",
-    "address": "123 Art Lane, Downtown, CA 90210"
+    "phone": "(555) 012-3456",
+    "email": "hello@nookandcrannybooks.com",
+    "address": "123 Book Lane, Readerville, TX 78910"
   },
   "footer": {
-    "description": "Creative Canvas Gallery - Inspiring creativity in every brush stroke.",
+    "description": "Nook & Cranny Books: Your local bookstore dedicated to inspiring readers through literature.",
     "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/creativecanvasgallery" },
-      { "platform": "Instagram", "url": "https://instagram.com/creativecanvasgallery" },
-      { "platform": "Twitter", "url": "https://twitter.com/creativecngallery" }
+      { "platform": "Facebook", "url": "https://facebook.com/nookandcrannybooks" },
+      { "platform": "Instagram", "url": "https://instagram.com/nookandcrannybooks" },
+      { "platform": "Twitter", "url": "https://twitter.com/nookandcranny" }
     ]
   }
 }
