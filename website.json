@@ -1,62 +1,62 @@
 {
-  "slug": "earthy-yoga-studio",
-  "name": "Earthy Yoga Studio",
-  "tagline": "Find Your Balance, Embrace the Calm",
-  "industry": "Health & Wellness",
-  "brand": "#BFAE9B",
-  "accent": "#4E705B",
-  "hero": "https://images.unsplash.com/photo-1595296388259-9c550cdbb808",
-  "description": "Welcome to Earthy Yoga Studio, where you can find your inner peace while connecting deeply with nature. Our mindfulness-focused classes encourage you to ground yourself, embrace the present, and cultivate tranquility amidst the chaos of daily life.",
+  "slug": "artisanal-chocolate-boutique",
+  "name": "ChocoDelight Boutique",
+  "tagline": "Indulge in Artisan Excellence",
+  "industry": "Food & Beverage",
+  "brand": "#4B3D86",
+  "accent": "#F8E3A0",
+  "hero": "https://images.unsplash.com/photo-1600548442976-f343e121f119",
+  "description": "ChocoDelight Boutique specializes in creating exquisite handcrafted truffles and premium cocoa blends. Our passion for chocolate and commitment to quality ensures every bite delivers a delightful experience tailored to the chocolate lover in you.",
   "pages": [
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
+          "heading": "Our Story",
+          "paragraph": "At ChocoDelight, we believe that chocolate is not just a treat; it's an experience. Founded in 2021 by a group of chocolate enthusiasts, we craft each product with love, using only the finest ingredients sourced from sustainable farms."
+        },
+        {
           "heading": "Our Philosophy",
-          "paragraph": "At Earthy Yoga Studio, we believe in the transformative power of yoga and mindfulness. Our classes are designed to create a serene atmosphere where everyone feels welcome and inspired to deepen their practice."
-        },
-        {
-          "heading": "Our Instructors",
-          "paragraph": "Our team of certified instructors embodies a wealth of knowledge and passion for the practice. Each brings their unique style and perspective, guiding you on your journey toward personal growth and well-being."
-        }
-      ]
-    },
-    {
-      "slug": "classes",
-      "title": "Classes & Schedule",
-      "content": [
-        {
-          "heading": "Variety of Classes",
-          "paragraph": "We offer a variety of classes ranging from gentle Yin to energizing Vinyasa to suit all levels of experience. Join us to explore your body and breathing in a mindful and nurturing environment."
-        },
-        {
-          "heading": "Monthly Schedule",
-          "paragraph": "Check our online schedule to find classes that fit your routine. We also provide online options for those who wish to practice from the comfort of their homes."
+          "paragraph": "We are committed to artisanal craftsmanship and ethical sourcing. Our chocolates are crafted with passion and respect for the environment, ensuring every bite supports our values."
         }
       ]
     },
     {
       "slug": "services",
-      "title": "Wellness Services",
+      "title": "Our Chocolates",
       "content": [
         {
-          "heading": "Holistic Approach",
-          "paragraph": "In addition to yoga classes, our studio offers meditation workshops, wellness retreats, and personalized mindfulness coaching sessions."
+          "heading": "Handcrafted Truffles",
+          "paragraph": "Explore our selection of handcrafted truffles, each uniquely flavored and beautifully presented for an unforgettable gift or personal indulgence."
         },
         {
-          "heading": "Custom Packages",
-          "paragraph": "Explore our tailored packages that combine yoga, meditation, and wellness consultations to fit your specific needs."
+          "heading": "Premium Cocoa Blends",
+          "paragraph": "Savor the richness of our premium cocoa blends, perfect for creating gourmet hot chocolate or adding a touch of luxury to your favorite dessert."
+        },
+        {
+          "heading": "Custom Chocolate Creations",
+          "paragraph": "Looking for something special? Our bespoke chocolate service allows you to create unique truffles tailored to your taste or event theme."
+        }
+      ]
+    },
+    {
+      "slug": "gallery",
+      "title": "Gallery",
+      "content": [
+        {
+          "heading": "Visual Delight",
+          "paragraph": "Our gallery showcases the artistry behind each chocolate creation. Immerse yourself in our world of flavors through stunning visuals."
         }
       ]
     },
     {
       "slug": "contact",
-      "title": "Get in Touch",
+      "title": "Contact Us",
       "content": [
         {
-          "heading": "We’d Love to Hear From You!",
-          "paragraph": "Whether you have a question about our classes, want to book a session, or simply seek guidance on your yoga journey, feel free to reach out to us!"
+          "heading": "Get in Touch",
+          "paragraph": "Have questions? We'd love to hear from you! Reach out to us to discuss orders, events, or simply to share your love of chocolate."
         }
       ]
     }
@@ -64,44 +64,53 @@
   "navigation": [
     { "label": "Home", "url": "/" },
     { "label": "About", "url": "/about" },
-    { "label": "Classes", "url": "/classes" },
-    { "label": "Services", "url": "/services" },
+    { "label": "Our Chocolates", "url": "/services" },
+    { "label": "Gallery", "url": "/gallery" },
     { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
-    { "name": "Sarah Thompson", "role": "Yoga Practitioner", "text": "Earthy Yoga Studio has transformed my practice and my life! I love the community and mindfulness focus.", "rating": 5 },
-    { "name": "James Orson", "role": "Beginner Yogi", "text": "As a beginner, I felt so welcomed. The instructors are kind and patient.", "rating": 4 },
-    { "name": "Elizabeth H.", "role": "Wellness Coach", "text": "The peaceful environment here is unmatched. This space truly nurtures the spirit!", "rating": 5 }
+    {
+      "name": "Jane Doe",
+      "role": "Chocolate Connoisseur",
+      "text": "ChocoDelight's truffles are simply divine! Each bite is a perfect balance of flavor and texture.",
+      "rating": 5
+    },
+    {
+      "name": "John Smith",
+      "role": "Food Blogger",
+      "text": "I was blown away by the quality and creativity of the chocolate blends. Truly a gourmet experience!",
+      "rating": 5
+    }
   ],
   "services": [
     {
-      "title": "Mindfulness Coaching",
-      "description": "One-on-one sessions focusing on integrating mindfulness practices into your daily life.",
-      "icon": "🧘‍♀️"
+      "title": "Luxury Chocolate Boxes",
+      "description": "Curated collections of our finest chocolates to make the perfect gift. Each box showcases the best of our artisanal creations.",
+      "icon": "🎁"
     },
     {
-      "title": "Group Retreats",
-      "description": "Seasonal wellness retreats that combine yoga, workshops, and relaxation in nature.",
-      "icon": "🌿"
+      "title": "Chocolate Workshops",
+      "description": "Join our interactive workshops to learn the art of chocolate making and create your own delectable treats.",
+      "icon": "👩‍🍳"
     },
     {
-      "title": "Private Yoga Lessons",
-      "description": "Personalized yoga sessions tailored to your body's needs and goals.",
-      "icon": "🏞️"
+      "title": "Corporate Gifts",
+      "description": "Impress your clients and employees with our personalized corporate gift offerings tailored to your business needs.",
+      "icon": "🏢"
     }
   ],
-  "servicesPageLayout": "<div class='services-container'><h2 class='services-title'>Our Services</h2><div class='services-grid'><div class='service-card' style='background-color:#e9f0e8;'><h3>Mindfulness Coaching</h3><p>One-on-one sessions focusing on integrating mindfulness practices into your daily life.</p><div class='icon'>🧘‍♀️</div></div><div class='service-card' style='background-color:#d8ecd2;'><h3>Group Retreats</h3><p>Seasonal wellness retreats that combine yoga, workshops, and relaxation in nature.</p><div class='icon'>🌿</div></div><div class='service-card' style='background-color:#c6e9e4;'><h3>Private Yoga Lessons</h3><p>Personalized yoga sessions tailored to your body's needs and goals.</p><div class='icon'>🏞️</div></div></div></div>",
+  "servicesPageLayout": "<div class='bg-gradient-to-r from-indigo-300 to-yellow-200 py-12'><h1 class='text-3xl font-bold text-center'>Our Chocolates</h1><div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8'> <div class='bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105'><h2 class='font-semibold text-xl'>Handcrafted Truffles</h2><p class='mt-2 text-gray-600'>Explore our selection of beautifully crafted truffles, each bursting with flavor and unique designs.</p> </div><div class='bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105'><h2 class='font-semibold text-xl'>Premium Cocoa Blends</h2><p class='mt-2 text-gray-600'>Savor our rich cocoa blends, made from the finest ingredients for an incomparable chocolate experience.</p> </div><div class='bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105'><h2 class='font-semibold text-xl'>Custom Chocolate Creations</h2><p class='mt-2 text-gray-600'>Let us help you create a unique chocolate experience for your special event.</p> </div></div></div>",
   "contact": {
-    "phone": "+1 (555) 123-4567",
-    "email": "info@earthyyoga.com",
-    "address": "123 Mindful Lane, Nature City, CA 90210"
+    "phone": "(123) 456-7890",
+    "email": "info@chocodelight.com",
+    "address": "123 Chocolate Avenue, Sweet City, SC 12345"
   },
   "footer": {
-    "description": "At Earthy Yoga Studio, we are committed to fostering a supportive and nurturing environment for all individuals on their journey towards a balanced life.",
+    "description": "ChocoDelight Boutique - Where Every Bite is a Delight.",
     "socialLinks": [
-      { "platform": "Facebook", "url": "https://facebook.com/earthyyogastudio" },
-      { "platform": "Instagram", "url": "https://instagram.com/earthyyogastudio" },
-      { "platform": "Twitter", "url": "https://twitter.com/earthyyogastudio" }
+      { "platform": "Facebook", "url": "https://facebook.com/chocodelight" },
+      { "platform": "Instagram", "url": "https://instagram.com/chocodelight" },
+      { "platform": "Twitter", "url": "https://twitter.com/chocodelight" }
     ]
   }
 }
