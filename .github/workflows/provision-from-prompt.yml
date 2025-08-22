@@ -64,7 +64,7 @@ jobs:
             "messages":[
               {
                 "role":"system",
-                "content":"You are a professional web designer creating complete website structures. Generate a comprehensive website plan with all content. Return JSON with: slug (kebab-case, <=30 chars), name (business name, <=40 chars), tagline (compelling tagline), industry (detected industry), brand (primary hex color), accent (secondary hex color), hero (high-quality Unsplash image URL), description (2-3 sentences about the business), pages (array of page objects with: slug, title, content array of sections with heading and paragraphs), navigation (array of nav items with label and url), testimonials (array with name, role, text, rating), services (array with title, description, icon), contact (object with phone, email, address), footer (object with description, social links). Make content realistic, detailed, and industry-appropriate. Use real business copy, not placeholder text."
+                "content":"You are a professional web designer creating complete website structures. Generate a comprehensive website plan with all content. Return JSON with: slug (kebab-case, <=30 chars), name (business name, <=40 chars), tagline (compelling tagline), industry (detected industry), brand (primary hex color), accent (secondary hex color), hero (high-quality Unsplash image URL), description (2-3 sentences about the business), pages (array of page objects with: slug, title, content array of sections with heading and paragraphs), navigation (array of nav items with label and url), testimonials (array with name, role, text, rating), services (array with title, description, icon), servicesPageLayout (creative custom HTML layout for services page - be creative with design, animations, layouts based on business type), contact (object with phone, email, address), footer (object with description, social links). Make content realistic, detailed, and industry-appropriate. Use real business copy, not placeholder text."
               },
               {
                 "role":"user",
@@ -725,32 +725,16 @@ jobs:
           <?php get_footer(); ?>
           PHP
 
-          cat > child/page-services.php <<'PHP'
-          <?php get_header(); ?>
-          <main id="main" class="py-20">
-            <div class="container">
-              <h1 class="section-title text-center mb-16"><?php the_title(); ?></h1>
-              <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <?php
-                $services = $website_data = json_decode(file_get_contents(ABSPATH . 'website.json'), true);
-                $services = $website_data['services'] ?? [];
-                foreach ($services as $service) : setup_postdata($service); ?>
-                  <div class="card">
-                    <?php if (has_post_thumbnail($service->ID)) : ?>
-                      <img src="<?php echo get_the_post_thumbnail_url($service->ID, 'medium'); ?>" 
-                           alt="<?php echo get_the_title($service->ID); ?>" 
-                           class="w-full h-48 object-cover rounded-lg mb-4">
-                    <?php endif; ?>
-                    <h3 class="text-xl font-semibold mb-3"><?php echo get_the_title($service->ID); ?></h3>
-                    <p class="text-gray-600"><?php echo get_the_excerpt($service->ID); ?></p>
-                  </div>
-                <?php endforeach; wp_reset_postdata(); ?>
-              </div>
-            </div>
-          </main>
-          <?php get_footer(); ?>
-          PHP
-
+          # Generate AI-designed services page
+          echo "<?php get_header(); ?>" > child/page-services.php
+          cat >> child/page-services.php <<'SERVICESPAGE'
+          <?php
+          $website_data = json_decode(file_get_contents(ABSPATH . 'website.json'), true);
+          $customLayout = $website_data['servicesPageLayout'] ?? '<div class="container py-20"><h1>Our Services</h1></div>';
+          echo $customLayout;
+          ?>
+          SERVICESPAGE
+          echo "<?php get_footer(); ?>" >> child/page-services.php
           cat > child/page-contact.php <<'PHP'
           <?php get_header(); ?>
           <main id="main" class="py-20">
