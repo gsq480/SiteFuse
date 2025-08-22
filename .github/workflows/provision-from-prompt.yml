@@ -943,19 +943,19 @@ jobs:
               wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content='Get in touch with us today.' --allow-root
             fi
             # Home page
-            if [ \$(wp post list --post_type=page --post_title="Home" --format=count --allow-root) -eq 0 ]; then
+            if [ \$(wp post list --post_type=page --name=home --format=count --allow-root) -eq 0 ]; then
               HOME_ID=\$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --porcelain --allow-root)
               wp option update show_on_front page --allow-root
               wp option update page_on_front \$HOME_ID --allow-root
             else
-              HOME_ID=\$(wp post list --post_type=page --post_title="Home" --field=ID --allow-root | head -1)
+              HOME_ID=\$(wp post list --post_type=page --name=home --field=ID --allow-root | head -1)
               wp option update show_on_front page --allow-root
               wp option update page_on_front \$HOME_ID --allow-root
             fi
             
             # Create and set up navigation menu
             wp menu create 'Primary Menu' --allow-root 2>/dev/null || true
-            wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="Home" --field=ID --allow-root | head -1) --title='Home' --allow-root 2>/dev/null || true
+            wp menu item add-post primary-menu \$(wp post list --post_type=page --name=home --field=ID --allow-root | head -1) --title='Home' --allow-root 2>/dev/null || true
             wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="About" --field=ID --allow-root | head -1) --title='About' --allow-root 2>/dev/null || true
             wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="Services" --field=ID --allow-root | head -1) --title='Services' --allow-root 2>/dev/null || true
             wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="Contact" --field=ID --allow-root | head -1) --title='Contact' --allow-root 2>/dev/null || true
