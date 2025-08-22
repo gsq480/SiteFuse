@@ -1,34 +1,24 @@
 {
-  "slug": "mechanic-canberra-bw",
-  "name": "Black and White Mechanic",
-  "tagline": "Your Friendly Neighborhood Mechanic",
-  "industry": "Automotive",
-  "brand": "#000000",
-  "accent": "#FFFFFF",
-  "hero": "https://source.unsplash.com/featured/?mechanic,car",
-  "description": "Black and White Mechanic is your trusted workshop in Canberra, committed to providing the highest quality of automotive repair and maintenance services. Our experienced technicians use state-of-the-art equipment and their extensive knowledge to keep your vehicle running smoothly and safely.",
+  "slug": "artisanal-bakery",
+  "name": "Rustic Crust Bakery",
+  "tagline": "Baked with Love, Crafted with Tradition",
+  "industry": "restaurant",
+  "brand": "#7B3F00",
+  "accent": "#E2B522",
+  "hero": "https://images.unsplash.com/photo-1581965354069-b7d3d37bdf22",
+  "description": "At Rustic Crust Bakery, we specialize in artisanal sourdough breads and exquisite French pastries. With a warm and inviting atmosphere, our bakery is a haven for food lovers seeking quality and craftsmanship in every bite.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Black and White Mechanic",
-          "paragraph": "At Black and White Mechanic, we pride ourselves on delivering top-notch auto services in a transparent and honest environment. Our clients are our priority, and we ensure every vehicle that leaves our shop is safe and in perfect working condition."
+          "heading": "Welcome to Rustic Crust!",
+          "paragraph": "Experience the essence of artisanal baking at Rustic Crust Bakery. Our sourdough is made with love and aged to perfection, while our French pastries are crafted following traditional recipes to bring you authentic European flavors."
         },
         {
-          "heading": "Why Choose Us?",
-          "paragraph": "With over a decade of experience in the automotive industry, our skilled team is dedicated to providing not only quality repairs but also guidance and education about your vehicle, ensuring long-term satisfaction."
-        }
-      ]
-    },
-    {
-      "slug": "services",
-      "title": "Services",
-      "content": [
-        {
-          "heading": "What We Offer",
-          "paragraph": "Our full suite of services includes everything from routine maintenance to emergency repairs, tailored to meet your specific needs."
+          "heading": "Visit Us",
+          "paragraph": "Join us in our cozy bakery where the rich aroma of fresh bread and pastries fills the air. Enjoy a cup of coffee with friends or pick up a treat to take home today!"
         }
       ]
     },
@@ -37,12 +27,26 @@
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Mission",
-          "paragraph": "To be Canberra's premier automotive service provider by delivering reliable, honest, and efficient car care."
+          "heading": "Our Story",
+          "paragraph": "Rustic Crust Bakery was founded by a passionate baker whose love for bread-making began in a small French village. Today, we delight our community with handcrafted breads and pastries, honoring age-old traditions while infusing modern techniques."
         },
         {
-          "heading": "Meet the Team",
-          "paragraph": "Our team consists of experienced mechanics with a passion for cars. We ensure continuous training and up-to-date knowledge of the latest automotive technologies."
+          "heading": "Our Philosophy",
+          "paragraph": "We believe in using only the finest ingredients sourced from local farms. Our commitment to quality and sustainability shapes every aspect of our business, from the dough we knead to the smiles we serve."
+        }
+      ]
+    },
+    {
+      "slug": "services",
+      "title": "Our Offerings",
+      "content": [
+        {
+          "heading": "Artisanal Products",
+          "paragraph": "Our bakery offers a variety of sourdough breads, buttery pastries, and seasonal specials that celebrate the best of what each season has to offer."
+        },
+        {
+          "heading": "Custom Orders",
+          "paragraph": "We provide custom baking services for special occasions, whether it’s a wedding cake, a birthday treat, or a holiday feast. Let us create something special just for you!"
         }
       ]
     },
@@ -52,80 +56,60 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "Ready to schedule an appointment or have questions? Reach out to us today!"
+          "paragraph": "We’d love to hear from you! Whether you have a question, feedback, or just want to say hello, feel free to reach out to us."
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "Home",
-      "url": "/"
-    },
-    {
-      "label": "Services",
-      "url": "/services"
-    },
-    {
-      "label": "About Us",
-      "url": "/about"
-    },
-    {
-      "label": "Contact",
-      "url": "/contact"
-    }
+    { "label": "Home", "url": "/home" },
+    { "label": "About", "url": "/about" },
+    { "label": "Services", "url": "/services" },
+    { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "John Doe",
-      "role": "Customer",
-      "text": "Black and White Mechanic treated my car with utmost care. They explained the process clearly and the repairs were completed on time!",
+      "name": "Sarah Thompson",
+      "role": "Food Blogger",
+      "text": "Rustic Crust Bakery is my go-to for the best sourdough in town! The ambiance is perfect for enjoying a pastry with coffee.",
       "rating": 5
     },
     {
-      "name": "Emily Smith",
-      "role": "Customer",
-      "text": "They are honest and trustworthy! I will never take my car anywhere else.",
+      "name": "Michael Johnson",
+      "role": "Local Chef",
+      "text": "Every bite at Rustic Crust is a reminder of traditional baking methods. Their croissants are simply the best!",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Oil Change",
-      "description": "Regular oil changes are vital for your car’s performance. We use top-grade oil that suits your vehicle's specifications.",
-      "icon": "🔧"
+      "title": "Sourdough Bread",
+      "description": "Our signature sourdough is naturally leavened and baked with care to achieve a crispy crust and soft interior.",
+      "icon": "🥖"
     },
     {
-      "title": "Brake Services",
-      "description": "Ensuring your brakes are functioning properly is essential for safety. Our team provides comprehensive brake inspections and repairs.",
-      "icon": "🛑"
+      "title": "French Pastries",
+      "description": "Indulge in our flaky croissants, éclairs, and tarts, crafted with authentic French techniques and premium ingredients.",
+      "icon": "🍰"
     },
     {
-      "title": "Tire Rotations",
-      "description": "Extend the life of your tires with regular rotations and alignments, optimizing performance and safety.",
-      "icon": "⚙️"
+      "title": "Custom Cakes",
+      "description": "From weddings to birthdays, we create bespoke cakes that look stunning and taste divine.",
+      "icon": "🎂"
     }
   ],
+  "servicesPageLayout": "<div class='services-section'>\n  <h2>Our Artisanal Offerings</h2>\n  <div class='services-grid'>\n    <div class='service-item' style='transform: translateY(0); transition: transform 0.3s;'>\n      <h3>Sourdough Bread</h3>\n      <p>Our signature sourdough is naturally leavened and baked with care to achieve a crispy crust and soft interior.</p>\n    </div>\n    <div class='service-item' style='transform: translateY(0); transition: transform 0.3s;'>\n      <h3>French Pastries</h3>\n      <p>Indulge in our flaky croissants, éclairs, and tarts, crafted with authentic French techniques and premium ingredients.</p>\n    </div>\n    <div class='service-item' style='transform: translateY(0); transition: transform 0.3s;'>\n      <h3>Custom Cakes</h3>\n      <p>From weddings to birthdays, we create bespoke cakes that look stunning and taste divine.</p>\n    </div>\n  </div>\n</div>\n<style>\n  .services-section {\n    text-align: center;\n    padding: 50px 0;\n    background-color: #f9f9f9;\n  }\n  .services-grid {\n    display: flex;\n    justify-content: space-around;\n  }\n  .service-item {\n    background-color: #fff;\n    border: 1px solid #e4e4e4;\n    padding: 20px;\n    margin: 10px;\n    border-radius: 5px;\n    box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n    transition: transform 0.3s;\n  }\n  .service-item:hover {\n    transform: translateY(-5px);\n  }\n</style>",
   "contact": {
-    "phone": "(02) 1234 5678",
-    "email": "info@bwmechanic.com.au",
-    "address": "123 Mechanic Lane, Canberra, ACT 2600, Australia"
+    "phone": "(555) 123-4567",
+    "email": "info@rusticcrustbakery.com",
+    "address": "123 Bread Lane, Springfield, USA"
   },
   "footer": {
-    "description": "Black and White Mechanic - Honesty, Reliability, and Quality Service.",
+    "description": "Join us in celebrating the art of baking. Every loaf and pastry is made with passion and dedication.",
     "socialLinks": [
-      {
-        "platform": "Facebook",
-        "url": "https://facebook.com/bwmechanic"
-      },
-      {
-        "platform": "Instagram",
-        "url": "https://instagram.com/bwmechanic"
-      },
-      {
-        "platform": "Twitter",
-        "url": "https://twitter.com/bwmechanic"
-      }
+      { "platform": "Facebook", "url": "https://facebook.com/rusticcrustbakery" },
+      { "platform": "Instagram", "url": "https://instagram.com/rusticcrustbakery" },
+      { "platform": "Twitter", "url": "https://twitter.com/rusticcrust" }
     ]
   }
 }
