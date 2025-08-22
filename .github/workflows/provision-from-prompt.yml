@@ -657,7 +657,7 @@ jobs:
           module.exports = {
             content: ['./**/*.php'],
             safelist: [
-              'container', 'btn', 'btn-primary', 'btn-secondary', 'card', 'section-title', 'section-subtitle',
+              'container', 'btn', 'btn-primary', 'bg-primary', 'bg-accent', 'text-primary', 'text-accent', 'border-primary', 'border-accent', 'btn-secondary', 'card', 'section-title', 'section-subtitle',
               'hero-section', 'service-icon', 'testimonial-card', 'nav-link', 'footer-section', 'animate-fade-in',
               'grid', 'md:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-2', 'gap-4', 'gap-8', 'gap-12',
               'py-20', 'text-center', 'text-white', 'bg-white', 'w-full', 'h-full', 'object-cover', 
