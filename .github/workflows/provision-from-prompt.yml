@@ -543,6 +543,7 @@ jobs:
                     <p class="text-xl text-white/90 mb-8 leading-relaxed">
                       <?php
                       $website_data = json_decode(file_get_contents(get_template_directory() . '/../../website.json'), true);
+echo "<!-- DEBUG: website_data loaded: " . (empty($website_data) ? "NO" : "YES") . " -->";
                       echo esc_html($website_data['description'] ?? 'Discover excellence in every detail. We\'re committed to providing you with exceptional service and results that exceed your expectations.');
                       ?>
                     </p>
@@ -573,6 +574,7 @@ jobs:
                 <div class="grid md:grid-cols-3 gap-8">
                   <?php
                   $website_data = json_decode(file_get_contents(get_template_directory() . '/../../website.json'), true);
+echo "<!-- DEBUG: website_data loaded: " . (empty($website_data) ? "NO" : "YES") . " -->";
                   $services = $website_data['services'] ?? [
                     ['title' => 'Strategic Planning', 'description' => 'Comprehensive planning and strategy development to help you achieve your goals efficiently and effectively.', 'icon' => '🎯'],
                     ['title' => 'Expert Implementation', 'description' => 'Professional implementation of solutions with attention to detail and commitment to excellence in every project.', 'icon' => '⚡'],
