@@ -1,62 +1,80 @@
 {
   "slug": "cozy-mountain-cabins",
-  "name": "Cozy Mountain Cabins",
-  "tagline": "Your Escape to Nature's Serenity",
-  "industry": "Real Estate",
-  "brand": "#4A7CBA",
-  "accent": "#F4C2A6",
-  "hero": "https://images.unsplash.com/photo-1515072817660-5c0c8c5c6d2d",
-  "description": "Experience the ultimate getaway in our rustic mountain cabins, where charm meets nature. Surrounded by stunning alpine views, each cabin is designed for comfort and tranquility, making it the ideal retreat for families and friends alike.",
+  "name": "Mountain Bliss Cabins",
+  "tagline": "Your Escape to Rustic Comfort",
+  "industry": "real-estate",
+  "brand": "#8B4513",
+  "accent": "#FFD700",
+  "hero": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
+  "description": "At Mountain Bliss Cabins, we offer a selection of charming mountain cabins nestled in picturesque surroundings. Experience breathtaking alpine views and the warmth of rustic designs that turn your getaway into a cozy retreat.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Cozy Mountain Cabins",
-          "paragraph": "Nestled in the heart of the mountains, Cozy Mountain Cabins offers a unique blend of rustic charm and modern comforts. Explore breathtaking landscapes and enjoy a peaceful escape from the hustle and bustle of daily life."
+          "heading": "Welcome to Mountain Bliss Cabins",
+          "paragraphs": [
+            "Discover the perfect getaway in our cozy mountain cabins that blend rustic charm with modern comforts. Whether you're looking for a romantic escape or a fun family adventure, our cabins provide a serene setting to unwind and connect with nature.",
+            "Explore our stunning alpine landscapes, hike scenic trails, and enjoy the beauty of the great outdoors right at your doorstep."
+          ]
         },
         {
-          "heading": "Our Unique Features",
-          "paragraph": "Each cabin is uniquely designed with warm wood accents, cozy fireplaces, and stunning views of the surrounding wilderness. Relax on the porch with a cup of coffee, explore nature trails, or indulge in outdoor adventures."
+          "heading": "Why Choose Us?",
+          "paragraphs": [
+            "Our cabins are thoughtfully designed with comfort and style in mind, ensuring every guest has an unforgettable experience. From fully equipped kitchens to cozy wood-burning fireplaces, we've got everything you need to feel right at home.",
+            "Our dedicated team is available to assist you in making your stay seamless and enjoyable."
+          ]
         }
       ]
     },
     {
-      "slug": "about-us",
+      "slug": "listings",
+      "title": "Cabin Listings",
+      "content": [
+        {
+          "heading": "Explore Our Cabins",
+          "paragraphs": [
+            "Browse our exclusive collection of mountain cabins, each boasting unique characteristics and stunning views. Whether you need a cozy nook for two or a spacious lodge for your family reunion, we have the perfect option for you."
+          ]
+        },
+        {
+          "heading": "Featured Cabins",
+          "paragraphs": [
+            "1. The Pine Lodge: A spacious cabin with 3 bedrooms and a stunning view over the valley.",
+            "2. The Cozy Nook: A romantic hideaway for couples with a fireplace and scenic deck.",
+            "3. The Rustic Retreat: Perfect for family gatherings, this cabin features a game room and large dining area."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "about",
       "title": "About Us",
       "content": [
         {
           "heading": "Our Story",
-          "paragraph": "Founded in 2020, Cozy Mountain Cabins was born out of a love for nature and a desire to provide memorable experiences. Our cabins are meticulously crafted to offer a blend of rustic aesthetics and modern amenities."
+          "paragraphs": [
+            "Founded in 2015, Mountain Bliss Cabins is committed to providing our guests with an unforgettable mountain retreat experience. Our passion for the great outdoors and dedication to excellent hospitality drives us to maintain the highest standards."
+          ]
         },
         {
           "heading": "Our Mission",
-          "paragraph": "We strive to create a warm and inviting atmosphere that allows guests to unwind and reconnect with themselves and nature."
+          "paragraphs": [
+            "We aim to connect people with nature while offering a comfortable and charming atmosphere. Whether you're here for adventure or relaxation, we want your stay to be memorable."
+          ]
         }
       ]
     },
     {
-      "slug": "cabins",
-      "title": "Cabins",
+      "slug": "testimonials",
+      "title": "Guest Reviews",
       "content": [
         {
-          "heading": "Our Cabin Selection",
-          "paragraph": "Each of our charming cabins promises a unique experience, whether you're looking for a romantic getaway or a fun-filled family holiday. Check out our collection of cabins, each featuring cozy interiors and breathtaking views."
-        },
-        {
-          "heading": "Features",
-          "paragraph": "All cabins feature full kitchens, spacious living areas, and outdoor seating for enjoying your morning coffee or evening stars."
-        }
-      ]
-    },
-    {
-      "slug": "services",
-      "title": "Services",
-      "content": [
-        {
-          "heading": "What We Offer",
-          "paragraph": "In addition to comfortable accommodations, we offer guided outdoor activities, local dining recommendations, and customizable packages to enhance your stay."
+          "heading": "What Our Guests Say",
+          "paragraphs": [
+            "Don't just take our word for it – hear from our satisfied guests who have enjoyed their time at Mountain Bliss Cabins!"
+          ]
         }
       ]
     },
@@ -66,79 +84,68 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "Questions about our cabins or planning your stay? Reach out to our friendly customer service team who are happy to help you with any inquiries."
+          "paragraphs": [
+            "Have questions or need assistance? We'd love to hear from you! Reach out through phone or email, or visit us at our location."
+          ]
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "Home",
-      "url": "/"
-    },
-    {
-      "label": "About Us",
-      "url": "/about-us"
-    },
-    {
-      "label": "Cabins",
-      "url": "/cabins"
-    },
-    {
-      "label": "Services",
-      "url": "/services"
-    },
-    {
-      "label": "Contact",
-      "url": "/contact"
-    }
+    { "label": "Home", "url": "/" },
+    { "label": "Cabin Listings", "url": "/listings" },
+    { "label": "About Us", "url": "/about" },
+    { "label": "Guest Reviews", "url": "/testimonials" },
+    { "label": "Contact Us", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Emily Johnson",
-      "role": "Frequent Visitor",
-      "text": "Staying at Cozy Mountain Cabins was a dream! The views were breathtaking and the cabin felt like home.",
+      "name": "Sarah Johnson",
+      "role": "Travel Blogger",
+      "text": "Mountain Bliss Cabins was the ideal getaway for me and my husband. The views were stunning, and the cabin had all the charm we hoped for.",
       "rating": 5
     },
     {
-      "name": "Mark Thompson",
-      "role": "Weekend Adventurer",
-      "text": "A perfect place to unwind. The attention to detail and rustic charm made our weekend unforgettable!",
+      "name": "Michael Anderson",
+      "role": "Family Vacationer",
+      "text": "We loved our stay at The Rustic Retreat! Perfect for the family with enough space for everyone to relax.",
+      "rating": 4.5
+    },
+    {
+      "name": "Emma Davis",
+      "role": "Nature Enthusiast",
+      "text": "A perfect blend of beauty and comfort. We enjoyed exploring the nearby trails and coming back to a cozy cabin.",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Guided Hiking Tours",
-      "description": "Join our knowledgeable guides for a unique hiking experience through stunning terrains.",
-      "icon": "https://img.icons8.com/material-outlined/24/000000/hiking.png"
+      "title": "Cabin Rentals",
+      "description": "Choose from a range of unique cabins in stunning mountain settings.",
+      "icon": "🏡"
     },
     {
-      "title": "Cabin Packages",
-      "description": "Customizable packages for family reunions, romantic getaways, or adventure-filled weekends.",
-      "icon": "https://img.icons8.com/material-outlined/24/000000/package.png"
+      "title": "Guided Outdoor Adventures",
+      "description": "Join us for guided hikes, fishing trips, and outdoor experiences tailored to all skill levels.",
+      "icon": "🗺️"
+    },
+    {
+      "title": "Event Hosting",
+      "description": "Host your special events, from family reunions to intimate weddings, in our beautiful locations.",
+      "icon": "🎉"
     }
   ],
   "contact": {
-    "phone": "+1 (555) 123-4567",
-    "email": "info@cozymountaincabins.com",
-    "address": "123 Mountain Road, Alpine Village, CO 80405"
+    "phone": "(555) 123-4567",
+    "email": "info@mountainblisscabins.com",
+    "address": "123 Mountain View Rd, Alpine, CA 91901"
   },
   "footer": {
-    "description": "Explore the beauty of nature with Cozy Mountain Cabins. Book your stay today and create unforgettable memories.",
+    "description": "Experience the joy of mountain living at Mountain Bliss Cabins. Let us be your sanctuary in nature.",
     "social_links": [
-      {
-        "platform": "Facebook",
-        "url": "https://facebook.com/cozymountaincabins"
-      },
-      {
-        "platform": "Instagram",
-        "url": "https://instagram.com/cozymountaincabins"
-      },
-      {
-        "platform": "Twitter",
-        "url": "https://twitter.com/cozymountaincabins"
-      }
+      { "platform": "Facebook", "url": "https://facebook.com/mountainblisscabins" },
+      { "platform": "Instagram", "url": "https://instagram.com/mountainblisscabins" },
+      { "platform": "Twitter", "url": "https://twitter.com/mountainblisscabins" }
     ]
   }
 }
