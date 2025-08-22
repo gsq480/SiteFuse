@@ -573,25 +573,6 @@ jobs:
                 <div class="grid md:grid-cols-3 gap-8">
                   <?php
                   $website_data = json_decode(file_get_contents(get_template_directory() . '/../../website.json'), true);
-                <!-- DEBUG START -->
-                <?php
-                $json_path = get_template_directory() . "/../../website.json";
-                echo "<!-- DEBUG: Looking for website.json at: $json_path -->";
-                echo "<!-- DEBUG: File exists: " . (file_exists($json_path) ? "YES" : "NO") . " -->";
-                if (file_exists($json_path)) {
-                    $content = file_get_contents($json_path);
-                    echo "<!-- DEBUG: File size: " . strlen($content) . " bytes -->";
-                    $website_data = json_decode($content, true);
-                    echo "<!-- DEBUG: JSON decode success: " . ($website_data ? "YES" : "NO") . " -->";
-                    if ($website_data && isset($website_data["services"])) {
-                        echo "<!-- DEBUG: Found " . count($website_data["services"]) . " services -->";
-                        echo "<!-- DEBUG: First service: " . $website_data["services"][0]["title"] . " -->";
-                    }
-                } else {
-                    echo "<!-- DEBUG: website.json not found -->";
-                }
-                ?>
-                <!-- DEBUG END -->
                   $services = $website_data['services'] ?? [
                     ['title' => 'Strategic Planning', 'description' => 'Comprehensive planning and strategy development to help you achieve your goals efficiently and effectively.', 'icon' => '🎯'],
                     ['title' => 'Expert Implementation', 'description' => 'Professional implementation of solutions with attention to detail and commitment to excellence in every project.', 'icon' => '⚡'],
