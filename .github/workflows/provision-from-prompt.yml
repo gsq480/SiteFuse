@@ -954,11 +954,11 @@ jobs:
             fi
             
             # Create and set up navigation menu
+            wp menu delete primary-menu --allow-root 2>/dev/null || true
             wp menu create 'Primary Menu' --allow-root 2>/dev/null || true
             wp menu item add-post primary-menu \$(wp post list --post_type=page --name=home --field=ID --allow-root | head -1) --title='Home' --allow-root 2>/dev/null || true
-            wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="About" --field=ID --allow-root | head -1) --title='About' --allow-root 2>/dev/null || true
-            wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="Services" --field=ID --allow-root | head -1) --title='Services' --allow-root 2>/dev/null || true
-            wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="Contact" --field=ID --allow-root | head -1) --title='Contact' --allow-root 2>/dev/null || true
-            wp menu location assign primary-menu primary --allow-root 2>/dev/null || true"
-          
+            wp menu item add-post primary-menu \$(wp post list --post_type=page --name=about --field=ID --allow-root | head -1) --title='About' --allow-root 2>/dev/null || true
+            wp menu item add-post primary-menu \$(wp post list --post_type=page --name=services --field=ID --allow-root | head -1) --title='Services' --allow-root 2>/dev/null || true
+            wp menu item add-post primary-menu \$(wp post list --post_type=page --name=contact --field=ID --allow-root | head -1) --title='Contact' --allow-root 2>/dev/null || true
+            wp menu location assign primary-menu primary --allow-root 2>/dev/null || true          
           echo "✅ WordPress content created successfully"
