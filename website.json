@@ -1,24 +1,24 @@
 {
-  "slug": "modern-bookstore",
-  "name": "Nook & Cranny Books",
-  "tagline": "Your Cozy Escape into Literature",
-  "industry": "Retail - Books",
-  "brand": "#a0522d", 
-  "accent": "#d2b48c",
-  "hero": "https://images.unsplash.com/photo-1513353897536-13d3d6a7003e",
-  "description": "Nook & Cranny Books is your go-to destination for new and classic literature nestled in a warm, inviting atmosphere. Explore our carefully curated selection of books while enjoying our cozy reading nooks, designed for you to lose track of time in your next great read.",
+  "slug": "swedish-book-store-canberra",
+  "name": "Swedish Reads",
+  "tagline": "Your portal to a world of Swedish literature",
+  "industry": "Retail - Bookstore",
+  "brand": "#009B77",
+  "accent": "#FF5A00",
+  "hero": "https://images.unsplash.com/photo-1529176819061-c39b973e4edb",
+  "description": "Swedish Reads is a boutique bookstore located in the heart of Canberra, dedicated to offering a diverse selection of Swedish literature, children's books, and unique Scandinavian gifts. Our cozy atmosphere invites you to explore the rich literary traditions of Sweden while enjoying a fresh coffee.",
   "pages": [
     {
       "slug": "home",
-      "title": "Welcome to Nook & Cranny Books",
+      "title": "Welcome to Swedish Reads",
       "content": [
         {
-          "heading": "A World of Literature Awaits You",
-          "paragraph": "Step into our bookstore, where the smell of fresh pages meets warm earth tones. Whether you are seeking a riveting novel or a thoughtful non-fiction title, our collection is curated to inspire."
+          "heading": "Discover the Magic of Swedish Literature",
+          "paragraph": "At Swedish Reads, we curate a collection of literary gems from Sweden's finest authors, spanning genres from fiction and non-fiction to poetry and memoirs."
         },
         {
-          "heading": "Cozy Reading Nooks",
-          "paragraph": "Take a break in any of our cozy reading corners. With soft lighting and comfortable chairs, you'll feel right at home as you dive into the pages of your next favorite book."
+          "heading": "Community and Culture",
+          "paragraph": "Join us for our events celebrating Swedish culture, such as book readings, language workshops, and traditional fika gatherings."
         }
       ]
     },
@@ -27,12 +27,12 @@
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Mission",
-          "paragraph": "At Nook & Cranny Books, we believe that every book has a story and every reader deserves a haven for discovery. Our mission is to create a welcoming space for readers of all ages and backgrounds."
+          "heading": "Our Story",
+          "paragraph": "Founded by a team of avid readers and Swedish culture enthusiasts, Swedish Reads aims to create a cultural hub for the local community, intertwining the love for reading with the charm of Swedish traditions."
         },
         {
-          "heading": "Our Story",
-          "paragraph": "Founded in 2022 by a group of passionate book lovers, Nook & Cranny strives to foster community through the written word. We host authors, book clubs, and events that connect readers with the stories they love."
+          "heading": "Meet the Team",
+          "paragraph": "Our knowledgeable staff are passionate about books and are always ready to help you find your next great read or gift."
         }
       ]
     },
@@ -42,68 +42,122 @@
       "content": [
         {
           "heading": "Book Recommendations",
-          "paragraph": "Our knowledgeable staff is here to help you find your next great read. We offer personalized recommendations based on your interests and past favorites."
+          "paragraph": "Our team offers personalized book recommendations to match your interests, making it easy to find the perfect title."
         },
         {
-          "heading": "Book Clubs & Events",
-          "paragraph": "Join our community! Participate in book clubs and author signings, or just gather with fellow readers to discuss your favorite stories."
+          "heading": "Events and Workshops",
+          "paragraph": "We host regular events including author readings, Swedish language classes, and community discussions."
+        },
+        {
+          "heading": "Gift Vouchers",
+          "paragraph": "Our gift vouchers are perfect for any occasion, allowing your loved ones to explore our collection at their own pace."
         }
       ]
     },
     {
       "slug": "contact",
-      "title": "Get In Touch",
+      "title": "Contact Us",
       "content": [
         {
-          "heading": "We're Here to Help!",
-          "paragraph": "Whether you have questions about our books, events, or just want to chat, don’t hesitate to reach out!"
+          "heading": "Get in Touch",
+          "paragraph": "Have questions or want to know more about our collection? Feel free to reach out to us via the contact details below or visit us in-store."
+        },
+        {
+          "heading": "Location",
+          "paragraph": "You can find us at 123 Book Lane, Canberra, ACT 2601."
+        }
+      ]
+    },
+    {
+      "slug": "testimonials",
+      "title": "What Our Customers Say",
+      "content": [
+        {
+          "heading": "Customer Reviews",
+          "paragraph": "Hear from our happy readers about their experiences at Swedish Reads."
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/" },
-    { "label": "About", "url": "/about" },
-    { "label": "Services", "url": "/services" },
-    { "label": "Contact", "url": "/contact" }
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "About Us",
+      "url": "/about"
+    },
+    {
+      "label": "Services",
+      "url": "/services"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    },
+    {
+      "label": "Testimonials",
+      "url": "/testimonials"
+    }
   ],
   "testimonials": [
     {
-      "name": "Emily Smith",
-      "role": "Local Author",
-      "text": "Nook & Cranny is a true gem! The atmosphere makes every visit special.",
+      "name": "Anna Svensson",
+      "role": "Customer",
+      "text": "Swedish Reads is my favorite bookstore in Canberra! The selection and the atmosphere are absolutely charming.",
       "rating": 5
     },
     {
-      "name": "James Taylor",
-      "role": "Frequent Customer",
-      "text": "I always find the perfect book here. And I love the cozy reading nooks!",
+      "name": "Oliver Beck",
+      "role": "Local Author",
+      "text": "As a writer, I appreciate the support Swedish Reads gives to local authors and the literary community.",
+      "rating": 5
+    },
+    {
+      "name": "Greta Lindholm",
+      "role": "Book Enthusiast",
+      "text": "I love attending the book readings at Swedish Reads. They always feature fascinating topics and superb guests.",
       "rating": 4
     }
   ],
   "services": [
     {
-      "title": "Personalized Book Styling",
-      "description": "Let our staff create a curated selection just for you based on your reading preferences.",
+      "title": "Personalized Book Recommendations",
+      "description": "Our expert staff provide tailored suggestions to help you discover new favorite authors and titles.",
       "icon": "📚"
     },
     {
-      "title": "Literary Events",
-      "description": "Attend our events featuring renowned authors and engaging workshops.",
-      "icon": "✍️"
+      "title": "Cultural Events",
+      "description": "Participate in seasonal events, workshops, and community gatherings that celebrate Swedish literature and culture.",
+      "icon": "🎉"
+    },
+    {
+      "title": "Online Ordering",
+      "description": "Enjoy secure online ordering from the comfort of your home for convenient pickup or delivery.",
+      "icon": "🛒"
     }
   ],
   "contact": {
-    "phone": "(555) 012-3456",
-    "email": "hello@nookandcrannybooks.com",
-    "address": "123 Book Lane, Readerville, TX 78910"
+    "phone": "+61 2 1234 5678",
+    "email": "info@swedishreads.com.au",
+    "address": "123 Book Lane, Canberra, ACT 2601"
   },
   "footer": {
-    "description": "Nook & Cranny Books: Your local bookstore dedicated to inspiring readers through literature.",
+    "description": "Thank you for supporting local independent bookstores! Your love for books inspires us every day.",
     "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/nookandcrannybooks" },
-      { "platform": "Instagram", "url": "https://instagram.com/nookandcrannybooks" },
-      { "platform": "Twitter", "url": "https://twitter.com/nookandcranny" }
+      {
+        "platform": "Facebook",
+        "url": "https://facebook.com/swedishreads"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://instagram.com/swedishreads"
+      },
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/swedishreads"
+      }
     ]
   }
 }
