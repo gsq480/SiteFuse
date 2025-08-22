@@ -941,7 +941,18 @@ jobs:
             if [ \$(wp post list --post_type=page --post_title="Contact" --format=count --allow-root) -eq 0 ]; then
               wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content='Get in touch with us today.' --allow-root
               echo 'Created Contact page'
-            fi"
+            # Home page
+            if [ \$(wp post list --post_type=page --post_title="Home" --format=count --allow-root) -eq 0 ]; then
+              HOME_ID=\$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --porcelain --allow-root)
+              wp option update show_on_front page --allow-root
+              wp option update page_on_front \$HOME_ID --allow-root
+              echo 'Created Home page and set as front page'
+            else
+              HOME_ID=\$(wp post list --post_type=page --post_title="Home" --field=ID --allow-root | head -1)
+              wp option update show_on_front page --allow-root
+              wp option update page_on_front \$HOME_ID --allow-root
+              echo 'Home page exists, just updated front page setting'
+            fi            fi"
           
           echo "✅ WordPress content created successfully"
 
