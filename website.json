@@ -1,42 +1,46 @@
 {
-  "slug": "luminous-lens-photography",
-  "name": "Luminous Lens Photography",
-  "tagline": "Capturing Life's Moments Beautifully",
-  "industry": "Photography",
-  "brand": "#FF6F61",
-  "accent": "#2A9D8F",
-  "hero": "https://images.unsplash.com/photo-1514735572558-7d1d8a5f674e",
-  "description": "At Luminous Lens Photography, we specialize in capturing stunning imagery that tells your unique story. Whether it's a wedding, a family portrait, or a corporate event, our expert photographers are dedicated to providing you with beautiful, high-quality photos that you'll cherish for a lifetime.",
+  "slug": "boxing-club",
+  "name": "Victory Boxing Club",
+  "tagline": "Unleash Your Inner Champion",
+  "industry": "Fitness & Sports",
+  "brand": "#FF5733",
+  "accent": "#C70039",
+  "hero": "https://source.unsplash.com/dF5h5qbfw8o",
+  "description": "Victory Boxing Club is dedicated to empowering individuals through the art of boxing. Whether you're a beginner looking to learn the ropes or a seasoned fighter aiming to refine your skills, our expert trainers are here to guide you every step of the way.",
   "pages": [
+    {
+      "slug": "home",
+      "title": "Home",
+      "content": [
+        {
+          "heading": "Welcome to Victory Boxing Club",
+          "paragraphs": [
+            "At Victory Boxing Club, we believe in the transformative power of boxing. Our state-of-the-art facility provides the perfect environment for athletes of all levels to achieve their goals, whether it's fitness, competition, or self-defense."
+          ]
+        },
+        {
+          "heading": "Join Our Community",
+          "paragraphs": [
+            "Become part of a passionate community that supports each other in training. Our members inspire one another through shared stories of hard work and dedication, ensuring that your journey is guided by camaraderie."
+          ]
+        }
+      ]
+    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Story",
-          "paragraph": "Founded in 2015, Luminous Lens Photography emerged from a passion for capturing the beauty of life's fleeting moments. We believe that every picture has a story to tell, and our mission is to bring your story to life through our lenses."
+          "heading": "Our Mission",
+          "paragraphs": [
+            "Our mission at Victory Boxing Club is to inspire and empower our members to reach their full potential through boxing. We strive to create a welcoming and inclusive environment where everyone can achieve their fitness and competitive goals."
+          ]
         },
         {
           "heading": "Our Team",
-          "paragraph": "Our talented team of photographers brings a wealth of experience and creativity, ensuring that each session is tailored to your preferences and needs. We are dedicated to making your experience enjoyable and hassle-free."
-        }
-      ]
-    },
-    {
-      "slug": "portfolio",
-      "title": "Portfolio",
-      "content": [
-        {
-          "heading": "Weddings",
-          "paragraph": "Explore our collection of stunning wedding photographs, capturing the love, joy, and endless celebrations of newlywed couples."
-        },
-        {
-          "heading": "Family Portraits",
-          "paragraph": "Take a look at our engaging family portrait sessions, highlighting the connections between family members and the shared moments that matter the most."
-        },
-        {
-          "heading": "Corporate Events",
-          "paragraph": "View our work with corporate clients, where we bring professionalism and creativity to business events, conferences, and branding sessions."
+          "paragraphs": [
+            "Led by professional boxers and certified trainers, our dedicated team has extensive experience in training athletes of all levels. They provide individualized attention to ensure every member gets the support they need."
+          ]
         }
       ]
     },
@@ -45,20 +49,22 @@
       "title": "Services",
       "content": [
         {
-          "heading": "Wedding Photography",
-          "paragraph": "From engagement shoots to the big day, we offer comprehensive wedding packages to capture every special moment."
+          "heading": "Group Classes",
+          "paragraphs": [
+            "Our group classes range from beginner to advanced levels, focusing on technique, conditioning, and sparring. Join fellow boxing enthusiasts in a motivating environment."
+          ]
         },
         {
-          "heading": "Event Photography",
-          "paragraph": "Whether it’s a birthday party or a corporate event, our photographers will ensure that no moment goes undocumented."
+          "heading": "Personal Training",
+          "paragraphs": [
+            "Get personalized training sessions tailored to your specific goals. Our expert trainers work with you one-on-one to maximize your potential and improve your performance."
+          ]
         },
         {
-          "heading": "Portrait Photography",
-          "paragraph": "Personal or family portraits designed to reflect the unique essence of you and your loved ones."
-        },
-        {
-          "heading": "Product Photography",
-          "paragraph": "Showcase your products with eye-catching imagery that captures their features and benefits perfectly."
+          "heading": "Youth Programs",
+          "paragraphs": [
+            "We offer specialized programs for kids and teens, teaching fundamental boxing skills while promoting discipline, self-confidence, and fitness."
+          ]
         }
       ]
     },
@@ -67,8 +73,10 @@
       "title": "Testimonials",
       "content": [
         {
-          "heading": "What Our Clients Say",
-          "paragraph": "Read honest feedback from our satisfied clients who have trusted us to capture their most cherished moments."
+          "heading": "What Our Members Say",
+          "paragraphs": [
+            "Read inspiring stories from our community about their experiences at Victory Boxing Club."
+          ]
         }
       ]
     },
@@ -77,73 +85,69 @@
       "title": "Contact Us",
       "content": [
         {
-          "heading": "Get in Touch",
-          "paragraph": "Have questions or want to book a session with us? We would love to hear from you! Fill out the form below or reach out using our contact details."
+          "heading": "Get In Touch",
+          "paragraphs": [
+            "Have questions or want to learn more about our programs? Reach out to us, and we'll be happy to assist you."
+          ]
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/" },
-    { "label": "About", "url": "/about" },
-    { "label": "Portfolio", "url": "/portfolio" },
+    { "label": "Home", "url": "/home" },
+    { "label": "About Us", "url": "/about" },
     { "label": "Services", "url": "/services" },
     { "label": "Testimonials", "url": "/testimonials" },
     { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Emily Turner",
-      "role": "Bride",
-      "text": "Luminous Lens Photography captured our wedding day perfectly! The attention to detail and creativity blew us away.",
+      "name": "James Smith",
+      "role": "Amateur Boxer",
+      "text": "Victory Boxing Club has completely transformed my fitness journey. The trainers are knowledgeable and supportive!",
       "rating": 5
     },
     {
-      "name": "Daniel Smith",
-      "role": "Corporate Manager",
-      "text": "We hired them for our annual conference – the photos were professional and exceeded our expectations.",
+      "name": "Maria Patel",
+      "role": "Parent of A Young Boxer",
+      "text": "The youth program has been a game-changer for my son. He has gained confidence and made great friends.",
       "rating": 5
     },
     {
-      "name": "Laura Jones",
-      "role": "Mother of the Family",
-      "text": "Our family portraits are amazing! The photographers made us feel comfortable and captured beautiful moments.",
-      "rating": 5
+      "name": "Tom Johnson",
+      "role": "Fitness Enthusiast",
+      "text": "The group classes are intense yet fun! I love the community vibe and the motivation to push my limits.",
+      "rating": 4
     }
   ],
   "services": [
     {
-      "title": "Wedding Photography",
-      "description": "Capture your special day with our comprehensive wedding photography packages tailored to your needs.",
-      "icon": "📸"
+      "title": "Boxing Classes",
+      "description": "Dynamic boxing classes designed to enhance your skills, fitness, and coordination.",
+      "icon": "https://img.icons8.com/ios-filled/50/FF5733/boxing-glove.png"
     },
     {
-      "title": "Event Photography",
-      "description": "Whether it's a party, anniversary, or corporate event, we provide professional event photography services.",
-      "icon": "🎉"
+      "title": "Personal Training",
+      "description": "One-on-one training sessions focusing on your unique goals and boxing technique.",
+      "icon": "https://img.icons8.com/ios-filled/50/C70039/personal-trainer.png"
     },
     {
-      "title": "Portrait Photography",
-      "description": "From solo portraits to family groups, we create stunning photographs that reflect your personality.",
-      "icon": "👨‍👩‍👧"
-    },
-    {
-      "title": "Product Photography",
-      "description": "Showcase your products in the best light with our specialized product photography services.",
-      "icon": "🛍️"
+      "title": "Fight Preparation",
+      "description": "Comprehensive fight training programs designed for serious competitors.",
+      "icon": "https://img.icons8.com/ios-filled/50/FF5733/sports.png"
     }
   ],
   "contact": {
-    "phone": "123-456-7890",
-    "email": "info@luminouslens.com",
-    "address": "123 Photography St, Captivating City, CA 90210"
+    "phone": "(555) 012-3456",
+    "email": "info@victoryboxingclub.com",
+    "address": "123 Punch Lane, Boxingtown, BT 54321"
   },
   "footer": {
-    "description": "Thank you for visiting Luminous Lens Photography. We look forward to capturing your precious moments.",
+    "description": "Victory Boxing Club - Train hard, fight easy.",
     "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/luminouslens" },
-      { "platform": "Instagram", "url": "https://instagram.com/luminouslens" },
-      { "platform": "Twitter", "url": "https://twitter.com/luminouslens" }
+      { "platform": "Facebook", "url": "https://facebook.com/victoryboxingclub" },
+      { "platform": "Instagram", "url": "https://instagram.com/victoryboxingclub" },
+      { "platform": "Twitter", "url": "https://twitter.com/victoryboxingclub" }
     ]
   }
 }
