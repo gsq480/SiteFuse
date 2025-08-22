@@ -599,7 +599,7 @@ jobs:
                       <?php echo esc_html($website_data["description"] ?? "We are passionate professionals..."); ?>
                     </p>
                     <p class="text-gray-600 mb-8 leading-relaxed">
-                      <?php echo esc_html($website_data["pages"][0]["content"][0]["paragraph"] ?? "<?php 
+                      <?php echo esc_html($website_data["description"] ?? "<?php 
 $about_content = ""; 
 if (isset($website_data["pages"])) { 
   foreach ($website_data["pages"] as $page) { 
@@ -744,8 +744,7 @@ echo esc_html($about_content ?: "Our team combines expertise, innovation, and pe
               <h1 class="section-title text-center mb-16"><?php the_title(); ?></h1>
               <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <?php
-                $website_data = json_decode(file_get_contents(ABSPATH . 'website.json'), true);
-$services = $website_data['services'] ?? [];
+                $services = get_posts(['post_type' => 'service', 'numberposts' => -1]);
                 foreach ($services as $service) : setup_postdata($service); ?>
                   <div class="card">
                     <?php if (has_post_thumbnail($service->ID)) : ?>
