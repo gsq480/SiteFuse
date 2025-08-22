@@ -1,28 +1,34 @@
 {
-  "slug": "boxing-club",
-  "name": "Victory Boxing Club",
-  "tagline": "Unleash Your Inner Champion",
-  "industry": "Fitness & Sports",
-  "brand": "#FF5733",
-  "accent": "#C70039",
-  "hero": "https://source.unsplash.com/dF5h5qbfw8o",
-  "description": "Victory Boxing Club is dedicated to empowering individuals through the art of boxing. Whether you're a beginner looking to learn the ropes or a seasoned fighter aiming to refine your skills, our expert trainers are here to guide you every step of the way.",
+  "slug": "mechanic-canberra-bw",
+  "name": "Black and White Mechanic",
+  "tagline": "Your Friendly Neighborhood Mechanic",
+  "industry": "Automotive",
+  "brand": "#000000",
+  "accent": "#FFFFFF",
+  "hero": "https://source.unsplash.com/featured/?mechanic,car",
+  "description": "Black and White Mechanic is your trusted workshop in Canberra, committed to providing the highest quality of automotive repair and maintenance services. Our experienced technicians use state-of-the-art equipment and their extensive knowledge to keep your vehicle running smoothly and safely.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Victory Boxing Club",
-          "paragraphs": [
-            "At Victory Boxing Club, we believe in the transformative power of boxing. Our state-of-the-art facility provides the perfect environment for athletes of all levels to achieve their goals, whether it's fitness, competition, or self-defense."
-          ]
+          "heading": "Welcome to Black and White Mechanic",
+          "paragraph": "At Black and White Mechanic, we pride ourselves on delivering top-notch auto services in a transparent and honest environment. Our clients are our priority, and we ensure every vehicle that leaves our shop is safe and in perfect working condition."
         },
         {
-          "heading": "Join Our Community",
-          "paragraphs": [
-            "Become part of a passionate community that supports each other in training. Our members inspire one another through shared stories of hard work and dedication, ensuring that your journey is guided by camaraderie."
-          ]
+          "heading": "Why Choose Us?",
+          "paragraph": "With over a decade of experience in the automotive industry, our skilled team is dedicated to providing not only quality repairs but also guidance and education about your vehicle, ensuring long-term satisfaction."
+        }
+      ]
+    },
+    {
+      "slug": "services",
+      "title": "Services",
+      "content": [
+        {
+          "heading": "What We Offer",
+          "paragraph": "Our full suite of services includes everything from routine maintenance to emergency repairs, tailored to meet your specific needs."
         }
       ]
     },
@@ -32,51 +38,11 @@
       "content": [
         {
           "heading": "Our Mission",
-          "paragraphs": [
-            "Our mission at Victory Boxing Club is to inspire and empower our members to reach their full potential through boxing. We strive to create a welcoming and inclusive environment where everyone can achieve their fitness and competitive goals."
-          ]
+          "paragraph": "To be Canberra's premier automotive service provider by delivering reliable, honest, and efficient car care."
         },
         {
-          "heading": "Our Team",
-          "paragraphs": [
-            "Led by professional boxers and certified trainers, our dedicated team has extensive experience in training athletes of all levels. They provide individualized attention to ensure every member gets the support they need."
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "services",
-      "title": "Services",
-      "content": [
-        {
-          "heading": "Group Classes",
-          "paragraphs": [
-            "Our group classes range from beginner to advanced levels, focusing on technique, conditioning, and sparring. Join fellow boxing enthusiasts in a motivating environment."
-          ]
-        },
-        {
-          "heading": "Personal Training",
-          "paragraphs": [
-            "Get personalized training sessions tailored to your specific goals. Our expert trainers work with you one-on-one to maximize your potential and improve your performance."
-          ]
-        },
-        {
-          "heading": "Youth Programs",
-          "paragraphs": [
-            "We offer specialized programs for kids and teens, teaching fundamental boxing skills while promoting discipline, self-confidence, and fitness."
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "testimonials",
-      "title": "Testimonials",
-      "content": [
-        {
-          "heading": "What Our Members Say",
-          "paragraphs": [
-            "Read inspiring stories from our community about their experiences at Victory Boxing Club."
-          ]
+          "heading": "Meet the Team",
+          "paragraph": "Our team consists of experienced mechanics with a passion for cars. We ensure continuous training and up-to-date knowledge of the latest automotive technologies."
         }
       ]
     },
@@ -85,69 +51,81 @@
       "title": "Contact Us",
       "content": [
         {
-          "heading": "Get In Touch",
-          "paragraphs": [
-            "Have questions or want to learn more about our programs? Reach out to us, and we'll be happy to assist you."
-          ]
+          "heading": "Get in Touch",
+          "paragraph": "Ready to schedule an appointment or have questions? Reach out to us today!"
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/home" },
-    { "label": "About Us", "url": "/about" },
-    { "label": "Services", "url": "/services" },
-    { "label": "Testimonials", "url": "/testimonials" },
-    { "label": "Contact", "url": "/contact" }
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "Services",
+      "url": "/services"
+    },
+    {
+      "label": "About Us",
+      "url": "/about"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
   ],
   "testimonials": [
     {
-      "name": "James Smith",
-      "role": "Amateur Boxer",
-      "text": "Victory Boxing Club has completely transformed my fitness journey. The trainers are knowledgeable and supportive!",
+      "name": "John Doe",
+      "role": "Customer",
+      "text": "Black and White Mechanic treated my car with utmost care. They explained the process clearly and the repairs were completed on time!",
       "rating": 5
     },
     {
-      "name": "Maria Patel",
-      "role": "Parent of A Young Boxer",
-      "text": "The youth program has been a game-changer for my son. He has gained confidence and made great friends.",
+      "name": "Emily Smith",
+      "role": "Customer",
+      "text": "They are honest and trustworthy! I will never take my car anywhere else.",
       "rating": 5
-    },
-    {
-      "name": "Tom Johnson",
-      "role": "Fitness Enthusiast",
-      "text": "The group classes are intense yet fun! I love the community vibe and the motivation to push my limits.",
-      "rating": 4
     }
   ],
   "services": [
     {
-      "title": "Boxing Classes",
-      "description": "Dynamic boxing classes designed to enhance your skills, fitness, and coordination.",
-      "icon": "https://img.icons8.com/ios-filled/50/FF5733/boxing-glove.png"
+      "title": "Oil Change",
+      "description": "Regular oil changes are vital for your car’s performance. We use top-grade oil that suits your vehicle's specifications.",
+      "icon": "🔧"
     },
     {
-      "title": "Personal Training",
-      "description": "One-on-one training sessions focusing on your unique goals and boxing technique.",
-      "icon": "https://img.icons8.com/ios-filled/50/C70039/personal-trainer.png"
+      "title": "Brake Services",
+      "description": "Ensuring your brakes are functioning properly is essential for safety. Our team provides comprehensive brake inspections and repairs.",
+      "icon": "🛑"
     },
     {
-      "title": "Fight Preparation",
-      "description": "Comprehensive fight training programs designed for serious competitors.",
-      "icon": "https://img.icons8.com/ios-filled/50/FF5733/sports.png"
+      "title": "Tire Rotations",
+      "description": "Extend the life of your tires with regular rotations and alignments, optimizing performance and safety.",
+      "icon": "⚙️"
     }
   ],
   "contact": {
-    "phone": "(555) 012-3456",
-    "email": "info@victoryboxingclub.com",
-    "address": "123 Punch Lane, Boxingtown, BT 54321"
+    "phone": "(02) 1234 5678",
+    "email": "info@bwmechanic.com.au",
+    "address": "123 Mechanic Lane, Canberra, ACT 2600, Australia"
   },
   "footer": {
-    "description": "Victory Boxing Club - Train hard, fight easy.",
-    "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/victoryboxingclub" },
-      { "platform": "Instagram", "url": "https://instagram.com/victoryboxingclub" },
-      { "platform": "Twitter", "url": "https://twitter.com/victoryboxingclub" }
+    "description": "Black and White Mechanic - Honesty, Reliability, and Quality Service.",
+    "socialLinks": [
+      {
+        "platform": "Facebook",
+        "url": "https://facebook.com/bwmechanic"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://instagram.com/bwmechanic"
+      },
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/bwmechanic"
+      }
     ]
   }
 }
