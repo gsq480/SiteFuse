@@ -880,6 +880,22 @@ jobs:
           git commit -m "chore: add enhanced child theme '${SLUG}-child' with AI-generated content" || echo "No changes to commit"
           git push || echo "Push skipped"
 
+      - name: Deploy parent theme to Cloudways
+        run: |
+          set -euo pipefail
+          PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base"
+
+          # Deploy parent theme
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'"
+
+          rsync -avz \
+            -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" \
+            "$GITHUB_WORKSPACE/sitefuse-base/" \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/"
+
+          echo "✅ Deployed parent theme to: $PARENT_DEST/"
+
       - name: Deploy to Cloudways via rsync
         env:
           SLUG: ${{ steps.openai.outputs.slug }}
