@@ -1,24 +1,35 @@
 {
-  "slug": "kids-party-retail",
-  "name": "Party Pals",
-  "tagline": "Creating Magical Moments for Your Little Ones",
-  "industry": "retail",
-  "brand": "#FF5733",
-  "accent": "#C70039",
-  "hero": "https://images.unsplash.com/photo-1564503108280-a3a5e7c87b48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080",
-  "description": "Party Pals is your one-stop shop for all things kids' parties! We offer a wide variety of themed decorations, party supplies, and custom solutions to make your child's celebration unforgettable. Transform ordinary moments into extraordinary memories with us!",
+  "slug": "local-art-gallery",
+  "name": "Creative Canvas Gallery",
+  "tagline": "Where Art Meets Imagination",
+  "industry": "Art Gallery",
+  "brand": "#4A90E2",
+  "accent": "#D8C349",
+  "hero": "https://images.unsplash.com/photo-1581926621701-7c18f3b0dbf8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fGFydCUyMGdhbGxlcnl8ZW58MHx8fHwxNjIyMDI1MTQw&ixlib=rb-4.0.3&q=80&w=1080",
+  "description": "Creative Canvas Gallery is a vibrant art destination dedicated to showcasing contemporary artists and their stunning works. Our modern space is designed to inspire creativity and spark conversation, making it the perfect place to explore the beauty of art in a refreshing environment.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Party Pals!",
-          "paragraph": "We believe that every child's party should be a magical experience. From intricate decorations to fun party favors, our mission is to provide high-quality products that bring joy and excitement to your celebrations."
+          "heading": "Welcome to Creative Canvas",
+          "paragraphs": [
+            "Discover a unique collection of contemporary art at Creative Canvas Gallery. We celebrate local talent and provide a platform for artists to display their work in innovative ways.",
+            "Join us for our upcoming exhibitions and experience the heartbeat of our creative community."
+          ]
         },
         {
-          "heading": "Browse Our Collections",
-          "paragraph": "Explore our extensive range of themed parties, from princesses and superheroes to dinosaurs and outer space, each curated to ignite your child's imagination."
+          "heading": "Our Mission",
+          "paragraphs": [
+            "Our gallery is committed to supporting emerging artists and enriching our local culture through art. We aim to create an inclusive space that highlights diverse perspectives and artistic expressions."
+          ]
+        },
+        {
+          "heading": "Visit Us",
+          "paragraphs": [
+            "Explore our gallery located in the heart of downtown. Immerse yourself in our curated collections, attend workshops, and participate in community events."
+          ]
         }
       ]
     },
@@ -28,39 +39,51 @@
       "content": [
         {
           "heading": "Our Story",
-          "paragraph": "Established in 2020, Party Pals was born from a love for celebrations and the joy they bring to children. Our passionate team is dedicated to creating the ultimate party experience that leaves lasting impressions and smiles."
+          "paragraphs": [
+            "Founded in 2020, Creative Canvas Gallery was born from a passion for visual arts and a desire to connect people through creativity. Our gallery serves as a beacon for artists and art lovers alike."
+          ]
         },
         {
-          "heading": "Why Choose Us?",
-          "paragraph": "At Party Pals, we pride ourselves on our exceptional customer service, unique product offerings, and commitment to quality. Your child's happiness is our top priority."
+          "heading": "Meet Our Team",
+          "paragraphs": [
+            "Our dedicated team of art curators and creative minds works tirelessly to elevate the voice of local artists. We strive to foster an engaging space for both artists and visitors."
+          ]
         }
       ]
     },
     {
-      "slug": "shop",
-      "title": "Shop",
+      "slug": "exhibitions",
+      "title": "Exhibitions",
       "content": [
         {
-          "heading": "Explore Our Products",
-          "paragraph": "From decorations and tableware to balloons and party bags, we offer a vast selection of products that cater to all age groups and themes. Find everything you need to throw the perfect party under one roof!"
+          "heading": "Current Exhibitions",
+          "paragraphs": [
+            "Explore our latest exhibitions featuring talented local artists. Each showcase is thoughtfully curated to highlight unique artistic voices and stimulate dialogue."
+          ]
         },
         {
-          "heading": "Best Sellers",
-          "paragraph": "Check out our best-selling items that customers love! These popular products are tried and tested, ensuring you pick items that other parents adore."
+          "heading": "Upcoming Events",
+          "paragraphs": [
+            "Stay tuned for details on upcoming exhibitions and events such as artist talks, workshops, and community gatherings."
+          ]
         }
       ]
     },
     {
       "slug": "services",
-      "title": "Our Services",
+      "title": "Services",
       "content": [
         {
-          "heading": "Custom Party Planning",
-          "paragraph": "Let our experienced team assist you in planning the most spectacular party tailored to your child's interests and preferences. We offer consultation services to make your vision come to life!"
+          "heading": "Art Consultation",
+          "paragraphs": [
+            "Our expert team offers personalized consultation services to help you select the perfect artworks for your space, whether it’s a home, office, or public installation."
+          ]
         },
         {
-          "heading": "Delivery & Set-Up",
-          "paragraph": "Need help setting up? Our delivery and set-up service ensures that your party area is seamlessly transformed before your guests arrive, allowing you to enjoy the festivities stress-free."
+          "heading": "Workshops",
+          "paragraphs": [
+            "Join one of our art workshops led by talented instructors. Experience hands-on learning and unleash your inner artist in a friendly and supportive environment."
+          ]
         }
       ]
     },
@@ -70,66 +93,57 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "Have questions? We're here to help! Reach out to us via phone or email, or visit our store to receive personalized assistance with all your party needs."
+          "paragraphs": [
+            "We’d love to hear from you! Reach out to us for inquiries about exhibitions, events, or any questions."
+          ]
         }
       ]
     }
   ],
   "navigation": [
     { "label": "Home", "url": "/home" },
-    { "label": "About Us", "url": "/about" },
-    { "label": "Shop", "url": "/shop" },
+    { "label": "About", "url": "/about" },
+    { "label": "Exhibitions", "url": "/exhibitions" },
     { "label": "Services", "url": "/services" },
     { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Jessica Taylor",
-      "role": "Happy Parent",
-      "text": "Party Pals made my daughter's birthday unforgettable! The decorations were beautiful, and the service was exceptional.",
+      "name": "Emily Johnson",
+      "role": "Local Artist",
+      "text": "Creative Canvas Gallery provided me the platform to showcase my work and connect with art lovers. The supportive environment has truly inspired my creativity!",
       "rating": 5
     },
     {
-      "name": "Mark Johnson",
-      "role": "Birthday Planner",
-      "text": "I've worked with many party supply companies, and Party Pals clearly stands out. Their quality and attention to detail are unmatched.",
-      "rating": 5
-    },
-    {
-      "name": "Linda Green",
-      "role": "Satisfied Customer",
-      "text": "From the planning to the execution, everything was perfect. I recommend Party Pals to anyone looking to throw a fantastic party!",
-      "rating": 5
+      "name": "Michael Green",
+      "role": "Art Enthusiast",
+      "text": "A refreshing place to experience contemporary art. The exhibitions are thoughtfully curated, and the staff is incredibly knowledgeable.",
+      "rating": 4
     }
   ],
   "services": [
     {
-      "title": "Themed Party Supplies",
-      "description": "Discover a wide range of party supplies tailored to different themes including decor, gift bags, and more!",
-      "icon": "🎈"
+      "title": "Art Consultation",
+      "description": "Personalized guidance to choose the right artwork for residential or commercial spaces.",
+      "icon": "🖼️"
     },
     {
-      "title": "Event Consultation",
-      "description": "Get expert advice on planning and executing the perfect celebration for your child.",
-      "icon": "🗓️"
-    },
-    {
-      "title": "Custom Decorations",
-      "description": "We offer customized decoration services that match your child's unique party theme.",
+      "title": "Art Workshops",
+      "description": "Hands-on workshops led by experienced artists for all skill levels.",
       "icon": "🎨"
     }
   ],
   "contact": {
-    "phone": "+1-800-555-0199",
-    "email": "info@partypals.com",
-    "address": "123 Party Lane, Fun City, CA 90210"
+    "phone": "+1 555-0123",
+    "email": "info@creativecanvasgallery.com",
+    "address": "123 Art Lane, Downtown, CA 90210"
   },
   "footer": {
-    "description": "Party Pals is dedicated to creating unforgettable experiences for children through beautiful and quality party supplies. Join us in celebrating every child's special day!",
+    "description": "Creative Canvas Gallery - Inspiring creativity in every brush stroke.",
     "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/partypals" },
-      { "platform": "Instagram", "url": "https://instagram.com/partypals" },
-      { "platform": "Twitter", "url": "https://twitter.com/partypals" }
+      { "platform": "Facebook", "url": "https://facebook.com/creativecanvasgallery" },
+      { "platform": "Instagram", "url": "https://instagram.com/creativecanvasgallery" },
+      { "platform": "Twitter", "url": "https://twitter.com/creativecngallery" }
     ]
   }
 }
