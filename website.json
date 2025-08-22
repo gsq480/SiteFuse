@@ -1,26 +1,13 @@
 {
-  "slug": "canberra-cycling-club",
-  "name": "Canberra Cycling Club",
-  "tagline": "Pedal Together, Achieve Together!",
+  "slug": "canberra-mountain-bike-club",
+  "name": "Canberra Mountain Bike Club",
+  "tagline": "Ride the Trails, Conquer the Hills",
   "industry": "Sports & Recreation",
-  "brand": "#0033cc",
-  "accent": "#000000",
-  "hero": "https://images.unsplash.com/photo-1528001735830-17c4f7c7c3f2",
-  "description": "The Canberra Cycling Club is a vibrant community of cycling enthusiasts dedicated to promoting the joy and benefits of cycling. We offer a welcoming environment for cyclists of all levels, from beginners to seasoned pros. Join us for rides, events, and training sessions that foster growth and camaraderie.",
+  "brand": "#C8102E",
+  "accent": "#FFFFFF",
+  "hero": "https://images.unsplash.com/photo-1528877133780-282e89b65e5f",
+  "description": "The Canberra Mountain Bike Club is home to mountain biking enthusiasts of all levels. Join us to explore stunning trails, improve your skills, and connect with a community committed to adventure and the great outdoors.",
   "pages": [
-    {
-      "slug": "home",
-      "title": "Home",
-      "content": [
-        {
-          "heading": "Welcome to Canberra Cycling Club",
-          "paragraphs": [
-            "Whether you’re a casual rider or a competitive athlete, our club offers various opportunities for everyone. Explore our club ride schedules, training sessions, and events to involve yourself in the cycling community.",
-            "Join us today and experience the thrill of cycling with fellow enthusiasts!"
-          ]
-        }
-      ]
-    },
     {
       "slug": "about",
       "title": "About Us",
@@ -28,50 +15,50 @@
         {
           "heading": "Our Mission",
           "paragraphs": [
-            "At Canberra Cycling Club, we strive to promote a healthy lifestyle through cycling while creating an inclusive community for cyclists of all abilities. Our mission extends beyond just riding; we aim to build friendships that last a lifetime."
+            "At the Canberra Mountain Bike Club, we strive to create an inclusive and passionate community of mountain biking enthusiasts. Whether you’re a beginner or a seasoned pro, our goal is to provide a supportive environment that fosters growth, camaraderie, and adventure."
           ]
         },
         {
           "heading": "Our History",
           "paragraphs": [
-            "Established in 2005, the Canberra Cycling Club has grown from a small group of passionate cyclists to one of the largest cycling clubs in the region. We’ve hosted numerous events and training camps, fostering not just skill development but also lifelong friendships."
+            "Founded in 2005, the Canberra Mountain Bike Club has grown from a small group of local riders into a thriving community. Over the years, we've worked hard to promote mountain biking, improve local trails, and build relationships with local land managers."
           ]
         }
       ]
     },
     {
-      "slug": "services",
-      "title": "Services",
+      "slug": "events",
+      "title": "Events",
       "content": [
         {
-          "heading": "Club Rides",
+          "heading": "Upcoming Rides",
           "paragraphs": [
-            "Join our weekly club rides across various skill levels. Guided by experienced riders, these sessions ensure safety and support for all participants."
+            "Join us for our weekly group rides every Saturday morning. Explore Canberra's breathtaking trails led by knowledgeable guides.",
+            "Don't miss our annual mountain bike race! It's a fun and competitive event that welcomes bikers of all skills and ages."
           ]
         },
         {
-          "heading": "Training and Workshops",
+          "heading": "Workshops",
           "paragraphs": [
-            "We offer training sessions focusing on cycling techniques, endurance building, and safety workshops to help cyclists enhance their skills and confidence."
-          ]
-        },
-        {
-          "heading": "Events and Races",
-          "paragraphs": [
-            "Participate in our regular events and races throughout the year. Compete with club members or enjoy the friendly atmosphere of our themed rides."
+            "Enhance your riding skills with our monthly workshops. Topics cover everything from bike maintenance to advanced riding techniques."
           ]
         }
       ]
     },
     {
-      "slug": "testimonials",
-      "title": "Testimonials",
+      "slug": "membership",
+      "title": "Membership",
       "content": [
         {
-          "heading": "What Our Members Say",
+          "heading": "Join the Club!",
           "paragraphs": [
-            "“The Canberra Cycling Club has changed my life! I've met amazing people and improved my cycling skills tremendously.” - Sarah J., Club Member",
-            "“A great community that encourages everyone, regardless of their cycling ability!” - Matt K., Competitive Cyclist"
+            "Become a member of the Canberra Mountain Bike Club and unlock a variety of benefits including access to exclusive rides, discounts at local bike shops, and the camaraderie of like-minded individuals."
+          ]
+        },
+        {
+          "heading": "Membership Fees",
+          "paragraphs": [
+            "Annual membership is $50, which helps support local trail maintenance and club activities. Join us today and start making the most of your rides!"
           ]
         }
       ]
@@ -83,7 +70,7 @@
         {
           "heading": "Get in Touch",
           "paragraphs": [
-            "We'd love to hear from you! If you have any questions or want to know more about our club, feel free to reach out."
+            "We’d love to hear from you! Whether you have a question about events, membership, or anything else, feel free to reach out."
           ]
         }
       ]
@@ -99,12 +86,12 @@
       "url": "/about"
     },
     {
-      "label": "Services",
-      "url": "/services"
+      "label": "Events",
+      "url": "/events"
     },
     {
-      "label": "Testimonials",
-      "url": "/testimonials"
+      "label": "Membership",
+      "url": "/membership"
     },
     {
       "label": "Contact",
@@ -113,54 +100,49 @@
   ],
   "testimonials": [
     {
-      "name": "Sarah Johnson",
+      "name": "James Smith",
       "role": "Club Member",
-      "text": "The Canberra Cycling Club has changed my life! I've met amazing people and improved my cycling skills tremendously.",
+      "text": "Being part of the Canberra Mountain Bike Club has been a life-changing experience for me. I've made great friends and improved my skills tremendously!",
       "rating": 5
     },
     {
-      "name": "Matt Kelly",
-      "role": "Competitive Cyclist",
-      "text": "A great community that encourages everyone, regardless of their cycling ability!",
-      "rating": 4
+      "name": "Emily Johnson",
+      "role": "Event Organizer",
+      "text": "Our events are so much fun! The energy and enthusiasm from fellow riders is contagious, making every ride a memorable adventure.",
+      "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Club Rides",
-      "description": "Join our weekly club rides across various skill levels. Guided by experienced riders, these sessions ensure safety and support for all participants.",
-      "icon": "🚴‍♂️"
+      "title": "Guided Rides",
+      "description": "Explore some of Canberra's best trails with our experienced guides who know the ins and outs of the local area.",
+      "icon": "🚴"
     },
     {
-      "title": "Training and Workshops",
-      "description": "We offer training sessions focusing on cycling techniques, endurance building, and safety workshops to help cyclists enhance their skills and confidence.",
-      "icon": "🏋️‍♀️"
-    },
-    {
-      "title": "Events and Races",
-      "description": "Participate in our regular events and races throughout the year. Compete with club members or enjoy the friendly atmosphere of our themed rides.",
-      "icon": "🏆"
+      "title": "Trail Maintenance",
+      "description": "We actively work to maintain and improve local mountain biking trails, ensuring their longevity and quality for all riders.",
+      "icon": "🔨"
     }
   ],
   "contact": {
-    "phone": "+61 412 345 678",
-    "email": "info@canberracyclingclub.org",
-    "address": "123 Cycling Ave, Canberra, ACT, Australia"
+    "phone": "+61 2 1234 5678",
+    "email": "info@canberramtbclub.com.au",
+    "address": "123 Trailhead Ave, Canberra, ACT 2600, Australia"
   },
   "footer": {
-    "description": "Join us at Canberra Cycling Club and be a part of a wonderful cycling community!",
+    "description": "Join us today and become part of the Canberra Mountain Bike Club family.",
     "social_links": [
       {
         "platform": "Facebook",
-        "url": "https://facebook.com/canberracyclingclub"
+        "url": "https://facebook.com/canberramtbclub"
       },
       {
         "platform": "Instagram",
-        "url": "https://instagram.com/canberracyclingclub"
+        "url": "https://instagram.com/canberramtbclub"
       },
       {
         "platform": "Twitter",
-        "url": "https://twitter.com/canberracyclingclub"
+        "url": "https://twitter.com/canberramtbclub"
       }
     ]
   }
