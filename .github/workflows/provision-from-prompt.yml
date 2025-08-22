@@ -530,36 +530,23 @@ jobs:
 
           # Generate AI-designed front page
           echo "<?php get_header(); ?>" > child/front-page.php
-          cat >> child/front-page.php <<'FRONTPAGE'
+          cat >> child/front-page.php <<FRONTPAGE
           <?php
-          $website_data = json_decode(file_get_contents(ABSPATH . 'website.json'), true);
-          
-          // Prioritize individual sections over homepageLayout (which may have placeholders)
-          $heroHTML = $website_data['heroSection']['customHTML'] ?? '';
-          $customSections = $website_data['customSections'] ?? [];
-          
-          if (!empty($heroHTML) || !empty($customSections)) {
-            // Use individual sections (real HTML)
-            if (!empty($heroHTML)) {
-              echo wp_kses_post($heroHTML);
-            }
-            foreach ($customSections as $section) {
-              $sectionHTML = $section['html'] ?? '';
-              if (!empty($sectionHTML)) {
-                echo wp_kses_post($sectionHTML);
-              }
-            }
-          } else {
-            // Fallback to homepageLayout
-            $homepageLayout = $website_data['homepageLayout'] ?? '';
-            if (!empty($homepageLayout)) {
-              echo wp_kses_post($homepageLayout);
+          \$website_data = json_decode(file_get_contents(ABSPATH . 'website.json'), true);
+          \$heroHTML = \$website_data['heroSection']['customHTML'] ?? '';
+          if (!empty(\$heroHTML)) {
+            echo \$heroHTML;
+          }
+          \$customSections = \$website_data['customSections'] ?? [];
+          foreach (\$customSections as \$section) {
+            \$sectionHTML = \$section['html'] ?? '';
+            if (!empty(\$sectionHTML)) {
+              echo \$sectionHTML;
             }
           }
           ?>
-          FRONTPAGE
-          echo "<?php get_footer(); ?>" >> child/front-page.php          <?php get_header(); ?>
-          <main id="main" class="py-20">
+FRONTPAGE
+          echo "<?php get_footer(); ?>" >> child/front-page.php          <main id="main" class="py-20">
             <div class="container">
               <div class="max-w-4xl mx-auto">
                 <h1 class="section-title text-center mb-8"><?php the_title(); ?></h1>
