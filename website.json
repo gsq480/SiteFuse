@@ -1,116 +1,71 @@
 {
-  "slug": "artisanal-chocolate-boutique",
-  "name": "ChocoDelight Boutique",
-  "tagline": "Indulge in Artisan Excellence",
-  "industry": "Food & Beverage",
-  "brand": "#4B3D86",
-  "accent": "#F8E3A0",
-  "hero": "https://images.unsplash.com/photo-1600548442976-f343e121f119",
-  "description": "ChocoDelight Boutique specializes in creating exquisite handcrafted truffles and premium cocoa blends. Our passion for chocolate and commitment to quality ensures every bite delivers a delightful experience tailored to the chocolate lover in you.",
-  "pages": [
+  "slug": "kids-party-catering",
+  "name": "Little Chefs Party Catering",
+  "tagline": "Creating Magical Moments Through Delicious Food",
+  "industry": "Catering",
+  "designTheme": "playful",
+  "colorPalette": {
+    "primary": "#FF6F61",
+    "secondary": "#6BBFBD",
+    "accent": "#FFC107",
+    "background": "#FCE4EC",
+    "text": "#37474F"
+  },
+  "typography": {
+    "headingFont": "'Poppins', sans-serif",
+    "bodyFont": "'Roboto', sans-serif",
+    "accentFont": "'Lobster', cursive"
+  },
+  "heroSection": {
+    "customHTML": "<div class='relative bg-cover bg-center h-screen' style='background-image: url(https://example.com/kids-party-bg.jpg);'>\n  <div class='absolute inset-0 bg-black opacity-50'></div>\n  <div class='flex items-center justify-center h-full'>\n    <div class='text-white text-center'>\n      <h1 class='text-5xl font-bold mb-4'>Little Chefs Party Catering</h1>\n      <p class='text-xl mb-8'>Unforgettable Parties Filled with Flavor!</p>\n      <a href='#services' class='bg-yellow-400 text-black font-semibold py-2 px-6 rounded-full shadow-md hover:bg-yellow-500 transition ease-in-out duration-200'>Explore Our Services</a>\n    </div>\n  </div>\n</div>"
+  },
+  "customSections": [
     {
-      "slug": "about",
-      "title": "About Us",
-      "content": [
-        {
-          "heading": "Our Story",
-          "paragraph": "At ChocoDelight, we believe that chocolate is not just a treat; it's an experience. Founded in 2021 by a group of chocolate enthusiasts, we craft each product with love, using only the finest ingredients sourced from sustainable farms."
-        },
-        {
-          "heading": "Our Philosophy",
-          "paragraph": "We are committed to artisanal craftsmanship and ethical sourcing. Our chocolates are crafted with passion and respect for the environment, ensuring every bite supports our values."
-        }
-      ]
+      "title": "What We Offer",
+      "html": "<div class='py-16 px-4 text-center bg-white'>\n  <h2 class='text-3xl font-semibold'>Delicious Catering Packages</h2>\n  <div class='grid grid-cols-1 md:grid-cols-3 gap-6 mt-8'>\n    <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n      <h3 class='text-xl font-bold'>Mini Muffin & Cake Pops</h3>\n      <p class='mt-2'>Affordably delightful treats for all ages!</p>\n    </div>\n    <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n      <h3 class='text-xl font-bold'>Tasty Finger Foods</h3>\n      <p class='mt-2'>Enjoyable bites, easy to eat, and fun!</p>\n    </div>\n    <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n      <h3 class='text-xl font-bold'>Themed Birthday Cakes</h3>\n      <p class='mt-2'>Customize your cake for a magical experience!</p>\n    </div>\n  </div>\n</div>"
     },
     {
-      "slug": "services",
-      "title": "Our Chocolates",
-      "content": [
-        {
-          "heading": "Handcrafted Truffles",
-          "paragraph": "Explore our selection of handcrafted truffles, each uniquely flavored and beautifully presented for an unforgettable gift or personal indulgence."
-        },
-        {
-          "heading": "Premium Cocoa Blends",
-          "paragraph": "Savor the richness of our premium cocoa blends, perfect for creating gourmet hot chocolate or adding a touch of luxury to your favorite dessert."
-        },
-        {
-          "heading": "Custom Chocolate Creations",
-          "paragraph": "Looking for something special? Our bespoke chocolate service allows you to create unique truffles tailored to your taste or event theme."
-        }
-      ]
+      "title": "Why Choose Us?",
+      "html": "<div class='py-16 px-4 text-center bg-pink-100'>\n  <h2 class='text-3xl font-semibold'>A Recipe for Fun!</h2>\n  <p class='mt-4 text-lg'>We specialize in customizing menus for your child's unique taste and party theme.</p>\n  <ul class='mt-8 space-y-4'>\n    <li class='text-left'><span class='font-semibold'>✔ Fresh Ingredients</span> - We only use the freshest of ingredients to ensure quality.</li>\n    <li class='text-left'><span class='font-semibold'>✔ Creative Presentation</span> - Our food looks as good as it tastes!</li>\n    <li class='text-left'><span class='font-semibold'>✔ Responsive Service</span> - Our team is there to cater to your needs.</li>\n  </ul>\n</div>"
     },
     {
-      "slug": "gallery",
-      "title": "Gallery",
-      "content": [
-        {
-          "heading": "Visual Delight",
-          "paragraph": "Our gallery showcases the artistry behind each chocolate creation. Immerse yourself in our world of flavors through stunning visuals."
-        }
-      ]
-    },
-    {
-      "slug": "contact",
-      "title": "Contact Us",
-      "content": [
-        {
-          "heading": "Get in Touch",
-          "paragraph": "Have questions? We'd love to hear from you! Reach out to us to discuss orders, events, or simply to share your love of chocolate."
-        }
-      ]
-    }
-  ],
-  "navigation": [
-    { "label": "Home", "url": "/" },
-    { "label": "About", "url": "/about" },
-    { "label": "Our Chocolates", "url": "/services" },
-    { "label": "Gallery", "url": "/gallery" },
-    { "label": "Contact", "url": "/contact" }
-  ],
-  "testimonials": [
-    {
-      "name": "Jane Doe",
-      "role": "Chocolate Connoisseur",
-      "text": "ChocoDelight's truffles are simply divine! Each bite is a perfect balance of flavor and texture.",
-      "rating": 5
-    },
-    {
-      "name": "John Smith",
-      "role": "Food Blogger",
-      "text": "I was blown away by the quality and creativity of the chocolate blends. Truly a gourmet experience!",
-      "rating": 5
+      "title": "Happy Customers",
+      "html": "<div class='py-16 px-4 text-center'>\n  <h2 class='text-3xl font-semibold'>What Parents Say</h2>\n  <div class='grid grid-cols-1 md:grid-cols-2 gap-8 mt-8'>\n    <div class='bg-white p-5 rounded-lg shadow-lg'>\n      <p class='italic'>\"The food was a hit! The kids loved the mini muffin decoration, and it brightened our party!\"</p>\n      <p class='mt-2 font-bold'>- Sarah M.</p>\n    </div>\n    <div class='bg-white p-5 rounded-lg shadow-lg'>\n      <p class='italic'>\"Fantastic service and delicious food! It made my son's birthday even more special!\"</p>\n      <p class='mt-2 font-bold'>- John D.</p>\n    </div>\n  </div>\n</div>"
     }
   ],
   "services": [
     {
-      "title": "Luxury Chocolate Boxes",
-      "description": "Curated collections of our finest chocolates to make the perfect gift. Each box showcases the best of our artisanal creations.",
-      "icon": "🎁"
+      "title": "Themed Catering Services",
+      "description": "Customize your party menu around your theme (e.g. unicorns, dinosaurs, etc.). Perfect for kids of all ages!"
     },
     {
-      "title": "Chocolate Workshops",
-      "description": "Join our interactive workshops to learn the art of chocolate making and create your own delectable treats.",
-      "icon": "👩‍🍳"
+      "title": "Delivery and Setup",
+      "description": "We provide delivery and setup, so you can relax and enjoy the party!"
     },
     {
-      "title": "Corporate Gifts",
-      "description": "Impress your clients and employees with our personalized corporate gift offerings tailored to your business needs.",
-      "icon": "🏢"
+      "title": "Event Coordination",
+      "description": "Stress-free planning with our expert event coordinators." 
     }
   ],
-  "servicesPageLayout": "<div class='bg-gradient-to-r from-indigo-300 to-yellow-200 py-12'><h1 class='text-3xl font-bold text-center'>Our Chocolates</h1><div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8'> <div class='bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105'><h2 class='font-semibold text-xl'>Handcrafted Truffles</h2><p class='mt-2 text-gray-600'>Explore our selection of beautifully crafted truffles, each bursting with flavor and unique designs.</p> </div><div class='bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105'><h2 class='font-semibold text-xl'>Premium Cocoa Blends</h2><p class='mt-2 text-gray-600'>Savor our rich cocoa blends, made from the finest ingredients for an incomparable chocolate experience.</p> </div><div class='bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105'><h2 class='font-semibold text-xl'>Custom Chocolate Creations</h2><p class='mt-2 text-gray-600'>Let us help you create a unique chocolate experience for your special event.</p> </div></div></div>",
+  "testimonials": [
+    {
+      "name": "Emily R.",
+      "feedback": "Little Chefs made my daughter's party unforgettable! The themed cake was gorgeous and delicious!"
+    },
+    {
+      "name": "Brian K.",
+      "feedback": "Amazing service and happy kids! We loved the finger foods!"
+    }
+  ],
   "contact": {
-    "phone": "(123) 456-7890",
-    "email": "info@chocodelight.com",
-    "address": "123 Chocolate Avenue, Sweet City, SC 12345"
+    "phone": "+1 234 567 8900",
+    "email": "info@littlechefscatering.com",
+    "address": "123 Fun Street, Kidsville, KK 90210",
+    "contactFormHTML": "<form class='space-y-4'>\n  <input type='text' placeholder='Your Name' class='p-2 border border-gray-300 rounded-md w-full' required>\n  <input type='email' placeholder='Your Email' class='p-2 border border-gray-300 rounded-md w-full' required>\n  <textarea rows='4' placeholder='Your Message' class='p-2 border border-gray-300 rounded-md w-full' required></textarea>\n  <button type='submit' class='bg-FF6F61 text-white py-2 px-4 rounded-md hover:bg-FF8160'>Send Message</button>\n</form>"
   },
   "footer": {
-    "description": "ChocoDelight Boutique - Where Every Bite is a Delight.",
-    "socialLinks": [
-      { "platform": "Facebook", "url": "https://facebook.com/chocodelight" },
-      { "platform": "Instagram", "url": "https://instagram.com/chocodelight" },
-      { "platform": "Twitter", "url": "https://twitter.com/chocodelight" }
-    ]
-  }
+    "html": "<div class='bg-gray-800 text-white py-6 text-center'>\n  <p>&copy; 2023 Little Chefs Party Catering. All rights reserved.</p>\n  <div class='flex justify-center space-x-4 mt-2'>\n    <a href='#' class='hover:text-yellow-400'>Facebook</a>\n    <a href='#' class='hover:text-yellow-400'>Instagram</a>\n  </div>\n</div>"
+  },
+  "homepageLayout": "<div class='container mx-auto'>\n  <section id='hero'>\n    <!-- Hero Section -->\n    <div class='relative bg-cover bg-center h-screen' style='background-image: url(https://example.com/kids-party-bg.jpg);'>\n      <div class='absolute inset-0 bg-black opacity-50'></div>\n      <div class='flex items-center justify-center h-full'>\n        <div class='text-white text-center'>\n          <h1 class='text-5xl font-bold mb-4'>Little Chefs Party Catering</h1>\n          <p class='text-xl mb-8'>Unforgettable Parties Filled with Flavor!</p>\n          <a href='#services' class='bg-yellow-400 text-black font-semibold py-2 px-6 rounded-full shadow-md hover:bg-yellow-500 transition ease-in-out duration-200'>Explore Our Services</a>\n        </div>\n      </div>\n    </div>\n  </section>\n\n  <section id='about' class='py-16 px-4 text-center bg-white'>\n    <h2 class='text-3xl font-semibold'>Delicious Catering Packages</h2>\n    <div class='grid grid-cols-1 md:grid-cols-3 gap-6 mt-8'>\n      <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n        <h3 class='text-xl font-bold'>Mini Muffin & Cake Pops</h3>\n        <p class='mt-2'>Affordably delightful treats for all ages!</p>\n      </div>\n      <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n        <h3 class='text-xl font-bold'>Tasty Finger Foods</h3>\n        <p class='mt-2'>Enjoyable bites, easy to eat, and fun!</p>\n      </div>\n      <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n        <h3 class='text-xl font-bold'>Themed Birthday Cakes</h3>\n        <p class='mt-2'>Customize your cake for a magical experience!</p>\n      </div>\n    </div>\n  </section>\n\n  <section id='testimonials' class='py-16 px-4 text-center'>\n    <h2 class='text-3xl font-semibold'>What Parents Say</h2>\n    <div class='grid grid-cols-1 md:grid-cols-2 gap-8 mt-8'>\n      <div class='bg-white p-5 rounded-lg shadow-lg'>\n        <p class='italic'>\"The food was a hit! The kids loved the mini muffin decoration, and it brightened our party!\"</p>\n        <p class='mt-2 font-bold'>- Sarah M.</p>\n      </div>\n      <div class='bg-white p-5 rounded-lg shadow-lg'>\n        <p class='italic'>\"Fantastic service and delicious food! It made my son's birthday even more special!\"</p>\n        <p class='mt-2 font-bold'>- John D.</p>\n      </div>\n    </div>\n  </section>\n\n  <section id='contact' class='py-16 px-4 text-center bg-pink-100'>\n    <h2 class='text-3xl font-semibold'>Get in Touch!</h2>\n    <p class='mt-4'>We’d love to hear from you! Fill out the form below to get started.</p>\n    <div class='mt-8'>\n      <form class='space-y-4'>\n        <input type='text' placeholder='Your Name' class='p-2 border border-gray-300 rounded-md w-full' required>\n        <input type='email' placeholder='Your Email' class='p-2 border border-gray-300 rounded-md w-full' required>\n        <textarea rows='4' placeholder='Your Message' class='p-2 border border-gray-300 rounded-md w-full' required></textarea>\n        <button type='submit' class='bg-FF6F61 text-white py-2 px-4 rounded-md hover:bg-FF8160'>Send Message</button>\n      </form>\n    </div>\n  </section>\n\n  <footer>\n    <div class='bg-gray-800 text-white py-6 text-center'>\n      <p>&copy; 2023 Little Chefs Party Catering. All rights reserved.</p>\n      <div class='flex justify-center space-x-4 mt-2'>\n        <a href='#' class='hover:text-yellow-400'>Facebook</a>\n        <a href='#' class='hover:text-yellow-400'>Instagram</a>\n      </div>\n    </div>\n  </footer>\n</div>",
+  "servicesPageLayout": "<div class='container mx-auto'>\n  <section id='services' class='py-16 px-4 text-center'>\n    <h2 class='text-4xl font-semibold mb-8'>Our Services</h2>\n    <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>\n      {{#each services}}  \n      <div class='bg-gray-100 p-5 rounded-lg shadow-lg'>\n        <h3 class='text-2xl font-bold'>{{this.title}}</h3>\n        <p class='mt-2'>{{this.description}}</p>\n      </div>\n      {{/each}}\n    </div>\n  </section>\n</div>"
 }
