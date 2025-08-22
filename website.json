@@ -1,49 +1,22 @@
 {
-  "slug": "cozy-mountain-cabins",
-  "name": "Mountain Bliss Cabins",
-  "tagline": "Your Escape to Rustic Comfort",
-  "industry": "real-estate",
-  "brand": "#8B4513",
-  "accent": "#FFD700",
-  "hero": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
-  "description": "At Mountain Bliss Cabins, we offer a selection of charming mountain cabins nestled in picturesque surroundings. Experience breathtaking alpine views and the warmth of rustic designs that turn your getaway into a cozy retreat.",
+  "slug": "canberra-cycling-club",
+  "name": "Canberra Cycling Club",
+  "tagline": "Pedal Together, Achieve Together!",
+  "industry": "Sports & Recreation",
+  "brand": "#0033cc",
+  "accent": "#000000",
+  "hero": "https://images.unsplash.com/photo-1528001735830-17c4f7c7c3f2",
+  "description": "The Canberra Cycling Club is a vibrant community of cycling enthusiasts dedicated to promoting the joy and benefits of cycling. We offer a welcoming environment for cyclists of all levels, from beginners to seasoned pros. Join us for rides, events, and training sessions that foster growth and camaraderie.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Mountain Bliss Cabins",
+          "heading": "Welcome to Canberra Cycling Club",
           "paragraphs": [
-            "Discover the perfect getaway in our cozy mountain cabins that blend rustic charm with modern comforts. Whether you're looking for a romantic escape or a fun family adventure, our cabins provide a serene setting to unwind and connect with nature.",
-            "Explore our stunning alpine landscapes, hike scenic trails, and enjoy the beauty of the great outdoors right at your doorstep."
-          ]
-        },
-        {
-          "heading": "Why Choose Us?",
-          "paragraphs": [
-            "Our cabins are thoughtfully designed with comfort and style in mind, ensuring every guest has an unforgettable experience. From fully equipped kitchens to cozy wood-burning fireplaces, we've got everything you need to feel right at home.",
-            "Our dedicated team is available to assist you in making your stay seamless and enjoyable."
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "listings",
-      "title": "Cabin Listings",
-      "content": [
-        {
-          "heading": "Explore Our Cabins",
-          "paragraphs": [
-            "Browse our exclusive collection of mountain cabins, each boasting unique characteristics and stunning views. Whether you need a cozy nook for two or a spacious lodge for your family reunion, we have the perfect option for you."
-          ]
-        },
-        {
-          "heading": "Featured Cabins",
-          "paragraphs": [
-            "1. The Pine Lodge: A spacious cabin with 3 bedrooms and a stunning view over the valley.",
-            "2. The Cozy Nook: A romantic hideaway for couples with a fireplace and scenic deck.",
-            "3. The Rustic Retreat: Perfect for family gatherings, this cabin features a game room and large dining area."
+            "Whether you’re a casual rider or a competitive athlete, our club offers various opportunities for everyone. Explore our club ride schedules, training sessions, and events to involve yourself in the cycling community.",
+            "Join us today and experience the thrill of cycling with fellow enthusiasts!"
           ]
         }
       ]
@@ -53,27 +26,52 @@
       "title": "About Us",
       "content": [
         {
-          "heading": "Our Story",
+          "heading": "Our Mission",
           "paragraphs": [
-            "Founded in 2015, Mountain Bliss Cabins is committed to providing our guests with an unforgettable mountain retreat experience. Our passion for the great outdoors and dedication to excellent hospitality drives us to maintain the highest standards."
+            "At Canberra Cycling Club, we strive to promote a healthy lifestyle through cycling while creating an inclusive community for cyclists of all abilities. Our mission extends beyond just riding; we aim to build friendships that last a lifetime."
           ]
         },
         {
-          "heading": "Our Mission",
+          "heading": "Our History",
           "paragraphs": [
-            "We aim to connect people with nature while offering a comfortable and charming atmosphere. Whether you're here for adventure or relaxation, we want your stay to be memorable."
+            "Established in 2005, the Canberra Cycling Club has grown from a small group of passionate cyclists to one of the largest cycling clubs in the region. We’ve hosted numerous events and training camps, fostering not just skill development but also lifelong friendships."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "services",
+      "title": "Services",
+      "content": [
+        {
+          "heading": "Club Rides",
+          "paragraphs": [
+            "Join our weekly club rides across various skill levels. Guided by experienced riders, these sessions ensure safety and support for all participants."
+          ]
+        },
+        {
+          "heading": "Training and Workshops",
+          "paragraphs": [
+            "We offer training sessions focusing on cycling techniques, endurance building, and safety workshops to help cyclists enhance their skills and confidence."
+          ]
+        },
+        {
+          "heading": "Events and Races",
+          "paragraphs": [
+            "Participate in our regular events and races throughout the year. Compete with club members or enjoy the friendly atmosphere of our themed rides."
           ]
         }
       ]
     },
     {
       "slug": "testimonials",
-      "title": "Guest Reviews",
+      "title": "Testimonials",
       "content": [
         {
-          "heading": "What Our Guests Say",
+          "heading": "What Our Members Say",
           "paragraphs": [
-            "Don't just take our word for it – hear from our satisfied guests who have enjoyed their time at Mountain Bliss Cabins!"
+            "“The Canberra Cycling Club has changed my life! I've met amazing people and improved my cycling skills tremendously.” - Sarah J., Club Member",
+            "“A great community that encourages everyone, regardless of their cycling ability!” - Matt K., Competitive Cyclist"
           ]
         }
       ]
@@ -85,67 +83,85 @@
         {
           "heading": "Get in Touch",
           "paragraphs": [
-            "Have questions or need assistance? We'd love to hear from you! Reach out through phone or email, or visit us at our location."
+            "We'd love to hear from you! If you have any questions or want to know more about our club, feel free to reach out."
           ]
         }
       ]
     }
   ],
   "navigation": [
-    { "label": "Home", "url": "/" },
-    { "label": "Cabin Listings", "url": "/listings" },
-    { "label": "About Us", "url": "/about" },
-    { "label": "Guest Reviews", "url": "/testimonials" },
-    { "label": "Contact Us", "url": "/contact" }
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "About Us",
+      "url": "/about"
+    },
+    {
+      "label": "Services",
+      "url": "/services"
+    },
+    {
+      "label": "Testimonials",
+      "url": "/testimonials"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact"
+    }
   ],
   "testimonials": [
     {
       "name": "Sarah Johnson",
-      "role": "Travel Blogger",
-      "text": "Mountain Bliss Cabins was the ideal getaway for me and my husband. The views were stunning, and the cabin had all the charm we hoped for.",
+      "role": "Club Member",
+      "text": "The Canberra Cycling Club has changed my life! I've met amazing people and improved my cycling skills tremendously.",
       "rating": 5
     },
     {
-      "name": "Michael Anderson",
-      "role": "Family Vacationer",
-      "text": "We loved our stay at The Rustic Retreat! Perfect for the family with enough space for everyone to relax.",
-      "rating": 4.5
-    },
-    {
-      "name": "Emma Davis",
-      "role": "Nature Enthusiast",
-      "text": "A perfect blend of beauty and comfort. We enjoyed exploring the nearby trails and coming back to a cozy cabin.",
-      "rating": 5
+      "name": "Matt Kelly",
+      "role": "Competitive Cyclist",
+      "text": "A great community that encourages everyone, regardless of their cycling ability!",
+      "rating": 4
     }
   ],
   "services": [
     {
-      "title": "Cabin Rentals",
-      "description": "Choose from a range of unique cabins in stunning mountain settings.",
-      "icon": "🏡"
+      "title": "Club Rides",
+      "description": "Join our weekly club rides across various skill levels. Guided by experienced riders, these sessions ensure safety and support for all participants.",
+      "icon": "🚴‍♂️"
     },
     {
-      "title": "Guided Outdoor Adventures",
-      "description": "Join us for guided hikes, fishing trips, and outdoor experiences tailored to all skill levels.",
-      "icon": "🗺️"
+      "title": "Training and Workshops",
+      "description": "We offer training sessions focusing on cycling techniques, endurance building, and safety workshops to help cyclists enhance their skills and confidence.",
+      "icon": "🏋️‍♀️"
     },
     {
-      "title": "Event Hosting",
-      "description": "Host your special events, from family reunions to intimate weddings, in our beautiful locations.",
-      "icon": "🎉"
+      "title": "Events and Races",
+      "description": "Participate in our regular events and races throughout the year. Compete with club members or enjoy the friendly atmosphere of our themed rides.",
+      "icon": "🏆"
     }
   ],
   "contact": {
-    "phone": "(555) 123-4567",
-    "email": "info@mountainblisscabins.com",
-    "address": "123 Mountain View Rd, Alpine, CA 91901"
+    "phone": "+61 412 345 678",
+    "email": "info@canberracyclingclub.org",
+    "address": "123 Cycling Ave, Canberra, ACT, Australia"
   },
   "footer": {
-    "description": "Experience the joy of mountain living at Mountain Bliss Cabins. Let us be your sanctuary in nature.",
+    "description": "Join us at Canberra Cycling Club and be a part of a wonderful cycling community!",
     "social_links": [
-      { "platform": "Facebook", "url": "https://facebook.com/mountainblisscabins" },
-      { "platform": "Instagram", "url": "https://instagram.com/mountainblisscabins" },
-      { "platform": "Twitter", "url": "https://twitter.com/mountainblisscabins" }
+      {
+        "platform": "Facebook",
+        "url": "https://facebook.com/canberracyclingclub"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://instagram.com/canberracyclingclub"
+      },
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/canberracyclingclub"
+      }
     ]
   }
 }

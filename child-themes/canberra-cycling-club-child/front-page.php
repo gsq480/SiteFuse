@@ -10,7 +10,7 @@
           </h1>
           <p class="text-xl text-white/90 mb-8 leading-relaxed">
             <?php
-            $website_data = json_decode(file_get_contents(get_template_directory() . '/../../website.json'), true);
+            $website_data = json_decode(file_get_contents(ABSPATH . 'website.json'), true);
             echo esc_html($website_data['description'] ?? 'Discover excellence in every detail. We\'re committed to providing you with exceptional service and results that exceed your expectations.');
             ?>
           </p>
@@ -40,7 +40,7 @@
       </div>
       <div class="grid md:grid-cols-3 gap-8">
         <?php
-        $website_data = json_decode(file_get_contents(get_template_directory() . '/../../website.json'), true);
+        $website_data = json_decode(file_get_contents(ABSPATH . 'website.json'), true);
         $services = $website_data['services'] ?? [
           ['title' => 'Strategic Planning', 'description' => 'Comprehensive planning and strategy development to help you achieve your goals efficiently and effectively.', 'icon' => '🎯'],
           ['title' => 'Expert Implementation', 'description' => 'Professional implementation of solutions with attention to detail and commitment to excellence in every project.', 'icon' => '⚡'],
@@ -64,7 +64,7 @@
         <div>
           <h2 class="section-title mb-6">About <?php bloginfo('name'); ?></h2>
           <p class="text-lg text-gray-600 mb-6 leading-relaxed">
-            We are passionate professionals dedicated to delivering exceptional results. With years of experience and a commitment to excellence, we work closely with our clients to understand their unique needs and provide tailored solutions.
+            <?php echo esc_html($website_data["description"] ?? "We are passionate professionals..."); ?>
           </p>
           <p class="text-gray-600 mb-8 leading-relaxed">
             Our team combines expertise, innovation, and personalized service to help you achieve your goals. We believe in building lasting relationships based on trust, quality, and results.
