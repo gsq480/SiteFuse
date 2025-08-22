@@ -1,138 +1,149 @@
 {
-  "slug": "swedish-book-club-shop",
-  "name": "Swedish Book Haven",
-  "tagline": "Explore Sweden Through Literature",
-  "industry": "Retail / Books",
-  "brand": "#005BAC",
-  "accent": "#FFD200",
-  "hero": "https://images.unsplash.com/photo-15164384186-7c97c1e9d582",
-  "description": "At Swedish Book Haven, we curate the finest selection of Swedish literature, from classic novels to contemporary gems. Join our book club to connect with like-minded readers and dive deeper into the rich culture of Sweden.",
+  "slug": "swedish-book-club",
+  "name": "Swedish Book Club",
+  "tagline": "Discover the Joy of Reading Together",
+  "industry": "Literature / Community",
+  "brand": "#004B87",
+  "accent": "#FFD700",
+  "hero": "https://www.canberracyclingclub.org.au/wp-content/uploads/2024/02/Vols-620x330.jpeg",
+  "description": "Join the Swedish Book Club to explore literature in a vibrant, friendly environment. We celebrate Swedish authors and immerse ourselves in thought-provoking discussions.",
   "pages": [
     {
-      "slug": "about",
+      "slug": "about-us",
       "title": "About Us",
       "content": [
         {
+          "heading": "Who We Are",
+          "paragraphs": [
+            "The Swedish Book Club is a community of book lovers dedicated to exploring and celebrating literature from Sweden. Our goal is to provide a platform for discussion, analysis, and appreciation of Swedish authors and their works.",
+            "We meet once a month to discuss a selected book, delve into its themes, and enjoy each other's company in a warm, welcoming atmosphere."
+          ]
+        },
+        {
           "heading": "Our Mission",
-          "paragraph": "Swedish Book Haven is dedicated to sharing the beauty and depth of Swedish literature with the world. We believe that every book tells a story, and we aim to help you uncover the unique narratives that define Sweden's literary heritage."
-        },
-        {
-          "heading": "Our Story",
-          "paragraph": "Founded by literature enthusiasts, our shop seeks to create a community where readers can gather, discuss, and celebrate Swedish literature. From book launches to author events, we aim to bring the excitement of books to life."
+          "paragraphs": [
+            "Our mission is to cultivate a community passionate about Swedish literature and culture while fostering friendships through our shared love of reading."
+          ]
         }
       ]
     },
     {
-      "slug": "shop",
-      "title": "Book Collection",
+      "slug": "upcoming-meetings",
+      "title": "Upcoming Meetings",
       "content": [
         {
-          "heading": "Discover Our Selection",
-          "paragraph": "Browse through an extensive collection of Swedish novels, non-fiction, and children's books. Our curated selection includes classic authors like August Strindberg and Selma Lagerlöf, alongside contemporary voices shaping the future of literature."
+          "heading": "Join Us!",
+          "paragraphs": [
+            "We host our meetings every third Thursday of the month at 7:00 PM. Each month features a different Swedish book, and we encourage members to suggest titles for future discussions."
+          ]
         },
         {
-          "heading": "Special Offers",
-          "paragraph": "Check out our weekly featured books and exclusive discounts for book club members. Join today and enjoy great savings on your literary journey!"
+          "heading": "Next Book Discussion",
+          "paragraphs": [
+            "This month, we will be discussing 'The Hundred-Year-Old Man Who Climbed Out the Window and Disappeared' by Jonas Jonasson. Grab a copy and join us for an engaging conversation!"
+          ]
         }
       ]
     },
     {
-      "slug": "events",
-      "title": "Book Club Events",
+      "slug": "membership",
+      "title": "Membership",
       "content": [
         {
-          "heading": "Join Our Community",
-          "paragraph": "Participate in exciting discussions and events centered around Swedish literature. Our book club meets monthly, and we host special online sessions with guest authors."
+          "heading": "Become a Member",
+          "paragraphs": [
+            "Joining the Swedish Book Club is free and open to anyone with an interest in Swedish literature. Simply reach out via our contact page to express your interest and receive updates on upcoming meetings!"
+          ]
         },
         {
-          "heading": "Upcoming Events",
-          "paragraph": "Stay tuned for our next book club meeting and author signing event. Sign up for our newsletter to receive updates on all upcoming events and special invitations!"
+          "heading": "Member Benefits",
+          "paragraphs": [
+            "As a member, you will receive exclusive access to our book selections, the opportunity to participate in polls for future reads, and a community of fellow book lovers."
+          ]
         }
       ]
     },
     {
-      "slug": "contact",
+      "slug": "contact-us",
       "title": "Contact Us",
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "Have questions or feedback? We would love to hear from you. Reach out via phone or email, or visit us at our store for a chat about your favorite books!"
+          "paragraphs": [
+            "We would love to hear from you! Whether you have questions about membership, book suggestions, or anything else, please reach out to us."
+          ]
         }
       ]
     }
   ],
   "navigation": [
     {
-      "label": "Home",
-      "url": "/"
-    },
-    {
       "label": "About Us",
-      "url": "/about"
+      "url": "/about-us"
     },
     {
-      "label": "Shop",
-      "url": "/shop"
+      "label": "Upcoming Meetings",
+      "url": "/upcoming-meetings"
     },
     {
-      "label": "Events",
-      "url": "/events"
+      "label": "Membership",
+      "url": "/membership"
     },
     {
-      "label": "Contact",
-      "url": "/contact"
+      "label": "Contact Us",
+      "url": "/contact-us"
     }
   ],
   "testimonials": [
     {
-      "name": "Anna Larsson",
-      "role": "Book Club Member",
-      "text": "Swedish Book Haven has transformed my reading experience! I’ve discovered so many wonderful authors that I would have never known otherwise.",
+      "name": "Astrid Lindh",
+      "role": "Member",
+      "text": "The Swedish Book Club has opened my eyes to new authors and stories I might never have discovered on my own. The discussions are always enriching and enjoyable!",
       "rating": 5
     },
     {
-      "name": "Johan Svensson",
-      "role": "Author",
-      "text": "As an author, I appreciate how this shop promotes Swedish literature. It’s a hub of creativity and passion for readers and writers alike.",
+      "name": "Erik Johansen",
+      "role": "Co-founder",
+      "text": "It's rewarding to see our community grow and bond over shared experiences of literature. Each meeting leaves me inspired.",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Book Club Subscription",
-      "description": "Join our exclusive book club for special discounts, early access to new releases, and invitations to special events.",
+      "title": "Monthly Book Discussions",
+      "description": "Engage in thought-provoking conversations about selected Swedish literature with fellow readers.",
       "icon": "📚"
     },
     {
-      "title": "Personalized Recommendations",
-      "description": "Receive tailored book suggestions based on your reading preferences to enhance your literary journey.",
-      "icon": "🎯"
+      "title": "Author Spotlights",
+      "description": "Learn more about notable Swedish authors and their contributions to literature through dedicated sessions.",
+      "icon": "✍️"
     },
     {
       "title": "Community Events",
-      "description": "Engage with our vibrant community through book launches, discussions, and author events.",
-      "icon": "🎤"
+      "description": "Participate in special events, such as literary festivals, readings, and author meet-and-greets.",
+      "icon": "🌟"
     }
   ],
   "contact": {
-    "phone": "+46 8 123 4567",
-    "email": "info@swedishbookhaven.se",
-    "address": "Kungsgatan 45, 111 35 Stockholm, Sweden"
+    "phone": "+46 12 345 67 89",
+    "email": "info@swedishbookclub.org",
+    "address": "123 Book Lane, Stockholm, Sweden"
   },
   "footer": {
-    "description": "Join our literary community and explore the wonders of Swedish literature. Subscribe to our newsletter for the latest updates!",
+    "description": "Thank you for visiting the Swedish Book Club website! We look forward to connecting with you and sharing our love for Swedish literature.",
     "social_links": [
       {
         "platform": "Facebook",
-        "url": "https://www.facebook.com/swedishbookhaven"
-      },
-      {
-        "platform": "Instagram",
-        "url": "https://www.instagram.com/swedishbookhaven"
+        "url": "https://www.facebook.com/swedishbookclub"
       },
       {
         "platform": "Twitter",
-        "url": "https://twitter.com/swedishbookhaven"
+        "url": "https://twitter.com/swedishbookclub"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://www.instagram.com/swedishbookclub"
       }
     ]
   }
