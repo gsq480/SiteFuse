@@ -924,3 +924,41 @@ jobs:
           
           # Update site name
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp option update blogname '$NAME' --allow-root"          
+          
+          # Activate theme
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp theme activate '"${SLUG}-child"' --allow-root || true"
+          
+          # Create pages only if they do not exist
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && 
+            # About page
+            if [ \$(wp post list --post_type=page --post_title="About" --format=count --allow-root) -eq 0 ]; then
+              wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content='Learn more about our story and values.' --allow-root
+            fi
+            # Services page
+            if [ \$(wp post list --post_type=page --post_title="Services" --format=count --allow-root) -eq 0 ]; then
+              wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content='Discover our comprehensive services.' --allow-root
+            fi
+            # Contact page
+            if [ \$(wp post list --post_type=page --post_title="Contact" --format=count --allow-root) -eq 0 ]; then
+              wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content='Get in touch with us today.' --allow-root
+            fi
+            # Home page
+            if [ \$(wp post list --post_type=page --post_title="Home" --format=count --allow-root) -eq 0 ]; then
+              HOME_ID=\$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage' --porcelain --allow-root)
+              wp option update show_on_front page --allow-root
+              wp option update page_on_front \$HOME_ID --allow-root
+            else
+              HOME_ID=\$(wp post list --post_type=page --post_title="Home" --field=ID --allow-root | head -1)
+              wp option update show_on_front page --allow-root
+              wp option update page_on_front \$HOME_ID --allow-root
+            fi
+            
+            # Create and set up navigation menu
+            wp menu create 'Primary Menu' --allow-root 2>/dev/null || true
+            wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="Home" --field=ID --allow-root | head -1) --title='Home' --allow-root 2>/dev/null || true
+            wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="About" --field=ID --allow-root | head -1) --title='About' --allow-root 2>/dev/null || true
+            wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="Services" --field=ID --allow-root | head -1) --title='Services' --allow-root 2>/dev/null || true
+            wp menu item add-post primary-menu \$(wp post list --post_type=page --post_title="Contact" --field=ID --allow-root | head -1) --title='Contact' --allow-root 2>/dev/null || true
+            wp menu location assign primary-menu primary --allow-root 2>/dev/null || true"
+          
+          echo "✅ WordPress content created successfully"
