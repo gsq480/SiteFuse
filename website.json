@@ -1,150 +1,149 @@
 {
-  "slug": "swedish-book-club",
-  "name": "Swedish Book Club",
-  "tagline": "Discover the Joy of Reading Together",
-  "industry": "Literature / Community",
-  "brand": "#004B87",
-  "accent": "#FFD700",
-  "hero": "https://www.canberracyclingclub.org.au/wp-content/uploads/2024/02/Vols-620x330.jpeg",
-  "description": "Join the Swedish Book Club to explore literature in a vibrant, friendly environment. We celebrate Swedish authors and immerse ourselves in thought-provoking discussions.",
+  "slug": "luminous-lens-photography",
+  "name": "Luminous Lens Photography",
+  "tagline": "Capturing Life's Moments Beautifully",
+  "industry": "Photography",
+  "brand": "#FF6F61",
+  "accent": "#2A9D8F",
+  "hero": "https://images.unsplash.com/photo-1514735572558-7d1d8a5f674e",
+  "description": "At Luminous Lens Photography, we specialize in capturing stunning imagery that tells your unique story. Whether it's a wedding, a family portrait, or a corporate event, our expert photographers are dedicated to providing you with beautiful, high-quality photos that you'll cherish for a lifetime.",
   "pages": [
     {
-      "slug": "about-us",
+      "slug": "about",
       "title": "About Us",
       "content": [
         {
-          "heading": "Who We Are",
-          "paragraphs": [
-            "The Swedish Book Club is a community of book lovers dedicated to exploring and celebrating literature from Sweden. Our goal is to provide a platform for discussion, analysis, and appreciation of Swedish authors and their works.",
-            "We meet once a month to discuss a selected book, delve into its themes, and enjoy each other's company in a warm, welcoming atmosphere."
-          ]
+          "heading": "Our Story",
+          "paragraph": "Founded in 2015, Luminous Lens Photography emerged from a passion for capturing the beauty of life's fleeting moments. We believe that every picture has a story to tell, and our mission is to bring your story to life through our lenses."
         },
         {
-          "heading": "Our Mission",
-          "paragraphs": [
-            "Our mission is to cultivate a community passionate about Swedish literature and culture while fostering friendships through our shared love of reading."
-          ]
+          "heading": "Our Team",
+          "paragraph": "Our talented team of photographers brings a wealth of experience and creativity, ensuring that each session is tailored to your preferences and needs. We are dedicated to making your experience enjoyable and hassle-free."
         }
       ]
     },
     {
-      "slug": "upcoming-meetings",
-      "title": "Upcoming Meetings",
+      "slug": "portfolio",
+      "title": "Portfolio",
       "content": [
         {
-          "heading": "Join Us!",
-          "paragraphs": [
-            "We host our meetings every third Thursday of the month at 7:00 PM. Each month features a different Swedish book, and we encourage members to suggest titles for future discussions."
-          ]
+          "heading": "Weddings",
+          "paragraph": "Explore our collection of stunning wedding photographs, capturing the love, joy, and endless celebrations of newlywed couples."
         },
         {
-          "heading": "Next Book Discussion",
-          "paragraphs": [
-            "This month, we will be discussing 'The Hundred-Year-Old Man Who Climbed Out the Window and Disappeared' by Jonas Jonasson. Grab a copy and join us for an engaging conversation!"
-          ]
+          "heading": "Family Portraits",
+          "paragraph": "Take a look at our engaging family portrait sessions, highlighting the connections between family members and the shared moments that matter the most."
+        },
+        {
+          "heading": "Corporate Events",
+          "paragraph": "View our work with corporate clients, where we bring professionalism and creativity to business events, conferences, and branding sessions."
         }
       ]
     },
     {
-      "slug": "membership",
-      "title": "Membership",
+      "slug": "services",
+      "title": "Services",
       "content": [
         {
-          "heading": "Become a Member",
-          "paragraphs": [
-            "Joining the Swedish Book Club is free and open to anyone with an interest in Swedish literature. Simply reach out via our contact page to express your interest and receive updates on upcoming meetings!"
-          ]
+          "heading": "Wedding Photography",
+          "paragraph": "From engagement shoots to the big day, we offer comprehensive wedding packages to capture every special moment."
         },
         {
-          "heading": "Member Benefits",
-          "paragraphs": [
-            "As a member, you will receive exclusive access to our book selections, the opportunity to participate in polls for future reads, and a community of fellow book lovers."
-          ]
+          "heading": "Event Photography",
+          "paragraph": "Whether it’s a birthday party or a corporate event, our photographers will ensure that no moment goes undocumented."
+        },
+        {
+          "heading": "Portrait Photography",
+          "paragraph": "Personal or family portraits designed to reflect the unique essence of you and your loved ones."
+        },
+        {
+          "heading": "Product Photography",
+          "paragraph": "Showcase your products with eye-catching imagery that captures their features and benefits perfectly."
         }
       ]
     },
     {
-      "slug": "contact-us",
+      "slug": "testimonials",
+      "title": "Testimonials",
+      "content": [
+        {
+          "heading": "What Our Clients Say",
+          "paragraph": "Read honest feedback from our satisfied clients who have trusted us to capture their most cherished moments."
+        }
+      ]
+    },
+    {
+      "slug": "contact",
       "title": "Contact Us",
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraphs": [
-            "We would love to hear from you! Whether you have questions about membership, book suggestions, or anything else, please reach out to us."
-          ]
+          "paragraph": "Have questions or want to book a session with us? We would love to hear from you! Fill out the form below or reach out using our contact details."
         }
       ]
     }
   ],
   "navigation": [
-    {
-      "label": "About Us",
-      "url": "/about-us"
-    },
-    {
-      "label": "Upcoming Meetings",
-      "url": "/upcoming-meetings"
-    },
-    {
-      "label": "Membership",
-      "url": "/membership"
-    },
-    {
-      "label": "Contact Us",
-      "url": "/contact-us"
-    }
+    { "label": "Home", "url": "/" },
+    { "label": "About", "url": "/about" },
+    { "label": "Portfolio", "url": "/portfolio" },
+    { "label": "Services", "url": "/services" },
+    { "label": "Testimonials", "url": "/testimonials" },
+    { "label": "Contact", "url": "/contact" }
   ],
   "testimonials": [
     {
-      "name": "Astrid Lindh",
-      "role": "Member",
-      "text": "The Swedish Book Club has opened my eyes to new authors and stories I might never have discovered on my own. The discussions are always enriching and enjoyable!",
+      "name": "Emily Turner",
+      "role": "Bride",
+      "text": "Luminous Lens Photography captured our wedding day perfectly! The attention to detail and creativity blew us away.",
       "rating": 5
     },
     {
-      "name": "Erik Johansen",
-      "role": "Co-founder",
-      "text": "It's rewarding to see our community grow and bond over shared experiences of literature. Each meeting leaves me inspired.",
+      "name": "Daniel Smith",
+      "role": "Corporate Manager",
+      "text": "We hired them for our annual conference – the photos were professional and exceeded our expectations.",
+      "rating": 5
+    },
+    {
+      "name": "Laura Jones",
+      "role": "Mother of the Family",
+      "text": "Our family portraits are amazing! The photographers made us feel comfortable and captured beautiful moments.",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Monthly Book Discussions",
-      "description": "Engage in thought-provoking conversations about selected Swedish literature with fellow readers.",
-      "icon": "📚"
+      "title": "Wedding Photography",
+      "description": "Capture your special day with our comprehensive wedding photography packages tailored to your needs.",
+      "icon": "📸"
     },
     {
-      "title": "Author Spotlights",
-      "description": "Learn more about notable Swedish authors and their contributions to literature through dedicated sessions.",
-      "icon": "✍️"
+      "title": "Event Photography",
+      "description": "Whether it's a party, anniversary, or corporate event, we provide professional event photography services.",
+      "icon": "🎉"
     },
     {
-      "title": "Community Events",
-      "description": "Participate in special events, such as literary festivals, readings, and author meet-and-greets.",
-      "icon": "🌟"
+      "title": "Portrait Photography",
+      "description": "From solo portraits to family groups, we create stunning photographs that reflect your personality.",
+      "icon": "👨‍👩‍👧"
+    },
+    {
+      "title": "Product Photography",
+      "description": "Showcase your products in the best light with our specialized product photography services.",
+      "icon": "🛍️"
     }
   ],
   "contact": {
-    "phone": "+46 12 345 67 89",
-    "email": "info@swedishbookclub.org",
-    "address": "123 Book Lane, Stockholm, Sweden"
+    "phone": "123-456-7890",
+    "email": "info@luminouslens.com",
+    "address": "123 Photography St, Captivating City, CA 90210"
   },
   "footer": {
-    "description": "Thank you for visiting the Swedish Book Club website! We look forward to connecting with you and sharing our love for Swedish literature.",
+    "description": "Thank you for visiting Luminous Lens Photography. We look forward to capturing your precious moments.",
     "social_links": [
-      {
-        "platform": "Facebook",
-        "url": "https://www.facebook.com/swedishbookclub"
-      },
-      {
-        "platform": "Twitter",
-        "url": "https://twitter.com/swedishbookclub"
-      },
-      {
-        "platform": "Instagram",
-        "url": "https://www.instagram.com/swedishbookclub"
-      }
+      { "platform": "Facebook", "url": "https://facebook.com/luminouslens" },
+      { "platform": "Instagram", "url": "https://instagram.com/luminouslens" },
+      { "platform": "Twitter", "url": "https://twitter.com/luminouslens" }
     ]
   }
 }
