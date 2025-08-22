@@ -599,7 +599,7 @@ jobs:
                       <?php echo esc_html($website_data["description"] ?? "We are passionate professionals..."); ?>
                     </p>
                     <p class="text-gray-600 mb-8 leading-relaxed">
-                      <?php echo esc_html($website_data["pages"][0]["content"][0]["paragraph"] ?? "<?php 
+                      <?php echo esc_html($website_data["description"] ?? "<?php 
 $about_content = ""; 
 if (isset($website_data["pages"])) { 
   foreach ($website_data["pages"] as $page) { 
