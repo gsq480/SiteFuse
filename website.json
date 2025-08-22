@@ -1,12 +1,12 @@
 {
-  "slug": "canberra-mountain-bike-club",
-  "name": "Canberra Mountain Bike Club",
-  "tagline": "Ride the Trails, Conquer the Hills",
-  "industry": "Sports & Recreation",
-  "brand": "#C8102E",
-  "accent": "#FFFFFF",
-  "hero": "https://images.unsplash.com/photo-1528877133780-282e89b65e5f",
-  "description": "The Canberra Mountain Bike Club is home to mountain biking enthusiasts of all levels. Join us to explore stunning trails, improve your skills, and connect with a community committed to adventure and the great outdoors.",
+  "slug": "swedish-book-club-shop",
+  "name": "Swedish Book Haven",
+  "tagline": "Explore Sweden Through Literature",
+  "industry": "Retail / Books",
+  "brand": "#005BAC",
+  "accent": "#FFD200",
+  "hero": "https://images.unsplash.com/photo-15164384186-7c97c1e9d582",
+  "description": "At Swedish Book Haven, we curate the finest selection of Swedish literature, from classic novels to contemporary gems. Join our book club to connect with like-minded readers and dive deeper into the rich culture of Sweden.",
   "pages": [
     {
       "slug": "about",
@@ -14,52 +14,39 @@
       "content": [
         {
           "heading": "Our Mission",
-          "paragraphs": [
-            "At the Canberra Mountain Bike Club, we strive to create an inclusive and passionate community of mountain biking enthusiasts. Whether you’re a beginner or a seasoned pro, our goal is to provide a supportive environment that fosters growth, camaraderie, and adventure."
-          ]
+          "paragraph": "Swedish Book Haven is dedicated to sharing the beauty and depth of Swedish literature with the world. We believe that every book tells a story, and we aim to help you uncover the unique narratives that define Sweden's literary heritage."
         },
         {
-          "heading": "Our History",
-          "paragraphs": [
-            "Founded in 2005, the Canberra Mountain Bike Club has grown from a small group of local riders into a thriving community. Over the years, we've worked hard to promote mountain biking, improve local trails, and build relationships with local land managers."
-          ]
+          "heading": "Our Story",
+          "paragraph": "Founded by literature enthusiasts, our shop seeks to create a community where readers can gather, discuss, and celebrate Swedish literature. From book launches to author events, we aim to bring the excitement of books to life."
+        }
+      ]
+    },
+    {
+      "slug": "shop",
+      "title": "Book Collection",
+      "content": [
+        {
+          "heading": "Discover Our Selection",
+          "paragraph": "Browse through an extensive collection of Swedish novels, non-fiction, and children's books. Our curated selection includes classic authors like August Strindberg and Selma Lagerlöf, alongside contemporary voices shaping the future of literature."
+        },
+        {
+          "heading": "Special Offers",
+          "paragraph": "Check out our weekly featured books and exclusive discounts for book club members. Join today and enjoy great savings on your literary journey!"
         }
       ]
     },
     {
       "slug": "events",
-      "title": "Events",
+      "title": "Book Club Events",
       "content": [
         {
-          "heading": "Upcoming Rides",
-          "paragraphs": [
-            "Join us for our weekly group rides every Saturday morning. Explore Canberra's breathtaking trails led by knowledgeable guides.",
-            "Don't miss our annual mountain bike race! It's a fun and competitive event that welcomes bikers of all skills and ages."
-          ]
+          "heading": "Join Our Community",
+          "paragraph": "Participate in exciting discussions and events centered around Swedish literature. Our book club meets monthly, and we host special online sessions with guest authors."
         },
         {
-          "heading": "Workshops",
-          "paragraphs": [
-            "Enhance your riding skills with our monthly workshops. Topics cover everything from bike maintenance to advanced riding techniques."
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "membership",
-      "title": "Membership",
-      "content": [
-        {
-          "heading": "Join the Club!",
-          "paragraphs": [
-            "Become a member of the Canberra Mountain Bike Club and unlock a variety of benefits including access to exclusive rides, discounts at local bike shops, and the camaraderie of like-minded individuals."
-          ]
-        },
-        {
-          "heading": "Membership Fees",
-          "paragraphs": [
-            "Annual membership is $50, which helps support local trail maintenance and club activities. Join us today and start making the most of your rides!"
-          ]
+          "heading": "Upcoming Events",
+          "paragraph": "Stay tuned for our next book club meeting and author signing event. Sign up for our newsletter to receive updates on all upcoming events and special invitations!"
         }
       ]
     },
@@ -69,9 +56,7 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraphs": [
-            "We’d love to hear from you! Whether you have a question about events, membership, or anything else, feel free to reach out."
-          ]
+          "paragraph": "Have questions or feedback? We would love to hear from you. Reach out via phone or email, or visit us at our store for a chat about your favorite books!"
         }
       ]
     }
@@ -86,12 +71,12 @@
       "url": "/about"
     },
     {
-      "label": "Events",
-      "url": "/events"
+      "label": "Shop",
+      "url": "/shop"
     },
     {
-      "label": "Membership",
-      "url": "/membership"
+      "label": "Events",
+      "url": "/events"
     },
     {
       "label": "Contact",
@@ -100,49 +85,54 @@
   ],
   "testimonials": [
     {
-      "name": "James Smith",
-      "role": "Club Member",
-      "text": "Being part of the Canberra Mountain Bike Club has been a life-changing experience for me. I've made great friends and improved my skills tremendously!",
+      "name": "Anna Larsson",
+      "role": "Book Club Member",
+      "text": "Swedish Book Haven has transformed my reading experience! I’ve discovered so many wonderful authors that I would have never known otherwise.",
       "rating": 5
     },
     {
-      "name": "Emily Johnson",
-      "role": "Event Organizer",
-      "text": "Our events are so much fun! The energy and enthusiasm from fellow riders is contagious, making every ride a memorable adventure.",
+      "name": "Johan Svensson",
+      "role": "Author",
+      "text": "As an author, I appreciate how this shop promotes Swedish literature. It’s a hub of creativity and passion for readers and writers alike.",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Guided Rides",
-      "description": "Explore some of Canberra's best trails with our experienced guides who know the ins and outs of the local area.",
-      "icon": "🚴"
+      "title": "Book Club Subscription",
+      "description": "Join our exclusive book club for special discounts, early access to new releases, and invitations to special events.",
+      "icon": "📚"
     },
     {
-      "title": "Trail Maintenance",
-      "description": "We actively work to maintain and improve local mountain biking trails, ensuring their longevity and quality for all riders.",
-      "icon": "🔨"
+      "title": "Personalized Recommendations",
+      "description": "Receive tailored book suggestions based on your reading preferences to enhance your literary journey.",
+      "icon": "🎯"
+    },
+    {
+      "title": "Community Events",
+      "description": "Engage with our vibrant community through book launches, discussions, and author events.",
+      "icon": "🎤"
     }
   ],
   "contact": {
-    "phone": "+61 2 1234 5678",
-    "email": "info@canberramtbclub.com.au",
-    "address": "123 Trailhead Ave, Canberra, ACT 2600, Australia"
+    "phone": "+46 8 123 4567",
+    "email": "info@swedishbookhaven.se",
+    "address": "Kungsgatan 45, 111 35 Stockholm, Sweden"
   },
   "footer": {
-    "description": "Join us today and become part of the Canberra Mountain Bike Club family.",
+    "description": "Join our literary community and explore the wonders of Swedish literature. Subscribe to our newsletter for the latest updates!",
     "social_links": [
       {
         "platform": "Facebook",
-        "url": "https://facebook.com/canberramtbclub"
+        "url": "https://www.facebook.com/swedishbookhaven"
       },
       {
         "platform": "Instagram",
-        "url": "https://instagram.com/canberramtbclub"
+        "url": "https://www.instagram.com/swedishbookhaven"
       },
       {
         "platform": "Twitter",
-        "url": "https://twitter.com/canberramtbclub"
+        "url": "https://twitter.com/swedishbookhaven"
       }
     ]
   }
