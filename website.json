@@ -1,70 +1,66 @@
 {
-  "slug": "local-canberra-kids-swim-school",
-  "name": "Fun Colours Swim School",
-  "tagline": "Making Waves with Smiles!",
-  "industry": "Education/Children's Activities",
-  "brand": "#FF5733",
-  "accent": "#FFC300",
-  "hero": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
-  "description": "Fun Colours Swim School is dedicated to teaching children in Canberra how to swim in a safe and enjoyable environment. Our passionate instructors utilize innovative methods that make learning to swim a fun experience for kids of all ages and skill levels.",
+  "slug": "fun-kids-party-canberra",
+  "name": "Canberra Party Fun",
+  "tagline": "Creating Unforgettable Memories for Kids!",
+  "industry": "Event Planning",
+  "brand": "#FFB74D",
+  "accent": "#FF9800",
+  "hero": "https://images.unsplash.com/photo-1563861462283-b74c9cf0de81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080",
+  "description": "Canberra Party Fun specializes in organizing exciting and memorable birthday parties for kids of all ages. Our vibrant themes, engaging activities, and dedicated staff ensure every celebration is a joyful experience for children and a stress-free event for parents.",
   "pages": [
+    {
+      "slug": "home",
+      "title": "Home",
+      "content": [
+        {
+          "heading": "Welcome to Canberra Party Fun!",
+          "paragraph": "We are your go-to party planning experts dedicated to making your children's birthdays unforgettable. From themed parties to fun activities, we bring the joy to every celebration!"
+        },
+        {
+          "heading": "Why Choose Us?",
+          "paragraph": "With years of experience, a passion for fun, and an extensive range of services, we ensure every event is tailored to your needs. Our friendly team is here to make your next party a huge success!"
+        }
+      ]
+    },
     {
       "slug": "about",
       "title": "About Us",
       "content": [
         {
+          "heading": "Our Story",
+          "paragraph": "Founded in 2020, Canberra Party Fun emerged from a desire to create magical moments for children. We understand the importance of fun and ensure every detail is covered with care."
+        },
+        {
           "heading": "Our Mission",
-          "paragraph": "At Fun Colours Swim School, our mission is to instill confidence and water safety skills in children while they have fun. Our primary goal is to create a positive and encouraging atmosphere for swimmers of all abilities."
-        },
-        {
-          "heading": "Our Team",
-          "paragraph": "Our dedicated team of certified swimming instructors has over 10 years of experience in teaching children. Each instructor is trained in water safety and child development to ensure a nurturing environment for learning."
+          "paragraph": "Our mission is to deliver safe, enjoyable, and unforgettable experiences by providing high-quality party planning services that bring dreams to life."
         }
       ]
     },
     {
-      "slug": "programs",
-      "title": "Programs",
+      "slug": "services",
+      "title": "Our Services",
       "content": [
         {
-          "heading": "Group Lessons",
-          "paragraph": "Our group lessons cater to various age groups and skill levels, promoting teamwork and social interaction while developing swimming skills."
+          "heading": "Party Packages",
+          "paragraph": "Choose from a variety of themed party packages tailored to your child's interests! We cater to both small and large gatherings."
         },
         {
-          "heading": "Private Lessons",
-          "paragraph": "For those who prefer individualized attention, we offer private lessons tailored to meet specific needs and goals."
+          "heading": "Entertainment & Activities",
+          "paragraph": "We provide professional entertainers, games, crafts, and more to keep the kids engaged and having fun throughout the event."
         },
         {
-          "heading": "Competitive Training",
-          "paragraph": "Our competitive training program helps aspiring young swimmers refine their techniques and prepare for local competitions."
+          "heading": "Catering & Goodies",
+          "paragraph": "Delicious catering options are available, including kid-friendly menus, cakes, and party treats that everyone will enjoy!"
         }
       ]
     },
     {
-      "slug": "schedule",
-      "title": "Class Schedule",
+      "slug": "testimonials",
+      "title": "Testimonials",
       "content": [
         {
-          "heading": "Weekly Classes",
-          "paragraph": "Classes are conducted weekly from Monday to Saturday, with varying time slots for different age groups. Check our website for the latest schedule and availability."
-        },
-        {
-          "heading": "Holiday Camps",
-          "paragraph": "Join our exciting holiday camps where kids will engage in swimming drills, competitions, and fun activities!"
-        }
-      ]
-    },
-    {
-      "slug": "registration",
-      "title": "Registration",
-      "content": [
-        {
-          "heading": "Enroll Now",
-          "paragraph": "Ready to dive in? Fill out our online registration form to secure a spot for your child at Fun Colours Swim School."
-        },
-        {
-          "heading": "Payment Information",
-          "paragraph": "We offer flexible payment options, including online payments and subscription plans, to make enrolling your child hassle-free."
+          "heading": "What Our Clients Say",
+          "paragraph": "Hear from parents who have trusted us to create magical experiences for their children!"
         }
       ]
     },
@@ -73,90 +69,87 @@
       "title": "Contact Us",
       "content": [
         {
-          "heading": "Get In Touch",
-          "paragraph": "For any inquiries, feel free to contact us via phone or email. We are here to help you with all your questions regarding our programs."
+          "heading": "Get in Touch!",
+          "paragraph": "Have questions or need more information? We'd love to hear from you! Reach out through the form below or contact us directly."
         }
       ]
     }
   ],
   "navigation": [
     {
+      "label": "Home",
+      "url": "/"
+    },
+    {
       "label": "About Us",
       "url": "/about"
     },
     {
-      "label": "Programs",
-      "url": "/programs"
+      "label": "Services",
+      "url": "/services"
     },
     {
-      "label": "Class Schedule",
-      "url": "/schedule"
+      "label": "Testimonials",
+      "url": "/testimonials"
     },
     {
-      "label": "Registration",
-      "url": "/registration"
-    },
-    {
-      "label": "Contact",
+      "label": "Contact Us",
       "url": "/contact"
     }
   ],
   "testimonials": [
     {
-      "name": "Sarah Johnson",
+      "name": "Samantha Johnson",
       "role": "Parent",
-      "text": "My daughter has loved every lesson at Fun Colours! The instructors are so patient and encouraging.",
+      "text": "Canberra Party Fun made my son's 7th birthday magical! The staff was professional and the kids had a blast!",
       "rating": 5
     },
     {
-      "name": "Tom Reynolds",
+      "name": "Michael Wilson",
       "role": "Parent",
-      "text": "The holiday camps are fantastic! My son had a blast and improved his swimming skills immensely.",
+      "text": "Amazing service! They took care of everything, from the decorations to the cake. Highly recommend!",
       "rating": 5
     },
     {
-      "name": "Emily Clarke",
-      "role": "Student",
-      "text": "I had so much fun learning to swim! The teachers are really nice and make it enjoyable.",
+      "name": "Emily Brown",
+      "role": "Parent",
+      "text": "My daughter loved her princess party! The entertainer was fantastic and kept the kids engaged throughout. We will definitely book again!",
       "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Swimming Instruction",
-      "description": "Comprehensive swimming lessons for kids of all ages, focusing on safety and skill development.",
-      "icon": "swim"
+      "title": "Themed Party Packages",
+      "description": "Choose from superheroes, princesses, animals, and more. Each package comes with decorations and activities tailored to the theme."
     },
     {
-      "title": "Water Safety Education",
-      "description": "Empowering children with essential water safety knowledge to prevent accidents.",
-      "icon": "safety"
+      "title": "Live Entertainment",
+      "description": "We offer clowns, magicians, and face painters to make each party unique and entertaining."
     },
     {
-      "title": "Competitive Swim Coaching",
-      "description": "Expert guidance for young athletes looking to excel in swim competitions.",
-      "icon": "medal"
+      "title": "Catering",
+      "description": "Delicious food options, including pizzas, snacks, and custom cakes, to keep all your young guests happy."
     }
   ],
   "contact": {
-    "phone": "+61 2 9555 1234",
-    "email": "info@funcoloursswimschool.com.au",
-    "address": "456 Swim Lane, Canberra, ACT, 2600, Australia"
+    "phone": "+61 2 1234 5678",
+    "email": "info@canberrapartyfun.com.au",
+    "address": "123 Fun St, Canberra, ACT 2600, Australia"
   },
   "footer": {
-    "description": "Join us at Fun Colours Swim School, where we make learning to swim a fun and exciting adventure!",
+    "description": "Thank you for choosing Canberra Party Fun! We look forward to making your child's day extraordinary.",
     "social_links": [
       {
         "platform": "Facebook",
-        "url": "https://facebook.com/funcoloursswimschool"
+        "url": "https://facebook.com/canberrapartyfun"
       },
       {
         "platform": "Instagram",
-        "url": "https://instagram.com/funcoloursswimschool"
+        "url": "https://instagram.com/canberrapartyfun"
       },
       {
         "platform": "Twitter",
-        "url": "https://twitter.com/funcoloursswim"
+        "url": "https://twitter.com/canberrapartyfun"
       }
     ]
   }
