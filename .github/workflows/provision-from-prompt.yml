@@ -960,5 +960,6 @@ jobs:
             wp menu item add-post primary-menu \$(wp post list --post_type=page --name=about --field=ID --allow-root | head -1) --title='About' --allow-root 2>/dev/null || true
             wp menu item add-post primary-menu \$(wp post list --post_type=page --name=services --field=ID --allow-root | head -1) --title='Services' --allow-root 2>/dev/null || true
             wp menu item add-post primary-menu \$(wp post list --post_type=page --name=contact --field=ID --allow-root | head -1) --title='Contact' --allow-root 2>/dev/null || true
-            wp menu location assign primary-menu primary --allow-root 2>/dev/null || true          
-          echo "✅ WordPress content created successfully"
+            wp menu location assign primary-menu primary --allow-root 2>/dev/null || true"
+          
+          echo "✅ WordPress content created successfully"          echo "✅ WordPress content created successfully"
