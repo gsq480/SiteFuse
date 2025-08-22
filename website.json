@@ -1,48 +1,52 @@
 {
-  "slug": "canberra-ipad-shop",
-  "name": "Canberra iPad Hub",
-  "tagline": "Your one-stop shop for all things iPad!",
-  "industry": "Retail",
-  "brand": "#3C4D6A",
-  "accent": "#F4B400",
-  "hero": "https://images.unsplash.com/photo-1586310190186-9cd05cd5b6e6",
-  "description": "Welcome to Canberra iPad Hub, the leading destination for the latest iPads and accessories in the heart of Australia's capital. We offer a wide range of products and exceptional customer service to help you find the perfect iPad for your needs.",
+  "slug": "cozy-mountain-cabins",
+  "name": "Cozy Mountain Cabins",
+  "tagline": "Your Escape to Nature's Serenity",
+  "industry": "Real Estate",
+  "brand": "#4A7CBA",
+  "accent": "#F4C2A6",
+  "hero": "https://images.unsplash.com/photo-1515072817660-5c0c8c5c6d2d",
+  "description": "Experience the ultimate getaway in our rustic mountain cabins, where charm meets nature. Surrounded by stunning alpine views, each cabin is designed for comfort and tranquility, making it the ideal retreat for families and friends alike.",
   "pages": [
     {
       "slug": "home",
       "title": "Home",
       "content": [
         {
-          "heading": "Welcome to Canberra iPad Hub",
-          "paragraph": "Discover the latest iPad models, accessories, and expert advice right here in Canberra. Our knowledgeable staff is ready to assist you in finding the best device for your lifestyle."
+          "heading": "Welcome to Cozy Mountain Cabins",
+          "paragraph": "Nestled in the heart of the mountains, Cozy Mountain Cabins offers a unique blend of rustic charm and modern comforts. Explore breathtaking landscapes and enjoy a peaceful escape from the hustle and bustle of daily life."
         },
         {
-          "heading": "Why Choose Us?",
-          "paragraph": "We pride ourselves on offering a comprehensive selection of the latest iPads, unbeatable prices, and outstanding customer service. Join our community of satisfied customers today!"
+          "heading": "Our Unique Features",
+          "paragraph": "Each cabin is uniquely designed with warm wood accents, cozy fireplaces, and stunning views of the surrounding wilderness. Relax on the porch with a cup of coffee, explore nature trails, or indulge in outdoor adventures."
         }
       ]
     },
     {
-      "slug": "about",
+      "slug": "about-us",
       "title": "About Us",
       "content": [
         {
           "heading": "Our Story",
-          "paragraph": "Founded in 2023, Canberra iPad Hub was born out of a passion for technology and a desire to serve the local community. Our mission is to provide an inclusive space for Apple enthusiasts and newcomers alike."
+          "paragraph": "Founded in 2020, Cozy Mountain Cabins was born out of a love for nature and a desire to provide memorable experiences. Our cabins are meticulously crafted to offer a blend of rustic aesthetics and modern amenities."
         },
         {
-          "heading": "Our Team",
-          "paragraph": "Our dedicated team of Apple certified experts is here to provide you with personalized assistance for your iPad selection, troubleshooting, and accessories."
+          "heading": "Our Mission",
+          "paragraph": "We strive to create a warm and inviting atmosphere that allows guests to unwind and reconnect with themselves and nature."
         }
       ]
     },
     {
-      "slug": "products",
-      "title": "Products",
+      "slug": "cabins",
+      "title": "Cabins",
       "content": [
         {
-          "heading": "Browse Our Range",
-          "paragraph": "Explore our extensive collection of iPads, from the latest models to budget-friendly options, along with a variety of accessories to enhance your experience."
+          "heading": "Our Cabin Selection",
+          "paragraph": "Each of our charming cabins promises a unique experience, whether you're looking for a romantic getaway or a fun-filled family holiday. Check out our collection of cabins, each featuring cozy interiors and breathtaking views."
+        },
+        {
+          "heading": "Features",
+          "paragraph": "All cabins feature full kitchens, spacious living areas, and outdoor seating for enjoying your morning coffee or evening stars."
         }
       ]
     },
@@ -52,7 +56,7 @@
       "content": [
         {
           "heading": "What We Offer",
-          "paragraph": "Our services include expert consultations, device setup, software guidance, and after-purchase support to make your iPad experience seamless."
+          "paragraph": "In addition to comfortable accommodations, we offer guided outdoor activities, local dining recommendations, and customizable packages to enhance your stay."
         }
       ]
     },
@@ -62,7 +66,7 @@
       "content": [
         {
           "heading": "Get in Touch",
-          "paragraph": "We’re here to help! Whether you have questions about our products or need assistance, feel free to reach out through the contact information below."
+          "paragraph": "Questions about our cabins or planning your stay? Reach out to our friendly customer service team who are happy to help you with any inquiries."
         }
       ]
     }
@@ -74,11 +78,11 @@
     },
     {
       "label": "About Us",
-      "url": "/about"
+      "url": "/about-us"
     },
     {
-      "label": "Products",
-      "url": "/products"
+      "label": "Cabins",
+      "url": "/cabins"
     },
     {
       "label": "Services",
@@ -91,49 +95,49 @@
   ],
   "testimonials": [
     {
-      "name": "Sarah Johnson",
-      "role": "Happy Customer",
-      "text": "I had an amazing experience at Canberra iPad Hub! The staff were so helpful in choosing the perfect iPad for my needs.",
+      "name": "Emily Johnson",
+      "role": "Frequent Visitor",
+      "text": "Staying at Cozy Mountain Cabins was a dream! The views were breathtaking and the cabin felt like home.",
       "rating": 5
     },
     {
-      "name": "Michael Lee",
-      "role": "Tech Enthusiast",
-      "text": "A fantastic selection of products and knowledgeable staff made my purchase easy and enjoyable. Highly recommend!",
-      "rating": 4
+      "name": "Mark Thompson",
+      "role": "Weekend Adventurer",
+      "text": "A perfect place to unwind. The attention to detail and rustic charm made our weekend unforgettable!",
+      "rating": 5
     }
   ],
   "services": [
     {
-      "title": "Device Setup",
-      "description": "Allow us to assist you with setting up your new iPad, from installation to personalization.",
-      "icon": "📱"
+      "title": "Guided Hiking Tours",
+      "description": "Join our knowledgeable guides for a unique hiking experience through stunning terrains.",
+      "icon": "https://img.icons8.com/material-outlined/24/000000/hiking.png"
     },
     {
-      "title": "Technical Support",
-      "description": "Need help? Our team is on standby to assist you with any technical difficulties you may encounter.",
-      "icon": "🛠"
+      "title": "Cabin Packages",
+      "description": "Customizable packages for family reunions, romantic getaways, or adventure-filled weekends.",
+      "icon": "https://img.icons8.com/material-outlined/24/000000/package.png"
     }
   ],
   "contact": {
-    "phone": "+61 2 5555 1234",
-    "email": "support@canberraipad.com.au",
-    "address": "123 Tech Street, Canberra, ACT 2600, Australia"
+    "phone": "+1 (555) 123-4567",
+    "email": "info@cozymountaincabins.com",
+    "address": "123 Mountain Road, Alpine Village, CO 80405"
   },
   "footer": {
-    "description": "Canberra iPad Hub is dedicated to providing top-notch service and products. Visit us for all your iPad needs!",
+    "description": "Explore the beauty of nature with Cozy Mountain Cabins. Book your stay today and create unforgettable memories.",
     "social_links": [
       {
         "platform": "Facebook",
-        "url": "https://facebook.com/canberraipad"
+        "url": "https://facebook.com/cozymountaincabins"
       },
       {
         "platform": "Instagram",
-        "url": "https://instagram.com/canberraipad"
+        "url": "https://instagram.com/cozymountaincabins"
       },
       {
         "platform": "Twitter",
-        "url": "https://twitter.com/canberraipad"
+        "url": "https://twitter.com/cozymountaincabins"
       }
     ]
   }
