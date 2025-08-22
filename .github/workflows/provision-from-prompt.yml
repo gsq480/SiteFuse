@@ -947,17 +947,17 @@ jobs:
           # Create pages only if they do not exist
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && 
             # About page
-            if [ \$(wp post list --post_type=page --name=about --format=count --allow-root) -eq 0 ]; then
+            if [ \$(wp post list --post_type=page --post_title="About" --format=count --allow-root) -eq 0 ]; then
               wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content='Learn more about our story and values.' --allow-root
               echo 'Created About page'
             fi
             # Services page
-            if [ \$(wp post list --post_type=page --name=services --format=count --allow-root) -eq 0 ]; then
+            if [ \$(wp post list --post_type=page --post_title="Services" --format=count --allow-root) -eq 0 ]; then
               wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content='Discover our comprehensive services.' --allow-root
               echo 'Created Services page'
             fi
             # Contact page
-            if [ \$(wp post list --post_type=page --name=contact --format=count --allow-root) -eq 0 ]; then
+            if [ \$(wp post list --post_type=page --post_title="Contact" --format=count --allow-root) -eq 0 ]; then
               wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content='Get in touch with us today.' --allow-root
               echo 'Created Contact page'
             fi"
