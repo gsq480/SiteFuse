@@ -1,32 +1,32 @@
 {
   "images": [
     {
-      "key": "hero",
+      "key": "heroImage",
       "target": "hero",
-      "prompt": "A professional and inviting image of a diverse team of business professionals collaborating in a modern office environment, showcasing teamwork and innovation.",
+      "prompt": "A welcoming service-based company homepage with a bright, inviting atmosphere. The image consists of friendly people working together, symbolizing collaboration. Overlay text should convey warmth and motivation like 'Welcome to our services page!' in a clear, bold font.",
       "aspect": "16:9",
-      "suggestedFilename": "hero-business-team-collaboration.jpg"
+      "suggestedFilename": "hero-welcome-services-page.jpg"
     },
     {
-      "key": "aboutSection",
+      "key": "ourServicesImage",
       "target": "section",
-      "prompt": "An engaging visual representation of a dedicated team at work, emphasizing commitment and professionalism in a workplace setting.",
+      "prompt": "A visually engaging collage showcasing various services offered by a professional company. This should include images of diverse professionals at work, demonstrating teamwork, and innovation. The overlay text should say 'Our Services' in an elegant font.",
       "aspect": "4:3",
-      "suggestedFilename": "about-us-team-dedication.jpg"
+      "suggestedFilename": "our-services-collage.jpg"
     },
     {
-      "key": "servicesSection",
+      "key": "whyChooseUsImage",
       "target": "section",
-      "prompt": "A creative design showcasing a collage of various services like consulting, design, and development, with icons or imagery representing each service.",
+      "prompt": "An empowering image illustrating trust and reliability. This could feature a satisfied client shaking hands with a company representative. The overlay text should read 'Why Choose Us?' to evoke a sense of assurance.",
       "aspect": "4:3",
-      "suggestedFilename": "services-collage-consulting-design-development.jpg"
+      "suggestedFilename": "why-choose-us.jpg"
     },
     {
-      "key": "testimonialsSection",
+      "key": "clientTestimonialsImage",
       "target": "section",
-      "prompt": "A warm and inviting image featuring satisfied clients giving a thumbs-up in a cozy office setting, symbolizing positive feedback and trust.",
+      "prompt": "A heartfelt depiction of happy clients sharing their experiences with the company's services. The background can include customer feedback icons or quotes. The image should have the overlay text 'Client Testimonials' to highlight satisfaction.",
       "aspect": "4:3",
-      "suggestedFilename": "testimonials-client-satisfaction.jpg"
+      "suggestedFilename": "client-testimonials.jpg"
     }
   ]
 }

@@ -1,134 +1,121 @@
 {
-  "website": {
-    "heroSection": {
-      "title": "Welcome to Our Services",
-      "subtitle": "Your One-Stop Solution for All Your Needs",
-      "customHTML": "<strong class=\"text-lg font-semibold\">Partner with us for innovative solutions that drive success.</strong>",
-      "backgroundImage": "url('hero-image.jpg')",
-      "container": "<section class=\"flex flex-col items-center justify-center p-6 bg-cover bg-center text-white\" style=\"background-image: url('hero-image.jpg');\"><h1 class='text-4xl font-bold mb-4'>Welcome to Our Services</h1><h2 class='text-2xl mb-4'>Your One-Stop Solution for All Your Needs</h2><strong class='text-lg font-semibold'>Partner with us for innovative solutions that drive success.</strong></section>"
+  "heroSection": {
+    "customHTML": "<section class=\"py-12 bg-gray-100 text-center px-4\">\n  <h1 class=\"text-3xl font-bold mb-4\">Welcome to our services page!</h1>\n  <p class=\"text-lg text-gray-700\">Where we offer tailored solutions to meet your specific needs. Explore our diverse range of services designed to enhance your experience and drive success. Let's embark on this journey together!</p>\n</section>"
+  },
+  "servicesPageLayout": {
+    "sections": [
+      {
+        "title": "Our Services",
+        "description": "Explore the range of services we provide to cater to your unique requirements."
+      },
+      {
+        "title": "Why Choose Us?",
+        "description": "Learn why we are the preferred choice for many clients in the industry."
+      },
+      {
+        "title": "Client Testimonials",
+        "description": "Hear from our satisfied clients and discover how we've made an impact."
+      },
+      {
+        "title": "FAQs",
+        "description": "Find answers to common questions about our services."
+      },
+      {
+        "title": "<h2 class=\"text-2xl font-semibold\">Our Services</h2>",
+        "description": "<p class=\"text-lg text-gray-600\">Explore the range of services we provide to cater to your unique requirements.</p>"
+      },
+      {
+        "title": "<h2 class=\"text-2xl font-semibold\">Why Choose Us?</h2>",
+        "description": "<p class=\"text-lg text-gray-600\">Learn why we are the preferred choice for many clients in the industry.</p>"
+      },
+      {
+        "title": "<h2 class=\"text-2xl font-semibold\">Client Testimonials</h2>",
+        "description": "<p class=\"text-lg text-gray-600\">Hear from our satisfied clients and discover how we've made an impact.</p>"
+      },
+      {
+        "title": "<h2 class=\"text-2xl font-semibold\">FAQs</h2>",
+        "description": "<p class=\"text-lg text-gray-600\">Find answers to common questions about our services.</p>"
+      }
+    ]
+  },
+  "customSections": [
+    {
+      "sectionType": "caseStudies",
+      "title": "Case Studies",
+      "description": "Discover how our services have successfully transformed businesses through real-life examples."
     },
-    "aboutSection": {
-      "heading": "About Us",
-      "content": "<section class=\"p-4\"><h2 class='text-3xl font-bold mb-2'>About Us</h2><p class='text-base text-gray-700'>We are a dedicated team of professionals focused on delivering exceptional service.</p></section>"
+    {
+      "sectionType": "blog",
+      "title": "Latest Insights",
+      "description": "Stay updated with the latest trends, tips, and insights from our expert team."
     },
-    "servicesSection": {
-      "heading": "Our Services",
-      "servicesList": [
-        {
-          "serviceName": "Consulting",
-          "serviceDescription": "Expert advice to guide your business."
-        },
-        {
-          "serviceName": "Design",
-          "serviceDescription": "Creative designs tailored to your brand."
-        },
-        {
-          "serviceName": "Development",
-          "serviceDescription": "Building robust applications and systems."
-        },
-        {
-          "serviceName": "Consulting",
-          "serviceDescription": "<div class='flex flex-col items-start mb-4'><h3 class='text-xl font-semibold'>Consulting</h3><p class='text-gray-600'>Expert advice to guide your business.</p></div>"
-        },
-        {
-          "serviceName": "Design",
-          "serviceDescription": "<div class='flex flex-col items-start mb-4'><h3 class='text-xl font-semibold'>Design</h3><p class='text-gray-600'>Creative designs tailored to your brand.</p></div>"
-        },
-        {
-          "serviceName": "Development",
-          "serviceDescription": "<div class='flex flex-col items-start mb-4'><h3 class='text-xl font-semibold'>Development</h3><p class='text-gray-600'>Building robust applications and systems.</p></div>"
-        }
-      ],
-      "container": "<section class='p-4'><h2 class='text-3xl font-bold mb-4'>Our Services</h2><div class='space-y-6'>{{servicesList}}</div></section>"
+    {
+      "sectionType": "caseStudies",
+      "title": "<h2 class=\"text-2xl font-semibold\">Case Studies</h2>",
+      "description": "<p class=\"text-lg text-gray-600\">Discover how our services have successfully transformed businesses through real-life examples.</p>"
     },
-    "testimonialsSection": {
-      "heading": "What Our Clients Say",
-      "testimonialsList": [
-        {
-          "clientName": "Jane Doe",
-          "feedback": "An exceptional service that transformed our business."
-        },
-        {
-          "clientName": "John Smith",
-          "feedback": "Highly professional and reliable."
-        },
-        {
-          "clientName": "Jane Doe",
-          "feedback": "<blockquote class='border-l-4 border-gray-300 pl-4 italic'><p>An exceptional service that transformed our business.</p></blockquote>"
-        },
-        {
-          "clientName": "John Smith",
-          "feedback": "<blockquote class='border-l-4 border-gray-300 pl-4 italic'><p>Highly professional and reliable.</p></blockquote>"
-        }
-      ],
-      "container": "<section class='p-4'><h2 class='text-3xl font-bold mb-4'>What Our Clients Say</h2><div class='space-y-4'>{{testimonialsList}}</div></section>"
-    },
-    "contactSection": {
-      "heading": "Contact Us",
-      "content": "<section class='p-4'><h2 class='text-3xl font-bold mb-2'>Contact Us</h2><p class='text-base text-gray-700'>Reach out for inquiries and support.</p></section>"
-    },
-    "servicesPageLayout": {
-      "layoutDescription": "Detailed overview of all our services with case studies and client achievements.",
-      "sections": [
-        {
-          "sectionHeading": "Consulting Services",
-          "sectionDetails": "In-depth consultations that explore your unique challenges."
-        },
-        {
-          "sectionHeading": "Design Capabilities",
-          "sectionDetails": "Visual identity creation and user experience design."
-        },
-        {
-          "sectionHeading": "Development Processes",
-          "sectionDetails": "Our methodology for software development and quality assurance."
-        },
-        {
-          "sectionHeading": "Consulting Services",
-          "sectionDetails": "<div class='mb-6'><h3 class='text-xl font-semibold'>Consulting Services</h3><p class='text-gray-600'>In-depth consultations that explore your unique challenges.</p></div>"
-        },
-        {
-          "sectionHeading": "Design Capabilities",
-          "sectionDetails": "<div class='mb-6'><h3 class='text-xl font-semibold'>Design Capabilities</h3><p class='text-gray-600'>Visual identity creation and user experience design.</p></div>"
-        },
-        {
-          "sectionHeading": "Development Processes",
-          "sectionDetails": "<div class='mb-6'><h3 class='text-xl font-semibold'>Development Processes</h3><p class='text-gray-600'>Our methodology for software development and quality assurance.</p></div>"
-        }
-      ],
-      "container": "<section class='p-4'><h2 class='text-3xl font-bold mb-4'>Our Services</h2><div class='space-y-6'>{{sections}}</div></section>"
-    },
-    "footerSection": {
-      "content": "<footer class='bg-gray-800 text-white text-center p-4'><p>© 2023 Your Company. All rights reserved.</p></footer>"
+    {
+      "sectionType": "blog",
+      "title": "<h2 class=\"text-2xl font-semibold\">Latest Insights</h2>",
+      "description": "<p class=\"text-lg text-gray-600\">Stay updated with the latest trends, tips, and insights from our expert team.</p>"
     }
+  ],
+  "footer": {
+    "links": [
+      {
+        "title": "Privacy Policy",
+        "url": "/privacy"
+      },
+      {
+        "title": "Terms of Service",
+        "url": "/terms"
+      },
+      {
+        "title": "Contact Us",
+        "url": "/contact"
+      },
+      {
+        "title": "<a class=\"text-blue-500 hover:underline\" href=\"/privacy\">Privacy Policy</a>",
+        "url": "/privacy"
+      },
+      {
+        "title": "<a class=\"text-blue-500 hover:underline\" href=\"/terms\">Terms of Service</a>",
+        "url": "/terms"
+      },
+      {
+        "title": "<a class=\"text-blue-500 hover:underline\" href=\"/contact\">Contact Us</a>",
+        "url": "/contact"
+      }
+    ]
   },
   "imagePrompts": [
     {
-      "key": "hero",
+      "key": "heroImage",
       "target": "hero",
-      "prompt": "A professional and inviting image of a diverse team of business professionals collaborating in a modern office environment, showcasing teamwork and innovation.",
+      "prompt": "A welcoming service-based company homepage with a bright, inviting atmosphere. The image consists of friendly people working together, symbolizing collaboration. Overlay text should convey warmth and motivation like 'Welcome to our services page!' in a clear, bold font.",
       "aspect": "16:9",
-      "suggestedFilename": "hero-business-team-collaboration.jpg"
+      "suggestedFilename": "hero-welcome-services-page.jpg"
     },
     {
-      "key": "aboutSection",
+      "key": "ourServicesImage",
       "target": "section",
-      "prompt": "An engaging visual representation of a dedicated team at work, emphasizing commitment and professionalism in a workplace setting.",
+      "prompt": "A visually engaging collage showcasing various services offered by a professional company. This should include images of diverse professionals at work, demonstrating teamwork, and innovation. The overlay text should say 'Our Services' in an elegant font.",
       "aspect": "4:3",
-      "suggestedFilename": "about-us-team-dedication.jpg"
+      "suggestedFilename": "our-services-collage.jpg"
     },
     {
-      "key": "servicesSection",
+      "key": "whyChooseUsImage",
       "target": "section",
-      "prompt": "A creative design showcasing a collage of various services like consulting, design, and development, with icons or imagery representing each service.",
+      "prompt": "An empowering image illustrating trust and reliability. This could feature a satisfied client shaking hands with a company representative. The overlay text should read 'Why Choose Us?' to evoke a sense of assurance.",
       "aspect": "4:3",
-      "suggestedFilename": "services-collage-consulting-design-development.jpg"
+      "suggestedFilename": "why-choose-us.jpg"
     },
     {
-      "key": "testimonialsSection",
+      "key": "clientTestimonialsImage",
       "target": "section",
-      "prompt": "A warm and inviting image featuring satisfied clients giving a thumbs-up in a cozy office setting, symbolizing positive feedback and trust.",
+      "prompt": "A heartfelt depiction of happy clients sharing their experiences with the company's services. The background can include customer feedback icons or quotes. The image should have the overlay text 'Client Testimonials' to highlight satisfaction.",
       "aspect": "4:3",
-      "suggestedFilename": "testimonials-client-satisfaction.jpg"
+      "suggestedFilename": "client-testimonials.jpg"
     }
   ]
 }
