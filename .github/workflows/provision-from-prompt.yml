@@ -208,7 +208,7 @@ jobs:
             <?php
             return ob_get_clean();
           });
-          PHP
+          HEADERTEMPLATE
 
           # Enhanced Tailwind CSS with modern components
           cat > child/assets/css/tailwind.css <<CSS
@@ -418,7 +418,7 @@ jobs:
           JS
 
           # Enhanced header with mobile menu
-          cat > child/header.php <<'PHP'
+          cat > child/header.php <<'HEADERTEMPLATE'
           <!doctype html>
           <html <?php language_attributes(); ?>>
           <head>
@@ -469,7 +469,7 @@ jobs:
               </div>
             </div>
           </header>
-          PHP
+          HEADERTEMPLATE
 
           # Enhanced footer
           cat > child/footer.php <<'PHP'
@@ -526,7 +526,7 @@ jobs:
           <?php wp_footer(); ?>
           </body>
           </html>
-          PHP
+          HEADERTEMPLATE
 
           # Generate AI-designed front page with safe YAML syntax
           echo "<?php get_header(); ?>" > child/front-page.php
@@ -549,7 +549,7 @@ jobs:
             </div>
           </main>
           <?php get_footer(); ?>
-          PHP
+          HEADERTEMPLATE
 
           # Generate AI-designed services page
           echo "<?php get_header(); ?>" > child/page-services.php
@@ -601,7 +601,7 @@ jobs:
             </div>
           </main>
           <?php get_footer(); ?>
-          PHP
+          HEADERTEMPLATE
 
           # Download hero and about images with multiple fallbacks
           echo "Downloading hero image..."
