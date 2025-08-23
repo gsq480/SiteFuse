@@ -1,79 +1,79 @@
 {
-  "slug": "water-slide-park-canberra",
-  "name": "Canberra Splash Zone",
-  "tagline": "Dive Into Adventure!",
-  "industry": "Amusement / Water Park",
-  "designTheme": "playful",
+  "slug": "brews-and-beans",
+  "name": "Brews & Beans",
+  "tagline": "Your Neighborhood Coffee Haven",
+  "industry": "Coffee Shop",
+  "designTheme": "Modern Cozy",
   "colorPalette": {
-    "primary": "#00A9E0",
-    "secondary": "#FF6F61",
-    "accent": "#FFD700",
-    "background": "#E0F7FA",
-    "text": "#333333"
+    "primary": "#94618E",
+    "secondary": "#DAA520",
+    "accent": "#7C4D00",
+    "background": "#F3F4F6",
+    "text": "#2D2D2D"
   },
   "typography": {
-    "headingFont": "Poppins, sans-serif",
-    "bodyFont": "Roboto, sans-serif",
-    "accentFont": "BubbleGum, cursive"
+    "headingFont": "'Montserrat', sans-serif",
+    "bodyFont": "'Roboto', sans-serif",
+    "accentFont": "'Lobster', cursive"
   },
   "heroSection": {
-    "customHTML": "<div class='relative bg-primary overflow-hidden'><div class='absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-50'></div><div class='container mx-auto flex flex-col justify-center items-center h-screen text-white z-10 text-center'><h1 class='text-5xl font-bold mb-4'>Welcome to Canberra Splash Zone</h1><p class='text-lg mb-8'>The ultimate destination for fun and excitement on the water!</p><a href='#services' class='bg-accent text-white py-2 px-5 rounded-full text-lg font-semibold hover:bg-yellow-500 transition'>Plan Your Visit</a></div></div>"
+    "customHTML": "<h1 class='text-5xl font-bold text-center text-white'>Welcome to Brews & Beans</h1><p class='text-xl text-center text-gray-300 mt-4'>Sip into serenity with every cup.</p>",
+    "heroImage": "https://example.com/images/hero-coffee-shop.jpg"
   },
-  "customSections": [
-    {
-      "title": "Exciting Rides and Attractions",
-      "customHTML": "<div class='container mx-auto my-16'><h2 class='text-4xl font-extrabold text-primary text-center mb-8'>Exciting Rides and Attractions</h2><div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'><div class='bg-white shadow-lg rounded-lg p-6'><h3 class='text-2xl font-bold mb-2'>Thunder Falls</h3><p>Experience the thrill of a steep drop into a splash pool below. Surrounded by lush landscapes, it’s perfect for daring adventurers!</p></div><div class='bg-white shadow-lg rounded-lg p-6'><h3 class='text-2xl font-bold mb-2'>Lazy River</h3><p>Float along our winding lazy river and soak up the sun. It's a tranquil retreat for families and friends who want to relax!</p></div><div class='bg-white shadow-lg rounded-lg p-6'><h3 class='text-2xl font-bold mb-2'>Kid's Splash Zone</h3><p>A dedicated area for little ones to splash around safely with mini slides and water features designed for their enjoyment!</p></div></div></div>"
+  "customSections": [{
+    "html": "<div class='bg-white p-6 rounded-lg shadow-md mb-8'><h2 class='text-3xl font-semibold mb-4'>About Us</h2><p class='text-lg text-gray-700'>At Brews & Beans, we believe coffee is more than just a beverage; it's an experience. Our carefully curated menu features locally-sourced, organic coffee beans roasted to perfection. Join us for a cozy atmosphere, delicious pastries, and memorable moments!</p></div>"
+  }],
+  "services": [{
+      "title": "Coffee & Beverages",
+      "description": "A variety of handcrafted coffee drinks, teas, and smoothies made with the finest ingredients."
     },
     {
-      "title": "Planning Your Visit",
-      "customHTML": "<div class='bg-background py-16'><div class='container mx-auto'><h2 class='text-4xl font-extrabold text-primary text-center mb-8'>Planning Your Visit</h2><div class='flex flex-col md:flex-row justify-around items-center'><div class='bg-white shadow-lg rounded-lg p-6 mb-4 md:mb-0'><h3 class='text-2xl font-bold mb-2'>Hours of Operation</h3><p>Monday - Sunday: 10 AM - 8 PM</p></div><div class='bg-white shadow-lg rounded-lg p-6 mb-4 md:mb-0'><h3 class='text-2xl font-bold mb-2'>Ticket Prices</h3><p>Adults: $30, Children: $20, Family Pass: $80</p></div><div class='bg-white shadow-lg rounded-lg p-6 mb-4 md:mb-0'><h3 class='text-2xl font-bold mb-2'>Location</h3><p>123 Water Lane, Canberra, ACT, Australia</p></div></div></div></div>"
+      "title": "Pastry & Snacks",
+      "description": "Indulge in our selection of fresh pastries, croissants, and healthy snacks, perfect to pair with your drink."
+    },
+    {
+      "title": "Catering Services",
+      "description": "Let us bring the coffee experience to your special events with our tailored catering services."
     }
   ],
-  "services": [
-    {
-      "title": "Group Events",
-      "description": "Book your birthday parties, school excursions, or corporate events at Canberra Splash Zone!"
+  "testimonials": [{
+      "name": "Emma Johnson",
+      "message": "Brews & Beans is my go-to spot for a morning pick-me-up! The atmosphere is so inviting and the coffee is simply unbeatable."
     },
     {
-      "title": "Food & Beverage",
-      "description": "Enjoy a variety of food options from snacks to full meals at our park's cafes."
+      "name": "Michael Adams",
+      "message": "I've tried many coffee shops, but none match the quality and warmth that Brews & Beans offers. Highly recommend!"
     },
     {
-      "title": "Season Passes",
-      "description": "Get unlimited access to fun for the whole season with our affordable season passes!"
-    }
-  ],
-  "testimonials": [
-    {
-      "name": "Sarah M.",
-      "content": "We had an amazing family day out! The kids loved every second at the park, especially the slides!"
-    },
-    {
-      "name": "James T.",
-      "content": "Best water park experience I've ever had! Clean, safe, and tons of fun!"
-    },
-    {
-      "name": "Emily R.",
-      "content": "A perfect spot for both relaxation and adrenaline-pumping rides!"
+      "name": "Sophia Lopez",
+      "message": "Their pastries are to die for and their baristas are super friendly. A wonderful place to relax."
     }
   ],
   "contact": {
-    "phone": "(02) 1234 5678",
-    "email": "info@canberrasplashzone.com.au",
-    "social": [
-      {
-        "platform": "Facebook",
-        "link": "https://facebook.com/canberrasplashzone"
-      },
-      {
-        "platform": "Instagram",
-        "link": "https://instagram.com/canberrasplashzone"
-      }
-    ]
+    "email": "contact@brewsandbeans.com",
+    "phone": "123-456-7890",
+    "address": {
+      "street": "123 Coffee Lane",
+      "city": "Brewtown",
+      "state": "CA",
+      "zip": "90001"
+    },
+    "contactFormHTML": "<form class='mt-6'><input type='text' placeholder='Your Name' class='w-full p-3 border border-gray-300 rounded mb-4' /><input type='email' placeholder='Your Email' class='w-full p-3 border border-gray-300 rounded mb-4' /><textarea placeholder='Your Message' class='w-full p-3 border border-gray-300 rounded mb-4' rows='4'></textarea><button type='submit' class='bg-primary text-white font-bold py-2 px-4 rounded'>Send Message</button></form>"
   },
   "footer": {
-    "customHTML": "<div class='bg-primary py-6 text-white'><div class='container mx-auto text-center'><p>&copy; 2023 Canberra Splash Zone. All rights reserved.</p></div></div>"
+    "customHTML": "<div class='bg-primary text-white p-4 text-center'>Copyright © 2023 Brews & Beans | Follow us on <a href='#' class='underline'>Instagram</a> | <a href='#' class='underline'>Facebook</a></div>"
   },
-  "homepageLayout": "<div class='bg-background'><header class='bg-white shadow'><div class='container mx-auto py-4 flex justify-between items-center'><h1 class='text-3xl font-bold text-primary'>Canberra Splash Zone</h1><nav><a href='#' class='text-primary mx-4'>Home</a><a href='#services' class='text-primary mx-4'>Services</a><a href='#testimonials' class='text-primary mx-4'>Testimonials</a><a href='#contact' class='text-primary mx-4'>Contact</a></nav></div></header><main><section class='hero-section'>[HERO SECTION GOES HERE]</section><section class='custom-sections'>[CUSTOM SECTIONS GO HERE]</section><section class='testimonials'>[TESTIMONIALS GO HERE]</section><section class='contact'>[CONTACT GOES HERE]</section></main><footer>[FOOTER GOES HERE]</footer></div>",
-  "servicesPageLayout": "<div class='container mx-auto my-16'><h2 class='text-4xl font-extrabold text-primary text-center mb-8'>Our Services</h2><div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>[SERVICE CARDS GO HERE]</div></div>"
+  "homepageLayout": [
+    "heroSection",
+    "customSections",
+    "services",
+    "testimonials",
+    "contact",
+    "footer"
+  ],
+  "servicesPageLayout": [
+    "services",
+    "contact",
+    "footer"
+  ]
 }
