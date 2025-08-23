@@ -1,113 +1,134 @@
 {
-  "heroSection": {
-    "headline": "Welcome to Our New Website!",
-    "subheadline": "Your success is our priority",
-    "customHTML": "<div class='container mx-auto py-6 px-4 text-center'><h1 class='text-3xl md:text-5xl font-bold mb-4'>Welcome to Our New Website!</h1><h2 class='text-xl md:text-3xl font-semibold mb-4'>Your success is our priority</h2><p class='text-lg md:text-xl text-gray-700'>Join us as we embark on a journey to provide innovative solutions tailored to your needs. We focus on delivering exceptional results for our clients through dedication and expertise.</p></div>"
-  },
-  "servicesPageLayout": [
-    {
-      "serviceTitle": "Consulting",
-      "serviceDescription": "Expert advice to drive your business strategy forward."
+  "website": {
+    "heroSection": {
+      "title": "Welcome to Our Services",
+      "subtitle": "Your One-Stop Solution for All Your Needs",
+      "customHTML": "<strong class=\"text-lg font-semibold\">Partner with us for innovative solutions that drive success.</strong>",
+      "backgroundImage": "url('hero-image.jpg')",
+      "container": "<section class=\"flex flex-col items-center justify-center p-6 bg-cover bg-center text-white\" style=\"background-image: url('hero-image.jpg');\"><h1 class='text-4xl font-bold mb-4'>Welcome to Our Services</h1><h2 class='text-2xl mb-4'>Your One-Stop Solution for All Your Needs</h2><strong class='text-lg font-semibold'>Partner with us for innovative solutions that drive success.</strong></section>"
     },
-    {
-      "serviceTitle": "Development",
-      "serviceDescription": "Building tailored software solutions to meet your business challenges."
+    "aboutSection": {
+      "heading": "About Us",
+      "content": "<section class=\"p-4\"><h2 class='text-3xl font-bold mb-2'>About Us</h2><p class='text-base text-gray-700'>We are a dedicated team of professionals focused on delivering exceptional service.</p></section>"
     },
-    {
-      "serviceTitle": "Support",
-      "serviceDescription": "Reliable customer service to ensure your systems run smoothly."
+    "servicesSection": {
+      "heading": "Our Services",
+      "servicesList": [
+        {
+          "serviceName": "Consulting",
+          "serviceDescription": "Expert advice to guide your business."
+        },
+        {
+          "serviceName": "Design",
+          "serviceDescription": "Creative designs tailored to your brand."
+        },
+        {
+          "serviceName": "Development",
+          "serviceDescription": "Building robust applications and systems."
+        },
+        {
+          "serviceName": "Consulting",
+          "serviceDescription": "<div class='flex flex-col items-start mb-4'><h3 class='text-xl font-semibold'>Consulting</h3><p class='text-gray-600'>Expert advice to guide your business.</p></div>"
+        },
+        {
+          "serviceName": "Design",
+          "serviceDescription": "<div class='flex flex-col items-start mb-4'><h3 class='text-xl font-semibold'>Design</h3><p class='text-gray-600'>Creative designs tailored to your brand.</p></div>"
+        },
+        {
+          "serviceName": "Development",
+          "serviceDescription": "<div class='flex flex-col items-start mb-4'><h3 class='text-xl font-semibold'>Development</h3><p class='text-gray-600'>Building robust applications and systems.</p></div>"
+        }
+      ],
+      "container": "<section class='p-4'><h2 class='text-3xl font-bold mb-4'>Our Services</h2><div class='space-y-6'>{{servicesList}}</div></section>"
     },
-    {
-      "serviceTitle": "Consulting",
-      "serviceDescription": "<div class='bg-white border border-gray-200 rounded-lg p-6 shadow-md mb-4'><h3 class='text-xl font-bold mb-2'>Consulting</h3><p class='text-gray-600'>Expert advice to drive your business strategy forward.</p></div>"
+    "testimonialsSection": {
+      "heading": "What Our Clients Say",
+      "testimonialsList": [
+        {
+          "clientName": "Jane Doe",
+          "feedback": "An exceptional service that transformed our business."
+        },
+        {
+          "clientName": "John Smith",
+          "feedback": "Highly professional and reliable."
+        },
+        {
+          "clientName": "Jane Doe",
+          "feedback": "<blockquote class='border-l-4 border-gray-300 pl-4 italic'><p>An exceptional service that transformed our business.</p></blockquote>"
+        },
+        {
+          "clientName": "John Smith",
+          "feedback": "<blockquote class='border-l-4 border-gray-300 pl-4 italic'><p>Highly professional and reliable.</p></blockquote>"
+        }
+      ],
+      "container": "<section class='p-4'><h2 class='text-3xl font-bold mb-4'>What Our Clients Say</h2><div class='space-y-4'>{{testimonialsList}}</div></section>"
     },
-    {
-      "serviceTitle": "Development",
-      "serviceDescription": "<div class='bg-white border border-gray-200 rounded-lg p-6 shadow-md mb-4'><h3 class='text-xl font-bold mb-2'>Development</h3><p class='text-gray-600'>Building tailored software solutions to meet your business challenges.</p></div>"
+    "contactSection": {
+      "heading": "Contact Us",
+      "content": "<section class='p-4'><h2 class='text-3xl font-bold mb-2'>Contact Us</h2><p class='text-base text-gray-700'>Reach out for inquiries and support.</p></section>"
     },
-    {
-      "serviceTitle": "Support",
-      "serviceDescription": "<div class='bg-white border border-gray-200 rounded-lg p-6 shadow-md mb-4'><h3 class='text-xl font-bold mb-2'>Support</h3><p class='text-gray-600'>Reliable customer service to ensure your systems run smoothly.</p></div>"
+    "servicesPageLayout": {
+      "layoutDescription": "Detailed overview of all our services with case studies and client achievements.",
+      "sections": [
+        {
+          "sectionHeading": "Consulting Services",
+          "sectionDetails": "In-depth consultations that explore your unique challenges."
+        },
+        {
+          "sectionHeading": "Design Capabilities",
+          "sectionDetails": "Visual identity creation and user experience design."
+        },
+        {
+          "sectionHeading": "Development Processes",
+          "sectionDetails": "Our methodology for software development and quality assurance."
+        },
+        {
+          "sectionHeading": "Consulting Services",
+          "sectionDetails": "<div class='mb-6'><h3 class='text-xl font-semibold'>Consulting Services</h3><p class='text-gray-600'>In-depth consultations that explore your unique challenges.</p></div>"
+        },
+        {
+          "sectionHeading": "Design Capabilities",
+          "sectionDetails": "<div class='mb-6'><h3 class='text-xl font-semibold'>Design Capabilities</h3><p class='text-gray-600'>Visual identity creation and user experience design.</p></div>"
+        },
+        {
+          "sectionHeading": "Development Processes",
+          "sectionDetails": "<div class='mb-6'><h3 class='text-xl font-semibold'>Development Processes</h3><p class='text-gray-600'>Our methodology for software development and quality assurance.</p></div>"
+        }
+      ],
+      "container": "<section class='p-4'><h2 class='text-3xl font-bold mb-4'>Our Services</h2><div class='space-y-6'>{{sections}}</div></section>"
+    },
+    "footerSection": {
+      "content": "<footer class='bg-gray-800 text-white text-center p-4'><p>© 2023 Your Company. All rights reserved.</p></footer>"
     }
-  ],
-  "customSections": [
-    {
-      "sectionTitle": "Client Testimonials",
-      "sectionContent": "Hear from our satisfied customers about how we've helped them achieve their goals."
-    },
-    {
-      "sectionTitle": "Our Process",
-      "sectionContent": "Learn how our approach ensures successful project delivery."
-    },
-    {
-      "sectionTitle": "Industry Insights",
-      "sectionContent": "Stay updated with the latest trends and news in your industry."
-    },
-    {
-      "sectionTitle": "Client Testimonials",
-      "sectionContent": "<div class='bg-gray-50 p-8 rounded-lg'><h3 class='text-2xl font-bold mb-4'>Client Testimonials</h3><p class='text-gray-700'>Hear from our satisfied customers about how we've helped them achieve their goals.</p></div>"
-    },
-    {
-      "sectionTitle": "Our Process",
-      "sectionContent": "<div class='bg-gray-50 p-8 rounded-lg'><h3 class='text-2xl font-bold mb-4'>Our Process</h3><p class='text-gray-700'>Learn how our approach ensures successful project delivery.</p></div>"
-    },
-    {
-      "sectionTitle": "Industry Insights",
-      "sectionContent": "<div class='bg-gray-50 p-8 rounded-lg'><h3 class='text-2xl font-bold mb-4'>Industry Insights</h3><p class='text-gray-700'>Stay updated with the latest trends and news in your industry.</p></div>"
-    }
-  ],
-  "footerSection": {
-    "contactInfo": {
-      "email": "<a href='mailto:support@example.com' class='text-blue-600 hover:underline'>support@example.com</a>",
-      "phone": "<span class='text-gray-700'>123-456-7890</span>"
-    },
-    "socialLinks": [
-      {
-        "platform": "LinkedIn",
-        "url": "https://linkedin.com/company/example"
-      },
-      {
-        "platform": "Twitter",
-        "url": "https://twitter.com/example"
-      },
-      {
-        "platform": "LinkedIn",
-        "url": "<a href='https://linkedin.com/company/example' target='_blank' class='text-blue-600 hover:underline'>LinkedIn</a>"
-      },
-      {
-        "platform": "Twitter",
-        "url": "<a href='https://twitter.com/example' target='_blank' class='text-blue-600 hover:underline'>Twitter</a>"
-      }
-    ]
   },
   "imagePrompts": [
     {
       "key": "hero",
       "target": "hero",
-      "prompt": "A welcoming and modern website homepage featuring a headline 'Welcome to Our New Website!' and a subheadline 'Your success is our priority'. The design should convey a sense of innovation and professionalism, with a clean and contemporary aesthetic. Include visuals of diverse people collaborating and using technology, symbolizing teamwork and success.",
+      "prompt": "A professional and inviting image of a diverse team of business professionals collaborating in a modern office environment, showcasing teamwork and innovation.",
       "aspect": "16:9",
-      "suggestedFilename": "hero-welcome-website.jpg"
+      "suggestedFilename": "hero-business-team-collaboration.jpg"
     },
     {
-      "key": "clientTestimonials",
+      "key": "aboutSection",
       "target": "section",
-      "prompt": "A visually appealing section that showcases client testimonials. Include the title 'Client Testimonials' with a background that feels warm and inviting. The imagery should depict happy clients sharing their success stories, emphasizing trust and satisfaction. Use soft colors to enhance approachability.",
+      "prompt": "An engaging visual representation of a dedicated team at work, emphasizing commitment and professionalism in a workplace setting.",
       "aspect": "4:3",
-      "suggestedFilename": "client-testimonials.jpg"
+      "suggestedFilename": "about-us-team-dedication.jpg"
     },
     {
-      "key": "ourProcess",
+      "key": "servicesSection",
       "target": "section",
-      "prompt": "An informative and engaging section that explains 'Our Process'. The design should visually outline steps of a project workflow, incorporating graphics or icons representing various stages of a process. Use a modern color palette and layout that enhances clarity and professionalism.",
+      "prompt": "A creative design showcasing a collage of various services like consulting, design, and development, with icons or imagery representing each service.",
       "aspect": "4:3",
-      "suggestedFilename": "our-process.jpg"
+      "suggestedFilename": "services-collage-consulting-design-development.jpg"
     },
     {
-      "key": "industryInsights",
+      "key": "testimonialsSection",
       "target": "section",
-      "prompt": "A modern section dedicated to 'Industry Insights'. The imagery should suggest a dynamic and forward-thinking approach to industry trends. Incorporate visuals like charts or graphs, and images of professionals engaging with data, suggesting knowledge and expertise in their field.",
+      "prompt": "A warm and inviting image featuring satisfied clients giving a thumbs-up in a cozy office setting, symbolizing positive feedback and trust.",
       "aspect": "4:3",
-      "suggestedFilename": "industry-insights.jpg"
+      "suggestedFilename": "testimonials-client-satisfaction.jpg"
     }
   ]
 }

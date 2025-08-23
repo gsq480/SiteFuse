@@ -1,2 +1,69 @@
 
-{"heroSection":{"headline":"Welcome to Our New Website!","subheadline":"Your success is our priority","customHTML":"Join us as we embark on a journey to provide innovative solutions tailored to your needs. We focus on delivering exceptional results for our clients through dedication and expertise."},"servicesPageLayout":[{"serviceTitle":"Consulting","serviceDescription":"Expert advice to drive your business strategy forward."},{"serviceTitle":"Development","serviceDescription":"Building tailored software solutions to meet your business challenges."},{"serviceTitle":"Support","serviceDescription":"Reliable customer service to ensure your systems run smoothly."}],"customSections":[{"sectionTitle":"Client Testimonials","sectionContent":"Hear from our satisfied customers about how we've helped them achieve their goals."},{"sectionTitle":"Our Process","sectionContent":"Learn how our approach ensures successful project delivery."},{"sectionTitle":"Industry Insights","sectionContent":"Stay updated with the latest trends and news in your industry."}],"footerSection":{"contactInfo":{"email":"support@example.com","phone":"123-456-7890"},"socialLinks":[{"platform":"LinkedIn","url":"https://linkedin.com/company/example"},{"platform":"Twitter","url":"https://twitter.com/example"}]}}
+{
+  "website": {
+    "heroSection": {
+      "title": "Welcome to Our Services",
+      "subtitle": "Your One-Stop Solution for All Your Needs",
+      "customHTML": "<strong>Partner with us for innovative solutions that drive success.</strong>",
+      "backgroundImage": "url('hero-image.jpg')"
+    },
+    "aboutSection": {
+      "heading": "About Us",
+      "content": "We are a dedicated team of professionals focused on delivering exceptional service."
+    },
+    "servicesSection": {
+      "heading": "Our Services",
+      "servicesList": [
+        {
+          "serviceName": "Consulting",
+          "serviceDescription": "Expert advice to guide your business."
+        },
+        {
+          "serviceName": "Design",
+          "serviceDescription": "Creative designs tailored to your brand."
+        },
+        {
+          "serviceName": "Development",
+          "serviceDescription": "Building robust applications and systems."
+        }
+      ]
+    },
+    "testimonialsSection": {
+      "heading": "What Our Clients Say",
+      "testimonialsList": [
+        {
+          "clientName": "Jane Doe",
+          "feedback": "An exceptional service that transformed our business."
+        },
+        {
+          "clientName": "John Smith",
+          "feedback": "Highly professional and reliable."
+        }
+      ]
+    },
+    "contactSection": {
+      "heading": "Contact Us",
+      "content": "Reach out for inquiries and support."
+    },
+    "servicesPageLayout": {
+      "layoutDescription": "Detailed overview of all our services with case studies and client achievements.",
+      "sections": [
+        {
+          "sectionHeading": "Consulting Services",
+          "sectionDetails": "In-depth consultations that explore your unique challenges."
+        },
+        {
+          "sectionHeading": "Design Capabilities",
+          "sectionDetails": "Visual identity creation and user experience design."
+        },
+        {
+          "sectionHeading": "Development Processes",
+          "sectionDetails": "Our methodology for software development and quality assurance."
+        }
+      ]
+    },
+    "footerSection": {
+      "content": "© 2023 Your Company. All rights reserved."
+    }
+  }
+}
