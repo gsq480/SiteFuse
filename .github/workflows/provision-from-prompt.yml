@@ -53,23 +53,23 @@ jobs:
           persist-credentials: true
 
       - name: SSH setup
-        run: |
-          set -euo pipefail
-          echo "[setup] preparing ssh"
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/id_rsa_cloudways
-          chmod 600 ~/.ssh/id_rsa_cloudways
-          ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
+        run: >
+          set -euo pipefail;
+          echo "[setup] preparing ssh";
+          mkdir -p ~/.ssh;
+          chmod 700 ~/.ssh;
+          printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/id_rsa_cloudways;
+          chmod 600 ~/.ssh/id_rsa_cloudways;
+          ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts;
 
       #####################################################################
-      # AI PASS 1 — Base site JSON
+      # AI PASS 1, base site JSON
       #####################################################################
       - name: AI pass 1, base website JSON
         id: ai1
-        run: |
-          set -euo pipefail
-          echo "[ai1] generating base website json"
+        run: >
+          set -euo pipefail;
+          echo "[ai1] generating base website json";
           cat > /tmp/payload.json <<'EOF'
           {
             "model":"gpt-4o-mini",
@@ -86,21 +86,21 @@ jobs:
             ]
           }
           EOF
-          curl -sS https://api.openai.com/v1/chat/completions \
-            -H "Authorization: Bearer $OPENAI_API_KEY" \
-            -H "Content-Type: application/json" \
-            -d @/tmp/payload.json \
-          | jq -r '.choices[0].message.content' > website-step1.json
-          jq . website-step1.json | head -n 60 || true
+          curl -sS https://api.openai.com/v1/chat/completions
+            -H "Authorization: Bearer $OPENAI_API_KEY"
+            -H "Content-Type: application/json"
+            -d @/tmp/payload.json
+          | jq -r '.choices[0].message.content' > website-step1.json;
+          jq . website-step1.json | head -n 60 || true;
 
       #####################################################################
-      # AI PASS 2 — Improve sections for the industry
+      # AI PASS 2, section audit and improvement
       #####################################################################
       - name: AI pass 2, section audit and improvement
         id: ai2
-        run: |
-          set -euo pipefail
-          echo "[ai2] auditing sections, adding or pruning for industry best practice"
+        run: >
+          set -euo pipefail;
+          echo "[ai2] auditing sections, adding or pruning for industry best practice";
           cat > /tmp/payload2.json <<'EOF'
           {
             "model":"gpt-4o-mini",
@@ -108,32 +108,33 @@ jobs:
             "messages":[
               {
                 "role":"system",
-                "content":"You are a senior UX director. Given a website JSON, audit whether sections are missing or redundant for the industry. Return an UPDATED website JSON. Improve heroSection customHTML for clarity, add or remove customSections where useful, and ensure servicesPageLayout is present and coherent. Preserve existing keys; extend rather than overwrite unless necessary."
+                "content":"You are a senior UX director. Given a website JSON, audit whether sections are missing or redundant for the industry. Return an UPDATED website JSON. Improve heroSection customHTML for clarity, add or remove customSections where useful, and ensure servicesPageLayout is present and coherent. Preserve existing keys, extend rather than overwrite unless necessary."
               },
               {
                 "role":"user",
-                "content":"Here is the current JSON:\n```json\n" 
+                "content":"Here is the current JSON:\n```json\n"
               }
             ]
           }
           EOF
-          # splice step1 content safely into user message
-          jq --rawfile j website-step1.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload2.json > /tmp/payload2.ready.json
-          curl -sS https://api.openai.com/v1/chat/completions \
-            -H "Authorization: Bearer $OPENAI_API_KEY" \
-            -H "Content-Type: application/json" \
-            -d @/tmp/payload2.ready.json \
-          | jq -r '.choices[0].message.content' > website-step2.json
-          jq . website-step2.json | head -n 60 || true
+          jq --rawfile j website-step1.json
+            '.messages[1].content += $j + "\n```"'
+            /tmp/payload2.json > /tmp/payload2.ready.json;
+          curl -sS https://api.openai.com/v1/chat/completions
+            -H "Authorization: Bearer $OPENAI_API_KEY"
+            -H "Content-Type: application/json"
+            -d @/tmp/payload2.ready.json
+          | jq -r '.choices[0].message.content' > website-step2.json;
+          jq . website-step2.json | head -n 60 || true;
 
       #####################################################################
-      # AI PASS 3 — Per-section refinement
+      # AI PASS 3, per section refinement
       #####################################################################
       - name: AI pass 3, per section refinement
         id: ai3
-        run: |
-          set -euo pipefail
-          echo "[ai3] refining each section's HTML for responsiveness and accessibility"
+        run: >
+          set -euo pipefail;
+          echo "[ai3] refining each section's HTML for responsiveness and accessibility";
           cat > /tmp/payload3.json <<'EOF'
           {
             "model":"gpt-4o-mini",
@@ -150,22 +151,24 @@ jobs:
             ]
           }
           EOF
-          jq --rawfile j website-step2.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload3.json > /tmp/payload3.ready.json
-          curl -sS https://api.openai.com/v1/chat/completions \
-            -H "Authorization: Bearer $OPENAI_API_KEY" \
-            -H "Content-Type: application/json" \
-            -d @/tmp/payload3.ready.json \
-          | jq -r '.choices[0].message.content' > website-step3.json
-          jq . website-step3.json | head -n 60 || true
+          jq --rawfile j website-step2.json
+            '.messages[1].content += $j + "\n```"'
+            /tmp/payload3.json > /tmp/payload3.ready.json;
+          curl -sS https://api.openai.com/v1/chat/completions
+            -H "Authorization: Bearer $OPENAI_API_KEY"
+            -H "Content-Type: application/json"
+            -d @/tmp/payload3.ready.json
+          | jq -r '.choices[0].message.content' > website-step3.json;
+          jq . website-step3.json | head -n 60 || true;
 
       #####################################################################
-      # AI PASS 4 — Image prompts for hero and key sections
+      # AI PASS 4, image prompt generation
       #####################################################################
       - name: AI pass 4, image prompt generation
         id: ai4
-        run: |
-          set -euo pipefail
-          echo "[ai4] generating image prompts for hero and up to 3 sections"
+        run: >
+          set -euo pipefail;
+          echo "[ai4] generating image prompts for hero and up to 3 sections";
           cat > /tmp/payload4.json <<'EOF'
           {
             "model":"gpt-4o-mini",
@@ -173,7 +176,7 @@ jobs:
             "messages":[
               {
                 "role":"system",
-                "content":"You are a creative director. From the website JSON, produce image prompt objects for: hero, and up to three high-impact custom sections. For each item output: key, target ('hero' or 'section'), prompt (detailed, photographic if appropriate), aspect ('16:9' for hero, '4:3' for sections), and suggestedFilename. Return { images: [ ... ] }"
+                "content":"You are a creative director. From the website JSON, produce image prompt objects for: hero, and up to three high-impact custom sections. For each item output: key, target ('hero' or 'section'), prompt, aspect ('16:9' for hero, '4:3' for sections), and suggestedFilename. Return { images: [ ... ] }"
               },
               {
                 "role":"user",
@@ -182,129 +185,128 @@ jobs:
             ]
           }
           EOF
-          jq --rawfile j website-step3.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload4.json > /tmp/payload4.ready.json
-          curl -sS https://api.openai.com/v1/chat/completions \
-            -H "Authorization: Bearer $OPENAI_API_KEY" \
-            -H "Content-Type: application/json" \
-            -d @/tmp/payload4.ready.json \
-          | jq -r '.choices[0].message.content' > image-prompts.json
-          jq . image-prompts.json | head -n 60 || true
+          jq --rawfile j website-step3.json
+            '.messages[1].content += $j + "\n```"'
+            /tmp/payload4.json > /tmp/payload4.ready.json;
+          curl -sS https://api.openai.com/v1/chat/completions
+            -H "Authorization: Bearer $OPENAI_API_KEY"
+            -H "Content-Type: application/json"
+            -d @/tmp/payload4.ready.json
+          | jq -r '.choices[0].message.content' > image-prompts.json;
+          jq . image-prompts.json | head -n 60 || true;
 
       #####################################################################
       # Merge JSON passes, normalise colours, extract core vars
       #####################################################################
       - name: Merge JSON passes and extract vars
         id: merge
-        run: |
-          set -euo pipefail
-          echo "[merge] merging website-step[1..3].json"
-          # Deep merge, later wins
-          jq -s 'def dmerge(a;b):
-                   reduce b[] as $x (a;
-                     reduce ($x|keys_unsorted[]) as $k (.;
-                       if ($x[$k]|type)=="object" and (.[ $k ]|type)=="object"
-                       then .[$k] = dmerge( .[$k]; [ $x[$k] ] )
-                       else .[$k] = $x[$k] end));
-                 dmerge(.; .[1:])' \
-                 website-step1.json website-step2.json website-step3.json > website.json
+        run: >
+          set -euo pipefail;
+          echo "[merge] merging website-step[1..3].json";
+          jq -s '
+            def dm(a; b):
+              if (a|type)=="object" and (b|type)=="object" then
+                reduce (b|keys_unsorted[]) as $k (a; .[$k] = dm(.[$k]; b[$k]))
+              elif (a|type)=="array" and (b|type)=="array" then a + b
+              else b end;
+            def normalise(x):
+              if x|type=="array" then reduce x[] as $e ({}; dm(.; $e)) else x end;
+            reduce .[] as $doc ({}; dm(.; normalise($doc)))
+          ' website-step1.json website-step2.json website-step3.json > website.json;
 
-          echo "[merge] attach image prompts for reference"
-          jq --rawfile imgs image-prompts.json '.imagePrompts = ($imgs[0].images // [])' website.json > website.tmp && mv website.tmp website.json
+          echo "[merge] attach image prompts";
+          jq --rawfile imgs image-prompts.json
+            '.imagePrompts = (($imgs | fromjson | .images) // [])'
+            website.json > website.tmp && mv website.tmp website.json;
 
-          echo "[merge] normalising colours to #rrggbb lower-case"
-          norm_hex() { # $1 hex maybe short, echo full lower-case or default blue
-            local h="${1:-#2563eb}"; h="${h,,}"; h="${h/#/}"
+          echo "[merge] normalising colours to #rrggbb lower-case";
+          norm_hex() {
+            local h="${1:-#2563eb}"; h="${h,,}"; h="${h#\#}";
             case "${#h}" in
               3) printf "#%s%s%s%s%s%s" "${h:0:1}" "${h:0:1}" "${h:1:1}" "${h:1:1}" "${h:2:1}" "${h:2:1}";;
               6) printf "#%s" "$h";;
               *) printf "#2563eb";;
             esac
           }
-          BRAND=$(jq -r '.colorPalette.primary // "#2563eb"' website.json)
-          ACCENT=$(jq -r '.colorPalette.accent  // "#3b82f6"' website.json)
-          BRAND=$(norm_hex "$BRAND")
-          ACCENT=$(norm_hex "$ACCENT")
+          BRAND=$(jq -r '.colorPalette.primary // "#2563eb"' website.json);
+          ACCENT=$(jq -r '.colorPalette.accent  // "#3b82f6"' website.json);
+          BRAND=$(norm_hex "$BRAND");
+          ACCENT=$(norm_hex "$ACCENT");
 
-          SLUG=$(jq -r '.slug // "new-site"' website.json | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9-_' | sed -E 's/^-+|-+$//g')
-          [ -n "$SLUG" ] || SLUG=new-site
-          NAME=$(jq -r '.name // "New Site"' website.json)
-          TAGLINE=$(jq -r '.tagline // "Welcome to our website"' website.json)
-          HERO=$(jq -r '.heroSection.heroImage // empty' website.json)
+          SLUG=$(jq -r '.slug // "new-site"' website.json | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9-_' | sed -E 's/^-+|-+$//g');
+          [ -n "$SLUG" ] || SLUG=new-site;
+          NAME=$(jq -r '.name // "New Site"' website.json);
+          TAGLINE=$(jq -r '.tagline // "Welcome to our website"' website.json);
+          HERO=$(jq -r '.heroSection.heroImage // empty' website.json);
           if [ -z "$HERO" ] || [ "$HERO" = "null" ]; then
-            HERO="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
+            HERO="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop";
           fi
 
           {
-            echo "slug=$SLUG"
-            echo "name=$NAME"
-            echo "tagline=$TAGLINE"
-            echo "brand=$BRAND"
-            echo "accent=$ACCENT"
-            echo "hero=$HERO"
-          } >> "$GITHUB_OUTPUT"
+            echo "slug=$SLUG";
+            echo "name=$NAME";
+            echo "tagline=$TAGLINE";
+            echo "brand=$BRAND";
+            echo "accent=$ACCENT";
+            echo "hero=$HERO";
+          } >> "$GITHUB_OUTPUT";
 
-          echo "[merge] final website.json preview:"
-          jq '.|{slug,name,tagline,industry,colorPalette,typography,(heroSection|keys),customSectionsCount:(.customSections|length)}' website.json || true
+          echo "[merge] final website.json preview:";
+          jq '.|{slug,name,tagline,industry,colorPalette,typography,(heroSection|keys),customSectionsCount:(.customSections|length)}' website.json || true;
 
       #####################################################################
-      # Optional — generate AI images from prompts
+      # Optional, generate AI images
       #####################################################################
       - name: Generate AI images from prompts
-        if: ${{ inputs.generate_images == true }}
+        if: ${{ github.event.inputs.generate_images == 'true' }}
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
-        run: |
-          set -euo pipefail
-          echo "[images] creating images folder"
-          mkdir -p "$GITHUB_WORKSPACE/${SLUG}-assets/img"
-          mkdir -p "tmp_images"
+        run: >
+          set -euo pipefail;
+          echo "[images] creating images folder";
+          mkdir -p "$GITHUB_WORKSPACE/${SLUG}-assets/img";
+          mkdir -p "tmp_images";
 
-          echo "[images] reading prompts"
-          jq -c '.imagePrompts[]?' website.json | head -n 20 || true
+          echo "[images] reading prompts";
+          jq -c '.imagePrompts[]?' website.json | head -n 20 || true;
 
           gen_one () {
-            local prompt="$1"; local outfile="$2"
-            echo "[images] generating $outfile"
-            # Call OpenAI Images API
-            curl -sS https://api.openai.com/v1/images/generations \
-              -H "Authorization: Bearer $OPENAI_API_KEY" \
-              -H "Content-Type: application/json" \
-              -d "$(jq -n --arg p "$prompt" --arg s "1024x576" '{model:"gpt-image-1",prompt:$p,size:$s}')" \
-            | jq -r '.data[0].url // empty' > tmp_url.txt || true
-
-            URL=$(cat tmp_url.txt || true)
+            local prompt="$1"; local outfile="$2";
+            echo "[images] generating $outfile";
+            curl -sS https://api.openai.com/v1/images/generations
+              -H "Authorization: Bearer $OPENAI_API_KEY"
+              -H "Content-Type: application/json"
+              -d "$(jq -n --arg p "$prompt" --arg s "1024x576" '{model:"gpt-image-1",prompt:$p,size:$s}')"
+            | jq -r '.data[0].url // empty' > tmp_url.txt || true;
+            URL=$(cat tmp_url.txt || true);
             if [ -n "${URL:-}" ]; then
-              curl -fsSL "$URL" -o "tmp_images/$outfile" --max-time 30 || true
+              curl -fsSL "$URL" -o "tmp_images/$outfile" --max-time 30 || true;
             fi
-          }
+          };
 
-          # Hero first, then up to 3 sections
-          count=0
           jq -c '.imagePrompts[]? | select(.target=="hero")' website.json | while read -r row; do
-            prompt=$(echo "$row" | jq -r '.prompt')
-            gen_one "$prompt" "hero.jpg"
-          done
+            prompt=$(echo "$row" | jq -r '.prompt');
+            gen_one "$prompt" "hero.jpg";
+          done;
 
-          jq -c '.imagePrompts[]? | select(.target=="section")' website.json | head -n 3 | nl -ba | while read -r n row; do
-            p=$(echo "$row" | cut -f2-)
-            prompt=$(echo "$p" | jq -r '.prompt')
-            gen_one "$prompt" "section${n}.jpg"
-          done
+          jq -c '.imagePrompts[]? | select(.target=="section")' website.json | nl -ba | head -n 3 | while read -r n row; do
+            p=$(echo "$row" | cut -f2-);
+            prompt=$(echo "$p" | jq -r '.prompt');
+            gen_one "$prompt" "section${n}.jpg";
+          done;
 
-          # Fallbacks if images missing
           if [ ! -s tmp_images/hero.jpg ]; then
-            echo "[images] hero fallback"
-            curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" -o tmp_images/hero.jpg --max-time 20 || true
+            echo "[images] hero fallback";
+            curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" -o tmp_images/hero.jpg --max-time 20 || true;
           fi
 
-          # Move into final assets location used later by theme scaffold
-          cp -f tmp_images/hero.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" || true
-          cp -f tmp_images/section1.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section1.jpg" || true
-          cp -f tmp_images/section2.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section2.jpg" || true
-          cp -f tmp_images/section3.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section3.jpg" || true
+          cp -f tmp_images/hero.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" || true;
+          cp -f tmp_images/section1.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section1.jpg" || true;
+          cp -f tmp_images/section2.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section2.jpg" || true;
+          cp -f tmp_images/section3.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section3.jpg" || true;
 
       #####################################################################
-      # Scaffold theme, robust hero wrapper and fonts
+      # Scaffold theme, fonts and hero fallback
       #####################################################################
       - name: Scaffold child theme in workspace
         env:
@@ -314,16 +316,13 @@ jobs:
           BRAND:   ${{ steps.merge.outputs.brand }}
           ACCENT:  ${{ steps.merge.outputs.accent }}
           HERO:    ${{ steps.merge.outputs.hero }}
-        run: |
-          set -euo pipefail
-          echo "[scaffold] theme for $SLUG"
-          THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
-          mkdir -p "$THEME_DIR/assets/css" "$THEME_DIR/assets/js" "$THEME_DIR/assets/img" "$THEME_DIR/dist" "$THEME_DIR/templates" "$THEME_DIR/parts" "$THEME_DIR/inc"
+        run: >
+          set -euo pipefail;
+          echo "[scaffold] theme for $SLUG";
+          THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child";
+          mkdir -p "$THEME_DIR/assets/css" "$THEME_DIR/assets/js" "$THEME_DIR/assets/img" "$THEME_DIR/dist" "$THEME_DIR/templates" "$THEME_DIR/parts" "$THEME_DIR/inc";
+          cp -f "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" "$THEME_DIR/assets/img/hero.jpg" 2>/dev/null || true;
 
-          # assets from AI images if present
-          cp -f "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" "$THEME_DIR/assets/img/hero.jpg" 2>/dev/null || true
-
-          # style.css
           cat > "$THEME_DIR/style.css" <<CSS
           /*
           Theme Name: ${NAME}
@@ -334,7 +333,6 @@ jobs:
           */
           CSS
 
-          # functions.php with Google Fonts auto loading
           cat > "$THEME_DIR/functions.php" <<'PHP'
           <?php
           add_action('wp_enqueue_scripts', function () {
@@ -345,7 +343,6 @@ jobs:
             $ver = file_exists($child_path) ? filemtime($child_path) : null;
             wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $ver);
 
-            // Load fonts from website.json if present
             $website_json = ABSPATH . 'website.json';
             if (file_exists($website_json)) {
               $cfg = json_decode(file_get_contents($website_json), true);
@@ -383,7 +380,6 @@ jobs:
           }, 10, 3);
           PHP
 
-          # Tailwind entry CSS
           cat > "$THEME_DIR/assets/css/tailwind.css" <<CSS
           @tailwind base;
           @tailwind components;
@@ -409,7 +405,6 @@ jobs:
           }
           CSS
 
-          # header.php
           cat > "$THEME_DIR/header.php" <<'PHP'
           <!doctype html>
           <html <?php language_attributes(); ?>>
@@ -444,7 +439,6 @@ jobs:
           </header>
           PHP
 
-          # footer.php
           cat > "$THEME_DIR/footer.php" <<'PHP'
           <footer class="footer-section mt-20">
             <div class="container py-16">
@@ -481,7 +475,6 @@ jobs:
           </html>
           PHP
 
-          # front-page.php with robust hero wrapper and containerised sections
           cat > "$THEME_DIR/front-page.php" <<'PHP'
           <?php
           get_header();
@@ -534,7 +527,6 @@ jobs:
           <?php get_footer(); ?>
           PHP
 
-          # index.php
           cat > "$THEME_DIR/index.php" <<'PHP'
           <?php get_header(); ?>
           <main id="main" class="container py-20">
@@ -543,7 +535,6 @@ jobs:
           <?php get_footer(); ?>
           PHP
 
-          # theme.js
           cat > "$THEME_DIR/assets/js/theme.js" <<'JS'
           document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -571,33 +562,30 @@ jobs:
           });
           JS
 
-          # basic hero fallback when no AI image
           if [ ! -s "$THEME_DIR/assets/img/hero.jpg" ]; then
             curl -fsSL "${HERO}" -o "$THEME_DIR/assets/img/hero.jpg" --max-time 20 || \
-            curl -fsSL "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop" -o "$THEME_DIR/assets/img/hero.jpg" --max-time 20 || true
+            curl -fsSL "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop" -o "$THEME_DIR/assets/img/hero.jpg" --max-time 20 || true;
           fi
 
       #####################################################################
-      # Extract AI HTML from all passes, Tailwind config
+      # Extract AI HTML and Tailwind config
       #####################################################################
       - name: Extract AI HTML and write Tailwind config
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
-        run: |
-          set -euo pipefail
-          echo "[tailwind] extracting AI HTML across passes"
-          THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
-          mkdir -p "$THEME_DIR/templates"
-
-          # concatenate html from all steps
+        run: >
+          set -euo pipefail;
+          echo "[tailwind] extracting AI HTML across passes";
+          THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child";
+          mkdir -p "$THEME_DIR/templates";
           {
-            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website-step1.json || true
-            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website-step2.json || true
-            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website-step3.json || true
-            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website.json || true
-          } > "$THEME_DIR/templates/ai.html"
+            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website-step1.json || true;
+            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website-step2.json || true;
+            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website-step3.json || true;
+            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website.json || true;
+          } > "$THEME_DIR/templates/ai.html";
 
-          echo "[tailwind] writing config with regex safelist"
+          echo "[tailwind] writing config with regex safelist";
           cat > "$THEME_DIR/tailwind.config.js" <<'CONFIG'
           module.exports = {
             content: ['./**/*.php','./templates/**/*.html','../website.json'],
@@ -615,94 +603,83 @@ jobs:
       - name: Build Tailwind CSS
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
-        run: |
-          set -euo pipefail
-          echo "[build] tailwind css"
-          THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
-          curl -sL https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.1/tailwindcss-linux-x64 -o tailwindcss
-          chmod +x tailwindcss
-          ./tailwindcss -c "$THEME_DIR/tailwind.config.js" -i "$THEME_DIR/assets/css/tailwind.css" -o "$THEME_DIR/dist/tailwind.css" --minify
-          test -s "$THEME_DIR/dist/tailwind.css" || { echo "Tailwind output missing"; exit 1; }
+        run: >
+          set -euo pipefail;
+          echo "[build] tailwind css";
+          THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child";
+          curl -sL https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.1/tailwindcss-linux-x64 -o tailwindcss;
+          chmod +x tailwindcss;
+          ./tailwindcss -c "$THEME_DIR/tailwind.config.js" -i "$THEME_DIR/assets/css/tailwind.css" -o "$THEME_DIR/dist/tailwind.css" --minify;
+          test -s "$THEME_DIR/dist/tailwind.css" || { echo "Tailwind output missing"; exit 1; };
 
       #####################################################################
-      # Commit artefacts (theme and website.json)
+      # Commit artefacts
       #####################################################################
       - name: Commit generated theme back to repo
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
-        run: |
-          set -euo pipefail
-          echo "[commit] committing child theme and website.json"
-          mkdir -p child-themes
-          rm -rf "child-themes/${SLUG}-child"
-          mv "$GITHUB_WORKSPACE/${SLUG}-child" "child-themes/${SLUG}-child"
-          git config user.name  "sitefuse-bot"
-          git config user.email "bot@users.noreply.github.com"
-          git add "child-themes/${SLUG}-child" website.json website-step1.json website-step2.json website-step3.json image-prompts.json
-          git commit -m "feat: ${SLUG}-child generated with multi-pass AI, images, hardened Tailwind" || echo "No changes to commit"
-          git push || echo "Push skipped"
+        run: >
+          set -euo pipefail;
+          echo "[commit] committing child theme and website.json";
+          mkdir -p child-themes;
+          rm -rf "child-themes/${SLUG}-child";
+          mv "$GITHUB_WORKSPACE/${SLUG}-child" "child-themes/${SLUG}-child";
+          git config user.name  "sitefuse-bot";
+          git config user.email "bot@users.noreply.github.com";
+          git add "child-themes/${SLUG}-child" website.json website-step1.json website-step2.json website-step3.json image-prompts.json;
+          git commit -m "feat: ${SLUG}-child generated with multi-pass AI, images, hardened Tailwind" || echo "No changes to commit";
+          git push || echo "Push skipped";
 
       #####################################################################
-      # Deploy parent and child to Cloudways
+      # Deploy to Cloudways
       #####################################################################
       - name: Deploy parent theme to Cloudways
-        run: |
-          set -euo pipefail
-          echo "[deploy] parent theme"
-          PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base"
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'"
-          rsync -avz -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" \
-            "$GITHUB_WORKSPACE/sitefuse-base/" \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/"
-          echo "parent deployed to: $PARENT_DEST/"
+        run: >
+          set -euo pipefail;
+          echo "[deploy] parent theme";
+          PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base";
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'";
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no"
+            "$GITHUB_WORKSPACE/sitefuse-base/"
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/";
+          echo "parent deployed to: $PARENT_DEST/";
 
       - name: Deploy child theme and website.json to Cloudways
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
-        run: |
-          set -euo pipefail
-          echo "[deploy] child theme"
-          THEME_DIR="$GITHUB_WORKSPACE/child-themes/${SLUG}-child"
-          DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
-
+        run: >
+          set -euo pipefail;
+          echo "[deploy] child theme";
+          THEME_DIR="$GITHUB_WORKSPACE/child-themes/${SLUG}-child";
+          DEST="$APP_PATH/wp-content/themes/${SLUG}-child";
           if [ -d "$THEME_DIR" ]; then
-            ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$DEST'"
-
-            rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" \
-              "$THEME_DIR/" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEST/"
-
-            rsync -avz -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" \
-              "$GITHUB_WORKSPACE/website.json" \
-              "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
-
-            echo "child deployed to: $DEST/"
+            ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$DEST'";
+            rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" "$THEME_DIR/" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEST/";
+            rsync -avz -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" "$GITHUB_WORKSPACE/website.json" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/";
+            echo "child deployed to: $DEST/";
           else
-            echo "theme directory not found locally"
-            exit 1
+            echo "theme directory not found locally";
+            exit 1;
           fi
 
       #####################################################################
-      # WordPress setup — idempotent
+      # WordPress setup, idempotent
       #####################################################################
       - name: Create WordPress pages and content
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
           NAME: ${{ steps.merge.outputs.name }}
           TAGLINE: ${{ steps.merge.outputs.tagline }}
-        run: |
-          set -euo pipefail
-          echo "[wp] applying settings and pages"
+        run: >
+          set -euo pipefail;
+          echo "[wp] applying settings and pages";
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && which wp";
 
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && which wp"
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp option update blogdescription '$TAGLINE' --allow-root";
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp option update blogname '$NAME' --allow-root";
 
-          # Update site options
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp option update blogdescription '$TAGLINE' --allow-root"
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp option update blogname '$NAME' --allow-root"
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp theme activate '"${SLUG}-child"' --allow-root || true";
 
-          # Activate theme
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp theme activate '"${SLUG}-child"' --allow-root || true"
-
-          # Pages, front page, menu
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' &&
             if [ \$(wp post list --post_type=page --post_title='About' --format=count --allow-root) -eq 0 ]; then
               wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content='Learn more about our story and values.' --allow-root;
@@ -730,5 +707,5 @@ jobs:
             wp menu item add-post 'Primary Menu' \$(wp post list --post_type=page --name=services --field=ID --allow-root | head -1) --title='Services' --allow-root 2>/dev/null || true;
             wp menu item add-post 'Primary Menu' \$(wp post list --post_type=page --name=contact --field=ID --allow-root | head -1) --title='Contact' --allow-root 2>/dev/null || true;
             wp menu location assign 'Primary Menu' primary --allow-root 2>/dev/null || true
-          "
-          echo "done"
+          ";
+          echo "done";
