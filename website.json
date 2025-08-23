@@ -1,6 +1,113 @@
 {
-  "slug": "demo",
   "heroSection": {
-    "customHTML": "<h1>Hello</h1>"
-  }
+    "headline": "Welcome to Our New Website!",
+    "subheadline": "Your success is our priority",
+    "customHTML": "<div class='container mx-auto py-6 px-4 text-center'><h1 class='text-3xl md:text-5xl font-bold mb-4'>Welcome to Our New Website!</h1><h2 class='text-xl md:text-3xl font-semibold mb-4'>Your success is our priority</h2><p class='text-lg md:text-xl text-gray-700'>Join us as we embark on a journey to provide innovative solutions tailored to your needs. We focus on delivering exceptional results for our clients through dedication and expertise.</p></div>"
+  },
+  "servicesPageLayout": [
+    {
+      "serviceTitle": "Consulting",
+      "serviceDescription": "Expert advice to drive your business strategy forward."
+    },
+    {
+      "serviceTitle": "Development",
+      "serviceDescription": "Building tailored software solutions to meet your business challenges."
+    },
+    {
+      "serviceTitle": "Support",
+      "serviceDescription": "Reliable customer service to ensure your systems run smoothly."
+    },
+    {
+      "serviceTitle": "Consulting",
+      "serviceDescription": "<div class='bg-white border border-gray-200 rounded-lg p-6 shadow-md mb-4'><h3 class='text-xl font-bold mb-2'>Consulting</h3><p class='text-gray-600'>Expert advice to drive your business strategy forward.</p></div>"
+    },
+    {
+      "serviceTitle": "Development",
+      "serviceDescription": "<div class='bg-white border border-gray-200 rounded-lg p-6 shadow-md mb-4'><h3 class='text-xl font-bold mb-2'>Development</h3><p class='text-gray-600'>Building tailored software solutions to meet your business challenges.</p></div>"
+    },
+    {
+      "serviceTitle": "Support",
+      "serviceDescription": "<div class='bg-white border border-gray-200 rounded-lg p-6 shadow-md mb-4'><h3 class='text-xl font-bold mb-2'>Support</h3><p class='text-gray-600'>Reliable customer service to ensure your systems run smoothly.</p></div>"
+    }
+  ],
+  "customSections": [
+    {
+      "sectionTitle": "Client Testimonials",
+      "sectionContent": "Hear from our satisfied customers about how we've helped them achieve their goals."
+    },
+    {
+      "sectionTitle": "Our Process",
+      "sectionContent": "Learn how our approach ensures successful project delivery."
+    },
+    {
+      "sectionTitle": "Industry Insights",
+      "sectionContent": "Stay updated with the latest trends and news in your industry."
+    },
+    {
+      "sectionTitle": "Client Testimonials",
+      "sectionContent": "<div class='bg-gray-50 p-8 rounded-lg'><h3 class='text-2xl font-bold mb-4'>Client Testimonials</h3><p class='text-gray-700'>Hear from our satisfied customers about how we've helped them achieve their goals.</p></div>"
+    },
+    {
+      "sectionTitle": "Our Process",
+      "sectionContent": "<div class='bg-gray-50 p-8 rounded-lg'><h3 class='text-2xl font-bold mb-4'>Our Process</h3><p class='text-gray-700'>Learn how our approach ensures successful project delivery.</p></div>"
+    },
+    {
+      "sectionTitle": "Industry Insights",
+      "sectionContent": "<div class='bg-gray-50 p-8 rounded-lg'><h3 class='text-2xl font-bold mb-4'>Industry Insights</h3><p class='text-gray-700'>Stay updated with the latest trends and news in your industry.</p></div>"
+    }
+  ],
+  "footerSection": {
+    "contactInfo": {
+      "email": "<a href='mailto:support@example.com' class='text-blue-600 hover:underline'>support@example.com</a>",
+      "phone": "<span class='text-gray-700'>123-456-7890</span>"
+    },
+    "socialLinks": [
+      {
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com/company/example"
+      },
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/example"
+      },
+      {
+        "platform": "LinkedIn",
+        "url": "<a href='https://linkedin.com/company/example' target='_blank' class='text-blue-600 hover:underline'>LinkedIn</a>"
+      },
+      {
+        "platform": "Twitter",
+        "url": "<a href='https://twitter.com/example' target='_blank' class='text-blue-600 hover:underline'>Twitter</a>"
+      }
+    ]
+  },
+  "imagePrompts": [
+    {
+      "key": "hero",
+      "target": "hero",
+      "prompt": "A welcoming and modern website homepage featuring a headline 'Welcome to Our New Website!' and a subheadline 'Your success is our priority'. The design should convey a sense of innovation and professionalism, with a clean and contemporary aesthetic. Include visuals of diverse people collaborating and using technology, symbolizing teamwork and success.",
+      "aspect": "16:9",
+      "suggestedFilename": "hero-welcome-website.jpg"
+    },
+    {
+      "key": "clientTestimonials",
+      "target": "section",
+      "prompt": "A visually appealing section that showcases client testimonials. Include the title 'Client Testimonials' with a background that feels warm and inviting. The imagery should depict happy clients sharing their success stories, emphasizing trust and satisfaction. Use soft colors to enhance approachability.",
+      "aspect": "4:3",
+      "suggestedFilename": "client-testimonials.jpg"
+    },
+    {
+      "key": "ourProcess",
+      "target": "section",
+      "prompt": "An informative and engaging section that explains 'Our Process'. The design should visually outline steps of a project workflow, incorporating graphics or icons representing various stages of a process. Use a modern color palette and layout that enhances clarity and professionalism.",
+      "aspect": "4:3",
+      "suggestedFilename": "our-process.jpg"
+    },
+    {
+      "key": "industryInsights",
+      "target": "section",
+      "prompt": "A modern section dedicated to 'Industry Insights'. The imagery should suggest a dynamic and forward-thinking approach to industry trends. Incorporate visuals like charts or graphs, and images of professionals engaging with data, suggesting knowledge and expertise in their field.",
+      "aspect": "4:3",
+      "suggestedFilename": "industry-insights.jpg"
+    }
+  ]
 }

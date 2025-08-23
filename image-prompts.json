@@ -1,0 +1,32 @@
+{
+  "images": [
+    {
+      "key": "hero",
+      "target": "hero",
+      "prompt": "A welcoming and modern website homepage featuring a headline 'Welcome to Our New Website!' and a subheadline 'Your success is our priority'. The design should convey a sense of innovation and professionalism, with a clean and contemporary aesthetic. Include visuals of diverse people collaborating and using technology, symbolizing teamwork and success.",
+      "aspect": "16:9",
+      "suggestedFilename": "hero-welcome-website.jpg"
+    },
+    {
+      "key": "clientTestimonials",
+      "target": "section",
+      "prompt": "A visually appealing section that showcases client testimonials. Include the title 'Client Testimonials' with a background that feels warm and inviting. The imagery should depict happy clients sharing their success stories, emphasizing trust and satisfaction. Use soft colors to enhance approachability.",
+      "aspect": "4:3",
+      "suggestedFilename": "client-testimonials.jpg"
+    },
+    {
+      "key": "ourProcess",
+      "target": "section",
+      "prompt": "An informative and engaging section that explains 'Our Process'. The design should visually outline steps of a project workflow, incorporating graphics or icons representing various stages of a process. Use a modern color palette and layout that enhances clarity and professionalism.",
+      "aspect": "4:3",
+      "suggestedFilename": "our-process.jpg"
+    },
+    {
+      "key": "industryInsights",
+      "target": "section",
+      "prompt": "A modern section dedicated to 'Industry Insights'. The imagery should suggest a dynamic and forward-thinking approach to industry trends. Incorporate visuals like charts or graphs, and images of professionals engaging with data, suggesting knowledge and expertise in their field.",
+      "aspect": "4:3",
+      "suggestedFilename": "industry-insights.jpg"
+    }
+  ]
+}
