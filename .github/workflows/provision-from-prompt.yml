@@ -114,7 +114,8 @@ jobs:
           WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
           echo "Debug: Starting theme generation for SLUG=${SLUG}"
           echo "Debug: NAME=${NAME}"
-          echo "Debug: Current working directory: $(pwd)"          mkdir -p child child/assets child/assets/css child/assets/js child/assets/img child/dist child/templates child/parts child/inc
+          echo "Debug: Current working directory: $(pwd)"
+          mkdir -p child child/assets child/assets/css child/assets/js child/assets/img child/dist child/templates child/parts child/inc
 
           # Enhanced style.css with theme info
           cat > child/style.css <<CSS
