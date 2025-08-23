@@ -655,8 +655,12 @@ jobs:
           mv child "${SLUG}-child"
 
           # Copy the generated theme to the main workspace
-          cp -r "${SLUG}-child" "$GITHUB_WORKSPACE/"
-
+          # Copy the generated theme to the main workspace with debug info
+          echo "Debug: Current directory: $(pwd)"
+          echo "Debug: Looking for theme directory: ${SLUG}-child"
+          ls -la "${SLUG}-child" || echo "Theme directory not found!"
+          echo "Debug: Copying to workspace: $GITHUB_WORKSPACE"
+          cp -r "${SLUG}-child" "$GITHUB_WORKSPACE/" && echo "Theme copied successfully" || echo "Theme copy failed"
       - name: Commit generated theme back to repo
         env:
           SLUG: ${{ steps.openai.outputs.slug }}
