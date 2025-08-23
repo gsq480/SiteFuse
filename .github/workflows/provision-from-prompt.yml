@@ -112,7 +112,9 @@ jobs:
         run: |
           set -euo pipefail
           WORKDIR="$(mktemp -d)"; echo "Workdir: $WORKDIR"; cd "$WORKDIR"
-          mkdir -p child/{assets/{css,js,img},dist,templates,parts,inc}
+          echo "Debug: Starting theme generation for SLUG=${SLUG}"
+          echo "Debug: NAME=${NAME}"
+          echo "Debug: Current working directory: $(pwd)"          mkdir -p child/{assets/{css,js,img},dist,templates,parts,inc}
 
           # Enhanced style.css with theme info
           cat > child/style.css <<CSS
