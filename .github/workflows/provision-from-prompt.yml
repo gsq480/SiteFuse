@@ -118,7 +118,7 @@ jobs:
           }
           EOF
           # splice step1 content safely into user message
-          jq -Rs --rawfile j website-step1.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload2.json > /tmp/payload2.ready.json
+          jq --rawfile j website-step1.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload2.json > /tmp/payload2.ready.json
           curl -sS https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
@@ -150,7 +150,7 @@ jobs:
             ]
           }
           EOF
-          jq -Rs --rawfile j website-step2.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload3.json > /tmp/payload3.ready.json
+          jq --rawfile j website-step2.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload3.json > /tmp/payload3.ready.json
           curl -sS https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
@@ -182,7 +182,7 @@ jobs:
             ]
           }
           EOF
-          jq -Rs --rawfile j website-step3.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload4.json > /tmp/payload4.ready.json
+          jq --rawfile j website-step3.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload4.json > /tmp/payload4.ready.json
           curl -sS https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
