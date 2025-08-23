@@ -23,6 +23,11 @@ on:
           - 'real-estate'
           - 'technology'
         default: 'auto-detect'
+      generate_images:
+        description: 'Generate AI images'
+        required: false
+        default: true
+        type: boolean
 
 permissions:
   contents: write
@@ -50,17 +55,21 @@ jobs:
       - name: SSH setup
         run: |
           set -euo pipefail
+          echo "[setup] preparing ssh"
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/id_rsa_cloudways
           chmod 600 ~/.ssh/id_rsa_cloudways
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
 
-      - name: Generate comprehensive website structure with AI
-        id: openai
+      #####################################################################
+      # AI PASS 1 — Base site JSON
+      #####################################################################
+      - name: AI pass 1, base website JSON
+        id: ai1
         run: |
           set -euo pipefail
-
+          echo "[ai1] generating base website json"
           cat > /tmp/payload.json <<'EOF'
           {
             "model":"gpt-4o-mini",
@@ -68,7 +77,7 @@ jobs:
             "messages":[
               {
                 "role":"system",
-                "content":"You are a professional web designer creating complete website structures. Generate a complete website JSON with: slug, name, tagline, industry, designTheme, colorPalette {primary, secondary, accent, background, text}, typography {headingFont, bodyFont, accentFont}, heroSection {customHTML, heroImage}, customSections [{html}], services, testimonials, contact, footer, homepageLayout, servicesPageLayout. Use real copy. Return fully responsive Tailwind-based HTML fragments. No templating placeholders."
+                "content":"You are a professional web designer. Produce a complete website JSON with the following keys: slug, name, tagline, industry, designTheme, colorPalette {primary, secondary, accent, background, text}, typography {headingFont, bodyFont, accentFont}, heroSection {customHTML, heroImage}, customSections [{key, title, html}], services, testimonials, contact, footer, homepageLayout, servicesPageLayout. Use realistic copy and fully responsive Tailwind HTML fragments without templating placeholders."
               },
               {
                 "role":"user",
@@ -77,25 +86,150 @@ jobs:
             ]
           }
           EOF
-
           curl -sS https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
             -d @/tmp/payload.json \
-          | jq -r '.choices[0].message.content' > website.json
+          | jq -r '.choices[0].message.content' > website-step1.json
+          jq . website-step1.json | head -n 60 || true
 
-          echo "Generated website structure:"
-          jq . website.json
+      #####################################################################
+      # AI PASS 2 — Improve sections for the industry
+      #####################################################################
+      - name: AI pass 2, section audit and improvement
+        id: ai2
+        run: |
+          set -euo pipefail
+          echo "[ai2] auditing sections, adding or pruning for industry best practice"
+          cat > /tmp/payload2.json <<'EOF'
+          {
+            "model":"gpt-4o-mini",
+            "response_format":{"type":"json_object"},
+            "messages":[
+              {
+                "role":"system",
+                "content":"You are a senior UX director. Given a website JSON, audit whether sections are missing or redundant for the industry. Return an UPDATED website JSON. Improve heroSection customHTML for clarity, add or remove customSections where useful, and ensure servicesPageLayout is present and coherent. Preserve existing keys; extend rather than overwrite unless necessary."
+              },
+              {
+                "role":"user",
+                "content":"Here is the current JSON:\n```json\n" 
+              }
+            ]
+          }
+          EOF
+          # splice step1 content safely into user message
+          jq -Rs --argfile j website-step1.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload2.json > /tmp/payload2.ready.json
+          curl -sS https://api.openai.com/v1/chat/completions \
+            -H "Authorization: Bearer $OPENAI_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload2.ready.json \
+          | jq -r '.choices[0].message.content' > website-step2.json
+          jq . website-step2.json | head -n 60 || true
 
-          # Extract core variables with safe fallbacks
+      #####################################################################
+      # AI PASS 3 — Per-section refinement
+      #####################################################################
+      - name: AI pass 3, per section refinement
+        id: ai3
+        run: |
+          set -euo pipefail
+          echo "[ai3] refining each section's HTML for responsiveness and accessibility"
+          cat > /tmp/payload3.json <<'EOF'
+          {
+            "model":"gpt-4o-mini",
+            "response_format":{"type":"json_object"},
+            "messages":[
+              {
+                "role":"system",
+                "content":"You are a front-end lead. Given a website JSON, refine every HTML fragment for responsiveness, accessible contrast, semantic structure, and Tailwind best practice. Return the full UPDATED JSON. Wrap loose fragments in container sections if needed. Do not introduce templating placeholders."
+              },
+              {
+                "role":"user",
+                "content":"Refine this JSON:\n```json\n"
+              }
+            ]
+          }
+          EOF
+          jq -Rs --argfile j website-step2.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload3.json > /tmp/payload3.ready.json
+          curl -sS https://api.openai.com/v1/chat/completions \
+            -H "Authorization: Bearer $OPENAI_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload3.ready.json \
+          | jq -r '.choices[0].message.content' > website-step3.json
+          jq . website-step3.json | head -n 60 || true
+
+      #####################################################################
+      # AI PASS 4 — Image prompts for hero and key sections
+      #####################################################################
+      - name: AI pass 4, image prompt generation
+        id: ai4
+        run: |
+          set -euo pipefail
+          echo "[ai4] generating image prompts for hero and up to 3 sections"
+          cat > /tmp/payload4.json <<'EOF'
+          {
+            "model":"gpt-4o-mini",
+            "response_format":{"type":"json_object"},
+            "messages":[
+              {
+                "role":"system",
+                "content":"You are a creative director. From the website JSON, produce image prompt objects for: hero, and up to three high-impact custom sections. For each item output: key, target ('hero' or 'section'), prompt (detailed, photographic if appropriate), aspect ('16:9' for hero, '4:3' for sections), and suggestedFilename. Return { images: [ ... ] }"
+              },
+              {
+                "role":"user",
+                "content":"Create image prompts for this JSON:\n```json\n"
+              }
+            ]
+          }
+          EOF
+          jq -Rs --argfile j website-step3.json '.messages[1].content += ( $j|tojson ) + "\n```"' /tmp/payload4.json > /tmp/payload4.ready.json
+          curl -sS https://api.openai.com/v1/chat/completions \
+            -H "Authorization: Bearer $OPENAI_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload4.ready.json \
+          | jq -r '.choices[0].message.content' > image-prompts.json
+          jq . image-prompts.json | head -n 60 || true
+
+      #####################################################################
+      # Merge JSON passes, normalise colours, extract core vars
+      #####################################################################
+      - name: Merge JSON passes and extract vars
+        id: merge
+        run: |
+          set -euo pipefail
+          echo "[merge] merging website-step[1..3].json"
+          # Deep merge, later wins
+          jq -s 'def dmerge(a;b):
+                   reduce b[] as $x (a;
+                     reduce ($x|keys_unsorted[]) as $k (.;
+                       if ($x[$k]|type)=="object" and (.[ $k ]|type)=="object"
+                       then .[$k] = dmerge( .[$k]; [ $x[$k] ] )
+                       else .[$k] = $x[$k] end));
+                 dmerge(.; .[1:])' \
+                 website-step1.json website-step2.json website-step3.json > website.json
+
+          echo "[merge] attach image prompts for reference"
+          jq --slurpfile imgs image-prompts.json '.imagePrompts = ($imgs[0].images // [])' website.json > website.tmp && mv website.tmp website.json
+
+          echo "[merge] normalising colours to #rrggbb lower-case"
+          norm_hex() { # $1 hex maybe short, echo full lower-case or default blue
+            local h="${1:-#2563eb}"; h="${h,,}"; h="${h/#/}"
+            case "${#h}" in
+              3) printf "#%s%s%s%s%s%s" "${h:0:1}" "${h:0:1}" "${h:1:1}" "${h:1:1}" "${h:2:1}" "${h:2:1}";;
+              6) printf "#%s" "$h";;
+              *) printf "#2563eb";;
+            esac
+          }
+          BRAND=$(jq -r '.colorPalette.primary // "#2563eb"' website.json)
+          ACCENT=$(jq -r '.colorPalette.accent  // "#3b82f6"' website.json)
+          BRAND=$(norm_hex "$BRAND")
+          ACCENT=$(norm_hex "$ACCENT")
+
           SLUG=$(jq -r '.slug // "new-site"' website.json | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9-_' | sed -E 's/^-+|-+$//g')
           [ -n "$SLUG" ] || SLUG=new-site
           NAME=$(jq -r '.name // "New Site"' website.json)
           TAGLINE=$(jq -r '.tagline // "Welcome to our website"' website.json)
-          INDUSTRY=$(jq -r '.industry // "general"' website.json)
-          BRAND=$(jq -r '.colorPalette.primary // .brand // "#2563eb"' website.json)
-          ACCENT=$(jq -r '.colorPalette.accent // .accent // "#3b82f6"' website.json)
-          HERO=$(jq -r '.heroSection.heroImage // .hero // empty' website.json)
+          HERO=$(jq -r '.heroSection.heroImage // empty' website.json)
           if [ -z "$HERO" ] || [ "$HERO" = "null" ]; then
             HERO="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
           fi
@@ -104,39 +238,103 @@ jobs:
             echo "slug=$SLUG"
             echo "name=$NAME"
             echo "tagline=$TAGLINE"
-            echo "industry=$INDUSTRY"
             echo "brand=$BRAND"
             echo "accent=$ACCENT"
             echo "hero=$HERO"
           } >> "$GITHUB_OUTPUT"
 
-      # 2) Scaffold child theme into the workspace
-      - name: Scaffold child theme in workspace
+          echo "[merge] final website.json preview:"
+          jq '.|{slug,name,tagline,industry,colorPalette,typography,(heroSection|keys),customSectionsCount:(.customSections|length)}' website.json || true
+
+      #####################################################################
+      # Optional — generate AI images from prompts
+      #####################################################################
+      - name: Generate AI images from prompts
+        if: ${{ inputs.generate_images == true }}
         env:
-          SLUG:     ${{ steps.openai.outputs.slug }}
-          NAME:     ${{ steps.openai.outputs.name }}
-          TAGLINE:  ${{ steps.openai.outputs.tagline }}
-          INDUSTRY: ${{ steps.openai.outputs.industry }}
-          BRAND:    ${{ steps.openai.outputs.brand }}
-          ACCENT:   ${{ steps.openai.outputs.accent }}
-          HERO:     ${{ steps.openai.outputs.hero }}
+          SLUG: ${{ steps.merge.outputs.slug }}
         run: |
           set -euo pipefail
+          echo "[images] creating images folder"
+          mkdir -p "$GITHUB_WORKSPACE/${SLUG}-assets/img"
+          mkdir -p "tmp_images"
+
+          echo "[images] reading prompts"
+          jq -c '.imagePrompts[]?' website.json | head -n 20 || true
+
+          gen_one () {
+            local prompt="$1"; local outfile="$2"
+            echo "[images] generating $outfile"
+            # Call OpenAI Images API
+            curl -sS https://api.openai.com/v1/images/generations \
+              -H "Authorization: Bearer $OPENAI_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d "$(jq -n --arg p "$prompt" --arg s "1024x576" '{model:"gpt-image-1",prompt:$p,size:$s}')" \
+            | jq -r '.data[0].url // empty' > tmp_url.txt || true
+
+            URL=$(cat tmp_url.txt || true)
+            if [ -n "${URL:-}" ]; then
+              curl -fsSL "$URL" -o "tmp_images/$outfile" --max-time 30 || true
+            fi
+          }
+
+          # Hero first, then up to 3 sections
+          count=0
+          jq -c '.imagePrompts[]? | select(.target=="hero")' website.json | while read -r row; do
+            prompt=$(echo "$row" | jq -r '.prompt')
+            gen_one "$prompt" "hero.jpg"
+          done
+
+          jq -c '.imagePrompts[]? | select(.target=="section")' website.json | head -n 3 | nl -ba | while read -r n row; do
+            p=$(echo "$row" | cut -f2-)
+            prompt=$(echo "$p" | jq -r '.prompt')
+            gen_one "$prompt" "section${n}.jpg"
+          done
+
+          # Fallbacks if images missing
+          if [ ! -s tmp_images/hero.jpg ]; then
+            echo "[images] hero fallback"
+            curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" -o tmp_images/hero.jpg --max-time 20 || true
+          fi
+
+          # Move into final assets location used later by theme scaffold
+          cp -f tmp_images/hero.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" || true
+          cp -f tmp_images/section1.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section1.jpg" || true
+          cp -f tmp_images/section2.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section2.jpg" || true
+          cp -f tmp_images/section3.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section3.jpg" || true
+
+      #####################################################################
+      # Scaffold theme, robust hero wrapper and fonts
+      #####################################################################
+      - name: Scaffold child theme in workspace
+        env:
+          SLUG:    ${{ steps.merge.outputs.slug }}
+          NAME:    ${{ steps.merge.outputs.name }}
+          TAGLINE: ${{ steps.merge.outputs.tagline }}
+          BRAND:   ${{ steps.merge.outputs.brand }}
+          ACCENT:  ${{ steps.merge.outputs.accent }}
+          HERO:    ${{ steps.merge.outputs.hero }}
+        run: |
+          set -euo pipefail
+          echo "[scaffold] theme for $SLUG"
           THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
           mkdir -p "$THEME_DIR/assets/css" "$THEME_DIR/assets/js" "$THEME_DIR/assets/img" "$THEME_DIR/dist" "$THEME_DIR/templates" "$THEME_DIR/parts" "$THEME_DIR/inc"
+
+          # assets from AI images if present
+          cp -f "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" "$THEME_DIR/assets/img/hero.jpg" 2>/dev/null || true
 
           # style.css
           cat > "$THEME_DIR/style.css" <<CSS
           /*
           Theme Name: ${NAME}
-          Description: Professional ${INDUSTRY} website built with SiteFuse
+          Description: Professional website built with SiteFuse
           Template: sitefuse-base
           Text Domain: ${SLUG}-child
           Version: 1.0.0
           */
           CSS
 
-          # functions.php
+          # functions.php with Google Fonts auto loading
           cat > "$THEME_DIR/functions.php" <<'PHP'
           <?php
           add_action('wp_enqueue_scripts', function () {
@@ -146,6 +344,25 @@ jobs:
             $child_path = get_stylesheet_directory() . '/dist/tailwind.css';
             $ver = file_exists($child_path) ? filemtime($child_path) : null;
             wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $ver);
+
+            // Load fonts from website.json if present
+            $website_json = ABSPATH . 'website.json';
+            if (file_exists($website_json)) {
+              $cfg = json_decode(file_get_contents($website_json), true);
+              if (is_array($cfg) && isset($cfg['typography'])) {
+                $families = [];
+                foreach (['headingFont','bodyFont','accentFont'] as $k) {
+                  if (!empty($cfg['typography'][$k]) && is_string($cfg['typography'][$k])) {
+                    $fam = trim(explode(',', $cfg['typography'][$k])[0]);
+                    if ($fam !== '') $families[$fam] = true;
+                  }
+                }
+                if ($families) {
+                  $qs = implode('&family=', array_map(function($f){ return str_replace(' ','+',$f).':wght@400;600;700;800'; }, array_keys($families)));
+                  wp_enqueue_style('sitefuse-fonts', 'https://fonts.googleapis.com/css2?family='.$qs.'&display=swap', [], null);
+                }
+              }
+            }
 
             wp_enqueue_script('sitefuse-js', get_stylesheet_directory_uri() . '/assets/js/theme.js', [], $ver, true);
           });
@@ -164,43 +381,6 @@ jobs:
             }
             return $atts;
           }, 10, 3);
-
-          add_action('init', function() {
-            register_post_type('testimonial', [
-              'labels' => ['name' => 'Testimonials', 'singular_name' => 'Testimonial'],
-              'public' => true, 'supports' => ['title','editor','thumbnail'], 'show_in_rest' => true,
-              'menu_icon' => 'dashicons-format-quote', 'rewrite' => ['slug' => 'testimonials']
-            ]);
-            register_post_type('service', [
-              'labels' => ['name' => 'Services', 'singular_name' => 'Service'],
-              'public' => true, 'supports' => ['title','editor','thumbnail','excerpt'], 'show_in_rest' => true,
-              'menu_icon' => 'dashicons-admin-tools', 'rewrite' => ['slug' => 'services']
-            ]);
-            register_post_type('portfolio', [
-              'labels' => ['name' => 'Portfolio', 'singular_name' => 'Portfolio Item'],
-              'public' => true, 'supports' => ['title','editor','thumbnail'], 'show_in_rest' => true,
-              'menu_icon' => 'dashicons-portfolio', 'rewrite' => ['slug' => 'portfolio']
-            ]);
-          });
-
-          function get_business_info($field) {
-            $info = get_option('business_info', []);
-            return $info[$field] ?? '';
-          }
-
-          add_shortcode('contact_form', function() {
-            ob_start(); ?>
-            <form class="contact-form space-y-4" action="#" method="post">
-              <div class="grid md:grid-cols-2 gap-4">
-                <input type="text" name="name" placeholder="Your Name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand">
-                <input type="email" name="email" placeholder="Your Email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand">
-              </div>
-              <input type="text" name="subject" placeholder="Subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand">
-              <textarea name="message" rows="5" placeholder="Your Message" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand"></textarea>
-              <button type="submit" class="btn btn-primary w-full">Send Message</button>
-            </form>
-            <?php return ob_get_clean();
-          });
           PHP
 
           # Tailwind entry CSS
@@ -210,7 +390,7 @@ jobs:
           @tailwind utilities;
 
           @layer base {
-            :root { --color-brand:${BRAND}; --color-brand-600:${BRAND}dd; --color-brand-700:${BRAND}bb; --color-accent:${ACCENT}; --color-cream:#fefaf6; --color-dark:#1f2937; --color-gray:#6b7280; }
+            :root { --color-brand:${BRAND}; --color-accent:${ACCENT}; --color-cream:#fefaf6; --color-dark:#1f2937; --color-gray:#6b7280; }
             html { scroll-behavior: smooth; } body { line-height: 1.7; }
           }
 
@@ -301,10 +481,11 @@ jobs:
           </html>
           PHP
 
-          # front-page.php
+          # front-page.php with robust hero wrapper and containerised sections
           cat > "$THEME_DIR/front-page.php" <<'PHP'
           <?php
           get_header();
+
           $data = [];
           $path = ABSPATH . 'website.json';
           if (file_exists($path)) {
@@ -312,14 +493,42 @@ jobs:
             $decoded = json_decode($json, true);
             if (is_array($decoded)) { $data = $decoded; }
           }
+
+          $heroHtml = $data['heroSection']['customHTML'] ?? '';
+          $heroImg  = $data['heroSection']['heroImage'] ?? get_stylesheet_directory_uri() . '/assets/img/hero.jpg';
+
+          $echo_wrapped = function(string $html) {
+            if ($html === '') return;
+            if (strpos($html, 'container') !== false) { echo $html; return; }
+            echo '<section class="py-16"><div class="container">'.$html.'</div></section>';
+          };
           ?>
           <main id="main">
+            <section class="hero-section relative">
+              <img src="<?php echo esc_url($heroImg); ?>" alt="" class="absolute inset-0 w-full h-full object-cover opacity-40" />
+              <div class="relative container py-24 md:py-40 text-center text-white">
+                <?php
+                  if ($heroHtml) {
+                    echo $heroHtml;
+                  } else {
+                    echo '<h1 class="text-4xl md:text-6xl font-extrabold">'. esc_html(get_bloginfo('name')) .'</h1>';
+                    echo '<p class="mt-4 text-xl">'. esc_html(get_bloginfo('description')) .'</p>';
+                  }
+                ?>
+              </div>
+            </section>
+
             <?php
-              echo $data['heroSection']['customHTML'] ?? '';
               if (!empty($data['customSections']) && is_array($data['customSections'])) {
-                foreach ($data['customSections'] as $section) { echo $section['html'] ?? ''; }
+                foreach ($data['customSections'] as $section) {
+                  $html = isset($section['html']) && is_string($section['html']) ? $section['html'] : '';
+                  $echo_wrapped($html);
+                }
               }
-              if (empty($data['heroSection']) && !empty($data['homepageLayout'])) { echo $data['homepageLayout']; }
+
+              if (empty($data['heroSection']) && !empty($data['homepageLayout']) && is_string($data['homepageLayout'])) {
+                echo $data['homepageLayout'];
+              }
             ?>
           </main>
           <?php get_footer(); ?>
@@ -334,77 +543,125 @@ jobs:
           <?php get_footer(); ?>
           PHP
 
-          # basic hero image
-          curl -fsSL "$HERO" -o "$THEME_DIR/assets/img/hero.jpg" --max-time 15 || \
-          curl -fsSL "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop" -o "$THEME_DIR/assets/img/hero.jpg" --max-time 10 || true
+          # theme.js
+          cat > "$THEME_DIR/assets/js/theme.js" <<'JS'
+          document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+              anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href && href.length > 1) {
+                  e.preventDefault();
+                  const target = document.querySelector(href);
+                  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              });
+            });
 
-      # 3) Extract AI HTML and write Tailwind config
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            if (mobileMenuBtn && mobileMenu) {
+              mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+              entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('animate-fade-in'); });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            document.querySelectorAll('.card, .service-item, .testimonial-card').forEach(el => observer.observe(el));
+          });
+          JS
+
+          # basic hero fallback when no AI image
+          if [ ! -s "$THEME_DIR/assets/img/hero.jpg" ]; then
+            curl -fsSL "${HERO}" -o "$THEME_DIR/assets/img/hero.jpg" --max-time 20 || \
+            curl -fsSL "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop" -o "$THEME_DIR/assets/img/hero.jpg" --max-time 20 || true
+          fi
+
+      #####################################################################
+      # Extract AI HTML from all passes, Tailwind config
+      #####################################################################
       - name: Extract AI HTML and write Tailwind config
         env:
-          SLUG: ${{ steps.openai.outputs.slug }}
+          SLUG: ${{ steps.merge.outputs.slug }}
         run: |
           set -euo pipefail
+          echo "[tailwind] extracting AI HTML across passes"
           THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
+          mkdir -p "$THEME_DIR/templates"
 
-          jq -r '[.heroSection.customHTML, (.customSections[]?.html)] | join("\n")' "$GITHUB_WORKSPACE/website.json" > "$THEME_DIR/templates/ai.html" || echo "" > "$THEME_DIR/templates/ai.html"
+          # concatenate html from all steps
+          {
+            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website-step1.json || true
+            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website-step2.json || true
+            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website-step3.json || true
+            jq -r '[.heroSection.customHTML, (.customSections[]?.html), .homepageLayout, .servicesPageLayout] | map(select(. != null)) | join("\n")' website.json || true
+          } > "$THEME_DIR/templates/ai.html"
 
+          echo "[tailwind] writing config with regex safelist"
           cat > "$THEME_DIR/tailwind.config.js" <<'CONFIG'
           module.exports = {
             content: ['./**/*.php','./templates/**/*.html','../website.json'],
             safelist: [
-              'container','btn','btn-primary','bg-primary','bg-accent','text-primary','text-accent','border-primary','border-accent','btn-secondary','card','section-title','section-subtitle',
-              'hero-section','service-icon','testimonial-card','nav-link','footer-section','animate-fade-in',
-              'grid','md:grid-cols-2','md:grid-cols-3','lg:grid-cols-2','gap-4','gap-8','gap-12',
-              'py-20','text-center','text-white','bg-white','w-full','h-full','object-cover',
-              'rounded-lg','shadow-xl','flex','items-center','justify-center','space-x-4',
-              'mb-4','text-xl','font-semibold','text-gray-600','leading-relaxed'
+              { pattern: /^(sm:|md:|lg:|xl:|2xl:)?(container|prose|grid|flex|items|justify|content|gap-[0-9]+|space-[xy]-[0-9]+|p[trblxy]?-[0-9]+|m[trblxy]?-[0-9]+|w-.*|h-.*|max-w-.*|min-h-.*|rounded.*|shadow.*|bg-.*|from-.*|via-.*|to-.*|text-.*|leading-.*|tracking-.*|font-.*|border-.*|ring-.*|col-span-.*|row-span-.*)$/ }
             ],
             theme: { extend: {} },
             plugins: [],
           }
           CONFIG
 
-      # 4) Build Tailwind CSS
+      #####################################################################
+      # Build Tailwind CSS
+      #####################################################################
       - name: Build Tailwind CSS
         env:
-          SLUG: ${{ steps.openai.outputs.slug }}
+          SLUG: ${{ steps.merge.outputs.slug }}
         run: |
           set -euo pipefail
+          echo "[build] tailwind css"
           THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
           curl -sL https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.1/tailwindcss-linux-x64 -o tailwindcss
           chmod +x tailwindcss
           ./tailwindcss -c "$THEME_DIR/tailwind.config.js" -i "$THEME_DIR/assets/css/tailwind.css" -o "$THEME_DIR/dist/tailwind.css" --minify
           test -s "$THEME_DIR/dist/tailwind.css" || { echo "Tailwind output missing"; exit 1; }
 
+      #####################################################################
+      # Commit artefacts (theme and website.json)
+      #####################################################################
       - name: Commit generated theme back to repo
         env:
-          SLUG: ${{ steps.openai.outputs.slug }}
+          SLUG: ${{ steps.merge.outputs.slug }}
         run: |
           set -euo pipefail
+          echo "[commit] committing child theme and website.json"
           mkdir -p child-themes
           rm -rf "child-themes/${SLUG}-child"
           mv "$GITHUB_WORKSPACE/${SLUG}-child" "child-themes/${SLUG}-child"
           git config user.name  "sitefuse-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add "child-themes/${SLUG}-child" website.json
-          git commit -m "chore: add enhanced child theme '${SLUG}-child' with AI generated content" || echo "No changes to commit"
+          git add "child-themes/${SLUG}-child" website.json website-step1.json website-step2.json website-step3.json image-prompts.json
+          git commit -m "feat: ${SLUG}-child generated with multi-pass AI, images, hardened Tailwind" || echo "No changes to commit"
           git push || echo "Push skipped"
 
+      #####################################################################
+      # Deploy parent and child to Cloudways
+      #####################################################################
       - name: Deploy parent theme to Cloudways
         run: |
           set -euo pipefail
+          echo "[deploy] parent theme"
           PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base"
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'"
           rsync -avz -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" \
             "$GITHUB_WORKSPACE/sitefuse-base/" \
             "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/"
-          echo "Deployed parent theme to: $PARENT_DEST/"
+          echo "parent deployed to: $PARENT_DEST/"
 
       - name: Deploy child theme and website.json to Cloudways
         env:
-          SLUG: ${{ steps.openai.outputs.slug }}
+          SLUG: ${{ steps.merge.outputs.slug }}
         run: |
           set -euo pipefail
+          echo "[deploy] child theme"
           THEME_DIR="$GITHUB_WORKSPACE/child-themes/${SLUG}-child"
           DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
 
@@ -418,19 +675,23 @@ jobs:
               "$GITHUB_WORKSPACE/website.json" \
               "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
 
-            echo "Deployed child theme to: $DEST/"
+            echo "child deployed to: $DEST/"
           else
-            echo "Theme directory not found locally, skipping deployment"
+            echo "theme directory not found locally"
             exit 1
           fi
 
+      #####################################################################
+      # WordPress setup — idempotent
+      #####################################################################
       - name: Create WordPress pages and content
         env:
-          SLUG: ${{ steps.openai.outputs.slug }}
-          NAME: ${{ steps.openai.outputs.name }}
-          TAGLINE: ${{ steps.openai.outputs.tagline }}
+          SLUG: ${{ steps.merge.outputs.slug }}
+          NAME: ${{ steps.merge.outputs.name }}
+          TAGLINE: ${{ steps.merge.outputs.tagline }}
         run: |
           set -euo pipefail
+          echo "[wp] applying settings and pages"
 
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && which wp"
 
@@ -441,7 +702,7 @@ jobs:
           # Activate theme
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && wp theme activate '"${SLUG}-child"' --allow-root || true"
 
-          # Create pages and assign front page
+          # Pages, front page, menu
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' &&
             if [ \$(wp post list --post_type=page --post_title='About' --format=count --allow-root) -eq 0 ]; then
               wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content='Learn more about our story and values.' --allow-root;
@@ -470,5 +731,4 @@ jobs:
             wp menu item add-post 'Primary Menu' \$(wp post list --post_type=page --name=contact --field=ID --allow-root | head -1) --title='Contact' --allow-root 2>/dev/null || true;
             wp menu location assign 'Primary Menu' primary --allow-root 2>/dev/null || true
           "
-
-          echo "✅ WordPress content created successfully"
+          echo "done"
