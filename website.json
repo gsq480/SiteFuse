@@ -1,79 +1,121 @@
 {
-  "slug": "brews-and-beans",
-  "name": "Brews & Beans",
-  "tagline": "Your Neighborhood Coffee Haven",
-  "industry": "Coffee Shop",
-  "designTheme": "Modern Cozy",
+  "slug": "canberra-bicycle-shop",
+  "name": "Canberra Bicycle Shop",
+  "tagline": "Ride Smart, Ride Safe",
+  "industry": "Bicycle Retail",
+  "designTheme": "Modern & Clean",
   "colorPalette": {
-    "primary": "#94618E",
-    "secondary": "#DAA520",
-    "accent": "#7C4D00",
-    "background": "#F3F4F6",
-    "text": "#2D2D2D"
+    "primary": "#FFA500",      	"secondary": "#008000",
+    "accent": "#FFD700",    	"background": "#F9FAFB",
+    "text": "#000000"
   },
   "typography": {
-    "headingFont": "'Montserrat', sans-serif",
-    "bodyFont": "'Roboto', sans-serif",
-    "accentFont": "'Lobster', cursive"
+    "headingFont": "Roboto, sans-serif",
+    "bodyFont": "Arial, sans-serif",
+    "accentFont": "Montserrat, sans-serif"
   },
   "heroSection": {
-    "customHTML": "<h1 class='text-5xl font-bold text-center text-white'>Welcome to Brews & Beans</h1><p class='text-xl text-center text-gray-300 mt-4'>Sip into serenity with every cup.</p>",
-    "heroImage": "https://example.com/images/hero-coffee-shop.jpg"
+    "customHTML": "<h1 class='text-5xl font-bold text-center text-white'>Explore Canberra on Two Wheels!</h1><p class='text-xl text-center text-white mt-4'>Your one-stop shop for bikes and cycling gear.</p>",
+    "heroImage": "https://source.unsplash.com/random/1600x900/?bicycle,shop"
   },
-  "customSections": [{
-    "html": "<div class='bg-white p-6 rounded-lg shadow-md mb-8'><h2 class='text-3xl font-semibold mb-4'>About Us</h2><p class='text-lg text-gray-700'>At Brews & Beans, we believe coffee is more than just a beverage; it's an experience. Our carefully curated menu features locally-sourced, organic coffee beans roasted to perfection. Join us for a cozy atmosphere, delicious pastries, and memorable moments!</p></div>"
-  }],
-  "services": [{
-      "title": "Coffee & Beverages",
-      "description": "A variety of handcrafted coffee drinks, teas, and smoothies made with the finest ingredients."
-    },
+  "customSections": [
     {
-      "title": "Pastry & Snacks",
-      "description": "Indulge in our selection of fresh pastries, croissants, and healthy snacks, perfect to pair with your drink."
-    },
-    {
-      "title": "Catering Services",
-      "description": "Let us bring the coffee experience to your special events with our tailored catering services."
+      "html": "<section class='bg-gray-200 p-6 mt-10 rounded'><h2 class='text-3xl font-semibold text-center'>Our Commitment</h2><p class='text-center text-lg mt-4'>At Canberra Bicycle Shop, we are passionate about cycling and committed to providing the best service and products to cyclists of all levels. Join our cycling community today!</p></section>"
     }
   ],
-  "testimonials": [{
-      "name": "Emma Johnson",
-      "message": "Brews & Beans is my go-to spot for a morning pick-me-up! The atmosphere is so inviting and the coffee is simply unbeatable."
+  "services": [
+    {
+      "name": "Bike Sales",
+      "description": "We offer a wide variety of bicycles from leading brands, suitable for everyone from beginners to professionals."
     },
     {
-      "name": "Michael Adams",
-      "message": "I've tried many coffee shops, but none match the quality and warmth that Brews & Beans offers. Highly recommend!"
+      "name": "Bike Repairs",
+      "description": "Our expert mechanics provide top-quality bicycle repairs and maintenance to keep you safe on the road."
     },
     {
-      "name": "Sophia Lopez",
-      "message": "Their pastries are to die for and their baristas are super friendly. A wonderful place to relax."
+      "name": "Cycling Accessories",
+      "description": "Browse our extensive range of cycling accessories, including helmets, lights, locks, and more."
+    }
+  ],
+  "testimonials": [
+    {
+      "customer": "Sarah J.",
+      "feedback": "The team at Canberra Bicycle Shop helped me choose the perfect bike. Their service is outstanding!"
+    },
+    {
+      "customer": "Mark T.",
+      "feedback": "Amazing selection of bikes! I found exactly what I was looking for, and the sales staff was super helpful."
     }
   ],
   "contact": {
-    "email": "contact@brewsandbeans.com",
-    "phone": "123-456-7890",
-    "address": {
-      "street": "123 Coffee Lane",
-      "city": "Brewtown",
-      "state": "CA",
-      "zip": "90001"
-    },
-    "contactFormHTML": "<form class='mt-6'><input type='text' placeholder='Your Name' class='w-full p-3 border border-gray-300 rounded mb-4' /><input type='email' placeholder='Your Email' class='w-full p-3 border border-gray-300 rounded mb-4' /><textarea placeholder='Your Message' class='w-full p-3 border border-gray-300 rounded mb-4' rows='4'></textarea><button type='submit' class='bg-primary text-white font-bold py-2 px-4 rounded'>Send Message</button></form>"
+    "email": "info@canberrabicycleshop.com",
+    "phone": "+61 2 1234 5678",
+    "address": "123 cyclers lane, Canberra, ACT 2601"
   },
   "footer": {
-    "customHTML": "<div class='bg-primary text-white p-4 text-center'>Copyright © 2023 Brews & Beans | Follow us on <a href='#' class='underline'>Instagram</a> | <a href='#' class='underline'>Facebook</a></div>"
+    "socialLinks": [
+      {
+        "platform": "Facebook",
+        "url": "https://facebook.com/canberrabicycleshop"
+      },
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/canberrabikes"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://instagram.com/canberrabicycleshop"
+      }
+    ],
+    "copyright": "© 2023 Canberra Bicycle Shop. All rights reserved."
   },
-  "homepageLayout": [
-    "heroSection",
-    "customSections",
-    "services",
-    "testimonials",
-    "contact",
-    "footer"
-  ],
-  "servicesPageLayout": [
-    "services",
-    "contact",
-    "footer"
-  ]
+  "homepageLayout": {
+    "sections": [
+      "heroSection",
+      "customSections",
+      "services",
+      "testimonials",
+      "contact"
+    ]
+  },
+  "servicesPageLayout": {
+    "sections": [
+      "services",
+      "testimonials",
+      "contact"
+    ]
+  }
 }
+
+  	           
+
+         		                                    
+                                                                  
+          
+         	   
+                
+    
+   
+          
+         	   
+
+          
+          
+         
+         	  
+
+          
+          
+          
+
+          
+         
+          
+                  
+
+          
+          
+                
+           
+
+   

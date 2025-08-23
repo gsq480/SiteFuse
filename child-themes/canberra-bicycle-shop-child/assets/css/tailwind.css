@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { --color-brand:#FFA500; --color-brand-600:#FFA500dd; --color-brand-700:#FFA500bb; --color-accent:#FFD700; --color-cream:#fefaf6; --color-dark:#1f2937; --color-gray:#6b7280; }
+  html { scroll-behavior: smooth; } body { line-height: 1.7; }
+}
+
+@layer components {
+  .container { width: 100%; margin-inline: auto; padding-inline: 1rem; max-width: 80rem; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; border-radius: .75rem; padding: .875rem 2rem; font-weight: 600; transition: all .3s; text-decoration: none; }
+  .btn-primary { background: linear-gradient(135deg, var(--color-brand), var(--color-accent)); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,.1); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,.15); }
+  .card { background: #fff; border-radius: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,.08); padding: 2.5rem; border: 1px solid rgb(241 245 249); transition: all .3s; }
+  .section-title { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1rem; }
+  .nav-link { color: var(--color-dark); font-weight: 500; text-decoration: none; padding: .5rem 1rem; border-radius: .5rem; transition: all .3s; }
+  .nav-link:hover { background: var(--color-cream); color: var(--color-brand); }
+  .footer-section { background: var(--color-dark); color: rgb(226 232 240); }
+  .animate-fade-in { animation: fadeIn .8s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+}
