@@ -430,7 +430,7 @@ jobs:
             <meta name="description" content="<?php bloginfo('description'); ?>">
             <?php wp_head(); ?>
           </head>
-          <body <?php body_class('font-sans antialiased'); ?> style="background-color: var(--color-cream); color: var(--color-dark);">
+          <body <?php body_class('''font-sans antialiased'''); ?> style="background-color: var(--color-cream); color: var(--color-dark);">
           <a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 btn btn-primary z-50" href="#main">Skip to content</a>
           
           <header class="sticky top-0 z-40" style="background: rgba(255,255,255,.95); backdrop-filter: blur(12px); border-bottom: 1px solid #e5e7eb;">
