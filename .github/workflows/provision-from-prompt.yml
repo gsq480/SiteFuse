@@ -64,7 +64,7 @@ jobs:
             "messages":[
               {
                 "role":"system",
-                "content":"You are a professional web designer creating complete website structures. You are a world-class web designer and developer with expertise in modern UI/UX, color theory, typography, and business psychology. Generate a complete, creative website that showcases industry best practices and innovative design tailored specifically to this business type. Return JSON with: slug, name, tagline, industry, designTheme (creative approach: minimal/bold/elegant/playful/corporate/artistic), colorPalette (primary, secondary, accent, background, text), typography (headingFont, bodyFont, accentFont), heroSection (customHTML with full Tailwind layout), customSections (array of creative sections with unique HTML layouts), services, testimonials, contact, footer, homepageLayout (complete custom HTML for entire homepage using Tailwind), servicesPageLayout (existing). Make content realistic, detailed, and industry-appropriate. Use real business copy, not placeholder text. BE EXTREMELY CREATIVE with layouts, color schemes, typography, and visual design. Consider modern web design trends like glassmorphism, neumorphism, bold typography, creative grids, unique animations, and industry-specific design patterns. Generate COMPLETE, READY-TO-USE HTML layouts using Tailwind CSS utility classes. DO NOT use template placeholders like {{{variable}}} or {{variable}}. Generate actual, working HTML code with real content, proper Tailwind classes, and complete markup that can be directly rendered on a webpage. Use Tailwind's grid, flexbox, spacing, and responsive utilities as the foundation, then add custom creative elements on top. All layouts must be fully responsive and use Tailwind best practices. Think like a top-tier design agency creating a premium, award-winning website."
+                "content":"You are a professional web designer creating complete website structures. You are a world-class web designer and developer with expertise in modern UI/UX, color theory, typography, and business psychology. Generate a complete, creative website that showcases industry best practices and innovative design tailored specifically to this business type. Return JSON with: slug, name, tagline, industry, designTheme (creative approach: minimal/bold/elegant/playful/corporate/artistic), colorPalette (primary, secondary, accent, background, text), typography (headingFont, bodyFont, accentFont), heroSection (customHTML with full Tailwind layout), customSections (array of creative sections with unique HTML layouts), services, testimonials, contact, footer, homepageLayout (complete custom HTML for entire homepage using Tailwind), servicesPageLayout (existing). Make content realistic, detailed, and industry-appropriate. Use real business copy, not placeholder text. Be creative with modern design. Generate COMPLETE, READY-TO-USE HTML layouts using Tailwind CSS utility classes. DO NOT use template placeholders like {{{variable}}} or {{variable}}. Generate actual, working HTML code with real content, proper Tailwind classes, and complete markup that can be directly rendered on a webpage. Use Tailwind's grid, flexbox, spacing, and responsive utilities as the foundation, then add custom creative elements on top. All layouts must be fully responsive and use Tailwind best practices. Think like a top-tier design agency creating a premium, award-winning website."
               },
               {
                 "role":"user",
@@ -211,7 +211,7 @@ jobs:
             <?php
             return ob_get_clean();
           });
-          HEADERTEMPLATE
+          PHP
 
           # Enhanced Tailwind CSS with modern components
           cat > child/assets/css/tailwind.css <<CSS
@@ -421,7 +421,7 @@ jobs:
           JS
 
           # Enhanced header with mobile menu
-          cat > child/header.php <<'HEADERTEMPLATE'
+          cat > child/header.php <<'HEADER'
           <!doctype html>
           <html <?php language_attributes(); ?>>
           <head>
@@ -472,7 +472,7 @@ jobs:
               </div>
             </div>
           </header>
-          HEADERTEMPLATE
+          PHP
 
           # Enhanced footer
           cat > child/footer.php <<'PHP'
@@ -529,7 +529,7 @@ jobs:
           <?php wp_footer(); ?>
           </body>
           </html>
-          HEADERTEMPLATE
+          PHP
 
           # Generate AI-designed front page with safe YAML syntax
           echo "<?php get_header(); ?>" > child/front-page.php
@@ -552,7 +552,7 @@ jobs:
             </div>
           </main>
           <?php get_footer(); ?>
-          HEADERTEMPLATE
+          PHP
 
           # Generate AI-designed services page
           echo "<?php get_header(); ?>" > child/page-services.php
@@ -604,7 +604,7 @@ jobs:
             </div>
           </main>
           <?php get_footer(); ?>
-          HEADERTEMPLATE
+          PHP
 
           # Download hero and about images with multiple fallbacks
           echo "Downloading hero image..."
