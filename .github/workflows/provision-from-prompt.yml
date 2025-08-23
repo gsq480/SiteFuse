@@ -53,7 +53,7 @@ jobs:
           persist-credentials: true
 
       - name: SSH setup
-        run: >
+        run: |
           set -euo pipefail;
           echo "[setup] preparing ssh";
           mkdir -p ~/.ssh;
@@ -67,11 +67,11 @@ jobs:
       #####################################################################
       - name: AI pass 1, base website JSON
         id: ai1
-        run: >
+        run: |
           set -euo pipefail;
           echo "[ai1] generating base website json";
           cat > /tmp/payload.json <<'EOF'
-          {
+{
             "model":"gpt-4o-mini",
             "response_format":{"type":"json_object"},
             "messages":[
@@ -98,11 +98,11 @@ jobs:
       #####################################################################
       - name: AI pass 2, section audit and improvement
         id: ai2
-        run: >
+        run: |
           set -euo pipefail;
           echo "[ai2] auditing sections, adding or pruning for industry best practice";
           cat > /tmp/payload2.json <<'EOF'
-          {
+{
             "model":"gpt-4o-mini",
             "response_format":{"type":"json_object"},
             "messages":[
@@ -132,11 +132,11 @@ jobs:
       #####################################################################
       - name: AI pass 3, per section refinement
         id: ai3
-        run: >
+        run: |
           set -euo pipefail;
           echo "[ai3] refining each section's HTML for responsiveness and accessibility";
           cat > /tmp/payload3.json <<'EOF'
-          {
+{
             "model":"gpt-4o-mini",
             "response_format":{"type":"json_object"},
             "messages":[
@@ -166,11 +166,11 @@ jobs:
       #####################################################################
       - name: AI pass 4, image prompt generation
         id: ai4
-        run: >
+        run: |
           set -euo pipefail;
           echo "[ai4] generating image prompts for hero and up to 3 sections";
           cat > /tmp/payload4.json <<'EOF'
-          {
+{
             "model":"gpt-4o-mini",
             "response_format":{"type":"json_object"},
             "messages":[
@@ -200,7 +200,7 @@ jobs:
       #####################################################################
       - name: Merge JSON passes and extract vars
         id: merge
-        run: >
+        run: |
           set -euo pipefail;
           echo "[merge] merging website-step[1..3].json";
           jq -s '
@@ -261,7 +261,7 @@ jobs:
         if: ${{ github.event.inputs.generate_images == 'true' }}
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
-        run: >
+        run: |
           set -euo pipefail;
           echo "[images] creating images folder";
           mkdir -p "$GITHUB_WORKSPACE/${SLUG}-assets/img";
@@ -316,7 +316,7 @@ jobs:
           BRAND:   ${{ steps.merge.outputs.brand }}
           ACCENT:  ${{ steps.merge.outputs.accent }}
           HERO:    ${{ steps.merge.outputs.hero }}
-        run: >
+        run: |
           set -euo pipefail;
           echo "[scaffold] theme for $SLUG";
           THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child";
@@ -573,7 +573,7 @@ jobs:
       - name: Extract AI HTML and write Tailwind config
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
-        run: >
+        run: |
           set -euo pipefail;
           echo "[tailwind] extracting AI HTML across passes";
           THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child";
@@ -603,7 +603,7 @@ jobs:
       - name: Build Tailwind CSS
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
-        run: >
+        run: |
           set -euo pipefail;
           echo "[build] tailwind css";
           THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child";
@@ -618,7 +618,7 @@ jobs:
       - name: Commit generated theme back to repo
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
-        run: >
+        run: |
           set -euo pipefail;
           echo "[commit] committing child theme and website.json";
           mkdir -p child-themes;
@@ -634,7 +634,7 @@ jobs:
       # Deploy to Cloudways
       #####################################################################
       - name: Deploy parent theme to Cloudways
-        run: >
+        run: |
           set -euo pipefail;
           echo "[deploy] parent theme";
           PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base";
@@ -647,7 +647,7 @@ jobs:
       - name: Deploy child theme and website.json to Cloudways
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
-        run: >
+        run: |
           set -euo pipefail;
           echo "[deploy] child theme";
           THEME_DIR="$GITHUB_WORKSPACE/child-themes/${SLUG}-child";
@@ -670,7 +670,7 @@ jobs:
           SLUG: ${{ steps.merge.outputs.slug }}
           NAME: ${{ steps.merge.outputs.name }}
           TAGLINE: ${{ steps.merge.outputs.tagline }}
-        run: >
+        run: |
           set -euo pipefail;
           echo "[wp] applying settings and pages";
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "cd '$APP_PATH' && which wp";
