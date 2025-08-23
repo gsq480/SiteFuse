@@ -68,8 +68,9 @@ jobs:
       - name: AI pass 1, base website JSON
         id: ai1
         run: |
-          set -euo pipefail;
-          echo "[ai1] generating base website json";
+          set -euo pipefail
+          [ -n "${OPENAI_API_KEY:-}" ] || { echo "OPENAI_API_KEY is empty"; exit 1; }
+          echo "[ai1] generating base website json"
           cat > /tmp/payload.json <<'EOF'
           {
             "model":"gpt-4o-mini",
@@ -86,12 +87,12 @@ jobs:
             ]
           }
           EOF
-          curl -sS https://api.openai.com/v1/chat/completions
-            -H "Authorization: Bearer $OPENAI_API_KEY"
-            -H "Content-Type: application/json"
-            -d @/tmp/payload.json
-          | jq -r '.choices[0].message.content' > website-step1.json;
-          jq . website-step1.json | head -n 60 || true;
+          curl -sS "https://api.openai.com/v1/chat/completions" \
+            -H "Authorization: Bearer ${OPENAI_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload.json \
+          | jq -r '.choices[0].message.content' > website-step1.json
+          jq . website-step1.json | head -n 60 || true
 
       #####################################################################
       # AI PASS 2, section audit and improvement
@@ -99,8 +100,9 @@ jobs:
       - name: AI pass 2, section audit and improvement
         id: ai2
         run: |
-          set -euo pipefail;
-          echo "[ai2] auditing sections, adding or pruning for industry best practice";
+          set -euo pipefail
+          [ -n "${OPENAI_API_KEY:-}" ] || { echo "OPENAI_API_KEY is empty"; exit 1; }
+          echo "[ai2] auditing sections, adding or pruning for industry best practice"
           cat > /tmp/payload2.json <<'EOF'
           {
             "model":"gpt-4o-mini",
@@ -117,15 +119,15 @@ jobs:
             ]
           }
           EOF
-          jq --rawfile j website-step1.json
-            '.messages[1].content += $j + "\n```"'
-            /tmp/payload2.json > /tmp/payload2.ready.json;
-          curl -sS https://api.openai.com/v1/chat/completions
-            -H "Authorization: Bearer $OPENAI_API_KEY"
-            -H "Content-Type: application/json"
-            -d @/tmp/payload2.ready.json
-          | jq -r '.choices[0].message.content' > website-step2.json;
-          jq . website-step2.json | head -n 60 || true;
+          jq --rawfile j website-step1.json \
+            '.messages[1].content += $j + "\n```"' \
+            /tmp/payload2.json > /tmp/payload2.ready.json
+          curl -sS "https://api.openai.com/v1/chat/completions" \
+            -H "Authorization: Bearer ${OPENAI_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload2.ready.json \
+          | jq -r '.choices[0].message.content' > website-step2.json
+          jq . website-step2.json | head -n 60 || true
 
       #####################################################################
       # AI PASS 3, per section refinement
@@ -133,8 +135,9 @@ jobs:
       - name: AI pass 3, per section refinement
         id: ai3
         run: |
-          set -euo pipefail;
-          echo "[ai3] refining each section's HTML for responsiveness and accessibility";
+          set -euo pipefail
+          [ -n "${OPENAI_API_KEY:-}" ] || { echo "OPENAI_API_KEY is empty"; exit 1; }
+          echo "[ai3] refining each section's HTML for responsiveness and accessibility"
           cat > /tmp/payload3.json <<'EOF'
           {
             "model":"gpt-4o-mini",
@@ -151,15 +154,15 @@ jobs:
             ]
           }
           EOF
-          jq --rawfile j website-step2.json
-            '.messages[1].content += $j + "\n```"'
-            /tmp/payload3.json > /tmp/payload3.ready.json;
-          curl -sS https://api.openai.com/v1/chat/completions
-            -H "Authorization: Bearer $OPENAI_API_KEY"
-            -H "Content-Type: application/json"
-            -d @/tmp/payload3.ready.json
-          | jq -r '.choices[0].message.content' > website-step3.json;
-          jq . website-step3.json | head -n 60 || true;
+          jq --rawfile j website-step2.json \
+            '.messages[1].content += $j + "\n```"' \
+            /tmp/payload3.json > /tmp/payload3.ready.json
+          curl -sS "https://api.openai.com/v1/chat/completions" \
+            -H "Authorization: Bearer ${OPENAI_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload3.ready.json \
+          | jq -r '.choices[0].message.content' > website-step3.json
+          jq . website-step3.json | head -n 60 || true
 
       #####################################################################
       # AI PASS 4, image prompt generation
@@ -167,8 +170,9 @@ jobs:
       - name: AI pass 4, image prompt generation
         id: ai4
         run: |
-          set -euo pipefail;
-          echo "[ai4] generating image prompts for hero and up to 3 sections";
+          set -euo pipefail
+          [ -n "${OPENAI_API_KEY:-}" ] || { echo "OPENAI_API_KEY is empty"; exit 1; }
+          echo "[ai4] generating image prompts for hero and up to 3 sections"
           cat > /tmp/payload4.json <<'EOF'
           {
             "model":"gpt-4o-mini",
@@ -185,15 +189,15 @@ jobs:
             ]
           }
           EOF
-          jq --rawfile j website-step3.json
-            '.messages[1].content += $j + "\n```"'
-            /tmp/payload4.json > /tmp/payload4.ready.json;
-          curl -sS https://api.openai.com/v1/chat/completions
-            -H "Authorization: Bearer $OPENAI_API_KEY"
-            -H "Content-Type: application/json"
-            -d @/tmp/payload4.ready.json
-          | jq -r '.choices[0].message.content' > image-prompts.json;
-          jq . image-prompts.json | head -n 60 || true;
+          jq --rawfile j website-step3.json \
+            '.messages[1].content += $j + "\n```"' \
+            /tmp/payload4.json > /tmp/payload4.ready.json
+          curl -sS "https://api.openai.com/v1/chat/completions" \
+            -H "Authorization: Bearer ${OPENAI_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload4.ready.json \
+          | jq -r '.choices[0].message.content' > image-prompts.json
+          jq . image-prompts.json | head -n 60 || true
 
       #####################################################################
       # Merge JSON passes, normalise colours, extract core vars
@@ -262,48 +266,53 @@ jobs:
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
         run: |
-          set -euo pipefail;
-          echo "[images] creating images folder";
-          mkdir -p "$GITHUB_WORKSPACE/${SLUG}-assets/img";
-          mkdir -p "tmp_images";
+          set -euo pipefail
+          [ -n "${OPENAI_API_KEY:-}" ] || { echo "OPENAI_API_KEY is empty"; exit 1; }
+          echo "[images] creating images folder"
+          mkdir -p "$GITHUB_WORKSPACE/${SLUG}-assets/img"
+          mkdir -p "tmp_images"
 
-          echo "[images] reading prompts";
-          jq -c '.imagePrompts[]?' website.json | head -n 20 || true;
+          echo "[images] reading prompts"
+          jq -c '.imagePrompts[]?' website.json | head -n 20 || true
 
           gen_one () {
-            local prompt="$1"; local outfile="$2";
-            echo "[images] generating $outfile";
-            curl -sS https://api.openai.com/v1/images/generations
-              -H "Authorization: Bearer $OPENAI_API_KEY"
-              -H "Content-Type: application/json"
-              -d "$(jq -n --arg p "$prompt" --arg s "1024x576" '{model:"gpt-image-1",prompt:$p,size:$s}')"
-            | jq -r '.data[0].url // empty' > tmp_url.txt || true;
-            URL=$(cat tmp_url.txt || true);
+            local prompt="$1"; local outfile="$2"
+            echo "[images] generating $outfile"
+            curl -sS "https://api.openai.com/v1/images/generations" \
+              -H "Authorization: Bearer ${OPENAI_API_KEY}" \
+              -H "Content-Type: application/json" \
+              -d "$(jq -n --arg p "$prompt" --arg s "1024x576" '{model:"gpt-image-1",prompt:$p,size:$s}')" \
+            | jq -r '.data[0].url // empty' > tmp_url.txt || true
+            URL=$(cat tmp_url.txt || true)
             if [ -n "${URL:-}" ]; then
-              curl -fsSL "$URL" -o "tmp_images/$outfile" --max-time 30 || true;
+              curl -fsSL "$URL" -o "tmp_images/$outfile" --max-time 30 || true
             fi
-          };
+          }
 
+          # hero
           jq -c '.imagePrompts[]? | select(.target=="hero")' website.json | while read -r row; do
-            prompt=$(echo "$row" | jq -r '.prompt');
-            gen_one "$prompt" "hero.jpg";
-          done;
+            prompt=$(echo "$row" | jq -r '.prompt')
+            gen_one "$prompt" "hero.jpg"
+          done
 
+          # up to 3 sections
           jq -c '.imagePrompts[]? | select(.target=="section")' website.json | nl -ba | head -n 3 | while read -r n row; do
-            p=$(echo "$row" | cut -f2-);
-            prompt=$(echo "$p" | jq -r '.prompt');
-            gen_one "$prompt" "section${n}.jpg";
-          done;
+            p=$(echo "$row" | cut -f2-)
+            prompt=$(echo "$p" | jq -r '.prompt')
+            gen_one "$prompt" "section${n}.jpg"
+          done
 
+          # fallback
           if [ ! -s tmp_images/hero.jpg ]; then
-            echo "[images] hero fallback";
-            curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" -o tmp_images/hero.jpg --max-time 20 || true;
+            echo "[images] hero fallback"
+            curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" -o tmp_images/hero.jpg --max-time 20 || true
           fi
 
-          cp -f tmp_images/hero.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" || true;
-          cp -f tmp_images/section1.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section1.jpg" || true;
-          cp -f tmp_images/section2.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section2.jpg" || true;
-          cp -f tmp_images/section3.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section3.jpg" || true;
+          # move assets
+          cp -f tmp_images/hero.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" || true
+          cp -f tmp_images/section1.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section1.jpg" || true
+          cp -f tmp_images/section2.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section2.jpg" || true
+          cp -f tmp_images/section3.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/section3.jpg" || true
 
       #####################################################################
       # Scaffold theme, fonts and hero fallback
