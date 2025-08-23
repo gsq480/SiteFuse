@@ -472,7 +472,7 @@ jobs:
               </div>
             </div>
           </header>
-          PHP
+          HEADER
 
           # Enhanced footer
           cat > child/footer.php <<'PHP'
