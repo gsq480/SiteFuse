@@ -219,9 +219,9 @@ jobs:
           ' website-step1.json website-step2.json website-step3.json > website.json;
 
           echo "[merge] attach image prompts";
-          jq --rawfile imgs image-prompts.json
-            '.imagePrompts = (($imgs | fromjson | .images) // [])'
-            website.json > website.tmp && mv website.tmp website.json;
+          jq --slurpfile imgs image-prompts.json \
+            '.imagePrompts = ($imgs[0].images // [])' \
+            website.json > website.tmp && mv website.tmp website.json
 
           echo "[merge] normalising colours to #rrggbb lower-case";
           norm_hex() {
