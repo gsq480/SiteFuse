@@ -644,32 +644,46 @@ jobs:
       #####################################################################
       - name: Deploy parent theme to Cloudways
         run: |
-          set -euo pipefail;
-          echo "[deploy] parent theme";
-          PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base";
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'";
-          rsync -avz -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no"
-            "$GITHUB_WORKSPACE/sitefuse-base/"
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/";
-          echo "parent deployed to: $PARENT_DEST/";
+          set -euxo pipefail
+          : "${CLOUDWAYS_HOST:?CLOUDWAYS_HOST empty}"
+          : "${CLOUDWAYS_USER:?CLOUDWAYS_USER empty}"
+          : "${APP_PATH:?APP_PATH empty}"
+
+          echo "[deploy] parent theme"
+          PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base"
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'"
+
+          rsync -avz --delete \
+            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+            "$GITHUB_WORKSPACE/sitefuse-base/" \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/"
 
       - name: Deploy child theme and website.json to Cloudways
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
         run: |
-          set -euo pipefail;
-          echo "[deploy] child theme";
-          THEME_DIR="$GITHUB_WORKSPACE/child-themes/${SLUG}-child";
-          DEST="$APP_PATH/wp-content/themes/${SLUG}-child";
-          if [ -d "$THEME_DIR" ]; then
-            ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$DEST'";
-            rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" "$THEME_DIR/" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEST/";
-            rsync -avz -e "ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no" "$GITHUB_WORKSPACE/website.json" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/";
-            echo "child deployed to: $DEST/";
-          else
-            echo "theme directory not found locally";
-            exit 1;
-          fi
+          set -euxo pipefail
+          : "${CLOUDWAYS_HOST:?CLOUDWAYS_HOST empty}"
+          : "${CLOUDWAYS_USER:?CLOUDWAYS_USER empty}"
+          : "${APP_PATH:?APP_PATH empty}"
+
+          echo "[deploy] child theme"
+          THEME_DIR="$GITHUB_WORKSPACE/child-themes/${SLUG}-child"
+          DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
+
+          test -d "$THEME_DIR"
+
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$DEST'"
+
+          rsync -avz --delete \
+            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+            "$THEME_DIR/" \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$DEST/"
+
+          rsync -avz \
+            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+            "$GITHUB_WORKSPACE/website.json" \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
 
       #####################################################################
       # WordPress setup, idempotent
