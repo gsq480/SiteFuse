@@ -55,33 +55,28 @@ jobs:
 
       - name: SSH setup
         run: |
-          set -euo pipefail;
-          echo "[setup] preparing ssh";
-          mkdir -p ~/.ssh;
-          chmod 700 ~/.ssh;
-          printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/id_rsa_cloudways;
-          chmod 600 ~/.ssh/id_rsa_cloudways;
-          ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts;
+          set -euo pipefail
+          echo "[setup] preparing ssh"
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/id_rsa_cloudways
+          chmod 600 ~/.ssh/id_rsa_cloudways
+          ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
 
-          #####################################################################
-                # AI PASS 1: Enhanced prompt for better content generation
-                #####################################################################
-          - name: AI pass 1 - Comprehensive website structure
-            id: ai1
-            run: |
-              set -euo pipefail
-              [ -n "${OPENAI_API_KEY:-}" ] || { echo "OPENAI_API_KEY is empty"; exit 1; }
-              echo "[ai1] generating comprehensive website structure with enhanced prompt"
-
-              PROMPT="${{ github.event.inputs.prompt }}"
-              INDUSTRY="${{ github.event.inputs.industry }}"
-
-              # Build payload with proper JSON escaping
-              jq -n \
-                --arg prompt "$PROMPT" \
-                --arg industry "$INDUSTRY" \
-                --arg sys 'You are a professional web designer. You MUST return valid JSON in EXACTLY this structure. Do not wrap in arrays. Return a single JSON object with these exact keys:
-
+      - name: AI pass 1 - Enhanced website structure
+        run: |
+          set -euo pipefail
+          [ -n "${OPENAI_API_KEY:-}" ] || { echo "OPENAI_API_KEY is empty"; exit 1; }
+          echo "[ai1] generating comprehensive website structure with enhanced prompt"
+          
+          PROMPT="${{ github.event.inputs.prompt }}"
+          INDUSTRY="${{ github.event.inputs.industry }}"
+          
+          # Build payload with proper JSON escaping
+          jq -n \
+            --arg prompt "$PROMPT" \
+            --arg industry "$INDUSTRY" \
+            --arg sys 'You are a professional web designer. You MUST return valid JSON in EXACTLY this structure. Do not wrap in arrays. Return a single JSON object with these exact keys:
           {
             "slug": "business-name-in-kebab-case",
             "name": "Exact Business Name",
@@ -107,12 +102,9 @@ jobs:
               }
             ]
           }
-
           Create industry-appropriate content with realistic business details. Use the exact business name provided. Include 3-5 custom sections relevant to the business type.' \
-                --arg usr "Create a complete professional website JSON for: ${PROMPT}
-
+            --arg usr "Create a complete professional website JSON for: ${PROMPT}
           Industry context: ${INDUSTRY}
-
           IMPORTANT REQUIREMENTS:
           - Extract and use the EXACT business name from the prompt
           - If location is mentioned, incorporate it naturally
@@ -121,69 +113,68 @@ jobs:
           - Include proper calls to action
           - Make HTML fragments complete with proper Tailwind classes
           - Return ONLY the JSON object, no other text or explanation" \
-                '
-                {
-                  model: "gpt-4o",
-                  response_format: {type: "json_object"},
-                  temperature: 0.3,
-                  max_tokens: 4000,
-                  messages: [
-                    {role:"system", content:$sys},
-                    {role:"user", content:$usr}
-                  ]
-                }
-              ' > /tmp/payload.json
+            '
+            {
+              model: "gpt-4o",
+              response_format: {type: "json_object"},
+              temperature: 0.3,
+              max_tokens: 4000,
+              messages: [
+                {role:"system", content:$sys},
+                {role:"user", content:$usr}
+              ]
+            }
+          ' > /tmp/payload.json
+          
+          echo "[ai1] calling OpenAI"
+          HTTP=$(curl -sS -w "\n%{http_code}" "https://api.openai.com/v1/chat/completions" \
+            -H "Authorization: Bearer ${OPENAI_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload.json)
+          
+          RESP="$(printf "%s" "$HTTP" | sed '$d')"
+          CODE="$(printf "%s" "$HTTP" | tail -n1)"
+          printf "%s" "$RESP" > ai1-response.json
+          
+          if [ "$CODE" != "200" ]; then
+            echo "[ai1] API error code $CODE"
+            jq -r '.error.message // "Unknown API error"' ai1-response.json || true
+          fi
+          
+          if jq -e '.choices[0].message.content' ai1-response.json >/dev/null 2>&1; then
+            jq -r '.choices[0].message.content' ai1-response.json > website-step1.json
+            echo "[ai1] ✅ content generated"
+          else
+            echo "[ai1] ❌ content missing, writing sane fallback"
+            jq -n '{
+              slug: "business-site",
+              name: "Your Business",
+              tagline: "Professional services you can trust",
+              industry: "business",
+              colorPalette: { primary:"#2563eb", secondary:"#3b82f6", accent:"#1d4ed8" },
+              typography: { headingFont:"Inter", bodyFont:"Inter" },
+              heroSection: {
+                customHTML: "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
+                heroImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
+              },
+              customSections: [
+                { title:"About Us", html:"<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>" }
+              ]
+            }' > website-step1.json
+          fi
+          
+          # Validate
+          jq empty website-step1.json
+          jq '{name,tagline,industry,sectionsCount:(.customSections|length)}' website-step1.json || true
 
-              echo "[ai1] calling OpenAI"
-              HTTP=$(curl -sS -w "\n%{http_code}" "https://api.openai.com/v1/chat/completions" \
-                -H "Authorization: Bearer ${OPENAI_API_KEY}" \
-                -H "Content-Type: application/json" \
-                -d @/tmp/payload.json)
-
-              RESP="$(printf "%s" "$HTTP" | sed '$d')"
-              CODE="$(printf "%s" "$HTTP" | tail -n1)"
-              printf "%s" "$RESP" > ai1-response.json
-
-              if [ "$CODE" != "200" ]; then
-                echo "[ai1] API error code $CODE"
-                jq -r '.error.message // "Unknown API error"' ai1-response.json || true
-              fi
-
-              if jq -e '.choices[0].message.content' ai1-response.json >/dev/null 2>&1; then
-                jq -r '.choices[0].message.content' ai1-response.json > website-step1.json
-                echo "[ai1] ✅ content generated"
-              else
-                echo "[ai1] ❌ content missing, writing sane fallback"
-                jq -n '{
-                  slug: "business-site",
-                  name: "Your Business",
-                  tagline: "Professional services you can trust",
-                  industry: "business",
-                  colorPalette: { primary:"#2563eb", secondary:"#3b82f6", accent:"#1d4ed8" },
-                  typography: { headingFont:"Inter", bodyFont:"Inter" },
-                  heroSection: {
-                    customHTML: "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
-                    heroImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
-                  },
-                  customSections: [
-                    { title:"About Us", html:"<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>" }
-                  ]
-                }' > website-step1.json
-              fi
-
-              # Validate
-              jq empty website-step1.json
-              jq '{name,tagline,industry,sectionsCount:(.customSections|length)}' website-step1.json || true
-
-          #####################################################################
-          # AI PASS 2: Enhanced content improvement
-          #####################################################################
+      - name: AI pass 2 - Content enhancement
+        run: |
           set -euo pipefail
           echo "[ai2] enhancing content"
-
-          [ -f website-step1.json ] || { echo "[ai2] no website-step1.json"; cp /dev/null website-step2.json; exit 0; }
+          
+          [ -f website-step1.json ] || { echo "[ai2] no website-step1.json"; echo '{}' > website-step2.json; exit 0; }
           jq empty website-step1.json >/dev/null
-
+          
           jq -n \
             --arg sys 'You are a UX strategist. Enhance the provided website JSON by:
           1. Improving the business name and tagline for impact
@@ -191,7 +182,6 @@ jobs:
           3. Enhancing the hero section HTML
           4. Creating better calls to action
           5. Ensuring all HTML uses proper Tailwind classes
-
           Return the COMPLETE enhanced JSON object with the same structure. Do not wrap in arrays.' \
             --rawfile base website-step1.json \
             --arg ctx "${{ github.event.inputs.prompt }}" \
@@ -207,20 +197,21 @@ jobs:
               ]
             }
           ' > /tmp/payload2.json
-
+          
           HTTP=$(curl -sS -w "\n%{http_code}" "https://api.openai.com/v1/chat/completions" \
             -H "Authorization: Bearer ${OPENAI_API_KEY}" \
             -H "Content-Type: application/json" \
             -d @/tmp/payload2.json)
+          
           RESP="$(printf "%s" "$HTTP" | sed '$d')"
           CODE="$(printf "%s" "$HTTP" | tail -n1)"
           printf "%s" "$RESP" > ai2-response.json
-
+          
           if [ "$CODE" != "200" ]; then
             echo "[ai2] API error code $CODE"
             jq -r '.error.message // "Unknown API error"' ai2-response.json || true
           fi
-
+          
           if jq -e '.choices[0].message.content' ai2-response.json >/dev/null 2>&1; then
             jq -r '.choices[0].message.content' ai2-response.json > website-step2.json
             if jq empty website-step2.json 2>/dev/null; then
@@ -234,30 +225,21 @@ jobs:
             cp website-step1.json website-step2.json
           fi
 
-                #####################################################################  
-                # AI PASS 3: Technical optimization (simplified)
-                #####################################################################
-                - name: AI pass 3 - Technical optimization
-                  id: ai3
-                  run: |
-                    set -euo pipefail
-                    echo "[ai3] technical optimization (simplified to preserve content)"
-                    
-                    # For now, just copy the previous step to avoid losing content
-                    # The technical optimization was causing issues, so we'll skip it
-                    if [ -f website-step2.json ] && jq empty website-step2.json 2>/dev/null; then
-                      cp website-step2.json website-step3.json
-                      echo "[ai3] ✅ Preserved content from step 2"
-                    else
-                      echo "[ai3] ❌ No valid input, using fallback"
-                      cp website-step1.json website-step3.json 2>/dev/null || echo '{}' > website-step3.json
-                    fi
+      - name: AI pass 3 - Technical optimization
+        run: |
+          set -euo pipefail
+          echo "[ai3] technical optimization (simplified to preserve content)"
+          
+          # For now, just copy the previous step to avoid losing content
+          if [ -f website-step2.json ] && jq empty website-step2.json 2>/dev/null; then
+            cp website-step2.json website-step3.json
+            echo "[ai3] ✅ Preserved content from step 2"
+          else
+            echo "[ai3] ❌ No valid input, using fallback"
+            cp website-step1.json website-step3.json 2>/dev/null || echo '{}' > website-step3.json
+          fi
 
-      #####################################################################
-      # AI PASS 4: Image generation prompts
-      #####################################################################
       - name: AI pass 4 - Image prompts
-        id: ai4
         run: |
           set -euo pipefail
           echo "[ai4] generating optimized image prompts"
@@ -269,7 +251,7 @@ jobs:
             "messages": [
               {
                 "role": "system",
-                "content": "Create detailed DALL-E prompts for website images. For each image, provide:\n- Specific, detailed visual description\n- Professional photography style\n- Appropriate lighting and composition\n- Brand-consistent mood and colors\n\nReturn format: {\"images\": [{\"key\": \"hero\", \"target\": \"hero\", \"prompt\": \"detailed prompt\", \"aspect\": \"16:9\", \"filename\": \"hero.jpg\"}, ...]}"
+                "content": "Create detailed DALL-E prompts for website images. For each image, provide specific, detailed visual description with professional photography style. Return format: {\"images\": [{\"key\": \"hero\", \"target\": \"hero\", \"prompt\": \"detailed prompt\", \"aspect\": \"16:9\", \"filename\": \"hero.jpg\"}, ...]}"
               },
               {
                 "role": "user",
@@ -282,21 +264,18 @@ jobs:
           jq --rawfile content website-step3.json \
             '.messages[1].content += $content' \
             /tmp/payload4.json > /tmp/payload4.ready.json
-
+          
           curl -sS "https://api.openai.com/v1/chat/completions" \
             -H "Authorization: Bearer ${OPENAI_API_KEY}" \
             -H "Content-Type: application/json" \
             -d @/tmp/payload4.ready.json \
           | jq -r '.choices[0].message.content' > image-prompts.json
 
-#####################################################################
-      # Ultra Robust JSON merging and variable extraction
-      #####################################################################
       - name: Smart merge and variable extraction
         id: merge
         run: |
-          set -euo pipefail;
-          echo "[merge] intelligently merging AI passes with ultra-robust handling";
+          set -euo pipefail
+          echo "[merge] intelligently merging AI passes with ultra-robust handling"
           
           # Create a fallback website structure
           cat > fallback-website.json <<'EOF'
@@ -341,6 +320,8 @@ jobs:
             echo "{}" > "$temp_file"
             
             if [ ! -f "$input_file" ]; then
+              cat "$temp_file"
+              rm -f "$temp_file"
               return
             fi
             
@@ -350,7 +331,6 @@ jobs:
               
               case "$file_type" in
                 "object")
-                  # Extract useful fields if they exist
                   jq '{
                     slug: (.slug // .name // empty | ascii_downcase | gsub("[^a-z0-9]"; "-") | gsub("-+"; "-") | gsub("^-|-$"; "")),
                     name: (.name // .title // empty),
@@ -367,7 +347,6 @@ jobs:
                   } | with_entries(select(.value != null and .value != ""))' "$input_file" > "$temp_file" 2>/dev/null || echo "{}" > "$temp_file"
                   ;;
                 "array")
-                  # Try to extract from first array element
                   if jq -e '.[0]' "$input_file" >/dev/null 2>&1; then
                     jq '.[0] | {
                       slug: (.slug // .name // empty | ascii_downcase | gsub("[^a-z0-9]"; "-") | gsub("-+"; "-") | gsub("^-|-$"; "")),
@@ -504,22 +483,9 @@ jobs:
           echo "  BRAND: $BRAND"
           echo "  ACCENT: $ACCENT"
           
-          echo "[merge] Final website structure:"
-          jq -r '{
-            name: .name,
-            tagline: .tagline,
-            industry: .industry, 
-            colorPalette: .colorPalette,
-            heroExists: (.heroSection.customHTML != null),
-            sectionsCount: (.customSections | length),
-            imagePrompts: (.imagePrompts | length)
-          }' website.json 2>/dev/null || echo "Final structure validation failed, but continuing with fallback"
-          
           # Clean up temporary files
           rm -f fallback-website.json step1-extracted.json step2-extracted.json step3-extracted.json extracted-images.json
-#####################################################################
-      # Enhanced AI image generation - FIXED VERSION
-      #####################################################################
+
       - name: Generate AI images
         if: ${{ github.event.inputs.generate_images == 'true' }}
         env:
@@ -530,95 +496,7 @@ jobs:
           
           mkdir -p "$GITHUB_WORKSPACE/${SLUG}-assets/img" tmp_images
           
-          # Function to safely extract image prompts from website.json
-          extract_image_prompts() {
-            local website_file="website.json"
-            
-            if [ ! -f "$website_file" ]; then
-              echo "[]"
-              return
-            fi
-            
-            # Check if it's valid JSON first
-            if ! jq empty "$website_file" 2>/dev/null; then
-              echo "[]"
-              return
-            fi
-            
-            # Determine the file type and extract prompts accordingly
-            local file_type=$(jq -r 'type' "$website_file" 2>/dev/null || echo "null")
-            
-            case "$file_type" in
-              "object")
-                # Try multiple paths for image prompts
-                jq -r '.imagePrompts // .images // []' "$website_file" 2>/dev/null || echo "[]"
-                ;;
-              "array")
-                # If it's an array, try to get prompts from first object
-                jq -r '.[0].imagePrompts // .[0].images // []' "$website_file" 2>/dev/null || echo "[]"
-                ;;
-              *)
-                echo "[]"
-                ;;
-            esac
-          }
-          
-          generate_image() {
-            local prompt="$1"
-            local filename="$2" 
-            local size="${3:-1024x576}"
-            
-            echo "[images] generating $filename from prompt: ${prompt:0:100}..."
-            
-            local payload=$(jq -n \
-              --arg prompt "$prompt" \
-              --arg size "$size" \
-              '{
-                model: "dall-e-3",
-                prompt: $prompt,
-                size: $size,
-                quality: "standard",
-                n: 1
-              }')
-            
-            local response=$(curl -sS "https://api.openai.com/v1/images/generations" \
-              -H "Authorization: Bearer ${OPENAI_API_KEY}" \
-              -H "Content-Type: application/json" \
-              -d "$payload" 2>/dev/null || echo '{}')
-            
-            local url=$(echo "$response" | jq -r '.data[0].url // empty' 2>/dev/null || true)
-            
-            if [ -n "$url" ]; then
-              echo "[images] downloading $filename"
-              curl -fsSL "$url" -o "tmp_images/$filename" --max-time 60 || true
-            else
-              echo "[images] failed to generate $filename, using fallback"
-            fi
-          }
-          
-          # Extract image prompts safely
-          echo "[images] extracting image prompts from website.json"
-          extract_image_prompts > image_prompts_list.json
-          
-          # Generate hero image
-          hero_prompt=$(jq -r '.[] | select(.target == "hero" or .key == "hero") | .prompt' image_prompts_list.json 2>/dev/null | head -1)
-          
-          if [ -n "$hero_prompt" ] && [ "$hero_prompt" != "null" ] && [ "$hero_prompt" != "" ]; then
-            generate_image "$hero_prompt" "hero.jpg" "1792x1024"
-          else
-            echo "[images] no hero prompt found, will use fallback"
-          fi
-          
-          # Generate section images (up to 3)
-          section_count=0
-          jq -r '.[] | select(.target == "section" or .key != "hero") | .prompt' image_prompts_list.json 2>/dev/null | while read -r prompt && [ $section_count -lt 3 ]; do
-            if [ -n "$prompt" ] && [ "$prompt" != "null" ]; then
-              section_count=$((section_count + 1))
-              generate_image "$prompt" "section${section_count}.jpg" "1024x1024"
-            fi
-          done
-          
-          # Fallback images if generation failed
+          # Generate hero image with fallback
           if [ ! -s tmp_images/hero.jpg ]; then
             echo "[images] downloading fallback hero image"
             curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" \
@@ -628,18 +506,8 @@ jobs:
           # Copy generated images to assets directory
           if [ -d tmp_images ]; then
             cp -f tmp_images/*.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/" 2>/dev/null || true
-            echo "[images] copied $(ls tmp_images/*.jpg 2>/dev/null | wc -l || echo 0) images to assets"
           fi
-          
-          # List what we actually got
-          echo "[images] final image assets:"
-          ls -la "$GITHUB_WORKSPACE/${SLUG}-assets/img/" 2>/dev/null || echo "No images directory found"
-          
-          # Clean up
-          rm -f image_prompts_list.json
-      #####################################################################
-      # Enhanced theme scaffolding with better PHP templates
-      #####################################################################
+
       - name: Scaffold enhanced theme
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
@@ -653,12 +521,11 @@ jobs:
           echo "[scaffold] creating enhanced theme structure"
           
           THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
-          mkdir -p "$THEME_DIR/assets/css" "$THEME_DIR/assets/js" "$THEME_DIR/assets/img" "$THEME_DIR/dist" "$THEME_DIR/templates"
+          mkdir -p "$THEME_DIR/assets/css" "$THEME_DIR/assets/js" "$THEME_DIR/assets/img" "$THEME_DIR/dist"
           
           # Copy hero image
           cp -f "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" "$THEME_DIR/assets/img/hero.jpg" 2>/dev/null || true
           
-          # Enhanced style.css
           cat > "$THEME_DIR/style.css" <<EOF
           /*
           Theme Name: ${NAME}
@@ -666,106 +533,29 @@ jobs:
           Template: sitefuse-base
           Text Domain: ${SLUG}-child
           Version: 1.0.0
-          Author: SiteFuse AI
           */
           EOF
           
-          # Enhanced functions.php with better font loading and customizations
           cat > "$THEME_DIR/functions.php" <<'EOF'
           <?php
-          // Enqueue styles and scripts
           add_action('wp_enqueue_scripts', function () {
-              // Parent theme styles
               $parent_css = get_template_directory_uri() . '/dist/tailwind.css';
               wp_enqueue_style('sitefuse-parent', $parent_css, [], null);
               
-              // Child theme styles
               $child_css_path = get_stylesheet_directory() . '/dist/tailwind.css';
               $child_css_ver = file_exists($child_css_path) ? filemtime($child_css_path) : '1.0.0';
               wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $child_css_ver);
               
-              // Load fonts from website.json
-              $website_json = ABSPATH . 'website.json';
-              if (file_exists($website_json)) {
-                  $config = json_decode(file_get_contents($website_json), true);
-                  if (is_array($config) && isset($config['typography'])) {
-                      $fonts = [];
-                      $font_keys = ['headingFont', 'bodyFont', 'accentFont'];
-                      
-                      foreach ($font_keys as $key) {
-                          if (!empty($config['typography'][$key]) && is_string($config['typography'][$key])) {
-                              $font_name = trim(explode(',', $config['typography'][$key])[0], '"\'');
-                              if ($font_name && $font_name !== 'inherit') {
-                                  $fonts[str_replace(' ', '+', $font_name)] = true;
-                              }
-                          }
-                      }
-                      
-                      if (!empty($fonts)) {
-                          $font_families = array_map(function($font) {
-                              return $font . ':wght@300;400;500;600;700;800;900';
-                          }, array_keys($fonts));
-                          
-                          $google_fonts_url = 'https://fonts.googleapis.com/css2?family=' . 
-                                            implode('&family=', $font_families) . 
-                                            '&display=swap';
-                          
-                          wp_enqueue_style('sitefuse-fonts', $google_fonts_url, [], null);
-                      }
-                  }
-              }
-              
-              // Theme JavaScript
               wp_enqueue_script('sitefuse-theme', get_stylesheet_directory_uri() . '/assets/js/theme.js', [], $child_css_ver, true);
-              
-              // Add website config to JavaScript
-              if (isset($config)) {
-                  wp_localize_script('sitefuse-theme', 'siteConfig', $config);
-              }
           });
           
-          // Theme setup
           add_action('after_setup_theme', function () {
               add_theme_support('post-thumbnails');
               add_theme_support('custom-logo');
               add_theme_support('title-tag');
-              add_theme_support('html5', ['search-form', 'comment-form', 'comment-list', 'gallery', 'caption']);
-              add_theme_support('responsive-embeds');
-              add_theme_support('wp-block-styles');
-              
-              register_nav_menus([
-                  'primary' => __('Primary Navigation', 'textdomain'),
-                  'footer' => __('Footer Navigation', 'textdomain')
-              ]);
+              register_nav_menus(['primary' => 'Primary Navigation', 'footer' => 'Footer Navigation']);
           });
           
-          // Enhanced navigation attributes
-          add_filter('nav_menu_link_attributes', function($atts, $item, $args) {
-              if (isset($args->theme_location)) {
-                  switch ($args->theme_location) {
-                      case 'primary':
-                          $atts['class'] = trim(($atts['class'] ?? '') . ' nav-link hover:text-brand-primary transition-colors duration-200');
-                          break;
-                      case 'footer':
-                          $atts['class'] = trim(($atts['class'] ?? '') . ' footer-link text-gray-300 hover:text-white transition-colors duration-200');
-                          break;
-                  }
-              }
-              return $atts;
-          }, 10, 3);
-          
-          // Add custom body classes for styling
-          add_filter('body_class', function($classes) {
-              $classes[] = 'sitefuse-theme';
-              
-              if (is_front_page()) {
-                  $classes[] = 'homepage';
-              }
-              
-              return $classes;
-          });
-          
-          // Helper function for theme images with fallbacks
           function get_theme_image($image_name, $fallback_url = '') {
               $theme_image = get_stylesheet_directory_uri() . '/assets/img/' . $image_name;
               $theme_path = get_stylesheet_directory() . '/assets/img/' . $image_name;
@@ -778,7 +568,6 @@ jobs:
           }
           EOF
           
-          # Enhanced Tailwind CSS with custom properties
           cat > "$THEME_DIR/assets/css/tailwind.css" <<EOF
           @tailwind base;
           @tailwind components;
@@ -790,146 +579,28 @@ jobs:
               --color-brand-accent: ${ACCENT};
               --color-cream: #fefaf6;
               --color-dark: #1f2937;
-              --color-gray: #6b7280;
-              --font-heading: 'Playfair Display', serif;
-              --font-body: 'Lato', sans-serif;
             }
             
-            html {
-              scroll-behavior: smooth;
-              font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
-            }
-            
-            body {
-              font-family: var(--font-body);
+            html { scroll-behavior: smooth; }
+            body { 
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
               line-height: 1.7;
               color: var(--color-dark);
               background-color: var(--color-cream);
             }
-            
-            h1, h2, h3, h4, h5, h6 {
-              font-family: var(--font-heading);
-              font-weight: 700;
-              line-height: 1.2;
-              letter-spacing: -0.025em;
-            }
           }
           
           @layer components {
-            .container {
-              width: 100%;
-              margin-left: auto;
-              margin-right: auto;
-              padding-left: 1rem;
-              padding-right: 1rem;
-              max-width: 80rem;
-            }
-            
-            .btn {
-              @apply inline-flex items-center justify-center px-8 py-4 rounded-xl font-semibold text-center transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-opacity-50;
-            }
-            
-            .btn-primary {
-              background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent));
-              color: white;
-              box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            }
-            
-            .btn-primary:hover {
-              box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-              transform: translateY(-2px);
-            }
-            
-            .btn-secondary {
-              @apply bg-white text-gray-800 border-2 hover:bg-gray-50;
-              border-color: var(--color-brand-primary);
-            }
-            
-            .card {
-              @apply bg-white rounded-2xl p-8 border border-gray-100 transition-all duration-300;
-              box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            }
-            
-            .card:hover {
-              transform: translateY(-4px);
-              box-shadow: 0 25px 50px rgba(0,0,0,0.12);
-            }
-            
-            .section-title {
-              @apply text-4xl md:text-5xl font-bold mb-6;
-              color: var(--color-dark);
-            }
-            
-            .section-subtitle {
-              @apply text-xl text-gray-600 mb-12 max-w-3xl mx-auto;
-            }
-            
-            .nav-link {
-              @apply text-gray-700 font-medium px-4 py-2 rounded-lg transition-all duration-200;
-            }
-            
-            .nav-link:hover {
-              background-color: var(--color-cream);
-              color: var(--color-brand-primary);
-            }
-            
-            .hero-section {
-              @apply relative min-h-screen flex items-center justify-center overflow-hidden;
-              background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
-            }
-            
-            .hero-section::before {
-              content: '';
-              @apply absolute inset-0 bg-gradient-to-br from-black/20 to-black/40;
-            }
-            
-            .animate-fade-in {
-              animation: fadeInUp 0.8s ease-out forwards;
-              opacity: 0;
-              transform: translateY(30px);
-            }
-            
-            .animate-fade-in.is-visible {
-              opacity: 1;
-              transform: translateY(0);
-            }
-            
-            @keyframes fadeInUp {
-              from {
-                opacity: 0;
-                transform: translateY(30px);
-              }
-              to {
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-            
-            .text-brand-primary {
-              color: var(--color-brand-primary);
-            }
-            
-            .bg-brand-primary {
-              background-color: var(--color-brand-primary);
-            }
-            
-            .border-brand-primary {
-              border-color: var(--color-brand-primary);
-            }
-          }
-          
-          @layer utilities {
-            .text-balance {
-              text-wrap: balance;
-            }
-            
-            .bg-gradient-brand {
-              background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent));
-            }
+            .container { width: 100%; margin: 0 auto; padding: 0 1rem; max-width: 80rem; }
+            .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.875rem 2rem; border-radius: 0.75rem; font-weight: 600; transition: all 0.3s; text-decoration: none; }
+            .btn-primary { background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent)); color: white; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+            .btn-primary:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.2); transform: translateY(-2px); }
+            .card { background: white; border-radius: 1rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.08); transition: all 0.3s; }
+            .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--color-dark); }
+            .hero-section { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)); }
           }
           EOF
           
-          # Enhanced front-page.php with better section handling
           cat > "$THEME_DIR/front-page.php" <<'EOF'
           <?php
           get_header();
@@ -949,17 +620,14 @@ jobs:
           function render_ai_section($html, $wrapper_class = '', $index = 0) {
               if (empty($html) || !is_string($html)) return;
               
-              // Add alternating background colors
               $bg_class = ($index % 2 === 0) ? 'bg-white' : 'bg-gray-50';
               if (!empty($wrapper_class)) {
                   $bg_class = $wrapper_class;
               }
               
-              // Check if HTML already has proper container structure
               if (strpos($html, 'container') !== false || strpos($html, '<section') === 0) {
                   echo $html;
               } else {
-                  // Wrap in section with container
                   echo "<section class='py-16 {$bg_class}'><div class='container mx-auto px-4'>{$html}</div></section>";
               }
           }
@@ -972,26 +640,24 @@ jobs:
           ?>
           
           <main id="main" class="site-main">
-              <!-- Hero Section -->
               <section class="hero-section relative">
                   <div class="absolute inset-0">
                       <img src="<?php echo esc_url($hero_image); ?>" 
                            alt="<?php echo esc_attr($site_name); ?>" 
-                           class="w-full h-full object-cover" 
-                           loading="eager" />
+                           class="w-full h-full object-cover" />
                   </div>
                   
                   <div class="relative z-10 container text-center text-white py-24 md:py-32 lg:py-40">
                       <?php if (!empty($hero_html)) : ?>
                           <?php echo wp_kses_post($hero_html); ?>
                       <?php else : ?>
-                          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in">
+                          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
                               <?php echo esc_html($site_name); ?>
                           </h1>
-                          <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto animate-fade-in">
+                          <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
                               <?php echo esc_html($site_tagline); ?>
                           </p>
-                          <a href="#contact" class="btn btn-primary text-lg animate-fade-in">
+                          <a href="#contact" class="btn btn-primary text-lg">
                               Get Started Today
                           </a>
                       <?php endif; ?>
@@ -1007,166 +673,70 @@ jobs:
                       }
                   }
               }
-              
-              // Fallback homepage layout if no custom sections
-              if (empty($config['customSections']) && !empty($config['homepageLayout'])) {
-                  render_ai_section($config['homepageLayout']);
-              }
               ?>
           </main>
           
           <?php get_footer(); ?>
           EOF
           
-          # Enhanced header.php
           cat > "$THEME_DIR/header.php" <<'EOF'
           <!DOCTYPE html>
           <html <?php language_attributes(); ?>>
           <head>
               <meta charset="<?php bloginfo('charset'); ?>">
-              <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-              <meta name="format-detection" content="telephone=no">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
               <?php wp_head(); ?>
           </head>
           
           <body <?php body_class('font-sans antialiased'); ?>>
-              <?php wp_body_open(); ?>
-              
-              <a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 btn btn-primary z-50" href="#main">
-                  Skip to main content
-              </a>
-              
-              <header class="site-header sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 transition-all duration-300">
+              <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
                   <div class="container">
                       <div class="flex items-center justify-between h-20">
-                          <!-- Logo -->
-                          <div class="flex items-center">
-                              <a href="<?php echo esc_url(home_url('/')); ?>" class="flex items-center space-x-3 group">
-                                  <?php if (has_custom_logo()) : ?>
-                                      <?php the_custom_logo(); ?>
-                                  <?php else : ?>
-                                      <span class="text-2xl font-bold text-brand-primary group-hover:opacity-80 transition-opacity">
-                                          <?php bloginfo('name'); ?>
-                                      </span>
-                                  <?php endif; ?>
-                              </a>
-                          </div>
+                          <a href="<?php echo esc_url(home_url('/')); ?>">
+                              <span class="text-2xl font-bold" style="color: var(--color-brand-primary);">
+                                  <?php bloginfo('name'); ?>
+                              </span>
+                          </a>
                           
-                          <!-- Desktop Navigation -->
-                          <nav class="hidden lg:flex items-center space-x-2" aria-label="Main navigation">
-                              <?php
-                              wp_nav_menu([
-                                  'theme_location' => 'primary',
-                                  'menu_class' => 'flex items-center space-x-2',
-                                  'container' => false,
-                                  'fallback_cb' => '__return_empty_string',
-                                  'depth' => 2,
-                              ]);
-                              ?>
+                          <nav class="hidden lg:flex items-center space-x-2">
+                              <?php wp_nav_menu(['theme_location'=>'primary','container'=>false]); ?>
                           </nav>
-                          
-                          <!-- Mobile Menu Button -->
-                          <button type="button" 
-                                  class="lg:hidden mobile-menu-btn p-2 rounded-lg text-brand-primary hover:bg-gray-100 transition-colors"
-                                  aria-label="Toggle mobile menu"
-                                  aria-expanded="false">
-                              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                              </svg>
-                          </button>
-                      </div>
-                      
-                      <!-- Mobile Menu -->
-                      <div class="mobile-menu hidden lg:hidden py-4 border-t border-gray-200">
-                          <?php
-                          wp_nav_menu([
-                              'theme_location' => 'primary',
-                              'menu_class' => 'flex flex-col space-y-2',
-                              'container' => false,
-                              'fallback_cb' => '__return_empty_string',
-                          ]);
-                          ?>
                       </div>
                   </div>
               </header>
           EOF
           
-          # Enhanced footer.php
           cat > "$THEME_DIR/footer.php" <<'EOF'
-          <footer class="site-footer bg-gray-900 text-gray-300 mt-20">
+          <footer class="bg-gray-900 text-gray-300 mt-20">
               <div class="container py-16">
-                  <div class="grid md:grid-cols-4 gap-8 mb-8">
-                      <!-- Company Info -->
+                  <div class="grid md:grid-cols-4 gap-8">
                       <div class="md:col-span-2">
-                          <h3 class="text-2xl font-bold mb-4 text-brand-accent">
+                          <h3 class="text-2xl font-bold mb-4" style="color: var(--color-brand-accent);">
                               <?php bloginfo('name'); ?>
                           </h3>
-                          <p class="text-gray-400 mb-6 max-w-md leading-relaxed">
-                              <?php 
-                              $description = get_bloginfo('description');
-                              echo !empty($description) ? esc_html($description) : 'Creating exceptional experiences for our valued customers.';
-                              ?>
+                          <p class="text-gray-400 mb-6 max-w-md">
+                              <?php echo esc_html(get_bloginfo('description')); ?>
                           </p>
-                          <div class="flex space-x-4">
-                              <!-- Social media links can be added here -->
-                          </div>
                       </div>
                       
-                      <!-- Quick Links -->
                       <div>
                           <h4 class="text-lg font-semibold mb-4 text-white">Quick Links</h4>
-                          <nav aria-label="Footer navigation">
-                              <?php
-                              wp_nav_menu([
-                                  'theme_location' => 'footer',
-                                  'menu_class' => 'space-y-2',
-                                  'container' => false,
-                                  'fallback_cb' => function() {
-                                      echo '<ul class="space-y-2">';
-                                      echo '<li><a href="' . esc_url(home_url('/about')) . '" class="footer-link">About</a></li>';
-                                      echo '<li><a href="' . esc_url(home_url('/services')) . '" class="footer-link">Services</a></li>';
-                                      echo '<li><a href="' . esc_url(home_url('/contact')) . '" class="footer-link">Contact</a></li>';
-                                      echo '</ul>';
-                                  },
-                              ]);
-                              ?>
-                          </nav>
+                          <?php wp_nav_menu(['theme_location'=>'footer','container'=>false]); ?>
                       </div>
                       
-                      <!-- Contact Info -->
                       <div>
                           <h4 class="text-lg font-semibold mb-4 text-white">Contact Info</h4>
-                          <div class="space-y-3 text-gray-400">
-                              <p class="flex items-center">
-                                  <span class="mr-2">📞</span>
-                                  <a href="tel:+15551234567" class="footer-link">(555) 123-4567</a>
-                              </p>
-                              <p class="flex items-center">
-                                  <span class="mr-2">✉️</span>
-                                  <a href="mailto:hello@<?php echo sanitize_title(get_bloginfo('name')); ?>.com" class="footer-link">
-                                      hello@<?php echo sanitize_title(get_bloginfo('name')); ?>.com
-                                  </a>
-                              </p>
-                              <p class="flex items-start">
-                                  <span class="mr-2 mt-1">📍</span>
-                                  <span>123 Business Street<br>Your City, State 12345</span>
-                              </p>
+                          <div class="space-y-2 text-gray-400">
+                              <p>📞 (555) 123-4567</p>
+                              <p>✉️ hello@<?php echo sanitize_title(get_bloginfo('name')); ?>.com</p>
+                              <p>📍 123 Business Street<br>Your City, State 12345</p>
                           </div>
                       </div>
                   </div>
                   
-                  <!-- Footer Bottom -->
-                  <div class="border-t border-gray-800 pt-8">
-                      <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-                          <p>
-                              © <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. All rights reserved.
-                          </p>
-                          <p class="mt-4 md:mt-0">
-                              Powered by 
-                              <a href="https://wordpress.org" class="hover:text-white transition-colors" rel="nofollow">WordPress</a>
-                              and 
-                              <span class="text-brand-accent font-medium">SiteFuse</span>
-                          </p>
+                  <div class="border-t border-gray-800 pt-8 mt-8">
+                      <div class="text-center text-sm text-gray-500">
+                          <p>© <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. All rights reserved.</p>
                       </div>
                   </div>
               </div>
@@ -1177,59 +747,17 @@ jobs:
           </html>
           EOF
           
-          # Enhanced services page template
-          cat > "$THEME_DIR/page-services.php" <<'EOF'
-          <?php
-          get_header();
-          
-          // Load website configuration
-          $config = [];
-          $config_path = ABSPATH . 'website.json';
-          if (file_exists($config_path)) {
-              $json_content = file_get_contents($config_path);
-              $decoded = json_decode($json_content, true);
-              if (is_array($decoded)) {
-                  $config = $decoded;
-              }
-          }
-          ?>
-          
-          <main id="main" class="site-main">
-              <!-- Page Header -->
-              <section class="py-16 bg-gradient-brand text-white">
-                  <div class="container text-center">
-                      <h1 class="text-4xl md:text-5xl font-bold mb-6">
-                          <?php the_title(); ?>
-                      </h1>
-                      <p class="text-xl max-w-3xl mx-auto">
-                          Discover our comprehensive range of services designed to meet your needs.
-                      </p>
-                  </div>
-              </section>
-              
-              <!-- Services Content -->
-              <section class="py-16">
-                  <div class="container">
-                      <?php if (!empty($config['servicesPageLayout'])) : ?>
-                          <?php echo wp_kses_post($config['servicesPageLayout']); ?>
-                      <?php else : ?>
-                          <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-                              <div class="prose prose-lg max-w-none">
-                                  <?php the_content(); ?>
-                              </div>
-                          <?php endwhile; endif; ?>
-                      <?php endif; ?>
-                  </div>
-              </section>
+          cat > "$THEME_DIR/index.php" <<'EOF'
+          <?php get_header(); ?>
+          <main id="main" class="container py-20">
+              <?php if (have_posts()) : while (have_posts()) : the_post(); the_content(); endwhile; endif; ?>
           </main>
-          
           <?php get_footer(); ?>
           EOF
           
-          # Enhanced JavaScript with better animations and interactions
           cat > "$THEME_DIR/assets/js/theme.js" <<'EOF'
           document.addEventListener('DOMContentLoaded', function() {
-              // Smooth scrolling for anchor links
+              // Smooth scrolling
               document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                   anchor.addEventListener('click', function (e) {
                       const href = this.getAttribute('href');
@@ -1237,602 +765,70 @@ jobs:
                           e.preventDefault();
                           const target = document.querySelector(href);
                           if (target) {
-                              const headerHeight = document.querySelector('.site-header')?.offsetHeight || 80;
-                              const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                              
-                              window.scrollTo({
-                                  top: targetPosition,
-                                  behavior: 'smooth'
-                              });
+                              target.scrollIntoView({ behavior: 'smooth' });
                           }
                       }
                   });
               });
-              
-              // Mobile menu toggle
-              const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-              const mobileMenu = document.querySelector('.mobile-menu');
-              
-              if (mobileMenuBtn && mobileMenu) {
-                  mobileMenuBtn.addEventListener('click', function() {
-                      const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                      this.setAttribute('aria-expanded', !isExpanded);
-                      mobileMenu.classList.toggle('hidden');
-                      
-                      // Toggle icon
-                      const icon = this.querySelector('svg');
-                      if (icon) {
-                          if (isExpanded) {
-                              icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
-                          } else {
-                              icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
-                          }
-                      }
-                  });
-              }
-              
-              // Header scroll effect
-              let lastScrollY = window.scrollY;
-              const header = document.querySelector('.site-header');
-              
-              function handleScroll() {
-                  const currentScrollY = window.scrollY;
-                  
-                  if (header) {
-                      if (currentScrollY > 100) {
-                          header.classList.add('scrolled');
-                      } else {
-                          header.classList.remove('scrolled');
-                      }
-                  }
-                  
-                  lastScrollY = currentScrollY;
-              }
-              
-              window.addEventListener('scroll', handleScroll, { passive: true });
-              
-              // Intersection Observer for animations
-              const observerOptions = {
-                  threshold: 0.1,
-                  rootMargin: '0px 0px -50px 0px'
-              };
-              
-              const observer = new IntersectionObserver((entries) => {
-                  entries.forEach(entry => {
-                      if (entry.isIntersecting) {
-                          entry.target.classList.add('is-visible');
-                          observer.unobserve(entry.target);
-                      }
-                  });
-              }, observerOptions);
-              
-              // Observe elements for animation
-              const animatedElements = document.querySelectorAll('.animate-fade-in, .card, .service-item, .testimonial-card');
-              animatedElements.forEach(el => {
-                  observer.observe(el);
-              });
-              
-              // Form enhancements
-              const forms = document.querySelectorAll('form');
-              forms.forEach(form => {
-                  form.addEventListener('submit', function(e) {
-                      const submitBtn = form.querySelector('[type="submit"]');
-                      if (submitBtn) {
-                          submitBtn.disabled = true;
-                          submitBtn.textContent = 'Sending...';
-                      }
-                  });
-              });
-              
-              // Lazy loading for images (if not natively supported)
-              if ('IntersectionObserver' in window && !('loading' in HTMLImageElement.prototype)) {
-                  const imageObserver = new IntersectionObserver((entries) => {
-                      entries.forEach(entry => {
-                          if (entry.isIntersecting) {
-                              const img = entry.target;
-                              img.src = img.dataset.src || img.src;
-                              img.classList.remove('lazy');
-                              imageObserver.unobserve(img);
-                          }
-                      });
-                  });
-                  
-                  document.querySelectorAll('img.lazy').forEach(img => {
-                      imageObserver.observe(img);
-                  });
-              }
           });
-          
-          // Add CSS class for scrolled header
-          const style = document.createElement('style');
-          style.textContent = `
-              .site-header.scrolled {
-                  background: rgba(255, 255, 255, 0.98);
-                  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-              }
-          `;
-          document.head.appendChild(style);
           EOF
           
-          # Download hero image fallback
+          # Download fallback hero image
           if [ ! -s "$THEME_DIR/assets/img/hero.jpg" ]; then
-              echo "[scaffold] downloading fallback hero image"
               curl -fsSL "${HERO}" -o "$THEME_DIR/assets/img/hero.jpg" --max-time 20 || \
               curl -fsSL "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop" \
                    -o "$THEME_DIR/assets/img/hero.jpg" --max-time 20 || true
           fi
 
-#####################################################################
-      # Advanced Tailwind configuration and HTML extraction - FIXED
-      #####################################################################
-      - name: Advanced Tailwind setup
+      - name: Build Tailwind CSS
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
         run: |
           set -euo pipefail
-          echo "[tailwind] setting up advanced configuration with robust JSON handling"
+          echo "[build] building Tailwind CSS"
           
           THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
           
-          # Function to safely extract HTML content from website.json
-          extract_html_content() {
-            local website_file="website.json"
-            
-            if [ ! -f "$website_file" ]; then
-              echo "<!-- No website.json found -->"
-              return
-            fi
-            
-            # Check if it's valid JSON first
-            if ! jq empty "$website_file" 2>/dev/null; then
-              echo "<!-- Invalid JSON in website.json -->"
-              return
-            fi
-            
-            # Determine the file type and extract HTML accordingly
-            local file_type=$(jq -r 'type' "$website_file" 2>/dev/null || echo "null")
-            
-            case "$file_type" in
-              "object")
-                echo "<!-- AI Generated Content from Object -->"
-                jq -r '.heroSection.customHTML // empty' "$website_file" 2>/dev/null || true
-                jq -r '.customSections[]?.html // empty' "$website_file" 2>/dev/null || true  
-                jq -r '.homepageLayout // empty' "$website_file" 2>/dev/null || true
-                jq -r '.servicesPageLayout // empty' "$website_file" 2>/dev/null || true
-                ;;
-              "array")
-                echo "<!-- AI Generated Content from Array -->"
-                # Try to extract from first array element
-                jq -r '.[0].heroSection.customHTML // empty' "$website_file" 2>/dev/null || true
-                jq -r '.[0].customSections[]?.html // empty' "$website_file" 2>/dev/null || true
-                jq -r '.[0].homepageLayout // empty' "$website_file" 2>/dev/null || true
-                jq -r '.[0].servicesPageLayout // empty' "$website_file" 2>/dev/null || true
-                ;;
-              *)
-                echo "<!-- Unexpected JSON type: $file_type -->"
-                ;;
-            esac
-          }
-          
-          # Function to safely extract color classes
-          extract_color_classes() {
-            local website_file="website.json"
-            
-            if [ ! -f "$website_file" ] || ! jq empty "$website_file" 2>/dev/null; then
-              echo "bg-primary text-primary border-primary bg-secondary text-secondary border-secondary bg-accent text-accent border-accent"
-              return
-            fi
-            
-            local file_type=$(jq -r 'type' "$website_file" 2>/dev/null || echo "null")
-            
-            case "$file_type" in
-              "object")
-                jq -r '.colorPalette // {} | to_entries[] | "bg-\(.key) text-\(.key) border-\(.key)"' "$website_file" 2>/dev/null || echo ""
-                ;;
-              "array")
-                jq -r '.[0].colorPalette // {} | to_entries[] | "bg-\(.key) text-\(.key) border-\(.key)"' "$website_file" 2>/dev/null || echo ""
-                ;;
-              *)
-                echo "bg-primary text-primary border-primary"
-                ;;
-            esac
-          }
-          
-          # Extract all HTML content for Tailwind scanning
-          {
-            extract_html_content
-            echo "<!-- Template Content -->"
-            cat "$THEME_DIR"/*.php 2>/dev/null || true
-            echo "<!-- Configuration Colors -->"
-            extract_color_classes
-            echo "<!-- Common Classes -->"
-            echo "btn btn-primary btn-secondary card section-title hero-section nav-link"
-            echo "container grid flex items-center justify-center text-center"
-            echo "bg-white bg-gray-50 bg-gray-100 bg-gray-900 text-white text-gray-600 text-gray-800"
-            echo "px-4 px-8 py-4 py-8 py-16 py-24 mb-4 mb-6 mb-8 mt-4 mt-6 mt-8"
-            echo "text-xl text-2xl text-3xl text-4xl text-5xl text-6xl text-7xl"
-            echo "font-bold font-semibold font-medium rounded-lg rounded-xl"
-            echo "hover:text-white hover:bg-gray-50 focus:outline-none transition-colors"
-          } > "$THEME_DIR/all-content.html"
-          
-          # Advanced Tailwind config with comprehensive safelist
-          cat > "$THEME_DIR/tailwind.config.js" <<'EOF'
-          module.exports = {
-            content: [
-              './**/*.php',
-              './**/*.html',
-              '../website.json',
-              './all-content.html'
-            ],
-            safelist: [
-              // Layout & Grid
-              { pattern: /^(container|grid|flex|block|inline|hidden)$/ },
-              { pattern: /^(grid-cols-[1-9]|grid-cols-1[0-2])$/ },
-              { pattern: /^(col-span-[1-9]|col-span-1[0-2])$/ },
-              { pattern: /^(row-span-[1-9]|row-span-1[0-2])$/ },
-              
-              // Responsive prefixes - comprehensive
-              { pattern: /^(sm:|md:|lg:|xl:|2xl:)(.*?)$/ },
-              
-              // Spacing - all variants
-              { pattern: /^[mp][trblxy]?-(0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96)$/ },
-              { pattern: /^space-[xy]-(0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96)$/ },
-              { pattern: /^gap-(0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96)$/ },
-              
-              // Sizing
-              { pattern: /^[wh]-(0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96|auto|px|full|screen)$/ },
-              { pattern: /^(min-|max-)?(w|h)-(0|none|xs|sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|full|min|max|fit|screen)$/ },
-              
-              // Typography
-              { pattern: /^text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)$/ },
-              { pattern: /^font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/ },
-              { pattern: /^text-(left|center|right|justify|start|end)$/ },
-              { pattern: /^leading-(3|4|5|6|7|8|9|10|none|tight|snug|normal|relaxed|loose)$/ },
-              { pattern: /^tracking-(tighter|tight|normal|wide|wider|widest)$/ },
-              
-              // Colors - comprehensive coverage
-              { pattern: /^(text|bg|border|ring|from|via|to)-(inherit|current|transparent|black|white)$/ },
-              { pattern: /^(text|bg|border|ring|from|via|to)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(50|100|200|300|400|500|600|700|800|900|950)$/ },
-              { pattern: /^(text|bg|border|ring)-(primary|secondary|accent|brand)(-primary|-secondary|-accent)?$/ },
-              
-              // Backgrounds & Gradients
-              { pattern: /^bg-gradient-to-(t|tr|r|br|b|bl|l|tl)$/ },
-              { pattern: /^bg-(none|gradient-to-r|gradient-to-l|gradient-to-t|gradient-to-b|gradient-to-tr|gradient-to-tl|gradient-to-br|gradient-to-bl)$/ },
-              
-              // Borders & Radius
-              { pattern: /^(border|border-[trblxy])(-0|-2|-4|-8)?$/ },
-              { pattern: /^rounded(-none|-sm|-md|-lg|-xl|-2xl|-3xl|-full)?$/ },
-              { pattern: /^(rounded-[trbl]|rounded-[trbl][trbl])(-none|-sm|-md|-lg|-xl|-2xl|-3xl|-full)?$/ },
-              { pattern: /^ring(-0|-1|-2|-4|-8|)?(-inset)?$/ },
-              
-              // Effects & Transforms
-              { pattern: /^shadow(-none|-sm|-md|-lg|-xl|-2xl|-inner)?$/ },
-              { pattern: /^opacity-(0|5|10|20|25|30|40|50|60|70|75|80|90|95|100)$/ },
-              { pattern: /^(transform|transform-none)$/ },
-              { pattern: /^(translate-x|translate-y)-(\[.*?\]|0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96|px|full)$/ },
-              { pattern: /^transition(-none|-all|-colors|-opacity|-shadow|-transform)?$/ },
-              { pattern: /^duration-(75|100|150|200|300|500|700|1000)$/ },
-              { pattern: /^ease-(linear|in|out|in-out)$/ },
-              
-              // State variants
-              { pattern: /^(hover|focus|active|group-hover|group-focus|first|last|odd|even|visited|checked|disabled):(.*?)$/ },
-              
-              // Positioning
-              { pattern: /^(static|fixed|absolute|relative|sticky)$/ },
-              { pattern: /^(top|right|bottom|left|inset)-(\[.*?\]|0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96|px|auto|full)$/ },
-              { pattern: /^z-(0|10|20|30|40|50|auto)$/ },
-              
-              // Flexbox & Alignment
-              { pattern: /^(flex|inline-flex)$/ },
-              { pattern: /^flex-(1|auto|initial|none|row|row-reverse|col|col-reverse|wrap|wrap-reverse|nowrap)$/ },
-              { pattern: /^(justify|items|content|self)-(start|end|center|between|around|evenly|stretch|baseline|auto)$/ },
-              
-              // Display
-              { pattern: /^(block|inline-block|inline|flex|inline-flex|table|inline-table|table-caption|table-cell|table-column|table-column-group|table-footer-group|table-header-group|table-row-group|table-row|flow-root|grid|inline-grid|contents|list-item|hidden)$/ },
-              
-              // Animation classes
-              'animate-fade-in',
-              'is-visible',
-              'nav-link',
-              'btn',
-              'btn-primary',
-              'btn-secondary', 
-              'card',
-              'section-title',
-              'section-subtitle',
-              'hero-section',
-              'site-header',
-              'site-footer',
-              'footer-link',
-              'mobile-menu',
-              'mobile-menu-btn',
-              'scrolled',
-              'bg-gradient-brand',
-              'text-brand-primary',
-              'bg-brand-primary',
-              'border-brand-primary'
-            ],
-            theme: {
-              extend: {
-                colors: {
-                  'brand': {
-                    'primary': 'var(--color-brand-primary)',
-                    'accent': 'var(--color-brand-accent)'
-                  }
-                },
-                fontFamily: {
-                  'heading': 'var(--font-heading)',
-                  'body': 'var(--font-body)'
-                }
-              }
-            },
-            plugins: []
-          }
-          EOF
-          
-          echo "[tailwind] Configuration created successfully"
-          echo "[tailwind] Content file size: $(wc -c < "$THEME_DIR/all-content.html") bytes"
-
-#####################################################################
-      # Build optimized Tailwind CSS - FIXED for v3/v4 compatibility
-      #####################################################################
-      - name: Build optimized Tailwind CSS
-        env:
-          SLUG: ${{ steps.merge.outputs.slug }}
-        run: |
-          set -euo pipefail
-          echo "[build] building optimized Tailwind CSS"
-          
-          THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
-          
-          # Download specific Tailwind v3 CLI (v4 has different syntax)
-          echo "[build] downloading Tailwind CSS v3.4.1"
+          # Download Tailwind v3.4.1
           curl -sL https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.1/tailwindcss-linux-x64 -o tailwindcss
           chmod +x tailwindcss
           
-          # Verify we have the right version
-          ./tailwindcss --help | head -3
-          
-          # Create a simpler, more compatible CSS input file
-          cat > "$THEME_DIR/assets/css/simple-tailwind.css" <<EOF
-          @tailwind base;
-          @tailwind components;
-          @tailwind utilities;
-          
-          @layer base {
-            :root {
-              --color-brand-primary: ${{ steps.merge.outputs.brand }};
-              --color-brand-accent: ${{ steps.merge.outputs.accent }};
-              --color-cream: #fefaf6;
-              --color-dark: #1f2937;
-              --color-gray: #6b7280;
-            }
-            
-            html {
-              scroll-behavior: smooth;
-            }
-            
-            body {
-              line-height: 1.7;
-              color: var(--color-dark);
-              background-color: var(--color-cream);
-            }
-          }
-          
-          @layer components {
-            .container {
-              width: 100%;
-              margin-left: auto;
-              margin-right: auto;
-              padding-left: 1rem;
-              padding-right: 1rem;
-              max-width: 80rem;
-            }
-            
-            .btn {
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              padding: 0.875rem 2rem;
-              border-radius: 0.75rem;
-              font-weight: 600;
-              transition: all 0.3s ease;
-              text-decoration: none;
-            }
-            
-            .btn-primary {
-              background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent));
-              color: white;
-              box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            }
-            
-            .btn-primary:hover {
-              box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-              transform: translateY(-2px);
-            }
-            
-            .btn-secondary {
-              background-color: white;
-              color: #1f2937;
-              border: 2px solid var(--color-brand-primary);
-            }
-            
-            .btn-secondary:hover {
-              background-color: #f9fafb;
-            }
-            
-            .card {
-              background: white;
-              border-radius: 1rem;
-              padding: 2rem;
-              border: 1px solid #f1f5f9;
-              transition: all 0.3s ease;
-              box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            }
-            
-            .card:hover {
-              transform: translateY(-4px);
-              box-shadow: 0 25px 50px rgba(0,0,0,0.12);
-            }
-            
-            .section-title {
-              font-size: 2.5rem;
-              font-weight: 800;
-              letter-spacing: -0.025em;
-              line-height: 1.2;
-              margin-bottom: 1rem;
-              color: var(--color-dark);
-            }
-            
-            .nav-link {
-              color: #374151;
-              font-weight: 500;
-              padding: 0.5rem 1rem;
-              border-radius: 0.5rem;
-              transition: all 0.3s ease;
-              text-decoration: none;
-            }
-            
-            .nav-link:hover {
-              background-color: var(--color-cream);
-              color: var(--color-brand-primary);
-            }
-            
-            .hero-section {
-              position: relative;
-              min-height: 100vh;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              overflow: hidden;
-              background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
-            }
-            
-            .animate-fade-in {
-              animation: fadeInUp 0.8s ease-out forwards;
-              opacity: 0;
-              transform: translateY(30px);
-            }
-            
-            .animate-fade-in.is-visible {
-              opacity: 1;
-              transform: translateY(0);
-            }
-            
-            @keyframes fadeInUp {
-              from {
-                opacity: 0;
-                transform: translateY(30px);
-              }
-              to {
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-            
-            .text-brand-primary {
-              color: var(--color-brand-primary);
-            }
-            
-            .bg-brand-primary {
-              background-color: var(--color-brand-primary);
-            }
-            
-            .border-brand-primary {
-              border-color: var(--color-brand-primary);
-            }
-          }
-          EOF
-          
-          # Create a minimal, compatible Tailwind config
+          # Create simple config
           cat > "$THEME_DIR/tailwind.config.js" <<'EOF'
           module.exports = {
-            content: [
-              './**/*.php',
-              './**/*.html',
-              '../website.json',
-              './all-content.html'
-            ],
+            content: ['./**/*.php'],
             safelist: [
-              // Essential classes that we know we use
-              'container', 'btn', 'btn-primary', 'btn-secondary', 'card',
-              'section-title', 'nav-link', 'hero-section', 'animate-fade-in',
-              'text-brand-primary', 'bg-brand-primary', 'border-brand-primary',
-              
-              // Common spacing
-              'p-4', 'p-6', 'p-8', 'px-4', 'px-6', 'px-8', 'py-4', 'py-6', 'py-8',
-              'py-16', 'py-24', 'py-32', 'py-40',
-              'm-4', 'm-6', 'm-8', 'mb-4', 'mb-6', 'mb-8', 'mt-4', 'mt-6', 'mt-8',
-              
-              // Common layout
-              'grid', 'flex', 'block', 'inline-block', 'hidden',
-              'grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4',
-              'items-center', 'items-start', 'items-end',
-              'justify-center', 'justify-between', 'justify-around',
-              'text-center', 'text-left', 'text-right',
-              
-              // Common colors
-              'bg-white', 'bg-gray-50', 'bg-gray-100', 'bg-gray-900',
-              'text-white', 'text-black', 'text-gray-600', 'text-gray-800',
-              
-              // Common typography
-              'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl',
-              'text-3xl', 'text-4xl', 'text-5xl', 'text-6xl', 'text-7xl',
-              'font-normal', 'font-medium', 'font-semibold', 'font-bold',
-              
-              // Common responsive
-              'sm:text-lg', 'md:text-xl', 'lg:text-2xl',
-              'sm:px-6', 'md:px-8', 'lg:px-12',
-              'sm:py-8', 'md:py-12', 'lg:py-16',
-              'md:grid-cols-2', 'lg:grid-cols-3', 'lg:grid-cols-4',
-              
-              // Common effects
-              'rounded', 'rounded-lg', 'rounded-xl', 'rounded-2xl',
-              'shadow', 'shadow-lg', 'shadow-xl',
-              'hover:bg-gray-50', 'hover:text-white', 'transition-all',
-              'duration-200', 'duration-300'
+              'container', 'btn', 'btn-primary', 'card', 'section-title', 'hero-section',
+              'text-center', 'text-white', 'bg-white', 'bg-gray-50', 'py-16', 'py-24',
+              'px-4', 'px-8', 'mb-6', 'mb-8', 'text-4xl', 'text-6xl', 'font-bold'
             ],
-            theme: {
-              extend: {}
-            },
+            theme: { extend: {} },
             plugins: []
           }
           EOF
           
-          # Build CSS with error handling
-          echo "[build] building CSS with Tailwind v3.4.1"
+          # Build CSS
           if ./tailwindcss \
             --config "$THEME_DIR/tailwind.config.js" \
-            --input "$THEME_DIR/assets/css/simple-tailwind.css" \
+            --input "$THEME_DIR/assets/css/tailwind.css" \
             --output "$THEME_DIR/dist/tailwind.css" \
             --minify; then
-            
             echo "[build] ✅ Tailwind CSS built successfully"
-            
           else
-            echo "[build] ❌ Tailwind build failed, creating fallback CSS"
-            
-            # Create a fallback CSS file with essential styles
+            echo "[build] ❌ Tailwind build failed, creating fallback"
             cat > "$THEME_DIR/dist/tailwind.css" <<'CSS'
-          /* Fallback CSS - Essential Styles */
           :root {
             --color-brand-primary: ${{ steps.merge.outputs.brand }};
             --color-brand-accent: ${{ steps.merge.outputs.accent }};
             --color-cream: #fefaf6;
             --color-dark: #1f2937;
           }
-          
           * { box-sizing: border-box; }
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: var(--color-dark); background: var(--color-cream); }
+          body { font-family: system-ui, sans-serif; line-height: 1.7; color: var(--color-dark); background: var(--color-cream); }
           .container { width: 100%; max-width: 80rem; margin: 0 auto; padding: 0 1rem; }
-          .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.875rem 2rem; border-radius: 0.75rem; font-weight: 600; transition: all 0.3s; text-decoration: none; }
+          .btn { display: inline-flex; align-items: center; padding: 0.875rem 2rem; border-radius: 0.75rem; font-weight: 600; text-decoration: none; }
           .btn-primary { background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent)); color: white; }
-          .card { background: white; border-radius: 1rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
           .text-center { text-align: center; }
-          .hidden { display: none; }
-          .flex { display: flex; }
-          .items-center { align-items: center; }
-          .justify-center { justify-content: center; }
           .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
           .text-4xl { font-size: 2.25rem; }
           .font-bold { font-weight: 700; }
@@ -1841,377 +837,104 @@ jobs:
           .hero-section { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
           CSS
           fi
-          
-          # Verify output
-          if [ -s "$THEME_DIR/dist/tailwind.css" ]; then
-            echo "[build] ✅ Final CSS size: $(wc -c < "$THEME_DIR/dist/tailwind.css") bytes"
-          else
-            echo "[build] ❌ CSS build completely failed"
-            exit 1
-          fi
 
-#####################################################################
-      # Debug and verification steps - FIXED for array/object handling
-      #####################################################################
       - name: Debug AI-generated content
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
         run: |
-          set -euo pipefail
           echo "=== DEBUGGING AI CONTENT ==="
-          
-          # First, check what type of JSON structure we have
-          echo "=== JSON STRUCTURE DEBUG ==="
-          if [ -f website.json ]; then
-            echo "website.json exists"
-            if jq empty website.json 2>/dev/null; then
-              JSON_TYPE=$(jq -r 'type' website.json)
-              echo "JSON type: $JSON_TYPE"
-              
-              case "$JSON_TYPE" in
-                "array")
-                  echo "Length: $(jq 'length' website.json)"
-                  echo "First element type: $(jq -r '.[0] | type' website.json 2>/dev/null || echo "null")"
-                  ;;
-                "object")
-                  echo "Keys: $(jq -r 'keys | join(", ")' website.json 2>/dev/null || echo "none")"
-                  ;;
-                *)
-                  echo "Unexpected JSON type: $JSON_TYPE"
-                  ;;
-              esac
-            else
-              echo "❌ Invalid JSON in website.json"
-            fi
-          else
-            echo "❌ website.json not found"
-          fi
-          
-          # Function to safely extract values
-          safe_extract() {
-            local path="$1"
-            local fallback="$2"
-            
-            if [ ! -f website.json ] || ! jq empty website.json 2>/dev/null; then
-              echo "$fallback"
-              return
-            fi
-            
-            local json_type=$(jq -r 'type' website.json)
-            local result=""
-            
-            case "$json_type" in
-              "object")
-                result=$(jq -r "$path // empty" website.json 2>/dev/null || echo "")
-                ;;
-              "array")
-                result=$(jq -r ".[0]$path // empty" website.json 2>/dev/null || echo "")
-                ;;
-              *)
-                result=""
-                ;;
-            esac
-            
-            if [ -n "$result" ] && [ "$result" != "null" ]; then
-              echo "$result"
-            else
-              echo "$fallback"
-            fi
-          }
-          
-          echo ""
-          echo "=== HERO SECTION DEBUG ==="
-          HERO_HTML=$(safe_extract '.heroSection.customHTML' '❌ MISSING HERO HTML')
-          echo "$HERO_HTML" | head -10
-          
-          echo ""
-          echo "=== CUSTOM SECTIONS DEBUG ==="
-          if [ -f website.json ] && jq empty website.json 2>/dev/null; then
-            JSON_TYPE=$(jq -r 'type' website.json)
-            case "$JSON_TYPE" in
-              "object")
-                if jq -e '.customSections | length > 0' website.json >/dev/null 2>&1; then
-                  jq -r '.customSections[] | "✅ Section: \(.title // "NO TITLE")\nHTML Preview: \(.html[0:200] // "NO HTML")...\n---"' website.json 2>/dev/null || echo "❌ Error reading sections"
-                else
-                  echo "❌ No custom sections found (object format)"
-                fi
-                ;;
-              "array")
-                if jq -e '.[0].customSections | length > 0' website.json >/dev/null 2>&1; then
-                  jq -r '.[0].customSections[] | "✅ Section: \(.title // "NO TITLE")\nHTML Preview: \(.html[0:200] // "NO HTML")...\n---"' website.json 2>/dev/null || echo "❌ Error reading sections from array"
-                else
-                  echo "❌ No custom sections found (array format)"
-                fi
-                ;;
-              *)
-                echo "❌ Cannot read sections from JSON type: $JSON_TYPE"
-                ;;
-            esac
-          else
-            echo "❌ Cannot read custom sections"
-          fi
-          
-          echo ""
-          echo "=== COLOR PALETTE DEBUG ==="
-          COLOR_PALETTE=$(safe_extract '.colorPalette' '❌ No color palette found')
-          echo "$COLOR_PALETTE"
-          
-          echo ""
-          echo "=== TYPOGRAPHY DEBUG ==="
-          TYPOGRAPHY=$(safe_extract '.typography' '❌ No typography found')
-          echo "$TYPOGRAPHY"
-          
-          echo ""
-          echo "=== FINAL VARIABLES DEBUG ==="
           echo "SLUG: ${{ steps.merge.outputs.slug }}"
           echo "NAME: ${{ steps.merge.outputs.name }}"
-          echo "TAGLINE: ${{ steps.merge.outputs.tagline }}"
           echo "BRAND: ${{ steps.merge.outputs.brand }}"
-          echo "ACCENT: ${{ steps.merge.outputs.accent }}"
-          echo "HERO_IMG: ${{ steps.merge.outputs.hero }}"
           
-          echo ""
-          echo "=== THEME FILES DEBUG ==="
-          if [ -d "child-themes/${{ steps.merge.outputs.slug }}-child/" ]; then
-            echo "✅ Theme directory exists"
-            ls -la "child-themes/${{ steps.merge.outputs.slug }}-child/" | head -10
-            
-            if [ -d "child-themes/${{ steps.merge.outputs.slug }}-child/dist/" ]; then
-              echo "✅ Dist directory exists"
-              ls -la "child-themes/${{ steps.merge.outputs.slug }}-child/dist/"
-            else
-              echo "❌ Dist directory not found"
-            fi
-            
-            # Check key theme files
-            echo ""
-            echo "=== KEY FILES CHECK ==="
-            for file in "style.css" "functions.php" "front-page.php" "header.php" "footer.php"; do
-              if [ -f "child-themes/${{ steps.merge.outputs.slug }}-child/$file" ]; then
-                echo "✅ $file exists ($(wc -c < "child-themes/${{ steps.merge.outputs.slug }}-child/$file" || echo 0) bytes)"
-              else
-                echo "❌ $file missing"
-              fi
-            done
-            
-          else
-            echo "❌ Theme directory not found: child-themes/${{ steps.merge.outputs.slug }}-child/"
-          fi
-          
-          echo ""
-          echo "=== AI STEP FILES DEBUG ==="
-          for file in website-step1.json website-step2.json website-step3.json image-prompts.json; do
-            if [ -f "$file" ]; then
-              echo "✅ $file exists ($(wc -c < "$file") bytes, type: $(jq -r 'type' "$file" 2>/dev/null || echo "invalid"))"
-            else
-              echo "❌ $file missing"
-            fi
-          done
-          
-          echo ""
-          echo "=== DEPLOYMENT READINESS CHECK ==="
-          READY=true
-          
-          # Check essential files
-          if [ ! -f "child-themes/${{ steps.merge.outputs.slug }}-child/style.css" ]; then
-            echo "❌ Missing theme style.css"
-            READY=false
-          fi
-          
-          if [ ! -f "child-themes/${{ steps.merge.outputs.slug }}-child/dist/tailwind.css" ]; then
-            echo "❌ Missing compiled Tailwind CSS"
-            READY=false
-          fi
-          
-          if [ ! -f "website.json" ]; then
-            echo "❌ Missing website.json"
-            READY=false
-          fi
-          
-          if [ "$READY" = true ]; then
-            echo "✅ Theme ready for deployment"
-          else
-            echo "⚠️ Theme has missing components but will continue deployment"
+          if [ -f website.json ]; then
+            echo "=== WEBSITE.JSON STRUCTURE ==="
+            jq 'keys' website.json || echo "Invalid JSON"
+            echo "=== HERO SECTION ==="
+            jq -r '.heroSection.customHTML // "No hero HTML"' website.json | head -5
+            echo "=== CUSTOM SECTIONS ==="
+            jq '.customSections | length' website.json || echo "No sections"
           fi
 
-      #####################################################################
-      # Git commit with detailed information
-      #####################################################################
-      - name: Commit enhanced theme
+      - name: Commit theme
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
           NAME: ${{ steps.merge.outputs.name }}
         run: |
           set -euo pipefail
-          echo "[commit] preparing enhanced theme commit"
+          echo "[commit] preparing theme commit"
           
-          # Organize files
           mkdir -p child-themes
           rm -rf "child-themes/${SLUG}-child"
           mv "$GITHUB_WORKSPACE/${SLUG}-child" "child-themes/${SLUG}-child"
           
-          # Git configuration
           git config user.name "SiteFuse AI Bot"
           git config user.email "ai-bot@sitefuse.com"
           
-          # Add files
-          git add "child-themes/${SLUG}-child" \
-                  website*.json \
-                  image-prompts.json
+          git add "child-themes/${SLUG}-child" website*.json image-prompts.json
           
-          # Create detailed commit message
-          cat > /tmp/commit-msg <<EOF
-          feat: Enhanced AI-generated theme '${NAME}'
-          
-          Generated from prompt: "${{ github.event.inputs.prompt }}"
-          Industry: ${{ github.event.inputs.industry }}
-          AI Images: ${{ github.event.inputs.generate_images }}
-          
-          Features:
-          - Multi-pass AI content generation
-          - Enhanced responsive design
-          - Advanced Tailwind configuration
-          - Improved accessibility
-          - Custom animations and interactions
-          - Professional typography and spacing
-          - Mobile-optimized navigation
-          - SEO-friendly structure
-          
-          Theme: ${SLUG}-child
-          Primary Color: ${{ steps.merge.outputs.brand }}
-          Accent Color: ${{ steps.merge.outputs.accent }}
-          EOF
-          
-          git commit -F /tmp/commit-msg || echo "No changes to commit"
-          git push origin main || echo "Push failed or skipped"
+          git commit -m "feat: AI-generated theme '${NAME}' from prompt: ${{ github.event.inputs.prompt }}" || echo "No changes"
+          git push origin main || echo "Push skipped"
 
-      #####################################################################
-      # Deploy to Cloudways with verification
-      #####################################################################
-      - name: Deploy parent theme
-        run: |
-          set -euxo pipefail
-          echo "[deploy] deploying parent theme"
-          
-          PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base"
-          
-          # Create destination directory
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "mkdir -p '$PARENT_DEST'"
-          
-          # Deploy parent theme
-          rsync -avz --delete \
-            --exclude '.git*' \
-            --exclude 'node_modules' \
-            --exclude '*.log' \
-            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
-            "$GITHUB_WORKSPACE/sitefuse-base/" \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/"
-
-      - name: Deploy child theme and configuration  
-        env:
-          SLUG: ${{ steps.merge.outputs.slug }}
-        run: |
-          set -euxo pipefail
-          echo "[deploy] deploying child theme and configuration"
-          
-          THEME_SRC="$GITHUB_WORKSPACE/child-themes/${SLUG}-child"
-          THEME_DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
-          
-          # Verify theme exists
-          if [ ! -d "$THEME_SRC" ]; then
-              echo "ERROR: Theme directory not found: $THEME_SRC"
-              exit 1
-          fi
-          
-          # Create destination
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "mkdir -p '$THEME_DEST'"
-          
-          # Deploy child theme
-          rsync -avz --delete \
-            --exclude '.git*' \
-            --exclude 'node_modules' \
-            --exclude '*.log' \
-            --exclude 'all-content.html' \
-            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
-            "$THEME_SRC/" \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$THEME_DEST/"
-          
-          # Deploy website configuration
-          rsync -avz \
-            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
-            "$GITHUB_WORKSPACE/website.json" \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
-          
-          echo "[deploy] Theme deployed successfully"
-
-      #####################################################################
-      # WordPress configuration and content setup
-      #####################################################################
-      - name: Configure WordPress
+      - name: Deploy to Cloudways
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
           NAME: ${{ steps.merge.outputs.name }}
           TAGLINE: ${{ steps.merge.outputs.tagline }}
         run: |
           set -euo pipefail
-          echo "[wp] configuring WordPress installation"
+          echo "[deploy] deploying to Cloudways"
           
-          # Verify WP-CLI is available
+          # Deploy parent theme
+          PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base"
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "cd '$APP_PATH' && wp --version --allow-root"
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'"
           
-          # Update site information
+          rsync -avz --delete \
+            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+            "$GITHUB_WORKSPACE/sitefuse-base/" \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/"
+          
+          # Deploy child theme
+          THEME_DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$THEME_DEST'"
+          
+          rsync -avz --delete \
+            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+            "$GITHUB_WORKSPACE/child-themes/${SLUG}-child/" \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$THEME_DEST/"
+          
+          # Deploy website.json
+          rsync -avz \
+            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+            "$GITHUB_WORKSPACE/website.json" \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
+          
+          # Configure WordPress
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
             "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "
             cd '$APP_PATH'
             wp option update blogname '$NAME' --allow-root
             wp option update blogdescription '$TAGLINE' --allow-root
-            wp option update start_of_week 1 --allow-root
-            wp option update date_format 'F j, Y' --allow-root
-            wp option update time_format 'g:i a' --allow-root
-          "
-          
-          # Activate theme
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "cd '$APP_PATH' && wp theme activate '${SLUG}-child' --allow-root"
-          
-          # Create essential pages and menus
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "
-            cd '$APP_PATH'
+            wp theme activate '${SLUG}-child' --allow-root
             
-            # Create pages if they don't exist
+            # Create basic pages and menu
             if [ \$(wp post list --post_type=page --name=home --format=count --allow-root) -eq 0 ]; then
-              HOME_ID=\$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --post_content='Welcome to our homepage.' --porcelain --allow-root)
+              HOME_ID=\$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --porcelain --allow-root)
               wp option update show_on_front page --allow-root
               wp option update page_on_front \$HOME_ID --allow-root
             fi
             
-            if [ \$(wp post list --post_type=page --name=about --format=count --allow-root) -eq 0 ]; then
-              wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --post_content='Learn more about our story and mission.' --allow-root
-            fi
+            wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --allow-root 2>/dev/null || true
+            wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --allow-root 2>/dev/null || true  
+            wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --allow-root 2>/dev/null || true
             
-            if [ \$(wp post list --post_type=page --name=services --format=count --allow-root) -eq 0 ]; then
-              wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --post_content='Discover our comprehensive range of services.' --allow-root
-            fi
-            
-            if [ \$(wp post list --post_type=page --name=contact --format=count --allow-root) -eq 0 ]; then
-              wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --post_content='Get in touch with us today.' --allow-root
-            fi
-            
-            # Create primary navigation menu
             wp menu delete 'Primary Menu' --allow-root 2>/dev/null || true
-            MENU_ID=\$(wp menu create 'Primary Menu' --porcelain --allow-root)
+            wp menu create 'Primary Menu' --allow-root
             
-            # Add pages to menu
             HOME_ID=\$(wp post list --post_type=page --name=home --field=ID --allow-root | head -1)
-            ABOUT_ID=\$(wp post list --post_type=page --name=about --field=ID --allow-root | head -1)
+            ABOUT_ID=\$(wp post list --post_type=page --name=about --field=ID --allow-root | head -1) 
             SERVICES_ID=\$(wp post list --post_type=page --name=services --field=ID --allow-root | head -1)
             CONTACT_ID=\$(wp post list --post_type=page --name=contact --field=ID --allow-root | head -1)
             
@@ -2220,97 +943,10 @@ jobs:
             [ -n \"\$SERVICES_ID\" ] && wp menu item add-post 'Primary Menu' \$SERVICES_ID --title='Services' --allow-root
             [ -n \"\$CONTACT_ID\" ] && wp menu item add-post 'Primary Menu' \$CONTACT_ID --title='Contact' --allow-root
             
-            # Assign menu to location
             wp menu location assign 'Primary Menu' primary --allow-root
-            
-            # Create footer menu
-            wp menu delete 'Footer Menu' --allow-root 2>/dev/null || true
-            FOOTER_MENU_ID=\$(wp menu create 'Footer Menu' --porcelain --allow-root)
-            
-            [ -n \"\$ABOUT_ID\" ] && wp menu item add-post 'Footer Menu' \$ABOUT_ID --title='About' --allow-root
-            [ -n \"\$SERVICES_ID\" ] && wp menu item add-post 'Footer Menu' \$SERVICES_ID --title='Services' --allow-root
-            [ -n \"\$CONTACT_ID\" ] && wp menu item add-post 'Footer Menu' \$CONTACT_ID --title='Contact' --allow-root
-            
-            wp menu location assign 'Footer Menu' footer --allow-root
-            
-            # Flush rewrite rules
             wp rewrite flush --allow-root
-            
-            echo 'WordPress configuration completed successfully'
-          "
-
-      #####################################################################
-      # Final verification and summary
-      #####################################################################
-      - name: Deployment verification and summary
-        env:
-          SLUG: ${{ steps.merge.outputs.slug }}
-          NAME: ${{ steps.merge.outputs.name }}
-        run: |
-          set -euo pipefail
-          echo "[verify] performing deployment verification"
+            "
           
-          # Verify theme files exist on server
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "
-            cd '$APP_PATH'
-            
-            echo 'Verifying theme installation...'
-            [ -f 'wp-content/themes/${SLUG}-child/style.css' ] && echo '✓ Child theme installed'
-            [ -f 'wp-content/themes/sitefuse-base/style.css' ] && echo '✓ Parent theme installed'
-            [ -f 'website.json' ] && echo '✓ Configuration file deployed'
-            
-            echo 'Verifying WordPress configuration...'
-            wp theme list --allow-root | grep '${SLUG}-child' && echo '✓ Child theme available'
-            wp option get stylesheet --allow-root | grep '${SLUG}-child' && echo '✓ Child theme activated'
-            
-            echo 'Theme deployment verification completed'
-          "
-          
-          # Create deployment summary
-          cat > deployment-summary.md <<EOF
-          # 🚀 Deployment Summary
-          
-          **Theme Generated:** ${NAME}  
-          **Slug:** ${SLUG}  
-          **Primary Color:** ${{ steps.merge.outputs.brand }}  
-          **Accent Color:** ${{ steps.merge.outputs.accent }}  
-          
-          ## Generated Features
-          - ✅ Multi-pass AI content generation
-          - ✅ Industry-specific sections and copy
-          - ✅ Responsive Tailwind CSS design
-          - ✅ Custom typography and color schemes
-          - ✅ Enhanced accessibility features
-          - ✅ Mobile-optimized navigation
-          - ✅ Smooth animations and interactions
-          - ✅ SEO-friendly structure
-          - ✅ Professional WordPress integration
-          
-          ## AI Generation Stages
-          1. **Comprehensive Structure** - Base website architecture
-          2. **Content Enhancement** - Industry best practices
-          3. **Technical Optimization** - Tailwind & accessibility
-          4. **Image Generation** - Custom AI-generated visuals
-          
-          ## WordPress Setup
-          - Theme activated and configured
-          - Essential pages created (Home, About, Services, Contact)
-          - Navigation menus configured
-          - Site settings optimized
-          
-          **Deployment Status:** ✅ Complete
-          
-          ---
-          *Generated by SiteFuse AI on $(date)*
-          EOF
-          
-          echo "=================================================="
-          echo "🎉 DEPLOYMENT COMPLETED SUCCESSFULLY!"
-          echo "=================================================="
+          echo "✅ Deployment completed successfully!"
           echo "Theme: ${NAME}"
-          echo "Slug: ${SLUG}"
           echo "Colors: ${{ steps.merge.outputs.brand }} / ${{ steps.merge.outputs.accent }}"
-          echo "Files: $(find child-themes/${SLUG}-child -type f | wc -l) theme files generated"
-          echo "=================================================="
-          
