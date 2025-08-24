@@ -438,8 +438,8 @@ jobs:
           
           # Clean up temporary files
           rm -f fallback-website.json step1-extracted.json step2-extracted.json step3-extracted.json extracted-images.json
-      #####################################################################
-      # Enhanced AI image generation
+#####################################################################
+      # Enhanced AI image generation - FIXED VERSION
       #####################################################################
       - name: Generate AI images
         if: ${{ github.event.inputs.generate_images == 'true' }}
@@ -447,16 +447,49 @@ jobs:
           SLUG: ${{ steps.merge.outputs.slug }}
         run: |
           set -euo pipefail
-          echo "[images] generating AI images"
+          echo "[images] generating AI images with robust JSON handling"
           
           mkdir -p "$GITHUB_WORKSPACE/${SLUG}-assets/img" tmp_images
+          
+          # Function to safely extract image prompts from website.json
+          extract_image_prompts() {
+            local website_file="website.json"
+            
+            if [ ! -f "$website_file" ]; then
+              echo "[]"
+              return
+            fi
+            
+            # Check if it's valid JSON first
+            if ! jq empty "$website_file" 2>/dev/null; then
+              echo "[]"
+              return
+            fi
+            
+            # Determine the file type and extract prompts accordingly
+            local file_type=$(jq -r 'type' "$website_file" 2>/dev/null || echo "null")
+            
+            case "$file_type" in
+              "object")
+                # Try multiple paths for image prompts
+                jq -r '.imagePrompts // .images // []' "$website_file" 2>/dev/null || echo "[]"
+                ;;
+              "array")
+                # If it's an array, try to get prompts from first object
+                jq -r '.[0].imagePrompts // .[0].images // []' "$website_file" 2>/dev/null || echo "[]"
+                ;;
+              *)
+                echo "[]"
+                ;;
+            esac
+          }
           
           generate_image() {
             local prompt="$1"
             local filename="$2" 
             local size="${3:-1024x576}"
             
-            echo "[images] generating $filename"
+            echo "[images] generating $filename from prompt: ${prompt:0:100}..."
             
             local payload=$(jq -n \
               --arg prompt "$prompt" \
@@ -477,34 +510,54 @@ jobs:
             local url=$(echo "$response" | jq -r '.data[0].url // empty' 2>/dev/null || true)
             
             if [ -n "$url" ]; then
+              echo "[images] downloading $filename"
               curl -fsSL "$url" -o "tmp_images/$filename" --max-time 60 || true
+            else
+              echo "[images] failed to generate $filename, using fallback"
             fi
           }
           
+          # Extract image prompts safely
+          echo "[images] extracting image prompts from website.json"
+          extract_image_prompts > image_prompts_list.json
+          
           # Generate hero image
-          hero_prompt=$(jq -r '.imagePrompts[]? | select(.target == "hero") | .prompt' website.json | head -1)
-          if [ -n "$hero_prompt" ] && [ "$hero_prompt" != "null" ]; then
+          hero_prompt=$(jq -r '.[] | select(.target == "hero" or .key == "hero") | .prompt' image_prompts_list.json 2>/dev/null | head -1)
+          
+          if [ -n "$hero_prompt" ] && [ "$hero_prompt" != "null" ] && [ "$hero_prompt" != "" ]; then
             generate_image "$hero_prompt" "hero.jpg" "1792x1024"
+          else
+            echo "[images] no hero prompt found, will use fallback"
           fi
           
-          # Generate section images
-          jq -r '.imagePrompts[]? | select(.target == "section") | .prompt' website.json | head -3 | nl -ba | while read num prompt; do
-            if [ -n "$prompt" ]; then
-              generate_image "$prompt" "section${num}.jpg" "1024x1024"
+          # Generate section images (up to 3)
+          section_count=0
+          jq -r '.[] | select(.target == "section" or .key != "hero") | .prompt' image_prompts_list.json 2>/dev/null | while read -r prompt && [ $section_count -lt 3 ]; do
+            if [ -n "$prompt" ] && [ "$prompt" != "null" ]; then
+              section_count=$((section_count + 1))
+              generate_image "$prompt" "section${section_count}.jpg" "1024x1024"
             fi
           done
           
-          # Fallback hero if needed
+          # Fallback images if generation failed
           if [ ! -s tmp_images/hero.jpg ]; then
-            echo "[images] using fallback hero image"
+            echo "[images] downloading fallback hero image"
             curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" \
               -o tmp_images/hero.jpg --max-time 30 || true
           fi
           
-          # Copy generated images
-          cp -f tmp_images/*.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/" 2>/dev/null || true
-          ls -la "$GITHUB_WORKSPACE/${SLUG}-assets/img/" || true
-
+          # Copy generated images to assets directory
+          if [ -d tmp_images ]; then
+            cp -f tmp_images/*.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/" 2>/dev/null || true
+            echo "[images] copied $(ls tmp_images/*.jpg 2>/dev/null | wc -l || echo 0) images to assets"
+          fi
+          
+          # List what we actually got
+          echo "[images] final image assets:"
+          ls -la "$GITHUB_WORKSPACE/${SLUG}-assets/img/" 2>/dev/null || echo "No images directory found"
+          
+          # Clean up
+          rm -f image_prompts_list.json
       #####################################################################
       # Enhanced theme scaffolding with better PHP templates
       #####################################################################
