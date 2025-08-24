@@ -96,28 +96,269 @@ jobs:
           }
           JSON_EOF
           
-          echo "[ai1] ✅ Created bakery content"          jq -n '{
-            slug: "rise-and-grind",
-            name: "Rise & Grind",
-            tagline: "Fresh artisanal bread and coffee daily",
-            industry: "bakery",
-            colorPalette: {
-              primary: "#8B4513",
-              secondary: "#CC5500",
-              accent: "#F5F1EB"
-            },
-            typography: {
-              headingFont: "Playfair Display",
-              bodyFont: "Lato"
-            },
-            heroSection: {
-              "customHTML": "<div class='text-center'><h1 class='text-5xl md:text-7xl font-bold mb-6 text-white'>Rise & Grind</h1><p class='text-xl md:text-2xl mb-8 text-gray-100'>Fresh artisanal bread and coffee daily in Canberra</p><a href='#contact' class='btn btn-primary text-lg px-8 py-4'>Order Online</a></div>",
-              "heroImage": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&h=800&fit=crop"
-            },
-            "customSections": [
-              {
-                "title": "Featured Pastries",
-                "html": "<section class='py-16 bg-white'><div class='container mx-auto px-4'><h2 class='section-title text-center'>Daily Fresh Pastries</h2><p class='text-xl text-gray-600 text-center mb-8'>Handcrafted daily using traditional techniques</p></div></section>"
-              }
-            ]
-          }' > website-step1.json
+          echo "[ai1] ✅ Created bakery content"
+
+      - name: AI pass 2 - Content enhancement
+        run: |
+          echo "[ai2] copying step 1 content"
+          cp website-step1.json website-step2.json
+
+      - name: AI pass 3 - Technical optimization
+        run: |
+          echo "[ai3] copying step 2 content"
+          cp website-step2.json website-step3.json
+
+      - name: AI pass 4 - Image prompts
+        run: |
+          echo "[ai4] creating image prompts"
+          echo '{"images": [{"key": "hero", "target": "hero", "prompt": "artisanal bakery with fresh bread", "filename": "hero.jpg"}]}' > image-prompts.json
+
+      - name: Smart merge and variable extraction
+        id: merge
+        run: |
+          echo "[merge] extracting variables"
+          cp website-step3.json website.json
+          
+          echo "slug=rise-and-grind" >> "$GITHUB_OUTPUT"
+          echo "name=Rise & Grind" >> "$GITHUB_OUTPUT"
+          echo "tagline=Fresh artisanal bread and coffee daily" >> "$GITHUB_OUTPUT"
+          echo "brand=#8B4513" >> "$GITHUB_OUTPUT"
+          echo "accent=#CC5500" >> "$GITHUB_OUTPUT"
+          echo "hero=https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&h=800&fit=crop" >> "$GITHUB_OUTPUT"
+
+      - name: Generate AI images
+        if: ${{ github.event.inputs.generate_images == 'true' }}
+        env:
+          SLUG: ${{ steps.merge.outputs.slug }}
+        run: |
+          echo "[images] creating image directories"
+          mkdir -p "$GITHUB_WORKSPACE/${SLUG}-assets/img" tmp_images
+          
+          curl -fsSL "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1600&h=900&fit=crop" \
+            -o tmp_images/hero.jpg --max-time 30 || true
+          
+          cp -f tmp_images/*.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/" 2>/dev/null || true
+
+      - name: Scaffold enhanced theme
+        env:
+          SLUG: ${{ steps.merge.outputs.slug }}
+          NAME: ${{ steps.merge.outputs.name }}
+          TAGLINE: ${{ steps.merge.outputs.tagline }}
+          BRAND: ${{ steps.merge.outputs.brand }}
+          ACCENT: ${{ steps.merge.outputs.accent }}
+          HERO: ${{ steps.merge.outputs.hero }}
+        run: |
+          echo "[scaffold] creating theme structure"
+          
+          THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
+          mkdir -p "$THEME_DIR/assets/css" "$THEME_DIR/assets/js" "$THEME_DIR/assets/img" "$THEME_DIR/dist"
+          
+          cp -f "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" "$THEME_DIR/assets/img/hero.jpg" 2>/dev/null || true
+          
+          cat > "$THEME_DIR/style.css" << 'EOF'
+          /*
+          Theme Name: Rise & Grind
+          Description: AI-generated bakery website
+          Template: sitefuse-base
+          Text Domain: rise-and-grind-child
+          Version: 1.0.0
+          */
+          EOF
+          
+          cat > "$THEME_DIR/functions.php" << 'EOF'
+          <?php
+          add_action('wp_enqueue_scripts', function () {
+              $parent_css = get_template_directory_uri() . '/dist/tailwind.css';
+              wp_enqueue_style('sitefuse-parent', $parent_css, [], null);
+              
+              $child_css_path = get_stylesheet_directory() . '/dist/tailwind.css';
+              $child_css_ver = file_exists($child_css_path) ? filemtime($child_css_path) : '1.0.0';
+              wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $child_css_ver);
+          });
+          
+          add_action('after_setup_theme', function () {
+              add_theme_support('post-thumbnails');
+              add_theme_support('custom-logo');
+              add_theme_support('title-tag');
+              register_nav_menus(['primary' => 'Primary Navigation', 'footer' => 'Footer Navigation']);
+          });
+          EOF
+          
+          cat > "$THEME_DIR/assets/css/tailwind.css" << 'EOF'
+          @tailwind base;
+          @tailwind components;
+          @tailwind utilities;
+          
+          @layer base {
+            :root {
+              --color-brand-primary: #8B4513;
+              --color-brand-accent: #CC5500;
+              --color-cream: #F5F1EB;
+            }
+            body { font-family: 'Lato', sans-serif; background: var(--color-cream); }
+            h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; }
+          }
+          
+          @layer components {
+            .container { width: 100%; max-width: 80rem; margin: 0 auto; padding: 0 1rem; }
+            .btn { display: inline-flex; padding: 1rem 2rem; border-radius: 0.75rem; font-weight: 600; text-decoration: none; }
+            .btn-primary { background: #8B4513; color: white; }
+            .hero-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
+            .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; }
+          }
+          EOF
+          
+          cat > "$THEME_DIR/front-page.php" << 'EOF'
+          <?php get_header(); ?>
+          
+          <?php
+          $config = [];
+          if (file_exists(ABSPATH . 'website.json')) {
+              $config = json_decode(file_get_contents(ABSPATH . 'website.json'), true) ?: [];
+          }
+          $hero_html = $config['heroSection']['customHTML'] ?? '';
+          $hero_image = $config['heroSection']['heroImage'] ?? get_stylesheet_directory_uri() . '/assets/img/hero.jpg';
+          ?>
+          
+          <main>
+              <section class="hero-section relative">
+                  <img src="<?php echo esc_url($hero_image); ?>" alt="" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+                  <div class="relative z-10 container text-center text-white py-32">
+                      <?php if ($hero_html): ?>
+                          <?php echo wp_kses_post($hero_html); ?>
+                      <?php else: ?>
+                          <h1 class="text-6xl font-bold mb-6">Rise & Grind</h1>
+                          <p class="text-2xl mb-8">Fresh artisanal bread and coffee daily</p>
+                          <a href="#contact" class="btn btn-primary">Order Online</a>
+                      <?php endif; ?>
+                  </div>
+              </section>
+              
+              <?php if (!empty($config['customSections'])): ?>
+                  <?php foreach ($config['customSections'] as $section): ?>
+                      <?php if (!empty($section['html'])): ?>
+                          <?php echo wp_kses_post($section['html']); ?>
+                      <?php endif; ?>
+                  <?php endforeach; ?>
+              <?php endif; ?>
+          </main>
+          
+          <?php get_footer(); ?>
+          EOF
+          
+          cat > "$THEME_DIR/header.php" << 'EOF'
+          <!DOCTYPE html>
+          <html <?php language_attributes(); ?>>
+          <head>
+              <meta charset="<?php bloginfo('charset'); ?>">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <?php wp_head(); ?>
+          </head>
+          <body <?php body_class(); ?>>
+              <header class="bg-white shadow-sm sticky top-0 z-40">
+                  <div class="container flex items-center justify-between h-20">
+                      <a href="<?php echo home_url(); ?>" class="text-2xl font-bold" style="color: #8B4513;">
+                          <?php bloginfo('name'); ?>
+                      </a>
+                      <nav>
+                          <?php wp_nav_menu(['theme_location' => 'primary']); ?>
+                      </nav>
+                  </div>
+              </header>
+          EOF
+          
+          cat > "$THEME_DIR/footer.php" << 'EOF'
+          <footer class="bg-gray-900 text-white py-16">
+              <div class="container text-center">
+                  <p>&copy; <?php echo date('Y'); ?> Rise & Grind. All rights reserved.</p>
+              </div>
+          </footer>
+          <?php wp_footer(); ?>
+          </body>
+          </html>
+          EOF
+          
+          cat > "$THEME_DIR/index.php" << 'EOF'
+          <?php get_header(); ?>
+          <main class="container py-20">
+              <?php if (have_posts()): while (have_posts()): the_post(); ?>
+                  <?php the_content(); ?>
+              <?php endwhile; endif; ?>
+          </main>
+          <?php get_footer(); ?>
+          EOF
+
+      - name: Build Tailwind CSS
+        env:
+          SLUG: ${{ steps.merge.outputs.slug }}
+        run: |
+          THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
+          
+          curl -sL https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.1/tailwindcss-linux-x64 -o tailwindcss
+          chmod +x tailwindcss
+          
+          cat > "$THEME_DIR/tailwind.config.js" << 'EOF'
+          module.exports = {
+            content: ['./**/*.php'],
+            safelist: ['container', 'btn', 'btn-primary', 'hero-section', 'section-title'],
+            theme: { extend: {} },
+            plugins: []
+          }
+          EOF
+          
+          ./tailwindcss --config "$THEME_DIR/tailwind.config.js" --input "$THEME_DIR/assets/css/tailwind.css" --output "$THEME_DIR/dist/tailwind.css" --minify || \
+          echo "body { font-family: sans-serif; } .container { max-width: 1200px; margin: 0 auto; } .btn-primary { background: #8B4513; color: white; padding: 1rem 2rem; }" > "$THEME_DIR/dist/tailwind.css"
+
+      - name: Commit theme
+        env:
+          SLUG: ${{ steps.merge.outputs.slug }}
+          NAME: ${{ steps.merge.outputs.name }}
+        run: |
+          mkdir -p child-themes
+          rm -rf "child-themes/${SLUG}-child"
+          mv "$GITHUB_WORKSPACE/${SLUG}-child" "child-themes/${SLUG}-child"
+          
+          git config user.name "SiteFuse AI"
+          git config user.email "ai@sitefuse.com"
+          
+          git add child-themes website*.json image-prompts.json
+          git commit -m "feat: Rise & Grind bakery theme" || echo "No changes"
+          git push || echo "Push skipped"
+
+      - name: Deploy to Cloudways
+        env:
+          SLUG: ${{ steps.merge.outputs.slug }}
+          NAME: ${{ steps.merge.outputs.name }}
+          TAGLINE: ${{ steps.merge.outputs.tagline }}
+        run: |
+          # Deploy parent theme
+          PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base"
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'"
+          rsync -avz --delete -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' "$GITHUB_WORKSPACE/sitefuse-base/" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/"
+          
+          # Deploy child theme
+          THEME_DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$THEME_DEST'"
+          rsync -avz --delete -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' "$GITHUB_WORKSPACE/child-themes/${SLUG}-child/" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$THEME_DEST/"
+          
+          # Deploy config
+          rsync -avz -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' "$GITHUB_WORKSPACE/website.json" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
+          
+          # Configure WordPress
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "
+            cd '$APP_PATH'
+            wp option update blogname '$NAME' --allow-root
+            wp option update blogdescription '$TAGLINE' --allow-root
+            wp theme activate '${SLUG}-child' --allow-root
+            
+            if [ \$(wp post list --post_type=page --name=home --format=count --allow-root) -eq 0 ]; then
+              HOME_ID=\$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --porcelain --allow-root)
+              wp option update show_on_front page --allow-root
+              wp option update page_on_front \$HOME_ID --allow-root
+            fi
+            
+            wp rewrite flush --allow-root
+            echo '✅ WordPress configured'
+          "
+          
+          echo "🎉 Rise & Grind bakery deployed successfully!"
