@@ -1544,7 +1544,3 @@ jobs:
           echo "Files: $(find child-themes/${SLUG}-child -type f | wc -l) theme files generated"
           echo "=================================================="
           
-          # Add summary to git
-          git add deployment-summary.md
-          git commit -m "docs: add deployment summary for ${NAME}" || true
-          git push origin main || echo "Push skipped"
