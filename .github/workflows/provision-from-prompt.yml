@@ -1283,29 +1283,97 @@ jobs:
                    -o "$THEME_DIR/assets/img/hero.jpg" --max-time 20 || true
           fi
 
-      #####################################################################
-      # Advanced Tailwind configuration and HTML extraction
+#####################################################################
+      # Advanced Tailwind configuration and HTML extraction - FIXED
       #####################################################################
       - name: Advanced Tailwind setup
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
         run: |
           set -euo pipefail
-          echo "[tailwind] setting up advanced configuration"
+          echo "[tailwind] setting up advanced configuration with robust JSON handling"
           
           THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
           
+          # Function to safely extract HTML content from website.json
+          extract_html_content() {
+            local website_file="website.json"
+            
+            if [ ! -f "$website_file" ]; then
+              echo "<!-- No website.json found -->"
+              return
+            fi
+            
+            # Check if it's valid JSON first
+            if ! jq empty "$website_file" 2>/dev/null; then
+              echo "<!-- Invalid JSON in website.json -->"
+              return
+            fi
+            
+            # Determine the file type and extract HTML accordingly
+            local file_type=$(jq -r 'type' "$website_file" 2>/dev/null || echo "null")
+            
+            case "$file_type" in
+              "object")
+                echo "<!-- AI Generated Content from Object -->"
+                jq -r '.heroSection.customHTML // empty' "$website_file" 2>/dev/null || true
+                jq -r '.customSections[]?.html // empty' "$website_file" 2>/dev/null || true  
+                jq -r '.homepageLayout // empty' "$website_file" 2>/dev/null || true
+                jq -r '.servicesPageLayout // empty' "$website_file" 2>/dev/null || true
+                ;;
+              "array")
+                echo "<!-- AI Generated Content from Array -->"
+                # Try to extract from first array element
+                jq -r '.[0].heroSection.customHTML // empty' "$website_file" 2>/dev/null || true
+                jq -r '.[0].customSections[]?.html // empty' "$website_file" 2>/dev/null || true
+                jq -r '.[0].homepageLayout // empty' "$website_file" 2>/dev/null || true
+                jq -r '.[0].servicesPageLayout // empty' "$website_file" 2>/dev/null || true
+                ;;
+              *)
+                echo "<!-- Unexpected JSON type: $file_type -->"
+                ;;
+            esac
+          }
+          
+          # Function to safely extract color classes
+          extract_color_classes() {
+            local website_file="website.json"
+            
+            if [ ! -f "$website_file" ] || ! jq empty "$website_file" 2>/dev/null; then
+              echo "bg-primary text-primary border-primary bg-secondary text-secondary border-secondary bg-accent text-accent border-accent"
+              return
+            fi
+            
+            local file_type=$(jq -r 'type' "$website_file" 2>/dev/null || echo "null")
+            
+            case "$file_type" in
+              "object")
+                jq -r '.colorPalette // {} | to_entries[] | "bg-\(.key) text-\(.key) border-\(.key)"' "$website_file" 2>/dev/null || echo ""
+                ;;
+              "array")
+                jq -r '.[0].colorPalette // {} | to_entries[] | "bg-\(.key) text-\(.key) border-\(.key)"' "$website_file" 2>/dev/null || echo ""
+                ;;
+              *)
+                echo "bg-primary text-primary border-primary"
+                ;;
+            esac
+          }
+          
           # Extract all HTML content for Tailwind scanning
           {
-              echo "<!-- AI Generated Content -->"
-              jq -r '.heroSection.customHTML // empty' website.json
-              jq -r '.customSections[]?.html // empty' website.json  
-              jq -r '.homepageLayout // empty' website.json
-              jq -r '.servicesPageLayout // empty' website.json
-              echo "<!-- Template Content -->"
-              cat "$THEME_DIR"/*.php 2>/dev/null || true
-              echo "<!-- Configuration Colors -->"
-              jq -r '.colorPalette | to_entries[] | "bg-\(.key) text-\(.key) border-\(.key)"' website.json 2>/dev/null || true
+            extract_html_content
+            echo "<!-- Template Content -->"
+            cat "$THEME_DIR"/*.php 2>/dev/null || true
+            echo "<!-- Configuration Colors -->"
+            extract_color_classes
+            echo "<!-- Common Classes -->"
+            echo "btn btn-primary btn-secondary card section-title hero-section nav-link"
+            echo "container grid flex items-center justify-center text-center"
+            echo "bg-white bg-gray-50 bg-gray-100 bg-gray-900 text-white text-gray-600 text-gray-800"
+            echo "px-4 px-8 py-4 py-8 py-16 py-24 mb-4 mb-6 mb-8 mt-4 mt-6 mt-8"
+            echo "text-xl text-2xl text-3xl text-4xl text-5xl text-6xl text-7xl"
+            echo "font-bold font-semibold font-medium rounded-lg rounded-xl"
+            echo "hover:text-white hover:bg-gray-50 focus:outline-none transition-colors"
           } > "$THEME_DIR/all-content.html"
           
           # Advanced Tailwind config with comprehensive safelist
@@ -1324,48 +1392,64 @@ jobs:
               { pattern: /^(col-span-[1-9]|col-span-1[0-2])$/ },
               { pattern: /^(row-span-[1-9]|row-span-1[0-2])$/ },
               
-              // Responsive prefixes
-              { pattern: /^(sm:|md:|lg:|xl:|2xl:)/ },
+              // Responsive prefixes - comprehensive
+              { pattern: /^(sm:|md:|lg:|xl:|2xl:)(.*?)$/ },
               
-              // Spacing
-              { pattern: /^[mp][trblxy]?-\d+$/ },
-              { pattern: /^space-[xy]-\d+$/ },
-              { pattern: /^gap-\d+$/ },
+              // Spacing - all variants
+              { pattern: /^[mp][trblxy]?-(0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96)$/ },
+              { pattern: /^space-[xy]-(0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96)$/ },
+              { pattern: /^gap-(0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96)$/ },
               
               // Sizing
-              { pattern: /^[wh]-\d+$/ },
-              { pattern: /^(min-|max-)?(w|h)-.+$/ },
+              { pattern: /^[wh]-(0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96|auto|px|full|screen)$/ },
+              { pattern: /^(min-|max-)?(w|h)-(0|none|xs|sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|full|min|max|fit|screen)$/ },
               
               // Typography
               { pattern: /^text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)$/ },
               { pattern: /^font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/ },
-              { pattern: /^text-(left|center|right|justify)$/ },
-              { pattern: /^leading-.+$/ },
-              { pattern: /^tracking-.+$/ },
+              { pattern: /^text-(left|center|right|justify|start|end)$/ },
+              { pattern: /^leading-(3|4|5|6|7|8|9|10|none|tight|snug|normal|relaxed|loose)$/ },
+              { pattern: /^tracking-(tighter|tight|normal|wide|wider|widest)$/ },
               
-              // Colors (comprehensive)
-              { pattern: /^(text|bg|border|ring)-(white|black|gray|red|yellow|green|blue|indigo|purple|pink)(-50|-100|-200|-300|-400|-500|-600|-700|-800|-900)?$/ },
-              { pattern: /^(text|bg|border)-brand-(primary|secondary|accent)$/ },
+              // Colors - comprehensive coverage
+              { pattern: /^(text|bg|border|ring|from|via|to)-(inherit|current|transparent|black|white)$/ },
+              { pattern: /^(text|bg|border|ring|from|via|to)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(50|100|200|300|400|500|600|700|800|900|950)$/ },
+              { pattern: /^(text|bg|border|ring)-(primary|secondary|accent|brand)(-primary|-secondary|-accent)?$/ },
               
               // Backgrounds & Gradients
-              { pattern: /^bg-(gradient-to-.+|from-.+|via-.+|to-.+)$/ },
+              { pattern: /^bg-gradient-to-(t|tr|r|br|b|bl|l|tl)$/ },
+              { pattern: /^bg-(none|gradient-to-r|gradient-to-l|gradient-to-t|gradient-to-b|gradient-to-tr|gradient-to-tl|gradient-to-br|gradient-to-bl)$/ },
               
               // Borders & Radius
-              { pattern: /^(border|rounded).*$/ },
-              { pattern: /^ring-.+$/ },
+              { pattern: /^(border|border-[trblxy])(-0|-2|-4|-8)?$/ },
+              { pattern: /^rounded(-none|-sm|-md|-lg|-xl|-2xl|-3xl|-full)?$/ },
+              { pattern: /^(rounded-[trbl]|rounded-[trbl][trbl])(-none|-sm|-md|-lg|-xl|-2xl|-3xl|-full)?$/ },
+              { pattern: /^ring(-0|-1|-2|-4|-8|)?(-inset)?$/ },
               
               // Effects & Transforms
-              { pattern: /^(shadow|opacity|transform|transition|duration|ease).*$/ },
-              { pattern: /^(hover:|focus:|active:)/ },
+              { pattern: /^shadow(-none|-sm|-md|-lg|-xl|-2xl|-inner)?$/ },
+              { pattern: /^opacity-(0|5|10|20|25|30|40|50|60|70|75|80|90|95|100)$/ },
+              { pattern: /^(transform|transform-none)$/ },
+              { pattern: /^(translate-x|translate-y)-(\[.*?\]|0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96|px|full)$/ },
+              { pattern: /^transition(-none|-all|-colors|-opacity|-shadow|-transform)?$/ },
+              { pattern: /^duration-(75|100|150|200|300|500|700|1000)$/ },
+              { pattern: /^ease-(linear|in|out|in-out)$/ },
+              
+              // State variants
+              { pattern: /^(hover|focus|active|group-hover|group-focus|first|last|odd|even|visited|checked|disabled):(.*?)$/ },
               
               // Positioning
-              { pattern: /^(relative|absolute|fixed|sticky)$/ },
-              { pattern: /^(top|right|bottom|left|inset)-.+$/ },
-              { pattern: /^z-\d+$/ },
+              { pattern: /^(static|fixed|absolute|relative|sticky)$/ },
+              { pattern: /^(top|right|bottom|left|inset)-(\[.*?\]|0|0\.5|1|1\.5|2|2\.5|3|3\.5|4|5|6|7|8|9|10|11|12|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96|px|auto|full)$/ },
+              { pattern: /^z-(0|10|20|30|40|50|auto)$/ },
               
               // Flexbox & Alignment
-              { pattern: /^(items|justify|content|self)-.+$/ },
-              { pattern: /^flex-.+$/ },
+              { pattern: /^(flex|inline-flex)$/ },
+              { pattern: /^flex-(1|auto|initial|none|row|row-reverse|col|col-reverse|wrap|wrap-reverse|nowrap)$/ },
+              { pattern: /^(justify|items|content|self)-(start|end|center|between|around|evenly|stretch|baseline|auto)$/ },
+              
+              // Display
+              { pattern: /^(block|inline-block|inline|flex|inline-flex|table|inline-table|table-caption|table-cell|table-column|table-column-group|table-footer-group|table-header-group|table-row-group|table-row|flow-root|grid|inline-grid|contents|list-item|hidden)$/ },
               
               // Animation classes
               'animate-fade-in',
@@ -1384,7 +1468,10 @@ jobs:
               'mobile-menu',
               'mobile-menu-btn',
               'scrolled',
-              'bg-gradient-brand'
+              'bg-gradient-brand',
+              'text-brand-primary',
+              'bg-brand-primary',
+              'border-brand-primary'
             ],
             theme: {
               extend: {
@@ -1403,6 +1490,9 @@ jobs:
             plugins: []
           }
           EOF
+          
+          echo "[tailwind] Configuration created successfully"
+          echo "[tailwind] Content file size: $(wc -c < "$THEME_DIR/all-content.html") bytes"
 
       #####################################################################
       # Build optimized Tailwind CSS
