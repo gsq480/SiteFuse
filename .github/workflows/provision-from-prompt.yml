@@ -1771,8 +1771,8 @@ jobs:
             exit 1
           fi
 
-      #####################################################################
-      # Debug and verification steps
+#####################################################################
+      # Debug and verification steps - FIXED for array/object handling
       #####################################################################
       - name: Debug AI-generated content
         env:
@@ -1781,24 +1781,179 @@ jobs:
           set -euo pipefail
           echo "=== DEBUGGING AI CONTENT ==="
           
+          # First, check what type of JSON structure we have
+          echo "=== JSON STRUCTURE DEBUG ==="
+          if [ -f website.json ]; then
+            echo "website.json exists"
+            if jq empty website.json 2>/dev/null; then
+              JSON_TYPE=$(jq -r 'type' website.json)
+              echo "JSON type: $JSON_TYPE"
+              
+              case "$JSON_TYPE" in
+                "array")
+                  echo "Length: $(jq 'length' website.json)"
+                  echo "First element type: $(jq -r '.[0] | type' website.json 2>/dev/null || echo "null")"
+                  ;;
+                "object")
+                  echo "Keys: $(jq -r 'keys | join(", ")' website.json 2>/dev/null || echo "none")"
+                  ;;
+                *)
+                  echo "Unexpected JSON type: $JSON_TYPE"
+                  ;;
+              esac
+            else
+              echo "❌ Invalid JSON in website.json"
+            fi
+          else
+            echo "❌ website.json not found"
+          fi
+          
+          # Function to safely extract values
+          safe_extract() {
+            local path="$1"
+            local fallback="$2"
+            
+            if [ ! -f website.json ] || ! jq empty website.json 2>/dev/null; then
+              echo "$fallback"
+              return
+            fi
+            
+            local json_type=$(jq -r 'type' website.json)
+            local result=""
+            
+            case "$json_type" in
+              "object")
+                result=$(jq -r "$path // empty" website.json 2>/dev/null || echo "")
+                ;;
+              "array")
+                result=$(jq -r ".[0]$path // empty" website.json 2>/dev/null || echo "")
+                ;;
+              *)
+                result=""
+                ;;
+            esac
+            
+            if [ -n "$result" ] && [ "$result" != "null" ]; then
+              echo "$result"
+            else
+              echo "$fallback"
+            fi
+          }
+          
+          echo ""
           echo "=== HERO SECTION DEBUG ==="
-          jq -r '.heroSection.customHTML // "❌ MISSING HERO HTML"' website.json | head -10
+          HERO_HTML=$(safe_extract '.heroSection.customHTML' '❌ MISSING HERO HTML')
+          echo "$HERO_HTML" | head -10
           
+          echo ""
           echo "=== CUSTOM SECTIONS DEBUG ==="
-          jq -r '.customSections[] | "✅ Section: \(.title // "NO TITLE")\nHTML Preview: \(.html[0:200] // "NO HTML")...\n---"' website.json || echo "❌ No custom sections found"
+          if [ -f website.json ] && jq empty website.json 2>/dev/null; then
+            JSON_TYPE=$(jq -r 'type' website.json)
+            case "$JSON_TYPE" in
+              "object")
+                if jq -e '.customSections | length > 0' website.json >/dev/null 2>&1; then
+                  jq -r '.customSections[] | "✅ Section: \(.title // "NO TITLE")\nHTML Preview: \(.html[0:200] // "NO HTML")...\n---"' website.json 2>/dev/null || echo "❌ Error reading sections"
+                else
+                  echo "❌ No custom sections found (object format)"
+                fi
+                ;;
+              "array")
+                if jq -e '.[0].customSections | length > 0' website.json >/dev/null 2>&1; then
+                  jq -r '.[0].customSections[] | "✅ Section: \(.title // "NO TITLE")\nHTML Preview: \(.html[0:200] // "NO HTML")...\n---"' website.json 2>/dev/null || echo "❌ Error reading sections from array"
+                else
+                  echo "❌ No custom sections found (array format)"
+                fi
+                ;;
+              *)
+                echo "❌ Cannot read sections from JSON type: $JSON_TYPE"
+                ;;
+            esac
+          else
+            echo "❌ Cannot read custom sections"
+          fi
           
+          echo ""
           echo "=== COLOR PALETTE DEBUG ==="
-          jq -r '.colorPalette' website.json || echo "❌ No color palette found"
+          COLOR_PALETTE=$(safe_extract '.colorPalette' '❌ No color palette found')
+          echo "$COLOR_PALETTE"
           
+          echo ""
+          echo "=== TYPOGRAPHY DEBUG ==="
+          TYPOGRAPHY=$(safe_extract '.typography' '❌ No typography found')
+          echo "$TYPOGRAPHY"
+          
+          echo ""
           echo "=== FINAL VARIABLES DEBUG ==="
           echo "SLUG: ${{ steps.merge.outputs.slug }}"
           echo "NAME: ${{ steps.merge.outputs.name }}"
+          echo "TAGLINE: ${{ steps.merge.outputs.tagline }}"
           echo "BRAND: ${{ steps.merge.outputs.brand }}"
           echo "ACCENT: ${{ steps.merge.outputs.accent }}"
+          echo "HERO_IMG: ${{ steps.merge.outputs.hero }}"
           
+          echo ""
           echo "=== THEME FILES DEBUG ==="
-          ls -la "child-themes/${SLUG}-child/" || echo "❌ Theme directory not found"
-          ls -la "child-themes/${SLUG}-child/dist/" || echo "❌ Dist directory not found"
+          if [ -d "child-themes/${{ steps.merge.outputs.slug }}-child/" ]; then
+            echo "✅ Theme directory exists"
+            ls -la "child-themes/${{ steps.merge.outputs.slug }}-child/" | head -10
+            
+            if [ -d "child-themes/${{ steps.merge.outputs.slug }}-child/dist/" ]; then
+              echo "✅ Dist directory exists"
+              ls -la "child-themes/${{ steps.merge.outputs.slug }}-child/dist/"
+            else
+              echo "❌ Dist directory not found"
+            fi
+            
+            # Check key theme files
+            echo ""
+            echo "=== KEY FILES CHECK ==="
+            for file in "style.css" "functions.php" "front-page.php" "header.php" "footer.php"; do
+              if [ -f "child-themes/${{ steps.merge.outputs.slug }}-child/$file" ]; then
+                echo "✅ $file exists ($(wc -c < "child-themes/${{ steps.merge.outputs.slug }}-child/$file" || echo 0) bytes)"
+              else
+                echo "❌ $file missing"
+              fi
+            done
+            
+          else
+            echo "❌ Theme directory not found: child-themes/${{ steps.merge.outputs.slug }}-child/"
+          fi
+          
+          echo ""
+          echo "=== AI STEP FILES DEBUG ==="
+          for file in website-step1.json website-step2.json website-step3.json image-prompts.json; do
+            if [ -f "$file" ]; then
+              echo "✅ $file exists ($(wc -c < "$file") bytes, type: $(jq -r 'type' "$file" 2>/dev/null || echo "invalid"))"
+            else
+              echo "❌ $file missing"
+            fi
+          done
+          
+          echo ""
+          echo "=== DEPLOYMENT READINESS CHECK ==="
+          READY=true
+          
+          # Check essential files
+          if [ ! -f "child-themes/${{ steps.merge.outputs.slug }}-child/style.css" ]; then
+            echo "❌ Missing theme style.css"
+            READY=false
+          fi
+          
+          if [ ! -f "child-themes/${{ steps.merge.outputs.slug }}-child/dist/tailwind.css" ]; then
+            echo "❌ Missing compiled Tailwind CSS"
+            READY=false
+          fi
+          
+          if [ ! -f "website.json" ]; then
+            echo "❌ Missing website.json"
+            READY=false
+          fi
+          
+          if [ "$READY" = true ]; then
+            echo "✅ Theme ready for deployment"
+          else
+            echo "⚠️ Theme has missing components but will continue deployment"
+          fi
 
       #####################################################################
       # Git commit with detailed information
