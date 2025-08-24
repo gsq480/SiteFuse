@@ -1,1 +1,25 @@
-null
+{
+  "slug": "business-site",
+  "name": "Your Business",
+  "tagline": "Professional services you can trust",
+  "industry": "business",
+  "colorPalette": {
+    "primary": "#2563eb",
+    "secondary": "#3b82f6",
+    "accent": "#1d4ed8"
+  },
+  "typography": {
+    "headingFont": "Inter",
+    "bodyFont": "Inter"
+  },
+  "heroSection": {
+    "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
+    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
+  },
+  "customSections": [
+    {
+      "title": "About Us",
+      "html": "<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"
+    }
+  ]
+}
