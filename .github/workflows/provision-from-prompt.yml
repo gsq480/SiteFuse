@@ -175,57 +175,64 @@ jobs:
               jq empty website-step1.json
               jq '{name,tagline,industry,sectionsCount:(.customSections|length)}' website-step1.json || true
 
-                #####################################################################
-                # AI PASS 2: Enhanced content improvement
-                #####################################################################
-                - name: AI pass 2 - Content enhancement  
-                  id: ai2
-                  run: |
-                    set -euo pipefail
-                    echo "[ai2] enhancing content with business-specific improvements"
-                    
-                    # Check if we have valid input
-                    if [ ! -f website-step1.json ] || ! jq empty website-step1.json 2>/dev/null; then
-                      echo "[ai2] ❌ No valid input from step 1, skipping enhancement"
-                      cp website-step1.json website-step2.json 2>/dev/null || echo '{}' > website-step2.json
-                      exit 0
-                    fi
-                    
-                    cat > /tmp/payload2.json <<EOF
-                    {
-                      "model": "gpt-4o",
-                      "response_format": {"type": "json_object"},
-                      "temperature": 0.4,
-                      "max_tokens": 4000,
-                      "messages": [
-                        {
-                          "role": "system",
-                          "content": "You are a UX strategist. Enhance the provided website JSON by:\n1. Improving the business name and tagline for impact\n2. Adding more industry-specific sections\n3. Enhancing the hero section HTML\n4. Creating better calls-to-action\n5. Ensuring all HTML uses proper Tailwind classes\n\nReturn the COMPLETE enhanced JSON object with the same structure. Do not wrap in arrays."
-                        },
-                        {
-                          "role": "user",
-                          "content": "Original business context: ${{ github.event.inputs.prompt }}\n\nEnhance this website JSON for better user experience and industry best practices:\n\n$(cat website-step1.json)"
-                        }
-                      ]
-                    }
-                    EOF
-                    
-                    if curl -sS "https://api.openai.com/v1/chat/completions" \
-                      -H "Authorization: Bearer ${OPENAI_API_KEY}" \
-                      -H "Content-Type: application/json" \
-                      -d @/tmp/payload2.json \
-                    | jq -r '.choices[0].message.content' > website-step2.json; then
-                      
-                      if jq empty website-step2.json 2>/dev/null; then
-                        echo "[ai2] ✅ Enhancement completed"
-                      else
-                        echo "[ai2] ❌ Invalid JSON from enhancement, using original"
-                        cp website-step1.json website-step2.json
-                      fi
-                    else
-                      echo "[ai2] ❌ API call failed, using original"
-                      cp website-step1.json website-step2.json
-                    fi
+          #####################################################################
+          # AI PASS 2: Enhanced content improvement
+          #####################################################################
+          set -euo pipefail
+          echo "[ai2] enhancing content"
+
+          [ -f website-step1.json ] || { echo "[ai2] no website-step1.json"; cp /dev/null website-step2.json; exit 0; }
+          jq empty website-step1.json >/dev/null
+
+          jq -n \
+            --arg sys 'You are a UX strategist. Enhance the provided website JSON by:
+          1. Improving the business name and tagline for impact
+          2. Adding more industry specific sections
+          3. Enhancing the hero section HTML
+          4. Creating better calls to action
+          5. Ensuring all HTML uses proper Tailwind classes
+
+          Return the COMPLETE enhanced JSON object with the same structure. Do not wrap in arrays.' \
+            --rawfile base website-step1.json \
+            --arg ctx "${{ github.event.inputs.prompt }}" \
+            '
+            {
+              model: "gpt-4o",
+              response_format: {type:"json_object"},
+              temperature: 0.4,
+              max_tokens: 4000,
+              messages: [
+                {role:"system", content:$sys},
+                {role:"user", content:("Original business context: " + $ctx + "\n\nEnhance this website JSON for better user experience and industry best practices:\n\n" + $base)}
+              ]
+            }
+          ' > /tmp/payload2.json
+
+          HTTP=$(curl -sS -w "\n%{http_code}" "https://api.openai.com/v1/chat/completions" \
+            -H "Authorization: Bearer ${OPENAI_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/payload2.json)
+          RESP="$(printf "%s" "$HTTP" | sed '$d')"
+          CODE="$(printf "%s" "$HTTP" | tail -n1)"
+          printf "%s" "$RESP" > ai2-response.json
+
+          if [ "$CODE" != "200" ]; then
+            echo "[ai2] API error code $CODE"
+            jq -r '.error.message // "Unknown API error"' ai2-response.json || true
+          fi
+
+          if jq -e '.choices[0].message.content' ai2-response.json >/dev/null 2>&1; then
+            jq -r '.choices[0].message.content' ai2-response.json > website-step2.json
+            if jq empty website-step2.json 2>/dev/null; then
+              echo "[ai2] ✅ enhancement ok"
+            else
+              echo "[ai2] ❌ invalid JSON, using step1"
+              cp website-step1.json website-step2.json
+            fi
+          else
+            echo "[ai2] ❌ content missing, using step1"
+            cp website-step1.json website-step2.json
+          fi
 
                 #####################################################################  
                 # AI PASS 3: Technical optimization (simplified)
