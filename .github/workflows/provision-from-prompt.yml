@@ -211,119 +211,181 @@ jobs:
           | jq -r '.choices[0].message.content' > image-prompts.json
 
 #####################################################################
-      # Smart JSON merging and variable extraction - FIXED VERSION
+      # Ultra Robust JSON merging and variable extraction
       #####################################################################
       - name: Smart merge and variable extraction
         id: merge
         run: |
           set -euo pipefail;
-          echo "[merge] intelligently merging AI passes";
+          echo "[merge] intelligently merging AI passes with ultra-robust handling";
           
-          # First, let's check what we actually got from the AI
-          echo "[debug] Checking AI response structure..."
-          for file in website-step1.json website-step2.json website-step3.json; do
-            if [ -f "$file" ]; then
-              echo "=== $file structure ==="
-              jq 'type' "$file" || echo "Invalid JSON in $file"
-              jq 'if type == "object" then keys else "ARRAY - length: \(length)" end' "$file" || echo "Cannot parse $file"
-            fi
-          done
+          # Create a fallback website structure
+          cat > fallback-website.json <<'EOF'
+          {
+            "slug": "new-site",
+            "name": "New Site", 
+            "tagline": "Welcome to our website",
+            "industry": "business",
+            "designTheme": "modern",
+            "colorPalette": {
+              "primary": "#2563eb",
+              "secondary": "#3b82f6", 
+              "accent": "#1d4ed8",
+              "background": "#ffffff",
+              "text": "#1f2937"
+            },
+            "typography": {
+              "headingFont": "Inter",
+              "bodyFont": "Inter", 
+              "accentFont": "Inter"
+            },
+            "heroSection": {
+              "customHTML": "<div class='text-center'><h1 class='text-5xl md:text-7xl font-bold mb-6 text-white'>Welcome</h1><p class='text-xl md:text-2xl mb-8 text-gray-100'>Your trusted partner</p><a href='#contact' class='btn btn-primary text-lg px-8 py-4'>Get Started</a></div>",
+              "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
+            },
+            "customSections": [
+              {
+                "key": "about",
+                "title": "About Us", 
+                "html": "<div class='text-center mb-16'><h2 class='text-4xl font-bold mb-6'>About Us</h2><p class='text-xl text-gray-600 max-w-3xl mx-auto'>We provide exceptional services to help your business thrive.</p></div>"
+              }
+            ],
+            "imagePrompts": []
+          }
+          EOF
           
-          # Function to ensure we have a valid JSON object
-          ensure_json_object() {
+          # Function to validate and extract useful content from AI responses
+          extract_valid_content() {
             local input_file="$1"
-            local output_file="$2"
+            local temp_file="temp_extracted.json"
             
-            if ! jq empty "$input_file" 2>/dev/null; then
-              echo "{}" > "$output_file"
+            echo "{}" > "$temp_file"
+            
+            if [ ! -f "$input_file" ]; then
               return
             fi
             
-            local file_type=$(jq -r 'type' "$input_file" 2>/dev/null || echo "null")
+            # Try to extract any valid content
+            if jq empty "$input_file" 2>/dev/null; then
+              local file_type=$(jq -r 'type' "$input_file" 2>/dev/null || echo "null")
+              
+              case "$file_type" in
+                "object")
+                  # Extract useful fields if they exist
+                  jq '{
+                    slug: (.slug // .name // empty | ascii_downcase | gsub("[^a-z0-9]"; "-") | gsub("-+"; "-") | gsub("^-|-$"; "")),
+                    name: (.name // .title // empty),
+                    tagline: (.tagline // .description // .subtitle // empty), 
+                    industry: (.industry // empty),
+                    designTheme: (.designTheme // .theme // .style // empty),
+                    colorPalette: (.colorPalette // .colors // empty),
+                    typography: (.typography // .fonts // empty),
+                    heroSection: (.heroSection // empty),
+                    customSections: (.customSections // .sections // empty),
+                    services: (.services // empty),
+                    testimonials: (.testimonials // empty),
+                    contact: (.contact // empty)
+                  } | with_entries(select(.value != null and .value != ""))' "$input_file" > "$temp_file" 2>/dev/null || echo "{}" > "$temp_file"
+                  ;;
+                "array")
+                  # Try to extract from first array element
+                  if jq -e '.[0]' "$input_file" >/dev/null 2>&1; then
+                    jq '.[0] | {
+                      slug: (.slug // .name // empty | ascii_downcase | gsub("[^a-z0-9]"; "-") | gsub("-+"; "-") | gsub("^-|-$"; "")),
+                      name: (.name // .title // empty),
+                      tagline: (.tagline // .description // .subtitle // empty),
+                      industry: (.industry // empty),
+                      designTheme: (.designTheme // .theme // .style // empty),
+                      colorPalette: (.colorPalette // .colors // empty),
+                      typography: (.typography // .fonts // empty), 
+                      heroSection: (.heroSection // empty),
+                      customSections: (.customSections // .sections // empty),
+                      services: (.services // empty),
+                      testimonials: (.testimonials // empty),
+                      contact: (.contact // empty)
+                    } | with_entries(select(.value != null and .value != ""))' "$input_file" > "$temp_file" 2>/dev/null || echo "{}" > "$temp_file"
+                  fi
+                  ;;
+              esac
+            fi
             
-            case "$file_type" in
-              "object")
-                cp "$input_file" "$output_file"
-                ;;
-              "array")
-                # If it's an array, try to extract the first object
-                jq '.[0] // {}' "$input_file" > "$output_file" 2>/dev/null || echo "{}" > "$output_file"
-                ;;
-              *)
-                # Invalid JSON, create empty object
-                echo "{}" > "$output_file"
-                ;;
-            esac
+            cat "$temp_file"
+            rm -f "$temp_file"
           }
           
-          # Ensure all files are valid JSON objects
-          ensure_json_object "website-step1.json" "step1-clean.json"
-          ensure_json_object "website-step2.json" "step2-clean.json" 
-          ensure_json_object "website-step3.json" "step3-clean.json"
-          ensure_json_object "image-prompts.json" "images-clean.json"
+          # Extract content from each AI step
+          echo "[merge] Extracting valid content from AI responses..."
+          extract_valid_content "website-step1.json" > step1-extracted.json
+          extract_valid_content "website-step2.json" > step2-extracted.json  
+          extract_valid_content "website-step3.json" > step3-extracted.json
           
-          # Smart merge with better error handling
-          jq -s '
-            def smart_merge(base; overlay):
-              if overlay == null or overlay == {} then base
-              elif (overlay | type) == "object" and (base | type) == "object" then
-                base + overlay + (
-                  base | with_entries(
-                    select(.value | type == "object") | 
-                    .value = smart_merge(.value; overlay[.key] // {})
-                  )
-                )
-              elif (overlay | type) == "array" and (base | type) == "array" then
-                if (overlay | length) > (base | length) then overlay else base end
-              elif overlay == "" or overlay == null or overlay == {} then base
-              else overlay
-              end;
-            
-            # Start with step3, merge step2, then step1 for any missing pieces
-            reduce .[0:3] as $step ({}; smart_merge(.; $step))
-          ' step3-clean.json step2-clean.json step1-clean.json > website.json
-          
-          # Add image prompts safely
-          if [ -s "images-clean.json" ]; then
-            # Check if images-clean.json has the expected structure
-            if jq -e '.images' images-clean.json >/dev/null 2>&1; then
-              jq --slurpfile imgs images-clean.json '.imagePrompts = ($imgs[0].images // [])' website.json > website.tmp && mv website.tmp website.json
-            elif jq -e '. | type == "array"' images-clean.json >/dev/null 2>&1; then
-              jq --slurpfile imgs images-clean.json '.imagePrompts = ($imgs[0] // [])' website.json > website.tmp && mv website.tmp website.json
+          # Also try to extract image prompts
+          if [ -f "image-prompts.json" ] && jq empty "image-prompts.json" 2>/dev/null; then
+            if jq -e '.images' "image-prompts.json" >/dev/null 2>&1; then
+              jq '.images // []' "image-prompts.json" > extracted-images.json
+            elif jq -e '. | type == "array"' "image-prompts.json" >/dev/null 2>&1; then
+              cp "image-prompts.json" extracted-images.json
             else
-              jq '.imagePrompts = []' website.json > website.tmp && mv website.tmp website.json
+              echo "[]" > extracted-images.json
             fi
           else
-            jq '.imagePrompts = []' website.json > website.tmp && mv website.tmp website.json
+            echo "[]" > extracted-images.json
           fi
+          
+          # Smart merge starting with fallback, then layering AI improvements
+          jq -s '
+            def deep_merge(base; overlay):
+              if (overlay | type) == "object" and (base | type) == "object" then
+                reduce (overlay | keys_unsorted[]) as $key (base; 
+                  .[$key] = if (.[$key] | type) == "object" and (overlay[$key] | type) == "object"
+                           then deep_merge(.[$key]; overlay[$key])
+                           else overlay[$key] 
+                           end
+                )
+              elif overlay != null and overlay != "" and overlay != {} then overlay
+              else base
+              end;
+            
+            # Start with fallback, then merge AI extracts (step1, step2, step3)
+            reduce .[1:] as $layer (.[0]; deep_merge(.; $layer))
+          ' fallback-website.json step1-extracted.json step2-extracted.json step3-extracted.json > website.json
+          
+          # Add image prompts
+          jq --slurpfile imgs extracted-images.json '.imagePrompts = ($imgs[0] // [])' website.json > website.tmp && mv website.tmp website.json
           
           # Color normalization function
           normalize_color() {
             local color="$1"
-            color="${color,,}"  # lowercase
-            color="${color#\#}"  # remove #
+            if [ -z "$color" ] || [ "$color" = "null" ]; then
+              echo "#2563eb"
+              return
+            fi
+            color="${color,,}"
+            color="${color#\#}"
             case "${#color}" in
               3) printf "#%s%s%s%s%s%s" "${color:0:1}" "${color:0:1}" "${color:1:1}" "${color:1:1}" "${color:2:1}" "${color:2:1}";;
               6) printf "#%s" "$color";;
-              *) printf "#2563eb";;  # fallback
+              *) printf "#2563eb";;
             esac
           }
           
-          # Extract variables with multiple fallback options and better error handling
-          BRAND="#2563eb"  # default
-          ACCENT="#3b82f6"  # default
+          # Extract variables with comprehensive fallback chain
+          BRAND="#2563eb"
+          ACCENT="#3b82f6"
           
-          # Try multiple paths for brand color
-          for path in '.colorPalette.primary' '.colorPalette.brand' '.colors.primary' '.primary'; do
-            if TEMP_COLOR=$(jq -r "$path // empty" website.json 2>/dev/null) && [ -n "$TEMP_COLOR" ] && [ "$TEMP_COLOR" != "null" ]; then
+          # Try to find brand color in multiple locations
+          for path in '.colorPalette.primary' '.colorPalette.brand' '.colors.primary' '.primary' '.colorPalette.secondary'; do
+            TEMP_COLOR=$(jq -r "$path // empty" website.json 2>/dev/null || echo "")
+            if [ -n "$TEMP_COLOR" ] && [ "$TEMP_COLOR" != "null" ] && [ "$TEMP_COLOR" != "empty" ]; then
               BRAND="$TEMP_COLOR"
               break
             fi
           done
           
-          # Try multiple paths for accent color  
-          for path in '.colorPalette.accent' '.colorPalette.secondary' '.colors.accent' '.accent'; do
-            if TEMP_COLOR=$(jq -r "$path // empty" website.json 2>/dev/null) && [ -n "$TEMP_COLOR" ] && [ "$TEMP_COLOR" != "null" ]; then
+          # Try to find accent color
+          for path in '.colorPalette.accent' '.colorPalette.secondary' '.colors.accent' '.accent' '.colorPalette.primary'; do
+            TEMP_COLOR=$(jq -r "$path // empty" website.json 2>/dev/null || echo "")
+            if [ -n "$TEMP_COLOR" ] && [ "$TEMP_COLOR" != "null" ] && [ "$TEMP_COLOR" != "empty" ] && [ "$TEMP_COLOR" != "$BRAND" ]; then
               ACCENT="$TEMP_COLOR"
               break
             fi
@@ -332,14 +394,17 @@ jobs:
           BRAND=$(normalize_color "$BRAND")
           ACCENT=$(normalize_color "$ACCENT")
           
-          # Extract other variables with fallbacks
-          SLUG=$(jq -r '.slug // "new-site"' website.json 2>/dev/null | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9-_' | sed -E 's/^-+|-+$//g')
-          [ -n "$SLUG" ] || SLUG="new-site"
+          # Extract other variables with robust fallbacks
+          SLUG=$(jq -r '.slug // (.name | ascii_downcase | gsub("[^a-z0-9]"; "-") | gsub("-+"; "-") | gsub("^-|-$"; "")) // "new-site"' website.json 2>/dev/null || echo "new-site")
+          [ -n "$SLUG" ] && [ "$SLUG" != "null" ] || SLUG="new-site"
           
           NAME=$(jq -r '.name // "New Site"' website.json 2>/dev/null || echo "New Site")
-          TAGLINE=$(jq -r '.tagline // "Welcome to our website"' website.json 2>/dev/null || echo "Welcome to our website")
-          HERO_IMG=$(jq -r '.heroSection.heroImage // empty' website.json 2>/dev/null || echo "")
+          [ -n "$NAME" ] && [ "$NAME" != "null" ] || NAME="New Site"
           
+          TAGLINE=$(jq -r '.tagline // "Welcome to our website"' website.json 2>/dev/null || echo "Welcome to our website")
+          [ -n "$TAGLINE" ] && [ "$TAGLINE" != "null" ] || TAGLINE="Welcome to our website"
+          
+          HERO_IMG=$(jq -r '.heroSection.heroImage // empty' website.json 2>/dev/null || echo "")
           if [ -z "$HERO_IMG" ] || [ "$HERO_IMG" = "null" ]; then
             HERO_IMG="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
           fi
@@ -347,27 +412,32 @@ jobs:
           # Output variables
           {
             echo "slug=$SLUG"
-            echo "name=$NAME" 
-            echo "tagline=$TAGLINE"
+            echo "name=$NAME"
+            echo "tagline=$TAGLINE" 
             echo "brand=$BRAND"
             echo "accent=$ACCENT"
             echo "hero=$HERO_IMG"
           } >> "$GITHUB_OUTPUT"
           
+          echo "[merge] Extracted variables:"
+          echo "  SLUG: $SLUG"
+          echo "  NAME: $NAME"
+          echo "  BRAND: $BRAND"
+          echo "  ACCENT: $ACCENT"
+          
           echo "[merge] Final website structure:"
-          jq '{
-            name: (.name // "Not found"),
-            tagline: (.tagline // "Not found"), 
-            industry: (.industry // "Not found"),
-            colorPalette: (.colorPalette // "Not found"),
-            typography: (.typography // "Not found"),
-            heroPreview: ((.heroSection.customHTML // "")[0:200] // "Not found"),
-            sectionsCount: ((.customSections // []) | length),
-            imagePrompts: ((.imagePrompts // []) | length)
-          }' website.json 2>/dev/null || echo "Could not parse final JSON"
+          jq -r '{
+            name: .name,
+            tagline: .tagline,
+            industry: .industry, 
+            colorPalette: .colorPalette,
+            heroExists: (.heroSection.customHTML != null),
+            sectionsCount: (.customSections | length),
+            imagePrompts: (.imagePrompts | length)
+          }' website.json 2>/dev/null || echo "Final structure validation failed, but continuing with fallback"
           
           # Clean up temporary files
-          rm -f step1-clean.json step2-clean.json step3-clean.json images-clean.json
+          rm -f fallback-website.json step1-extracted.json step2-extracted.json step3-extracted.json extracted-images.json
       #####################################################################
       # Enhanced AI image generation
       #####################################################################
