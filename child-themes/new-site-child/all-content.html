@@ -1,0 +1,396 @@
+<!-- AI Generated Content from Array -->
+<!-- Template Content -->
+<footer class="site-footer bg-gray-900 text-gray-300 mt-20">
+    <div class="container py-16">
+        <div class="grid md:grid-cols-4 gap-8 mb-8">
+            <!-- Company Info -->
+            <div class="md:col-span-2">
+                <h3 class="text-2xl font-bold mb-4 text-brand-accent">
+                    <?php bloginfo('name'); ?>
+                </h3>
+                <p class="text-gray-400 mb-6 max-w-md leading-relaxed">
+                    <?php 
+                    $description = get_bloginfo('description');
+                    echo !empty($description) ? esc_html($description) : 'Creating exceptional experiences for our valued customers.';
+                    ?>
+                </p>
+                <div class="flex space-x-4">
+                    <!-- Social media links can be added here -->
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-white">Quick Links</h4>
+                <nav aria-label="Footer navigation">
+                    <?php
+                    wp_nav_menu([
+                        'theme_location' => 'footer',
+                        'menu_class' => 'space-y-2',
+                        'container' => false,
+                        'fallback_cb' => function() {
+                            echo '<ul class="space-y-2">';
+                            echo '<li><a href="' . esc_url(home_url('/about')) . '" class="footer-link">About</a></li>';
+                            echo '<li><a href="' . esc_url(home_url('/services')) . '" class="footer-link">Services</a></li>';
+                            echo '<li><a href="' . esc_url(home_url('/contact')) . '" class="footer-link">Contact</a></li>';
+                            echo '</ul>';
+                        },
+                    ]);
+                    ?>
+                </nav>
+            </div>
+            
+            <!-- Contact Info -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-white">Contact Info</h4>
+                <div class="space-y-3 text-gray-400">
+                    <p class="flex items-center">
+                        <span class="mr-2">📞</span>
+                        <a href="tel:+15551234567" class="footer-link">(555) 123-4567</a>
+                    </p>
+                    <p class="flex items-center">
+                        <span class="mr-2">✉️</span>
+                        <a href="mailto:hello@<?php echo sanitize_title(get_bloginfo('name')); ?>.com" class="footer-link">
+                            hello@<?php echo sanitize_title(get_bloginfo('name')); ?>.com
+                        </a>
+                    </p>
+                    <p class="flex items-start">
+                        <span class="mr-2 mt-1">📍</span>
+                        <span>123 Business Street<br>Your City, State 12345</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="border-t border-gray-800 pt-8">
+            <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+                <p>
+                    © <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. All rights reserved.
+                </p>
+                <p class="mt-4 md:mt-0">
+                    Powered by 
+                    <a href="https://wordpress.org" class="hover:text-white transition-colors" rel="nofollow">WordPress</a>
+                    and 
+                    <span class="text-brand-accent font-medium">SiteFuse</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<?php wp_footer(); ?>
+</body>
+</html>
+<?php
+get_header();
+
+// Load website configuration
+$config = [];
+$config_path = ABSPATH . 'website.json';
+if (file_exists($config_path)) {
+    $json_content = file_get_contents($config_path);
+    $decoded = json_decode($json_content, true);
+    if (is_array($decoded)) {
+        $config = $decoded;
+    }
+}
+
+// Helper function to safely output HTML sections
+function render_ai_section($html, $wrapper_class = '', $index = 0) {
+    if (empty($html) || !is_string($html)) return;
+    
+    // Add alternating background colors
+    $bg_class = ($index % 2 === 0) ? 'bg-white' : 'bg-gray-50';
+    if (!empty($wrapper_class)) {
+        $bg_class = $wrapper_class;
+    }
+    
+    // Check if HTML already has proper container structure
+    if (strpos($html, 'container') !== false || strpos($html, '<section') === 0) {
+        echo $html;
+    } else {
+        // Wrap in section with container
+        echo "<section class='py-16 {$bg_class}'><div class='container mx-auto px-4'>{$html}</div></section>";
+    }
+}
+
+// Get hero configuration
+$hero_html = $config['heroSection']['customHTML'] ?? '';
+$hero_image = $config['heroSection']['heroImage'] ?? get_theme_image('hero.jpg');
+$site_name = get_bloginfo('name');
+$site_tagline = get_bloginfo('description');
+?>
+
+<main id="main" class="site-main">
+    <!-- Hero Section -->
+    <section class="hero-section relative">
+        <div class="absolute inset-0">
+            <img src="<?php echo esc_url($hero_image); ?>" 
+                 alt="<?php echo esc_attr($site_name); ?>" 
+                 class="w-full h-full object-cover" 
+                 loading="eager" />
+        </div>
+        
+        <div class="relative z-10 container text-center text-white py-24 md:py-32 lg:py-40">
+            <?php if (!empty($hero_html)) : ?>
+                <?php echo wp_kses_post($hero_html); ?>
+            <?php else : ?>
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in">
+                    <?php echo esc_html($site_name); ?>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto animate-fade-in">
+                    <?php echo esc_html($site_tagline); ?>
+                </p>
+                <a href="#contact" class="btn btn-primary text-lg animate-fade-in">
+                    Get Started Today
+                </a>
+            <?php endif; ?>
+        </div>
+    </section>
+    
+    <?php
+    // Render custom sections from AI
+    if (!empty($config['customSections']) && is_array($config['customSections'])) {
+        foreach ($config['customSections'] as $index => $section) {
+            if (isset($section['html']) && is_string($section['html']) && !empty($section['html'])) {
+                render_ai_section($section['html'], '', $index);
+            }
+        }
+    }
+    
+    // Fallback homepage layout if no custom sections
+    if (empty($config['customSections']) && !empty($config['homepageLayout'])) {
+        render_ai_section($config['homepageLayout']);
+    }
+    ?>
+</main>
+
+<?php get_footer(); ?>
+<?php
+// Enqueue styles and scripts
+add_action('wp_enqueue_scripts', function () {
+    // Parent theme styles
+    $parent_css = get_template_directory_uri() . '/dist/tailwind.css';
+    wp_enqueue_style('sitefuse-parent', $parent_css, [], null);
+    
+    // Child theme styles
+    $child_css_path = get_stylesheet_directory() . '/dist/tailwind.css';
+    $child_css_ver = file_exists($child_css_path) ? filemtime($child_css_path) : '1.0.0';
+    wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $child_css_ver);
+    
+    // Load fonts from website.json
+    $website_json = ABSPATH . 'website.json';
+    if (file_exists($website_json)) {
+        $config = json_decode(file_get_contents($website_json), true);
+        if (is_array($config) && isset($config['typography'])) {
+            $fonts = [];
+            $font_keys = ['headingFont', 'bodyFont', 'accentFont'];
+            
+            foreach ($font_keys as $key) {
+                if (!empty($config['typography'][$key]) && is_string($config['typography'][$key])) {
+                    $font_name = trim(explode(',', $config['typography'][$key])[0], '"\'');
+                    if ($font_name && $font_name !== 'inherit') {
+                        $fonts[str_replace(' ', '+', $font_name)] = true;
+                    }
+                }
+            }
+            
+            if (!empty($fonts)) {
+                $font_families = array_map(function($font) {
+                    return $font . ':wght@300;400;500;600;700;800;900';
+                }, array_keys($fonts));
+                
+                $google_fonts_url = 'https://fonts.googleapis.com/css2?family=' . 
+                                  implode('&family=', $font_families) . 
+                                  '&display=swap';
+                
+                wp_enqueue_style('sitefuse-fonts', $google_fonts_url, [], null);
+            }
+        }
+    }
+    
+    // Theme JavaScript
+    wp_enqueue_script('sitefuse-theme', get_stylesheet_directory_uri() . '/assets/js/theme.js', [], $child_css_ver, true);
+    
+    // Add website config to JavaScript
+    if (isset($config)) {
+        wp_localize_script('sitefuse-theme', 'siteConfig', $config);
+    }
+});
+
+// Theme setup
+add_action('after_setup_theme', function () {
+    add_theme_support('post-thumbnails');
+    add_theme_support('custom-logo');
+    add_theme_support('title-tag');
+    add_theme_support('html5', ['search-form', 'comment-form', 'comment-list', 'gallery', 'caption']);
+    add_theme_support('responsive-embeds');
+    add_theme_support('wp-block-styles');
+    
+    register_nav_menus([
+        'primary' => __('Primary Navigation', 'textdomain'),
+        'footer' => __('Footer Navigation', 'textdomain')
+    ]);
+});
+
+// Enhanced navigation attributes
+add_filter('nav_menu_link_attributes', function($atts, $item, $args) {
+    if (isset($args->theme_location)) {
+        switch ($args->theme_location) {
+            case 'primary':
+                $atts['class'] = trim(($atts['class'] ?? '') . ' nav-link hover:text-brand-primary transition-colors duration-200');
+                break;
+            case 'footer':
+                $atts['class'] = trim(($atts['class'] ?? '') . ' footer-link text-gray-300 hover:text-white transition-colors duration-200');
+                break;
+        }
+    }
+    return $atts;
+}, 10, 3);
+
+// Add custom body classes for styling
+add_filter('body_class', function($classes) {
+    $classes[] = 'sitefuse-theme';
+    
+    if (is_front_page()) {
+        $classes[] = 'homepage';
+    }
+    
+    return $classes;
+});
+
+// Helper function for theme images with fallbacks
+function get_theme_image($image_name, $fallback_url = '') {
+    $theme_image = get_stylesheet_directory_uri() . '/assets/img/' . $image_name;
+    $theme_path = get_stylesheet_directory() . '/assets/img/' . $image_name;
+    
+    if (file_exists($theme_path)) {
+        return $theme_image;
+    }
+    
+    return $fallback_url ?: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop';
+}
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="format-detection" content="telephone=no">
+    <?php wp_head(); ?>
+</head>
+
+<body <?php body_class('font-sans antialiased'); ?>>
+    <?php wp_body_open(); ?>
+    
+    <a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 btn btn-primary z-50" href="#main">
+        Skip to main content
+    </a>
+    
+    <header class="site-header sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 transition-all duration-300">
+        <div class="container">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="<?php echo esc_url(home_url('/')); ?>" class="flex items-center space-x-3 group">
+                        <?php if (has_custom_logo()) : ?>
+                            <?php the_custom_logo(); ?>
+                        <?php else : ?>
+                            <span class="text-2xl font-bold text-brand-primary group-hover:opacity-80 transition-opacity">
+                                <?php bloginfo('name'); ?>
+                            </span>
+                        <?php endif; ?>
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden lg:flex items-center space-x-2" aria-label="Main navigation">
+                    <?php
+                    wp_nav_menu([
+                        'theme_location' => 'primary',
+                        'menu_class' => 'flex items-center space-x-2',
+                        'container' => false,
+                        'fallback_cb' => '__return_empty_string',
+                        'depth' => 2,
+                    ]);
+                    ?>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button type="button" 
+                        class="lg:hidden mobile-menu-btn p-2 rounded-lg text-brand-primary hover:bg-gray-100 transition-colors"
+                        aria-label="Toggle mobile menu"
+                        aria-expanded="false">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="mobile-menu hidden lg:hidden py-4 border-t border-gray-200">
+                <?php
+                wp_nav_menu([
+                    'theme_location' => 'primary',
+                    'menu_class' => 'flex flex-col space-y-2',
+                    'container' => false,
+                    'fallback_cb' => '__return_empty_string',
+                ]);
+                ?>
+            </div>
+        </div>
+    </header>
+<?php
+get_header();
+
+// Load website configuration
+$config = [];
+$config_path = ABSPATH . 'website.json';
+if (file_exists($config_path)) {
+    $json_content = file_get_contents($config_path);
+    $decoded = json_decode($json_content, true);
+    if (is_array($decoded)) {
+        $config = $decoded;
+    }
+}
+?>
+
+<main id="main" class="site-main">
+    <!-- Page Header -->
+    <section class="py-16 bg-gradient-brand text-white">
+        <div class="container text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                <?php the_title(); ?>
+            </h1>
+            <p class="text-xl max-w-3xl mx-auto">
+                Discover our comprehensive range of services designed to meet your needs.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Services Content -->
+    <section class="py-16">
+        <div class="container">
+            <?php if (!empty($config['servicesPageLayout'])) : ?>
+                <?php echo wp_kses_post($config['servicesPageLayout']); ?>
+            <?php else : ?>
+                <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+                    <div class="prose prose-lg max-w-none">
+                        <?php the_content(); ?>
+                    </div>
+                <?php endwhile; endif; ?>
+            <?php endif; ?>
+        </div>
+    </section>
+</main>
+
+<?php get_footer(); ?>
+<!-- Configuration Colors -->
+<!-- Common Classes -->
+btn btn-primary btn-secondary card section-title hero-section nav-link
+container grid flex items-center justify-center text-center
+bg-white bg-gray-50 bg-gray-100 bg-gray-900 text-white text-gray-600 text-gray-800
+px-4 px-8 py-4 py-8 py-16 py-24 mb-4 mb-6 mb-8 mt-4 mt-6 mt-8
+text-xl text-2xl text-3xl text-4xl text-5xl text-6xl text-7xl
+font-bold font-semibold font-medium rounded-lg rounded-xl
+hover:text-white hover:bg-gray-50 focus:outline-none transition-colors

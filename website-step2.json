@@ -1,2 +1,156 @@
-
-{"heroSection":{"customHTML":"Welcome to our services page, where we offer tailored solutions to meet your specific needs. Explore our diverse range of services designed to enhance your experience and drive success. Let's embark on this journey together!"},"servicesPageLayout":{"sections":[{"title":"Our Services","description":"Explore the range of services we provide to cater to your unique requirements."},{"title":"Why Choose Us?","description":"Learn why we are the preferred choice for many clients in the industry."},{"title":"Client Testimonials","description":"Hear from our satisfied clients and discover how we've made an impact."},{"title":"FAQs","description":"Find answers to common questions about our services."}]},"customSections":[{"sectionType":"caseStudies","title":"Case Studies","description":"Discover how our services have successfully transformed businesses through real-life examples."},{"sectionType":"blog","title":"Latest Insights","description":"Stay updated with the latest trends, tips, and insights from our expert team."}], "footer": {"links":[{"title":"Privacy Policy","url":"/privacy"},{"title":"Terms of Service","url":"/terms"},{"title":"Contact Us","url":"/contact"}]} }
+{"website": {
+    "header": {
+        "logo": "path/to/logo.png",
+        "navigation": [
+            {"name": "Home", "link": "/"},
+            {"name": "About Us", "link": "/about"},
+            {"name": "Services", "link": "/services"},
+            {"name": "Blog", "link": "/blog"},
+            {"name": "Contact", "link": "/contact"}
+        ]
+    },
+    "hero": {
+        "image": "path/to/hero-image.jpg",
+        "headline": "Transform Your Business with Our Expert Solutions",
+        "subheadline": "Innovative, Reliable, and Tailored Services to Drive Success",
+        "cta": {
+            "text": "Get Started Today",
+            "link": "/contact"
+        }
+    },
+    "sections": [
+        {
+            "id": "about-us",
+            "title": "About Us",
+            "content": "With over a decade of experience, we specialize in delivering top-notch solutions that empower businesses to reach their full potential. Our team of experts is dedicated to providing personalized service to meet your unique needs."
+        },
+        {
+            "id": "services",
+            "title": "Our Services",
+            "services_list": [
+                {
+                    "name": "Consulting",
+                    "description": "Expert advice to streamline your business processes and maximize efficiency."
+                },
+                {
+                    "name": "Development",
+                    "description": "Custom software solutions designed to meet your specific requirements."
+                },
+                {
+                    "name": "Design",
+                    "description": "Creative design services to enhance your brand's visual identity."
+                }
+            ]
+        },
+        {
+            "id": "case-studies",
+            "title": "Case Studies",
+            "content": "Discover how we've helped businesses like yours achieve remarkable results. Check out our success stories and learn more about our impactful work.",
+            "cta": {
+                "text": "View Case Studies",
+                "link": "/case-studies"
+            }
+        },
+        {
+            "id": "blog",
+            "title": "Latest Insights",
+            "content": "Stay updated with industry news, tips, and trends. Our blog offers valuable insights to keep you informed and ahead of the curve.",
+            "cta": {
+                "text": "Read Our Blog",
+                "link": "/blog"
+            }
+        },
+        {
+            "id": "testimonials",
+            "title": "What Our Clients Say",
+            "testimonials_list": [
+                {
+                    "name": "John Doe",
+                    "company": "Company A",
+                    "quote": "Their services transformed our business. Highly recommend!"
+                },
+                {
+                    "name": "Jane Smith",
+                    "company": "Company B",
+                    "quote": "Professional and effective solutions every time."
+                }
+            ]
+        },
+        {
+            "id": "contact",
+            "title": "Get In Touch",
+            "content": "Ready to take your business to the next level? Contact us today to discuss how we can help.",
+            "contact_form": {
+                "fields": [
+                    {"name": "Name", "type": "text", "required": true},
+                    {"name": "Email", "type": "email", "required": true},
+                    {"name": "Message", "type": "textarea", "required": true}
+                ],
+                "submit_text": "Send Message"
+            }
+        }
+    ],
+    "footer": {
+        "quick_links": [
+            {"name": "Privacy Policy", "link": "/privacy-policy"},
+            {"name": "Terms of Service", "link": "/terms-of-service"}
+        ],
+        "social_media": [
+            {"platform": "Facebook", "link": "https://facebook.com"},
+            {"platform": "Twitter", "link": "https://twitter.com"},
+            {"platform": "LinkedIn", "link": "https://linkedin.com"}
+        ],
+        "contact_info": {
+            "address": "123 Business Rd, Business City, BC 12345",
+            "phone": "123-456-7890",
+            "email": "info@business.com"
+        }
+    },
+    "schema": {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Business Name",
+        "url": "https://www.business.com",
+        "logo": "https://www.business.com/path/to/logo.png",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-123-456-7890",
+            "contactType": "Customer Service",
+            "email": "info@business.com"
+        },
+        "sameAs": [
+            "https://facebook.com/business",
+            "https://twitter.com/business",
+            "https://linkedin.com/company/business"
+        ]
+    },
+    "accessibility": {
+        "alt_texts": {
+            "logo": "Business Logo",
+            "hero_image": "Hero image showcasing business solutions"
+        },
+        "aria_labels": {
+            "navigation": "Main Navigation",
+            "contact_form": "Contact Form"
+        }
+    },
+    "responsive_design": {
+        "breakpoints": {
+            "mobile": "max-width: 767px",
+            "tablet": "min-width: 768px and max-width: 1024px",
+            "desktop": "min-width: 1025px"
+        },
+        "styles": {
+            "font_size": {
+                "mobile": "16px",
+                "tablet": "18px",
+                "desktop": "20px"
+            },
+            "button_size": {
+                "mobile": "44px",
+                "tablet": "48px",
+                "desktop": "52px"
+            }
+        }
+    }
+}}
