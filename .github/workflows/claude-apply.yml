@@ -111,49 +111,47 @@ jobs:
               sed -i 's/ 2>\/dev\/null//g' "$TARGET_WORKFLOW"
               
               # Fix 2: Basic JSON and heredoc fixes
-              cat > fix_workflow.py << 'SCRIPT_END'
-import re
-import os
-
-target_file = os.environ.get('TARGET_WORKFLOW', '.github/workflows/provision-from-prompt.yml')
-
-with open(target_file, 'r') as f:
-    content = f.read()
-
-# Remove extra 2>/dev/null patterns
-content = content.replace(' 2>/dev/null', '')
-
-# Basic heredoc EOF fixes
-lines = content.split('\n')
-fixed_lines = []
-in_heredoc = False
-heredoc_delimiter = None
-
-for i, line in enumerate(lines):
-    # Detect heredoc start
-    if '<<' in line and ('FALLBACK_JSON' in line or 'EOF' in line):
-        if 'FALLBACK_JSON' in line:
-            heredoc_delimiter = 'FALLBACK_JSON'
-        else:
-            heredoc_delimiter = 'EOF'
-        in_heredoc = True
-        fixed_lines.append(line)
-    # Detect heredoc end
-    elif in_heredoc and line.strip() == heredoc_delimiter:
-        fixed_lines.append(line)
-        # Add EOF if it was missing
-        if heredoc_delimiter == 'FALLBACK_JSON':
-            fixed_lines.append('EOF')
-        in_heredoc = False
-        heredoc_delimiter = None
-    else:
-        fixed_lines.append(line)
-
-content = '\n'.join(fixed_lines)
-
-with open(target_file, 'w') as f:
-    f.write(content)
-SCRIPT_END
+              echo "import re" > fix_workflow.py
+              echo "import os" >> fix_workflow.py
+              echo "" >> fix_workflow.py
+              echo "target_file = os.environ.get('TARGET_WORKFLOW', '.github/workflows/provision-from-prompt.yml')" >> fix_workflow.py
+              echo "" >> fix_workflow.py
+              echo "with open(target_file, 'r') as f:" >> fix_workflow.py
+              echo "    content = f.read()" >> fix_workflow.py
+              echo "" >> fix_workflow.py
+              echo "# Remove extra 2>/dev/null patterns" >> fix_workflow.py
+              echo "content = content.replace(' 2>/dev/null', '')" >> fix_workflow.py
+              echo "" >> fix_workflow.py
+              echo "# Basic heredoc EOF fixes" >> fix_workflow.py
+              echo "lines = content.split('\\n')" >> fix_workflow.py
+              echo "fixed_lines = []" >> fix_workflow.py
+              echo "in_heredoc = False" >> fix_workflow.py
+              echo "heredoc_delimiter = None" >> fix_workflow.py
+              echo "" >> fix_workflow.py
+              echo "for i, line in enumerate(lines):" >> fix_workflow.py
+              echo "    # Detect heredoc start" >> fix_workflow.py
+              echo "    if '<<' in line and ('FALLBACK_JSON' in line or 'EOF' in line):" >> fix_workflow.py
+              echo "        if 'FALLBACK_JSON' in line:" >> fix_workflow.py
+              echo "            heredoc_delimiter = 'FALLBACK_JSON'" >> fix_workflow.py
+              echo "        else:" >> fix_workflow.py
+              echo "            heredoc_delimiter = 'EOF'" >> fix_workflow.py
+              echo "        in_heredoc = True" >> fix_workflow.py
+              echo "        fixed_lines.append(line)" >> fix_workflow.py
+              echo "    # Detect heredoc end" >> fix_workflow.py
+              echo "    elif in_heredoc and line.strip() == heredoc_delimiter:" >> fix_workflow.py
+              echo "        fixed_lines.append(line)" >> fix_workflow.py
+              echo "        # Add EOF if it was missing" >> fix_workflow.py
+              echo "        if heredoc_delimiter == 'FALLBACK_JSON':" >> fix_workflow.py
+              echo "            fixed_lines.append('EOF')" >> fix_workflow.py
+              echo "        in_heredoc = False" >> fix_workflow.py
+              echo "        heredoc_delimiter = None" >> fix_workflow.py
+              echo "    else:" >> fix_workflow.py
+              echo "        fixed_lines.append(line)" >> fix_workflow.py
+              echo "" >> fix_workflow.py
+              echo "content = '\\n'.join(fixed_lines)" >> fix_workflow.py
+              echo "" >> fix_workflow.py
+              echo "with open(target_file, 'w') as f:" >> fix_workflow.py
+              echo "    f.write(content)" >> fix_workflow.py
               python3 fix_workflow.py
               rm fix_workflow.py
               
@@ -284,6 +282,9 @@ This PR contains automatically generated fixes for workflow failures."
       - name: Enable auto-merge
         run: |
           set -euo pipefail
+          PR="${{ steps.pr.outputs.number }}"
+          echo "Enabling auto-merge for PR #$PR"
+          gh pr merge "$PR" --auto --squash
           PR="${{ steps.pr.outputs.number }}"
           echo "Enabling auto-merge for PR #$PR"
           gh pr merge "$PR" --auto --squash
