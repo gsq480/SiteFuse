@@ -160,8 +160,10 @@ jobs:
           echo "=== Processed Diff Preview ==="
           head -n 10 ai.diff
           
-          # basic validation
-          if ! grep -q '^diff --git ' ai.diff; then
+          # basic validation - accept both git diff format and standard unified diff format
+          if grep -q '^diff --git ' ai.diff || grep -q '^--- ' ai.diff; then
+            echo "✅ Valid unified diff detected"
+          else
             echo "Claude did not return a valid unified diff. Full response:"
             cat ai.diff.raw || echo "ai.diff.raw is empty"
             echo "=== Processed diff was ==="
@@ -246,9 +248,6 @@ jobs:
       - name: Enable auto-merge on green
         run: |
           set -euo pipefail
-          PR="${{ steps.pr.outputs.number }}"
-          # require checks to pass, then auto-merge with squash
-          gh pr merge "$PR" --auto --squash
           PR="${{ steps.pr.outputs.number }}"
           # require checks to pass, then auto-merge with squash
           gh pr merge "$PR" --auto --squash
