@@ -214,12 +214,16 @@ jobs:
               sed -i 's/ 2>\/dev\/null//g' "$TARGET_WORKFLOW"
               
               # Fix 2: Ensure heredoc blocks have proper EOF markers
-              # This is more complex, so let's just ensure basic structure is correct
-              python3 -c """
+              cat > fix_heredoc.py << 'PYTHON_SCRIPT'
 import re
 import sys
+import os
 
-with open('$TARGET_WORKFLOW', 'r') as f:
+target_file = os.environ.get('TARGET_WORKFLOW')
+if not target_file:
+    sys.exit(1)
+
+with open(target_file, 'r') as f:
     content = f.read()
 
 # Fix common heredoc issues
@@ -231,9 +235,11 @@ content = re.sub(
     flags=re.DOTALL
 )
 
-with open('$TARGET_WORKFLOW', 'w') as f:
+with open(target_file, 'w') as f:
     f.write(content)
-"""
+PYTHON_SCRIPT
+              python3 fix_heredoc.py
+              rm fix_heredoc.py
               
               if git diff --quiet "${TARGET_WORKFLOW}.bak" "$TARGET_WORKFLOW"; then
                 echo "No changes applied, patch may not be relevant"
