@@ -219,27 +219,24 @@ jobs:
               sed -i 's/ 2>\/dev\/null//g' "$TARGET_WORKFLOW"
               
               # Fix 2: Ensure heredoc blocks have proper EOF markers
-              cat > fix_heredoc.py << 'EOF'
-import re
-import sys
-import os
-
-target_file = os.environ.get('TARGET_WORKFLOW')
-if not target_file:
-    sys.exit(1)
-
-with open(target_file, 'r') as f:
-    content = f.read()
-
-# Fix common heredoc issues
-# Look for FALLBACK_JSON without proper EOF
-pattern = r'(cat > [^\n]*<<[\'\"]*FALLBACK_JSON[\'\"]*\n)(.*?)(\n\s*FALLBACK_JSON)'
-replacement = r'\1\2\3\nEOF'
-content = re.sub(pattern, replacement, content, flags=re.DOTALL)
-
-with open(target_file, 'w') as f:
-    f.write(content)
-EOF
+              echo "import re" > fix_heredoc.py
+              echo "import sys" >> fix_heredoc.py
+              echo "import os" >> fix_heredoc.py
+              echo "" >> fix_heredoc.py
+              echo "target_file = os.environ.get('TARGET_WORKFLOW')" >> fix_heredoc.py
+              echo "if not target_file:" >> fix_heredoc.py
+              echo "    sys.exit(1)" >> fix_heredoc.py
+              echo "" >> fix_heredoc.py
+              echo "with open(target_file, 'r') as f:" >> fix_heredoc.py
+              echo "    content = f.read()" >> fix_heredoc.py
+              echo "" >> fix_heredoc.py
+              echo "# Fix common heredoc issues" >> fix_heredoc.py
+              echo "pattern = r'(cat > [^\\n]*<<[\\'\\\"]*)FALLBACK_JSON([\\'\\\"]*)\\n)(.*?)(\\n\\s*FALLBACK_JSON)'" >> fix_heredoc.py
+              echo "replacement = r'\\1\\2\\3\\nEOF'" >> fix_heredoc.py
+              echo "content = re.sub(pattern, replacement, content, flags=re.DOTALL)" >> fix_heredoc.py
+              echo "" >> fix_heredoc.py
+              echo "with open(target_file, 'w') as f:" >> fix_heredoc.py
+              echo "    f.write(content)" >> fix_heredoc.py
               python3 fix_heredoc.py
               rm fix_heredoc.py
               
@@ -323,6 +320,9 @@ EOF
       - name: Enable auto-merge on green
         run: |
           set -euo pipefail
+          PR="${{ steps.pr.outputs.number }}"
+          # require checks to pass, then auto-merge with squash
+          gh pr merge "$PR" --auto --squash
           PR="${{ steps.pr.outputs.number }}"
           # require checks to pass, then auto-merge with squash
           gh pr merge "$PR" --auto --squash
