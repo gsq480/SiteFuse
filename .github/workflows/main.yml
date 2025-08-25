@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   propose-fix:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' && secrets.CLAUDE_API_KEY != '' }}
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     runs-on: ubuntu-latest
 
     env:
@@ -230,6 +230,9 @@ jobs:
       - name: Enable auto-merge on green
         run: |
           set -euo pipefail
+          PR="${{ steps.pr.outputs.number }}"
+          # require checks to pass, then auto-merge with squash
+          gh pr merge "$PR" --auto --squash
           PR="${{ steps.pr.outputs.number }}"
           # require checks to pass, then auto-merge with squash
           gh pr merge "$PR" --auto --squash
