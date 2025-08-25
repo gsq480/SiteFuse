@@ -97,7 +97,7 @@ jobs:
 
           curl -sS https://api.anthropic.com/v1/messages \
             -H "x-api-key: $CLAUDE_API_KEY" \
-            -H "anthropic-version": "2023-06-01" \
+            -H "anthropic-version: 2023-06-01" \
             -H "Content-Type: application/json" \
             -d @payload.json \
           | jq -r '.content[0].text' > ai.diff || true
