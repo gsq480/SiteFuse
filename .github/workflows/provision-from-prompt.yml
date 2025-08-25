@@ -151,7 +151,7 @@ jobs:
           
           if [ "$CODE" != "200" ]; then
             echo "[ai1] ❌ API error code $CODE"
-            jq -r '.error.message // "Unknown API error"' ai1-response.json 2>/dev/null || echo "Failed to parse error"
+            jq -r '.error.message // "Unknown API error"' ai1-response.json || echo "Failed to parse error"
             echo "Response preview:"
             head -10 ai1-response.json || true
           fi
@@ -161,10 +161,10 @@ jobs:
             jq -r '.choices[0].message.content' ai1-response.json > website-step1.json
             
             # Validate the JSON
-            if jq empty website-step1.json 2>/dev/null; then
+            if jq empty website-step1.json; then
               echo "[ai1] ✅ Valid JSON generated"
               echo "[ai1] Preview:"
-              jq -r '{name: .name, tagline: .tagline, industry: .industry, sectionsCount: (.customSections | length)}' website-step1.json 2>/dev/null || true
+              jq -r '{name: .name, tagline: .tagline, industry: .industry, sectionsCount: (.customSections | length)}' website-step1.json || true
             else
               echo "[ai1] ❌ Invalid JSON from AI, using fallback"
               cat > website-step1.json <<'FALLBACK_JSON'
@@ -194,6 +194,7 @@ jobs:
                 ]
               }
               FALLBACK_JSON
+EOF
             fi
           else
             echo "[ai1] ❌ No AI content returned, using fallback"
@@ -224,6 +225,7 @@ jobs:
               ]
             }
             FALLBACK_JSON
+EOF
           fi
           
           # Clean up temp files
@@ -276,7 +278,7 @@ jobs:
           
           if jq -e '.choices[0].message.content' ai2-response.json >/dev/null 2>&1; then
             jq -r '.choices[0].message.content' ai2-response.json > website-step2.json
-            if jq empty website-step2.json 2>/dev/null; then
+            if jq empty website-step2.json; then
               echo "[ai2] ✅ enhancement ok"
             else
               echo "[ai2] ❌ invalid JSON, using step1"
@@ -293,12 +295,12 @@ jobs:
           echo "[ai3] technical optimization (simplified to preserve content)"
           
           # For now, just copy the previous step to avoid losing content
-          if [ -f website-step2.json ] && jq empty website-step2.json 2>/dev/null; then
+          if [ -f website-step2.json ] && jq empty website-step2.json; then
             cp website-step2.json website-step3.json
             echo "[ai3] ✅ Preserved content from step 2"
           else
             echo "[ai3] ❌ No valid input, using fallback"
-            cp website-step1.json website-step3.json 2>/dev/null || echo '{}' > website-step3.json
+            cp website-step1.json website-step3.json || echo '{}' > website-step3.json
           fi
 
       - name: AI pass 4 - Image prompts
@@ -388,8 +390,8 @@ jobs:
             fi
             
             # Try to extract any valid content
-            if jq empty "$input_file" 2>/dev/null; then
-              local file_type=$(jq -r 'type' "$input_file" 2>/dev/null || echo "null")
+            if jq empty "$input_file"; then
+              local file_type=$(jq -r 'type' "$input_file" || echo "null")
               
               case "$file_type" in
                 "object")
@@ -406,7 +408,7 @@ jobs:
                     services: (.services // empty),
                     testimonials: (.testimonials // empty),
                     contact: (.contact // empty)
-                  } | with_entries(select(.value != null and .value != ""))' "$input_file" > "$temp_file" 2>/dev/null || echo "{}" > "$temp_file"
+                  } | with_entries(select(.value != null and .value != ""))' "$input_file" > "$temp_file" || echo "{}" > "$temp_file"
                   ;;
                 "array")
                   if jq -e '.[0]' "$input_file" >/dev/null 2>&1; then
@@ -423,7 +425,7 @@ jobs:
                       services: (.services // empty),
                       testimonials: (.testimonials // empty),
                       contact: (.contact // empty)
-                    } | with_entries(select(.value != null and .value != ""))' "$input_file" > "$temp_file" 2>/dev/null || echo "{}" > "$temp_file"
+                    } | with_entries(select(.value != null and .value != ""))' "$input_file" > "$temp_file" || echo "{}" > "$temp_file"
                   fi
                   ;;
               esac
@@ -440,7 +442,7 @@ jobs:
           extract_valid_content "website-step3.json" > step3-extracted.json
           
           # Also try to extract image prompts
-          if [ -f "image-prompts.json" ] && jq empty "image-prompts.json" 2>/dev/null; then
+          if [ -f "image-prompts.json" ] && jq empty "image-prompts.json"; then
             if jq -e '.images' "image-prompts.json" >/dev/null 2>&1; then
               jq '.images // []' "image-prompts.json" > extracted-images.json
             elif jq -e '. | type == "array"' "image-prompts.json" >/dev/null 2>&1; then
@@ -495,7 +497,7 @@ jobs:
           
           # Try to find brand color in multiple locations
           for path in '.colorPalette.primary' '.colorPalette.brand' '.colors.primary' '.primary' '.colorPalette.secondary'; do
-            TEMP_COLOR=$(jq -r "$path // empty" website.json 2>/dev/null || echo "")
+            TEMP_COLOR=$(jq -r "$path // empty" website.json || echo "")
             if [ -n "$TEMP_COLOR" ] && [ "$TEMP_COLOR" != "null" ] && [ "$TEMP_COLOR" != "empty" ]; then
               BRAND="$TEMP_COLOR"
               break
@@ -504,7 +506,7 @@ jobs:
           
           # Try to find accent color
           for path in '.colorPalette.accent' '.colorPalette.secondary' '.colors.accent' '.accent' '.colorPalette.primary'; do
-            TEMP_COLOR=$(jq -r "$path // empty" website.json 2>/dev/null || echo "")
+            TEMP_COLOR=$(jq -r "$path // empty" website.json || echo "")
             if [ -n "$TEMP_COLOR" ] && [ "$TEMP_COLOR" != "null" ] && [ "$TEMP_COLOR" != "empty" ] && [ "$TEMP_COLOR" != "$BRAND" ]; then
               ACCENT="$TEMP_COLOR"
               break
@@ -515,16 +517,16 @@ jobs:
           ACCENT=$(normalize_color "$ACCENT")
           
           # Extract other variables with robust fallbacks
-          SLUG=$(jq -r '.slug // (.name | ascii_downcase | gsub("[^a-z0-9]"; "-") | gsub("-+"; "-") | gsub("^-|-$"; "")) // "new-site"' website.json 2>/dev/null || echo "new-site")
+          SLUG=$(jq -r '.slug // (.name | ascii_downcase | gsub("[^a-z0-9]"; "-") | gsub("-+"; "-") | gsub("^-|-$"; "")) // "new-site"' website.json || echo "new-site")
           [ -n "$SLUG" ] && [ "$SLUG" != "null" ] || SLUG="new-site"
           
-          NAME=$(jq -r '.name // "New Site"' website.json 2>/dev/null || echo "New Site")
+          NAME=$(jq -r '.name // "New Site"' website.json || echo "New Site")
           [ -n "$NAME" ] && [ "$NAME" != "null" ] || NAME="New Site"
           
-          TAGLINE=$(jq -r '.tagline // "Welcome to our website"' website.json 2>/dev/null || echo "Welcome to our website")
+          TAGLINE=$(jq -r '.tagline // "Welcome to our website"' website.json || echo "Welcome to our website")
           [ -n "$TAGLINE" ] && [ "$TAGLINE" != "null" ] || TAGLINE="Welcome to our website"
           
-          HERO_IMG=$(jq -r '.heroSection.heroImage // empty' website.json 2>/dev/null || echo "")
+          HERO_IMG=$(jq -r '.heroSection.heroImage // empty' website.json || echo "")
           if [ -z "$HERO_IMG" ] || [ "$HERO_IMG" = "null" ]; then
             HERO_IMG="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
           fi
@@ -567,7 +569,7 @@ jobs:
           
           # Copy generated images to assets directory
           if [ -d tmp_images ]; then
-            cp -f tmp_images/*.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/" 2>/dev/null || true
+            cp -f tmp_images/*.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/" || true
           fi
 
       - name: Scaffold enhanced theme
@@ -586,7 +588,7 @@ jobs:
           mkdir -p "$THEME_DIR/assets/css" "$THEME_DIR/assets/js" "$THEME_DIR/assets/img" "$THEME_DIR/dist"
           
           # Copy hero image
-          cp -f "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" "$THEME_DIR/assets/img/hero.jpg" 2>/dev/null || true
+          cp -f "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" "$THEME_DIR/assets/img/hero.jpg" || true
           
           cat > "$THEME_DIR/style.css" <<EOF
           /*
@@ -988,11 +990,11 @@ jobs:
               wp option update page_on_front \$HOME_ID --allow-root
             fi
             
-            wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --allow-root 2>/dev/null || true
-            wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --allow-root 2>/dev/null || true  
-            wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --allow-root 2>/dev/null || true
+            wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --allow-root || true
+            wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --allow-root || true  
+            wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --allow-root || true
             
-            wp menu delete 'Primary Menu' --allow-root 2>/dev/null || true
+            wp menu delete 'Primary Menu' --allow-root || true
             wp menu create 'Primary Menu' --allow-root
             
             HOME_ID=\$(wp post list --post_type=page --name=home --field=ID --allow-root | head -1)
