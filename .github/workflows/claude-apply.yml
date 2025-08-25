@@ -280,6 +280,5 @@ This PR contains automatically generated fixes for workflow failures."
           PR="${{ steps.pr.outputs.number }}"
           echo "Enabling auto-merge for PR #$PR"
           gh pr merge "$PR" --auto --squash
-          PR="${{ steps.pr.outputs.number }}"
           echo "Enabling auto-merge for PR #$PR"
           gh pr merge "$PR" --auto --squash
