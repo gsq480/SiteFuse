@@ -77,10 +77,17 @@ jobs:
           WORKFLOW_JSON=$(jq -Rs . < .ai-fix/$(basename "$TARGET_WORKFLOW"))
           ERRORS_JSON=$(jq -Rs . < .ai-fix/errors.txt)
           SAFE_JSON=$(jq -Rs . < .ai-fix/safelist.txt)
+          
+          # Debug: Check if we have the required data
+          echo "=== Debug Info ==="
+          echo "CLAUDE_API_KEY present: $([ -n "$CLAUDE_API_KEY" ] && echo "yes" || echo "no")"
+          echo "Workflow JSON length: $(echo "$WORKFLOW_JSON" | wc -c)"
+          echo "Errors JSON length: $(echo "$ERRORS_JSON" | wc -c)"
+          
           cat > payload.json <<EOF
           {
-            "model": "claude-3-sonnet-20240229",
-            "max_tokens": 2000,
+            "model": "claude-3-5-sonnet-20241022",
+            "max_tokens": 4000,
             "messages": [
               {
                 "role": "system",
@@ -88,23 +95,48 @@ jobs:
               },
               {
                 "role": "user",
-                "content": "Repository: ${{ github.repository }}\\nCommit: ${{ github.event.workflow_run.head_sha }}\\nSafelist globs:\\n$SAFE_JSON\\n\\nFailing workflow file content:\\n$WORKFLOW_JSON\\n\\nTail of error logs:\\n$ERRORS_JSON\\n\\nReturn ONLY a valid unified diff (git patch) that fixes the failure with minimal changes."
+                "content": "Repository: ${{ github.repository }}\\nCommit: ${{ github.event.workflow_run.head_sha }}\\nSafelist globs:\\n${SAFE_JSON}\\n\\nFailing workflow file content:\\n${WORKFLOW_JSON}\\n\\nTail of error logs:\\n${ERRORS_JSON}\\n\\nReturn ONLY a valid unified diff (git patch) that fixes the failure with minimal changes."
               }
             ]
           }
           EOF
-          curl -sS https://api.anthropic.com/v1/messages \
+          
+          # Make API call with better error handling
+          HTTP_CODE=$(curl -w "%{http_code}" -sS https://api.anthropic.com/v1/messages \
             -H "x-api-key: $CLAUDE_API_KEY" \
             -H "anthropic-version: 2023-06-01" \
             -H "Content-Type: application/json" \
             -d @payload.json \
-          | jq -r '.content[0].text' > ai.diff || true
-          # basic validation
-          if ! grep -q '^diff --git ' ai.diff; then
-            echo "Claude did not return a valid unified diff. Exiting."
-            cat ai.diff || true
+            -o response.json)
+          
+          echo "API HTTP Code: $HTTP_CODE"
+          
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "=== API Error Response ==="
+            cat response.json || echo "No response body"
             exit 1
           fi
+          
+          # Extract the response with better error handling
+          if ! jq -e '.content[0].text' response.json > /dev/null; then
+            echo "=== Unexpected API Response Structure ==="
+            cat response.json
+            exit 1
+          fi
+          
+          jq -r '.content[0].text' response.json > ai.diff
+          
+          # Debug: Show what Claude returned
+          echo "=== Claude Response Preview ==="
+          head -n 20 ai.diff
+          
+          # basic validation
+          if ! grep -q '^diff --git ' ai.diff; then
+            echo "Claude did not return a valid unified diff. Full response:"
+            cat ai.diff || echo "ai.diff is empty"
+            exit 1
+          fi
+          
           # sanity guard: limit size to ~50KB
           if [ "$(wc -c < ai.diff)" -gt 51200 ]; then
             echo "Proposed diff too large, aborting."
