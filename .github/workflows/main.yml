@@ -32,6 +32,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure git identity
+        run: |
+          git config --global user.email "claude-auto-fix@anthropic.com"
+          git config --global user.name "Claude Auto-Fix Bot"
+
       - name: Install gh CLI
         run: |
           type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
