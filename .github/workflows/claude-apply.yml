@@ -111,7 +111,7 @@ jobs:
               sed -i 's/ 2>\/dev\/null//g' "$TARGET_WORKFLOW"
               
               # Fix 2: Basic JSON and heredoc fixes
-              python3 << 'EOF'
+              cat > fix_workflow.py << 'SCRIPT_END'
 import re
 import os
 
@@ -153,7 +153,9 @@ content = '\n'.join(fixed_lines)
 
 with open(target_file, 'w') as f:
     f.write(content)
-EOF
+SCRIPT_END
+              python3 fix_workflow.py
+              rm fix_workflow.py
               
               if git diff --quiet "${TARGET_WORKFLOW}.bak" "$TARGET_WORKFLOW"; then
                 echo "No changes applied, restoring original"
