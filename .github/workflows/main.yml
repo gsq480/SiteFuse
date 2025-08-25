@@ -17,9 +17,9 @@ jobs:
 
     env:
       CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.PAT_TOKEN }}
       TARGET_WORKFLOW: .github/workflows/provision-from-prompt.yml
-      # files Claude is allowed to change
+      # files Claude is allowed to change (exclude this auto-fix workflow)
       SAFE_GLOBS: |
         .github/workflows/provision-from-prompt.yml
         website*.json
@@ -211,6 +211,12 @@ jobs:
             # Check if this is a simple content fix we can apply manually
             if grep -q "FALLBACK_JSON" ai.diff && [ -f "$TARGET_WORKFLOW" ]; then
               echo "Detected FALLBACK_JSON fix, applying manually..."
+              
+              # Ensure we only modify the target workflow, not this auto-fix workflow
+              if [[ "$TARGET_WORKFLOW" == *"main.yml"* ]]; then
+                echo "Cannot modify the auto-fix workflow itself for security reasons"
+                exit 1
+              fi
               
               # Create a backup
               cp "$TARGET_WORKFLOW" "${TARGET_WORKFLOW}.bak"
