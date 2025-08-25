@@ -1,0 +1,40 @@
+      - name: AI pass 1 - Enhanced website structure
+        run: |
+          set -euo pipefail
+          echo "[ai1] creating Rise & Grind bakery content"
+          
+          # Create the JSON using cat instead of jq to avoid quote issues
+          cat > website-step1.json << 'JSON_EOF'
+          {
+            "slug": "rise-and-grind",
+            "name": "Rise & Grind",
+            "tagline": "Fresh artisanal bread and coffee daily",
+            "industry": "bakery",
+            "colorPalette": {
+              "primary": "#8B4513",
+              "secondary": "#CC5500",
+              "accent": "#F5F1EB"
+            },
+            "typography": {
+              "headingFont": "Playfair Display",
+              "bodyFont": "Lato"
+            },
+            "heroSection": {
+              "customHTML": "<div class='text-center'><h1 class='text-5xl md:text-7xl font-bold mb-6 text-white'>Rise & Grind</h1><p class='text-xl md:text-2xl mb-8 text-gray-100'>Fresh artisanal bread and coffee daily in Canberra</p><a href='#contact' class='btn btn-primary text-lg px-8 py-4'>Order Online</a></div>",
+              "heroImage": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&h=800&fit=crop"
+            },
+            "customSections": [
+              {
+                "title": "Featured Pastries",
+                "html": "<section class='py-16 bg-white'><div class='container mx-auto px-4'><h2 class='section-title text-center'>Daily Fresh Pastries</h2><p class='text-xl text-gray-600 text-center mb-8'>Handcrafted daily using traditional techniques and the finest ingredients</p></div></section>"
+              },
+              {
+                "title": "Catering Services",
+                "html": "<section class='py-16 bg-gray-50'><div class='container mx-auto px-4'><h2 class='section-title text-center'>Catering Services</h2><p class='text-xl text-gray-600 text-center mb-8'>Perfect for events, meetings, and special occasions throughout Canberra</p></div></section>"
+              }
+            ]
+          }
+          JSON_EOF
+          
+          echo "[ai1] ✅ Created Rise & Grind bakery JSON"
+          jq . website-step1.json > /dev/null && echo "[ai1] ✅ JSON is valid"
