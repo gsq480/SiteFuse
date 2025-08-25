@@ -195,6 +195,7 @@ jobs:
               }
               FALLBACK_JSON
 EOF
+EOF
             fi
           else
             echo "[ai1] ❌ No AI content returned, using fallback"
@@ -225,6 +226,7 @@ EOF
               ]
             }
             FALLBACK_JSON
+EOF
 EOF
           fi
           
