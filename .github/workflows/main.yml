@@ -214,30 +214,30 @@ jobs:
               sed -i 's/ 2>\/dev\/null//g' "$TARGET_WORKFLOW"
               
               # Fix 2: Ensure heredoc blocks have proper EOF markers
-              cat > fix_heredoc.py << 'PYTHON_SCRIPT'
-import re
-import sys
-import os
-
-target_file = os.environ.get('TARGET_WORKFLOW')
-if not target_file:
-    sys.exit(1)
-
-with open(target_file, 'r') as f:
-    content = f.read()
-
-# Fix common heredoc issues
-# Look for FALLBACK_JSON without proper EOF
-content = re.sub(
-    r'(cat > [^\n]*<<[\'\"]*FALLBACK_JSON[\'\"]*\n)(.*?)(\n\s*FALLBACK_JSON)',
-    r'\1\2\3\nEOF',
-    content,
-    flags=re.DOTALL
-)
-
-with open(target_file, 'w') as f:
-    f.write(content)
-PYTHON_SCRIPT
+              cat > fix_heredoc.py << 'EOF'
+          import re
+          import sys
+          import os
+          
+          target_file = os.environ.get('TARGET_WORKFLOW')
+          if not target_file:
+              sys.exit(1)
+          
+          with open(target_file, 'r') as f:
+              content = f.read()
+          
+          # Fix common heredoc issues
+          # Look for FALLBACK_JSON without proper EOF
+          content = re.sub(
+              r'(cat > [^\\n]*<<[\\'\\\"]*FALLBACK_JSON[\\'\\\"]*\\n)(.*?)(\\n\\s*FALLBACK_JSON)',
+              r'\\1\\2\\3\\nEOF',
+              content,
+              flags=re.DOTALL
+          )
+          
+          with open(target_file, 'w') as f:
+              f.write(content)
+          EOF
               python3 fix_heredoc.py
               rm fix_heredoc.py
               
@@ -321,6 +321,9 @@ PYTHON_SCRIPT
       - name: Enable auto-merge on green
         run: |
           set -euo pipefail
+          PR="${{ steps.pr.outputs.number }}"
+          # require checks to pass, then auto-merge with squash
+          gh pr merge "$PR" --auto --squash
           PR="${{ steps.pr.outputs.number }}"
           # require checks to pass, then auto-merge with squash
           gh pr merge "$PR" --auto --squash
