@@ -24,14 +24,14 @@ permissions:
   contents: write
   pull-requests: write
   actions: write
-  workflows: write   # ← add this so the job token can touch workflow resources if needed
+  workflows: write
 
 jobs:
   apply-fix:
     runs-on: ubuntu-latest
 
     env:
-      GH_TOKEN: ${{ secrets.PAT_TOKEN }}   # gh CLI will use your PAT
+      GH_TOKEN: ${{ secrets.PAT_TOKEN }}   # gh CLI will use this
       MAX_ATTEMPTS: "5"
 
     steps:
@@ -39,6 +39,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false   # ensure we do not use GITHUB_TOKEN for pushes
 
       - name: Configure git identity
         run: |
@@ -51,31 +52,41 @@ jobs:
           name: claude-analysis-${{ inputs.trigger_run_id }}
           path: analysis-results/
           run-id: ${{ inputs.analysis_run_id }}
-          github-token: ${{ secrets.PAT_TOKEN }}   # ← use PAT so you can read cross-run artifacts reliably
+          github-token: ${{ secrets.PAT_TOKEN }}
 
       - name: Verify analysis results
         id: verify
         run: |
           set -euo pipefail
+
           if [ ! -f "analysis-results/fix.patch" ]; then
             echo "No fix patch found in analysis results"
             exit 1
           fi
+
           if [ ! -f "analysis-results/metadata.json" ]; then
             echo "No metadata found in analysis results"
             exit 1
           fi
+
           echo "=== Analysis Metadata ==="
-          cat analysis-results/metadata.json
+          cat analysis-results/metadata.json || true
+
           echo "=== Fix Patch Preview ==="
-          head -n 20 analysis-results/fix.patch
+          head -n 20 analysis-results/fix.patch || true
+
           TARGET_WORKFLOW=$(jq -r '.target_workflow' analysis-results/metadata.json)
-          echo "TARGET_WORKFLOW=$TARGET_WORKFLOW" >> $GITHUB_OUTPUT
+          if [ -z "$TARGET_WORKFLOW" ] || [ "$TARGET_WORKFLOW" = "null" ]; then
+            TARGET_WORKFLOW=".github/workflows/provision-from-prompt.yml"
+          fi
+          echo "TARGET_WORKFLOW=$TARGET_WORKFLOW" >> "$GITHUB_OUTPUT"
 
       - name: Create fix branch and apply patch
         id: patch
+        shell: bash
         run: |
           set -euo pipefail
+
           BASE_BRANCH="${{ inputs.target_branch }}"
           BRANCH="ai-fix/${BASE_BRANCH}"
           TARGET_WORKFLOW="${{ steps.verify.outputs.TARGET_WORKFLOW }}"
@@ -91,22 +102,34 @@ jobs:
             echo "Patch applied successfully with 3-way merge"
           elif patch -p1 --dry-run < analysis-results/fix.patch >/dev/null 2>&1 && patch -p1 < analysis-results/fix.patch; then
             echo "Patch applied successfully with patch command"
-            git add .
+            git add -A
           else
             echo "Standard patch application failed, attempting manual fixes..."
+
             if [ -f "$TARGET_WORKFLOW" ]; then
               cp "$TARGET_WORKFLOW" "${TARGET_WORKFLOW}.bak"
+
+              # Remove stderr redirections that can break YAML or commands inside Actions
               sed -i 's/ 2>\/dev\/null//g' "$TARGET_WORKFLOW"
-              python3 - <<'PY'
+
+              # Use a robust Python fixer written via heredoc into a file
+              cat > fix_workflow.py <<'PY'
 import os
+
 target_file = os.environ.get('TARGET_WORKFLOW', '.github/workflows/provision-from-prompt.yml')
-with open(target_file, 'r') as f:
+
+with open(target_file, 'r', encoding='utf-8') as f:
     content = f.read()
+
+# Remove stray stderr redirections again
 content = content.replace(' 2>/dev/null', '')
+
+# Basic heredoc closing normalisation for lines that start a heredoc with FALLBACK_JSON
 lines = content.split('\n')
 fixed_lines = []
 in_heredoc = False
 heredoc_delimiter = None
+
 for line in lines:
     if '<<' in line and ('FALLBACK_JSON' in line or 'EOF' in line):
         heredoc_delimiter = 'FALLBACK_JSON' if 'FALLBACK_JSON' in line else 'EOF'
@@ -120,10 +143,16 @@ for line in lines:
         heredoc_delimiter = None
     else:
         fixed_lines.append(line)
+
 content = '\n'.join(fixed_lines)
-with open(target_file, 'w') as f:
+
+with open(target_file, 'w', encoding='utf-8') as f:
     f.write(content)
 PY
+
+              TARGET_WORKFLOW="$TARGET_WORKFLOW" python3 fix_workflow.py
+              rm -f fix_workflow.py
+
               if git diff --quiet "${TARGET_WORKFLOW}.bak" "$TARGET_WORKFLOW"; then
                 echo "No changes applied, restoring original"
                 mv "${TARGET_WORKFLOW}.bak" "$TARGET_WORKFLOW"
@@ -132,7 +161,7 @@ PY
               else
                 echo "Manual fixes applied successfully"
                 git add "$TARGET_WORKFLOW"
-                rm "${TARGET_WORKFLOW}.bak"
+                rm -f "${TARGET_WORKFLOW}.bak"
               fi
             else
               echo "Target workflow file not found: $TARGET_WORKFLOW"
@@ -140,23 +169,26 @@ PY
             fi
           fi
 
+          # Show staged changes
           CHANGED_FILES=$(git diff --cached --name-only)
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
+          # Safelist to guard what can be changed by this job
           SAFE_GLOBS="
           .github/workflows/provision-from-prompt.yml
           website*.json
           image-prompts.json
           child-themes/**/templates/*.html
           "
+
           BAD=0
           while IFS= read -r f; do
             [ -z "$f" ] && continue
             ok=0
             while IFS= read -r g; do
               [ -z "$g" ] && continue
-              if python3 -c "import fnmatch, sys;print('OK' if fnmatch.fnmatch(sys.argv[1], sys.argv[2]) else '')" "$f" "$g" | grep -q OK; then
+              if python3 -c "import fnmatch, sys; print('OK' if fnmatch.fnmatch(sys.argv[1], sys.argv[2]) else '')" "$f" "$g" | grep -q OK; then
                 ok=1
                 break
               fi
@@ -172,12 +204,14 @@ PY
             exit 1
           fi
 
+          # Attempts counter
           ATTEMPTS_FILE=".ai-fix-attempts"
           if git show HEAD:"$ATTEMPTS_FILE" >/dev/null 2>&1; then
             OLD=$(git show HEAD:"$ATTEMPTS_FILE" | tr -d '\n' || echo 0)
           else
             OLD=0
           fi
+
           NEW=$((OLD+1))
           echo "$NEW" > "$ATTEMPTS_FILE"
           git add "$ATTEMPTS_FILE"
@@ -187,21 +221,25 @@ PY
             exit 1
           fi
 
+          # Commit
           git commit -m "AI auto-fix attempt $NEW by Claude" \
             -m "Applied fix from analysis run ${{ inputs.analysis_run_id }}" \
             -m "Original failure: ${{ inputs.trigger_run_id }}" \
             -m "Target: $TARGET_WORKFLOW"
 
-          # ← push using PAT-authenticated remote to avoid the GitHub App restriction
+          # Push using PAT-authenticated remote so workflow edits are allowed
           git remote set-url origin "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git"
           git push -u origin "$BRANCH"
 
-          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
 
       - name: Create or update pull request
         id: pr
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           set -euo pipefail
+
           BRANCH="${{ steps.patch.outputs.branch }}"
           BASE_BRANCH="${{ inputs.target_branch }}"
           TITLE="AI auto-fix for workflow failure"
@@ -220,13 +258,13 @@ PY
             gh pr edit "$PR" --body "$PR_BODY"
           fi
 
-          echo "number=$PR" >> $GITHUB_OUTPUT
-          echo "Created/updated PR #$PR"
+          echo "number=$PR" >> "$GITHUB_OUTPUT"
+          echo "Created or updated PR #$PR"
 
       - name: Enable auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           set -euo pipefail
           PR="${{ steps.pr.outputs.number }}"
-          gh pr merge "$PR" --auto --squash
-          echo "Enabling auto-merge for PR #$PR"
           gh pr merge "$PR" --auto --squash
