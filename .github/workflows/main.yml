@@ -95,7 +95,7 @@ jobs:
           
           # Use jq to properly construct the JSON payload
           jq -n \
-            --arg model "claude-3-5-sonnet-20240620" \
+            --arg model "claude-sonnet-4-20250514" \
             --argjson max_tokens 4000 \
             --arg system "You are an expert CI engineer. You will output ONLY a unified diff patch bounded to a safelist of files. Keep changes minimal and syntactically correct. If logs show JSON being written as strings, decode them. Ensure curl blocks are correct. Ensure jq filters are type-safe. Do not touch files outside the safelist." \
             --arg user_content "$USER_CONTENT" \
