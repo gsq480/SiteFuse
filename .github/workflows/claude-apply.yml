@@ -60,12 +60,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           if [ ! -f "analysis-results/fix.patch" ]; then
             echo "No fix patch found in analysis results"
             exit 1
           fi
-
           if [ ! -f "analysis-results/metadata.json" ]; then
             echo "No metadata found in analysis results"
             exit 1
@@ -73,7 +71,6 @@ jobs:
 
           echo "=== Analysis Metadata ==="
           cat analysis-results/metadata.json || true
-
           echo "=== Fix Patch Preview ==="
           head -n 20 analysis-results/fix.patch || true
 
@@ -88,7 +85,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           BASE_BRANCH="${{ inputs.target_branch }}"
           BRANCH="ai-fix/${BASE_BRANCH}"
           TARGET_WORKFLOW="${{ steps.verify.outputs.TARGET_WORKFLOW }}"
@@ -107,7 +103,6 @@ jobs:
             git add -A
           else
             echo "Standard patch application failed, attempting manual fixes..."
-
             if [ -f "$TARGET_WORKFLOW" ]; then
               cp "$TARGET_WORKFLOW" "${TARGET_WORKFLOW}.bak"
 
@@ -173,7 +168,6 @@ jobs:
           image-prompts.json
           child-themes/**/templates/*.html
           "
-
           BAD=0
           while IFS= read -r f; do
             [ -z "$f" ] && continue
@@ -190,20 +184,18 @@ jobs:
               BAD=1
             fi
           done <<< "$CHANGED_FILES"
-
           if [ "$BAD" -eq 1 ]; then
             echo "Changes violated safelist. Aborting."
             exit 1
           fi
 
-          # Attempts counter
+          # Attempts counter stored on the branch
           ATTEMPTS_FILE=".ai-fix-attempts"
           if git show HEAD:"$ATTEMPTS_FILE" >/dev/null 2>&1; then
             OLD=$(git show HEAD:"$ATTEMPTS_FILE" | tr -d '\n' || echo 0)
           else
             OLD=0
           fi
-
           NEW=$((OLD+1))
           echo "$NEW" > "$ATTEMPTS_FILE"
           git add "$ATTEMPTS_FILE"
@@ -224,6 +216,7 @@ jobs:
           git push -u origin "$BRANCH"
 
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          echo "attempts=$NEW"  >> "$GITHUB_OUTPUT"
 
       - name: Create or update pull request
         id: pr
@@ -232,7 +225,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           BRANCH="${{ steps.patch.outputs.branch }}"
           BASE_BRANCH="${{ inputs.target_branch }}"
           TITLE="AI auto-fix for workflow failure"
@@ -262,6 +254,24 @@ jobs:
           set -euo pipefail
           PR="${{ steps.pr.outputs.number }}"
           gh pr merge "$PR" --auto --squash
+
+      # Re-run the target workflow on the fix branch so Stage 1 can analyse again if it still fails
+      - name: Re-run target workflow on fix branch
+        if: ${{ fromJSON(steps.patch.outputs.attempts) < fromJSON(env.MAX_ATTEMPTS) }}
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        shell: bash
+        run: |
           set -euo pipefail
-          PR="${{ steps.pr.outputs.number }}"
-          gh pr merge "$PR" --auto --squash
+          BRANCH="${{ steps.patch.outputs.branch }}"
+          echo "[rerun] triggering target workflow on ref $BRANCH"
+
+          # If you want to reuse real inputs, fetch them from the failed run API.
+          # For now, provide safe defaults that satisfy required inputs.
+          gh workflow run ".github/workflows/provision-from-prompt.yml" \
+            --ref "$BRANCH" \
+            -f prompt="Automated re-run after AI fix" \
+            -f industry="auto-detect" \
+            -f generate_images=true
+
+          echo "Dispatched target workflow on $BRANCH. If it fails again, Stage 1 will fire, then Stage 2, up to ${MAX_ATTEMPTS} attempts."
