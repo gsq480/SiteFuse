@@ -24,7 +24,6 @@ permissions:
   contents: write
   pull-requests: write
   actions: write
-  workflows: write
 
 jobs:
   apply-fix:
@@ -260,6 +259,9 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         shell: bash
         run: |
+          set -euo pipefail
+          PR="${{ steps.pr.outputs.number }}"
+          gh pr merge "$PR" --auto --squash
           set -euo pipefail
           PR="${{ steps.pr.outputs.number }}"
           gh pr merge "$PR" --auto --squash
