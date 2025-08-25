@@ -1,0 +1,287 @@
+name: Claude Auto-Apply (Stage 2)
+
+on:
+  workflow_dispatch:
+    inputs:
+      analysis_run_id:
+        description: 'Run ID of the analysis workflow'
+        required: true
+        type: string
+      trigger_run_id:
+        description: 'Original failing run ID'
+        required: true
+        type: string
+      target_branch:
+        description: 'Branch that had the failure'
+        required: true
+        type: string
+      target_sha:
+        description: 'SHA of the failing commit'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+jobs:
+  apply-fix:
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+      MAX_ATTEMPTS: "5"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config --global user.email "claude-auto-fix@anthropic.com"
+          git config --global user.name "Claude Auto-Fix Bot"
+
+      - name: Download analysis results
+        uses: actions/download-artifact@v4
+        with:
+          name: claude-analysis-${{ inputs.trigger_run_id }}
+          path: analysis-results/
+          run-id: ${{ inputs.analysis_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify analysis results
+        id: verify
+        run: |
+          set -euo pipefail
+          
+          if [ ! -f "analysis-results/fix.patch" ]; then
+            echo "No fix patch found in analysis results"
+            exit 1
+          fi
+          
+          if [ ! -f "analysis-results/metadata.json" ]; then
+            echo "No metadata found in analysis results"
+            exit 1
+          fi
+          
+          echo "=== Analysis Metadata ==="
+          cat analysis-results/metadata.json
+          
+          echo "=== Fix Patch Preview ==="
+          head -n 20 analysis-results/fix.patch
+          
+          # Extract target workflow from metadata
+          TARGET_WORKFLOW=$(jq -r '.target_workflow' analysis-results/metadata.json)
+          echo "TARGET_WORKFLOW=$TARGET_WORKFLOW" >> $GITHUB_OUTPUT
+
+      - name: Create fix branch and apply patch
+        id: patch
+        run: |
+          set -euo pipefail
+          BASE_BRANCH="${{ inputs.target_branch }}"
+          BRANCH="ai-fix/${BASE_BRANCH}"
+          TARGET_WORKFLOW="${{ steps.verify.outputs.TARGET_WORKFLOW }}"
+          
+          # Checkout the failing commit
+          git fetch --no-tags origin "${{ inputs.target_sha }}"
+          git checkout -B "$BRANCH" "${{ inputs.target_sha }}"
+          
+          echo "Attempting to apply Claude's fix..."
+          
+          # Try to apply patch with different strategies
+          if git apply --index analysis-results/fix.patch 2>/dev/null; then
+            echo "Patch applied successfully with direct method"
+          elif git apply --3way --index analysis-results/fix.patch 2>/dev/null; then
+            echo "Patch applied successfully with 3-way merge"
+          elif patch -p1 --dry-run < analysis-results/fix.patch >/dev/null 2>&1 && patch -p1 < analysis-results/fix.patch; then
+            echo "Patch applied successfully with patch command"
+            git add .
+          else
+            echo "Standard patch application failed, attempting manual fixes..."
+            
+            # Apply common fixes that Claude typically suggests
+            if [ -f "$TARGET_WORKFLOW" ]; then
+              # Create a backup
+              cp "$TARGET_WORKFLOW" "${TARGET_WORKFLOW}.bak"
+              
+              # Fix 1: Remove problematic 2>/dev/null redirections
+              sed -i 's/ 2>\/dev\/null//g' "$TARGET_WORKFLOW"
+              
+              # Fix 2: Basic JSON and heredoc fixes
+              python3 << 'EOF'
+import re
+import os
+
+target_file = os.environ.get('TARGET_WORKFLOW', '.github/workflows/provision-from-prompt.yml')
+
+with open(target_file, 'r') as f:
+    content = f.read()
+
+# Remove extra 2>/dev/null patterns
+content = content.replace(' 2>/dev/null', '')
+
+# Basic heredoc EOF fixes
+lines = content.split('\n')
+fixed_lines = []
+in_heredoc = False
+heredoc_delimiter = None
+
+for i, line in enumerate(lines):
+    # Detect heredoc start
+    if '<<' in line and ('FALLBACK_JSON' in line or 'EOF' in line):
+        if 'FALLBACK_JSON' in line:
+            heredoc_delimiter = 'FALLBACK_JSON'
+        else:
+            heredoc_delimiter = 'EOF'
+        in_heredoc = True
+        fixed_lines.append(line)
+    # Detect heredoc end
+    elif in_heredoc and line.strip() == heredoc_delimiter:
+        fixed_lines.append(line)
+        # Add EOF if it was missing
+        if heredoc_delimiter == 'FALLBACK_JSON':
+            fixed_lines.append('EOF')
+        in_heredoc = False
+        heredoc_delimiter = None
+    else:
+        fixed_lines.append(line)
+
+content = '\n'.join(fixed_lines)
+
+with open(target_file, 'w') as f:
+    f.write(content)
+EOF
+              
+              if git diff --quiet "${TARGET_WORKFLOW}.bak" "$TARGET_WORKFLOW"; then
+                echo "No changes applied, restoring original"
+                mv "${TARGET_WORKFLOW}.bak" "$TARGET_WORKFLOW"
+                echo "Unable to apply any fixes"
+                exit 1
+              else
+                echo "Manual fixes applied successfully"
+                git add "$TARGET_WORKFLOW"
+                rm "${TARGET_WORKFLOW}.bak"
+              fi
+            else
+              echo "Target workflow file not found: $TARGET_WORKFLOW"
+              exit 1
+            fi
+          fi
+
+          # Check what files were changed
+          CHANGED_FILES=$(git diff --cached --name-only)
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          
+          # Validate that only allowed files were changed
+          SAFE_GLOBS="
+          .github/workflows/provision-from-prompt.yml
+          website*.json
+          image-prompts.json
+          child-themes/**/templates/*.html
+          "
+          
+          BAD=0
+          while IFS= read -r f; do
+            if [ -z "$f" ]; then continue; fi
+            ok=0
+            while IFS= read -r g; do
+              if [ -z "$g" ]; then continue; fi
+              if python3 -c "
+import fnmatch, sys
+f = sys.argv[1]
+g = sys.argv[2]
+print('OK' if fnmatch.fnmatch(f, g) else '')
+" "$f" "$g" | grep -q OK; then 
+                ok=1
+                break
+              fi
+            done <<< "$SAFE_GLOBS"
+            if [ "$ok" -ne 1 ]; then 
+              echo "File outside safelist: $f"
+              BAD=1
+            fi
+          done <<< "$CHANGED_FILES"
+          
+          if [ "$BAD" -eq 1 ]; then
+            echo "Changes violated safelist. Aborting."
+            exit 1
+          fi
+
+          # Attempt counter
+          ATTEMPTS_FILE=".ai-fix-attempts"
+          if git show HEAD:"$ATTEMPTS_FILE" >/dev/null 2>&1; then
+            OLD=$(git show HEAD:"$ATTEMPTS_FILE" | tr -d '\n' || echo 0)
+          else
+            OLD=0
+          fi
+          NEW=$((OLD+1))
+          echo "$NEW" > "$ATTEMPTS_FILE"
+          git add "$ATTEMPTS_FILE"
+
+          if [ "$NEW" -gt "$MAX_ATTEMPTS" ]; then
+            echo "Max attempts ($MAX_ATTEMPTS) reached on this branch. Exiting."
+            exit 1
+          fi
+
+          # Commit the changes
+          git commit -m "AI auto-fix attempt $NEW by Claude
+
+Applied fix from analysis run ${{ inputs.analysis_run_id }}
+Original failure: ${{ inputs.trigger_run_id }}
+Target: $TARGET_WORKFLOW"
+
+          # Push the branch
+          git push -u origin "$BRANCH"
+
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Create or update pull request
+        id: pr
+        run: |
+          set -euo pipefail
+          BRANCH="${{ steps.patch.outputs.branch }}"
+          BASE_BRANCH="${{ inputs.target_branch }}"
+          TITLE="AI auto-fix for workflow failure"
+          
+          # Create PR body from analysis summary
+          PR_BODY=""
+          if [ -f "analysis-results/summary.md" ]; then
+            PR_BODY=$(cat analysis-results/summary.md)
+          else
+            PR_BODY="Automated fix generated by Claude AI.
+
+**Original failure:** [${{ inputs.trigger_run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ inputs.trigger_run_id }})
+**Analysis run:** [${{ inputs.analysis_run_id }}](https://github.com/${{ github.repository }}/actions/runs/${{ inputs.analysis_run_id }})
+
+This PR contains automatically generated fixes for workflow failures."
+          fi
+          
+          # Check for existing PR
+          PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number' || true)
+          
+          if [ -z "$PR" ]; then
+            echo "Creating new PR..."
+            gh pr create \
+              --title "$TITLE" \
+              --body "$PR_BODY" \
+              --head "$BRANCH" \
+              --base "$BASE_BRANCH"
+            PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
+          else
+            echo "Updating existing PR #$PR..."
+            gh pr edit "$PR" --body "$PR_BODY"
+          fi
+          
+          echo "number=$PR" >> $GITHUB_OUTPUT
+          echo "Created/updated PR #$PR"
+
+      - name: Enable auto-merge
+        run: |
+          set -euo pipefail
+          PR="${{ steps.pr.outputs.number }}"
+          echo "Enabling auto-merge for PR #$PR"
+          gh pr merge "$PR" --auto --squash
