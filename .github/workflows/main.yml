@@ -9,7 +9,6 @@ permissions:
   contents: write
   pull-requests: write
   actions: write
-  metadata: read
 
 jobs:
   propose-fix:
@@ -333,9 +332,6 @@ jobs:
       - name: Enable auto-merge on green
         run: |
           set -euo pipefail
-          PR="${{ steps.pr.outputs.number }}"
-          # require checks to pass, then auto-merge with squash
-          gh pr merge "$PR" --auto --squash
           PR="${{ steps.pr.outputs.number }}"
           # require checks to pass, then auto-merge with squash
           gh pr merge "$PR" --auto --squash
