@@ -223,11 +223,10 @@ jobs:
           fi
 
           # Commit the changes
-          git commit -m "AI auto-fix attempt $NEW by Claude
-
-Applied fix from analysis run ${{ inputs.analysis_run_id }}
-Original failure: ${{ inputs.trigger_run_id }}
-Target: $TARGET_WORKFLOW"
+          git commit -m "AI auto-fix attempt $NEW by Claude" \
+            -m "Applied fix from analysis run ${{ inputs.analysis_run_id }}" \
+            -m "Original failure: ${{ inputs.trigger_run_id }}" \
+            -m "Target: $TARGET_WORKFLOW"
 
           # Push the branch
           git push -u origin "$BRANCH"
@@ -279,6 +278,7 @@ This PR contains automatically generated fixes for workflow failures."
           set -euo pipefail
           PR="${{ steps.pr.outputs.number }}"
           echo "Enabling auto-merge for PR #$PR"
+          gh pr merge "$PR" --auto --squash
           gh pr merge "$PR" --auto --squash
           echo "Enabling auto-merge for PR #$PR"
           gh pr merge "$PR" --auto --squash
