@@ -17,19 +17,24 @@ jobs:
     env:
       CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
       TARGET_WORKFLOW: .github/workflows/provision-from-prompt.yml
+      MAX_ATTEMPTS: "5"
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Configure git identity
+        shell: bash
         run: |
+          set -euo pipefail
           git config --global user.email "claude-auto-fix@anthropic.com"
           git config --global user.name "Claude Auto-Fix Bot"
 
       - name: Fetch failing run logs
+        shell: bash
         run: |
           set -euo pipefail
           RUN_ID="${{ github.event.workflow_run.id }}"
@@ -43,164 +48,156 @@ jobs:
 
       - name: Collect context
         id: ctx
+        shell: bash
         run: |
           set -euo pipefail
           SHA="${{ github.event.workflow_run.head_sha }}"
-          echo "SHA=$SHA" >> $GITHUB_OUTPUT
-          echo "=== Changed files at failing SHA ==="
+          BRANCH="${{ github.event.workflow_run.head_branch }}"
+          echo "SHA=$SHA" >> "$GITHUB_OUTPUT"
+          echo "BRANCH=$BRANCH" >> "$GITHUB_OUTPUT"
+
           git fetch --no-tags origin "$SHA"
-          git checkout -q "$SHA"
-          # Gather key files
+          git checkout -q "$SHA" || true
+
           mkdir -p .ai-fix
           cp -f "$TARGET_WORKFLOW" .ai-fix/ 2>/dev/null || true
-          # Tail the last 300 lines of all step logs
           find logs -type f -name '*.txt' -exec tail -n 300 {} + > .ai-fix/errors.txt || true
+
+      - name: Determine current attempt count
+        id: attempts
+        shell: bash
+        run: |
+          set -euo pipefail
+          FIX_BRANCH="ai-fix/${{ steps.ctx.outputs.BRANCH }}"
+          CURRENT=0
+          # Try to read attempt count from the fix branch if it exists
+          if git ls-remote --exit-code --heads origin "$FIX_BRANCH" >/dev/null 2>&1; then
+            git fetch --no-tags origin "$FIX_BRANCH":"refs/tmp/ai-fix-read" || true
+            if git show "refs/tmp/ai-fix-read:.ai-fix-attempts" >/dev/null 2>&1; then
+              CURRENT="$(git show "refs/tmp/ai-fix-read:.ai-fix-attempts" | tr -d '\n' || echo 0)"
+            fi
+            # cleanup
+            git update-ref -d refs/tmp/ai-fix-read || true
+          fi
+          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "limit=${MAX_ATTEMPTS}" >> "$GITHUB_OUTPUT"
+          echo "Detected current attempts: $CURRENT of $MAX_ATTEMPTS"
+
+      - name: Stop if attempts exhausted
+        if: ${{ steps.attempts.outputs.current != '' && fromJSON(steps.attempts.outputs.current) >= fromJSON(steps.attempts.outputs.limit) }}
+        shell: bash
+        run: |
+          echo "Max attempts (${MAX_ATTEMPTS}) reached. Not analysing again."
+          exit 0
 
       - name: Ask Claude for unified diff
         id: ai
+        shell: bash
         run: |
           set -euo pipefail
-          WORKFLOW_JSON=$(jq -Rs . < .ai-fix/$(basename "$TARGET_WORKFLOW"))
-          ERRORS_JSON=$(jq -Rs . < .ai-fix/errors.txt)
-          
-          # Debug: Check if we have the required data
+
+          WF_BASE="$(basename "$TARGET_WORKFLOW")"
+          if [ -f ".ai-fix/$WF_BASE" ]; then
+            WORKFLOW_JSON="$(jq -Rs . < ".ai-fix/$WF_BASE")"
+          else
+            WORKFLOW_JSON="$(printf '' | jq -Rs .)"
+          fi
+          ERRORS_JSON="$(jq -Rs . < .ai-fix/errors.txt)"
+
           echo "=== Debug Info ==="
-          echo "CLAUDE_API_KEY present: $([ -n "$CLAUDE_API_KEY" ] && echo "yes" || echo "no")"
+          if [ -n "${CLAUDE_API_KEY:-}" ]; then echo "CLAUDE_API_KEY present: yes"; else echo "CLAUDE_API_KEY present: no"; fi
           echo "Workflow JSON length: $(echo "$WORKFLOW_JSON" | wc -c)"
           echo "Errors JSON length: $(echo "$ERRORS_JSON" | wc -c)"
-          
-          # Create the user content by concatenating the parts
+
           USER_CONTENT="Repository: ${{ github.repository }}\nCommit: ${{ github.event.workflow_run.head_sha }}\n\nFailing workflow file content:\n"
           USER_CONTENT="${USER_CONTENT}$(echo "$WORKFLOW_JSON" | jq -r .)"
           USER_CONTENT="${USER_CONTENT}\n\nTail of error logs:\n"
           USER_CONTENT="${USER_CONTENT}$(echo "$ERRORS_JSON" | jq -r .)"
           USER_CONTENT="${USER_CONTENT}\n\nReturn ONLY a valid unified diff (git patch) that fixes the failure with minimal changes."
-          
-          # Use jq to properly construct the JSON payload
+
           jq -n \
             --arg model "claude-sonnet-4-20250514" \
             --argjson max_tokens 4000 \
-            --arg system "You are an expert CI engineer. You will output ONLY a unified diff patch. Keep changes minimal and syntactically correct. If logs show JSON being written as strings, decode them. Ensure curl blocks are correct. Ensure jq filters are type-safe. Fix heredoc blocks and EOF markers." \
+            --arg system "You are an expert CI engineer. Output ONLY a unified diff patch. Keep changes minimal and syntactically correct. Fix heredoc and EOF issues. Validate jq and curl usage." \
             --arg user_content "$USER_CONTENT" \
             '{
               model: $model,
               max_tokens: $max_tokens,
               system: $system,
-              messages: [
-                {
-                  role: "user", 
-                  content: $user_content
-                }
-              ]
+              messages: [{ role: "user", content: $user_content }]
             }' > payload.json
-          
-          # Debug: Show payload size
-          echo "Payload size: $(wc -c < payload.json) bytes"
-          
-          # Make API call with better error handling
+
           HTTP_CODE=$(curl -w "%{http_code}" -sS https://api.anthropic.com/v1/messages \
             -H "x-api-key: $CLAUDE_API_KEY" \
             -H "anthropic-version: 2023-06-01" \
             -H "Content-Type: application/json" \
             -d @payload.json \
             -o response.json)
-          
+
           echo "API HTTP Code: $HTTP_CODE"
-          
           if [ "$HTTP_CODE" != "200" ]; then
-            echo "=== API Error Response ==="
-            cat response.json || echo "No response body"
-            exit 1
+            echo "=== API Error Response ==="; cat response.json || true; exit 1
           fi
-          
-          # Extract the response with better error handling
-          if ! jq -e '.content[0].text' response.json > /dev/null; then
-            echo "=== Unexpected API Response Structure ==="
-            cat response.json
-            exit 1
-          fi
-          
-          jq -r '.content[0].text' response.json > ai.diff.raw
-          
-          # Debug: Show what Claude returned
+
+          jq -er '.content[0].text' response.json > ai.diff.raw
+
           echo "=== Claude Response Preview ==="
-          head -n 20 ai.diff.raw
-          
-          # Strip markdown code fences if present and extract the actual diff
+          head -n 20 ai.diff.raw || true
+
           if grep -q '^```diff' ai.diff.raw; then
-            echo "Stripping markdown code fences..."
             sed -n '/^```diff$/,/^```$/p' ai.diff.raw | sed '1d;$d' > ai.diff
-          elif grep -q '^--- ' ai.diff.raw; then
-            echo "Raw diff format detected, using as-is..."
+          elif grep -q '^diff --git ' ai.diff.raw || grep -q '^--- ' ai.diff.raw; then
             cp ai.diff.raw ai.diff
           else
-            echo "Attempting to extract diff from response..."
-            # Try to find diff content even if not perfectly formatted
             grep -A 1000 '^--- ' ai.diff.raw > ai.diff || cp ai.diff.raw ai.diff
           fi
-          
-          # Debug: Show processed diff
+
           echo "=== Processed Diff Preview ==="
-          head -n 10 ai.diff
-          
-          # basic validation - accept both git diff format and standard unified diff format
+          head -n 10 ai.diff || true
+
           if grep -q '^diff --git ' ai.diff || grep -q '^--- ' ai.diff; then
-            echo "✅ Valid unified diff detected"
+            echo "Valid unified diff detected"
           else
-            echo "Claude did not return a valid unified diff. Full response:"
-            cat ai.diff.raw || echo "ai.diff.raw is empty"
-            echo "=== Processed diff was ==="
-            cat ai.diff || echo "ai.diff is empty"
-            exit 1
+            echo "Invalid diff from Claude"; cat ai.diff.raw || true; exit 1
           fi
-          
-          # sanity guard: limit size to ~50KB
+
           if [ "$(wc -c < ai.diff)" -gt 51200 ]; then
-            echo "Proposed diff too large, aborting."
-            exit 1
+            echo "Proposed diff too large"; exit 1
           fi
 
       - name: Save analysis results
+        shell: bash
         run: |
           set -euo pipefail
-          
-          # Create analysis results
           mkdir -p analysis-results
-          
-          # Save the diff
           cp ai.diff analysis-results/fix.patch
-          
-          # Save metadata
-          cat > analysis-results/metadata.json <<EOF
+          printf '%s' "{
+            \"trigger_run_id\": \"${{ github.event.workflow_run.id }}\",
+            \"trigger_sha\": \"${{ github.event.workflow_run.head_sha }}\",
+            \"trigger_branch\": \"${{ github.event.workflow_run.head_branch }}\",
+            \"target_workflow\": \"${TARGET_WORKFLOW}\",
+            \"analysis_time\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+            \"diff_size\": $(wc -c < ai.diff)
+          }" > analysis-results/metadata.json
+
+          PREVIEW="$(head -n 20 ai.diff | sed 's/"/\\"/g')"
           {
-            "trigger_run_id": "${{ github.event.workflow_run.id }}",
-            "trigger_sha": "${{ github.event.workflow_run.head_sha }}",
-            "trigger_branch": "${{ github.event.workflow_run.head_branch }}",
-            "target_workflow": "$TARGET_WORKFLOW",
-            "analysis_time": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "diff_size": $(wc -c < ai.diff)
-          }
-          EOF
-          
-          # Save summary for PR description
-          cat > analysis-results/summary.md <<EOF
-          # AI Auto-Fix Analysis
-          
-          **Triggered by:** Failed run [${{ github.event.workflow_run.id }}](${{ github.event.workflow_run.html_url }})
-          **Target:** \`$TARGET_WORKFLOW\`
-          **Branch:** \`${{ github.event.workflow_run.head_branch }}\`
-          **Commit:** \`${{ github.event.workflow_run.head_sha }}\`
-          
-          ## Analysis Summary
-          Claude analyzed the workflow failure and generated a fix patch.
-          
-          **Diff Preview:**
-          \`\`\`diff
-          $(head -n 20 ai.diff)
-          \`\`\`
-          EOF
-          
-          echo "Analysis complete. Results saved to analysis-results/"
+            echo "# AI Auto-Fix Analysis"
+            echo
+            echo "**Triggered by:** Failed run ${{ github.event.workflow_run.id }}"
+            echo "**Target:** \`${TARGET_WORKFLOW}\`"
+            echo "**Branch:** \`${{ github.event.workflow_run.head_branch }}\`"
+            echo "**Commit:** \`${{ github.event.workflow_run.head_sha }}\`"
+            echo
+            echo "## Analysis Summary"
+            echo "Claude analysed the workflow failure and generated a fix patch."
+            echo
+            echo "**Diff Preview:**"
+            echo '```diff'
+            echo "$PREVIEW"
+            echo '```'
+          } > analysis-results/summary.md
+
           ls -la analysis-results/
 
       - name: Upload analysis results
@@ -210,10 +207,35 @@ jobs:
           path: analysis-results/
           retention-days: 7
 
-      - name: Trigger application workflow
+      - name: Trigger Stage 2 (apply) with PAT
+        if: ${{ steps.attempts.outputs.current == '' || fromJSON(steps.attempts.outputs.current) < fromJSON(env.MAX_ATTEMPTS) }}
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        shell: bash
         run: |
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          set -euo pipefail
+          echo "[stage1] dispatching Stage 2 with PAT"
+          API="https://api.github.com/repos/${{ github.repository }}/actions/workflows/claude-apply.yml/dispatches"
+          BODY=$(jq -n \
+            --arg ref "main" \
+            --arg analysis_run_id "${{ github.run_id }}" \
+            --arg trigger_run_id "${{ github.event.workflow_run.id }}" \
+            --arg target_branch "${{ github.event.workflow_run.head_branch }}" \
+            --arg target_sha "${{ github.event.workflow_run.head_sha }}" \
+            '{ref:$ref, inputs:{analysis_run_id:$analysis_run_id, trigger_run_id:$trigger_run_id, target_branch:$target_branch, target_sha:$target_sha}}')
+
+          CODE=$(curl -sS -o /tmp/dispatch.out -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${PAT_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            -d "$BODY" \
+            "$API")
+          echo "Dispatch HTTP code: $CODE"
+          if [ "$CODE" -lt 200 ] || [ "$CODE" -ge 300 ]; then
+            echo "Dispatch failed, response:"; cat /tmp/dispatch.out || true; exit 1
+          fi
+          echo "Stage 2 dispatch succeeded."
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/claude-apply.yml/dispatches" \
             -d "{\"ref\":\"main\",\"inputs\":{\"analysis_run_id\":\"${{ github.run_id }}\",\"trigger_run_id\":\"${{ github.event.workflow_run.id }}\",\"target_branch\":\"${{ github.event.workflow_run.head_branch }}\",\"target_sha\":\"${{ github.event.workflow_run.head_sha }}\"}}"
