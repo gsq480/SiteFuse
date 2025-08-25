@@ -46,6 +46,7 @@ jobs:
           set -euo pipefail
           git config --global user.email "claude-auto-fix@anthropic.com"
           git config --global user.name "Claude Auto-Fix Bot"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Download analysis results
         uses: actions/download-artifact@v4
@@ -89,8 +90,18 @@ jobs:
           BRANCH="ai-fix/${BASE_BRANCH}"
           TARGET_WORKFLOW="${{ steps.verify.outputs.TARGET_WORKFLOW }}"
 
+          # Fetch required refs
           git fetch --no-tags origin "${{ inputs.target_sha }}"
-          git checkout -B "$BRANCH" "${{ inputs.target_sha }}"
+          git fetch --no-tags origin "${BRANCH}" || true
+
+          # Start from existing ai-fix branch if present, otherwise from failing SHA
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+            echo "[patch] Remote $BRANCH exists, basing work on origin/$BRANCH"
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+          else
+            echo "[patch] Remote $BRANCH does not exist, basing on failing SHA ${{ inputs.target_sha }}"
+            git checkout -B "$BRANCH" "${{ inputs.target_sha }}"
+          fi
 
           echo "Attempting to apply Claude's fix..."
 
@@ -105,11 +116,10 @@ jobs:
             echo "Standard patch application failed, attempting manual fixes..."
             if [ -f "$TARGET_WORKFLOW" ]; then
               cp "$TARGET_WORKFLOW" "${TARGET_WORKFLOW}.bak"
-
-              # Remove stderr redirections that can break YAML or commands inside Actions
+              # Remove stderr redirections that can break YAML or steps
               sed -i 's/ 2>\/dev\/null//g' "$TARGET_WORKFLOW"
 
-              # Build Python fixer script with echo lines
+              # Build a tiny Python fixer using echo lines to avoid heredocs
               rm -f fix_workflow.py
               echo "import os" >> fix_workflow.py
               echo "target_file = os.environ.get('TARGET_WORKFLOW', '.github/workflows/provision-from-prompt.yml')" >> fix_workflow.py
@@ -161,7 +171,7 @@ jobs:
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          # Safelist to guard what can be changed by this job
+          # Safelist guard
           SAFE_GLOBS="
           .github/workflows/provision-from-prompt.yml
           website*.json
@@ -175,45 +185,47 @@ jobs:
             while IFS= read -r g; do
               [ -z "$g" ] && continue
               if python3 -c "import fnmatch, sys; print('OK' if fnmatch.fnmatch(sys.argv[1], sys.argv[2]) else '')" "$f" "$g" | grep -q OK; then
-                ok=1
-                break
+                ok=1; break
               fi
             done <<< "$SAFE_GLOBS"
-            if [ "$ok" -ne 1 ]; then
-              echo "File outside safelist: $f"
-              BAD=1
-            fi
+            if [ "$ok" -ne 1 ]; then echo "File outside safelist: $f"; BAD=1; fi
           done <<< "$CHANGED_FILES"
-          if [ "$BAD" -eq 1 ]; then
-            echo "Changes violated safelist. Aborting."
-            exit 1
-          fi
+          if [ "$BAD" -eq 1 ]; then echo "Changes violated safelist. Aborting."; exit 1; fi
 
-          # Attempts counter stored on the branch
+          # Attempts counter on branch tip
           ATTEMPTS_FILE=".ai-fix-attempts"
+          OLD=0
           if git show HEAD:"$ATTEMPTS_FILE" >/dev/null 2>&1; then
             OLD=$(git show HEAD:"$ATTEMPTS_FILE" | tr -d '\n' || echo 0)
-          else
-            OLD=0
           fi
           NEW=$((OLD+1))
           echo "$NEW" > "$ATTEMPTS_FILE"
           git add "$ATTEMPTS_FILE"
 
-          if [ "$NEW" -gt "$MAX_ATTEMPTS" ]; then
-            echo "Max attempts ($MAX_ATTEMPTS) reached on this branch. Exiting."
+          if [ "$NEW" -gt "${MAX_ATTEMPTS}" ]; then
+            echo "Max attempts (${MAX_ATTEMPTS}) reached on this branch. Exiting."
             exit 1
           fi
 
-          # Commit
+          # Commit, then integrate any remote changes
           git commit -m "AI auto-fix attempt $NEW by Claude" \
-            -m "Applied fix from analysis run ${{ inputs.analysis_run_id }}" \
-            -m "Original failure: ${{ inputs.trigger_run_id }}" \
-            -m "Target: $TARGET_WORKFLOW"
+                     -m "Applied fix from analysis run ${{ inputs.analysis_run_id }}" \
+                     -m "Original failure: ${{ inputs.trigger_run_id }}" \
+                     -m "Target: $TARGET_WORKFLOW"
 
-          # Push using PAT-authenticated remote so workflow edits are allowed
+          # Rebase onto latest remote, fall back to merge if needed
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+            git pull --rebase origin "$BRANCH" || {
+              echo "[patch] Rebase had conflicts, aborting and creating a merge commit instead"
+              git rebase --abort || true
+              git fetch origin "$BRANCH"
+              git merge --no-edit "origin/$BRANCH" || true
+            }
+          fi
+
+          # Push with PAT and force-with-lease to avoid non-fast-forward errors
           git remote set-url origin "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git"
-          git push -u origin "$BRANCH"
+          git push --force-with-lease -u origin "$BRANCH"
 
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           echo "attempts=$NEW"  >> "$GITHUB_OUTPUT"
@@ -238,7 +250,7 @@ jobs:
           PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number' || true)
           if [ -z "$PR" ]; then
             gh pr create --title "$TITLE" --body "$PR_BODY" --head "$BRANCH" --base "$BASE_BRANCH"
-            PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
+            PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number' || true)
           else
             gh pr edit "$PR" --body "$PR_BODY"
           fi
@@ -253,9 +265,12 @@ jobs:
         run: |
           set -euo pipefail
           PR="${{ steps.pr.outputs.number }}"
-          gh pr merge "$PR" --auto --squash
+          if [ -n "$PR" ]; then
+            gh pr merge "$PR" --auto --squash || echo "Auto merge not enabled or PR already merged"
+          else
+            echo "No PR number available, skipping auto-merge step"
+          fi
 
-      # Re-run the target workflow on the fix branch so Stage 1 can analyse again if it still fails
       - name: Re-run target workflow on fix branch
         if: ${{ fromJSON(steps.patch.outputs.attempts) < fromJSON(env.MAX_ATTEMPTS) }}
         env:
@@ -266,12 +281,11 @@ jobs:
           BRANCH="${{ steps.patch.outputs.branch }}"
           echo "[rerun] triggering target workflow on ref $BRANCH"
 
-          # If you want to reuse real inputs, fetch them from the failed run API.
-          # For now, provide safe defaults that satisfy required inputs.
+          # Supply minimal valid inputs for the target workflow
           gh workflow run ".github/workflows/provision-from-prompt.yml" \
             --ref "$BRANCH" \
             -f prompt="Automated re-run after AI fix" \
             -f industry="auto-detect" \
             -f generate_images=true
 
-          echo "Dispatched target workflow on $BRANCH. If it fails again, Stage 1 will fire, then Stage 2, up to ${MAX_ATTEMPTS} attempts."
+          echo "Dispatched target workflow on $BRANCH so Stage 1 can analyse again if it fails."
