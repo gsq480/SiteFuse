@@ -190,12 +190,7 @@ jobs:
             ok=0
             while IFS= read -r g; do
               if [ -z "$g" ]; then continue; fi
-              if python3 -c "
-import fnmatch, sys
-f = sys.argv[1]
-g = sys.argv[2]
-print('OK' if fnmatch.fnmatch(f, g) else '')
-" "$f" "$g" | grep -q OK; then 
+              if python3 -c "import fnmatch, sys; f = sys.argv[1]; g = sys.argv[2]; print('OK' if fnmatch.fnmatch(f, g) else '')" "$f" "$g" | grep -q OK; then 
                 ok=1
                 break
               fi
