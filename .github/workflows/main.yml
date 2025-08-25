@@ -1,0 +1,189 @@
+name: Claude Auto-Fix
+
+on:
+  workflow_run:
+    workflows: ["Enhanced Child Theme from Prompt"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  propose-fix:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+
+    env:
+      CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TARGET_WORKFLOW: .github/workflows/provision-from-prompt.yml
+      # files Claude is allowed to change
+      SAFE_GLOBS: |
+        .github/workflows/provision-from-prompt.yml
+        website*.json
+        image-prompts.json
+        child-themes/**/templates/*.html
+      MAX_ATTEMPTS: "5"  # safety cap per branch
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install gh
+        uses: cli/cli-action@v2
+        with:
+          version: latest
+
+      - name: Fetch failing run logs
+        run: |
+          set -euo pipefail
+          RUN_ID="${{ github.event.workflow_run.id }}"
+          mkdir -p .ai-fix logs
+          curl -sSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${RUN_ID}/logs" \
+            -o logs/failure.zip
+          unzip -q logs/failure.zip -d logs || true
+
+      - name: Collect context
+        id: ctx
+        run: |
+          set -euo pipefail
+          SHA="${{ github.event.workflow_run.head_sha }}"
+          echo "SHA=$SHA" >> $GITHUB_OUTPUT
+
+          echo "=== Changed files at failing SHA ==="
+          git fetch --no-tags origin "$SHA"
+          git checkout -q "$SHA"
+
+          # Gather key files
+          mkdir -p .ai-fix
+          cp -f "$TARGET_WORKFLOW" .ai-fix/ 2>/dev/null || true
+
+          # Tail the last 300 lines of all step logs
+          find logs -type f -name '*.txt' -exec tail -n 300 {} + > .ai-fix/errors.txt || true
+
+          # Summarise safe globs for the prompt
+          printf "%s\n" "$SAFE_GLOBS" > .ai-fix/safelist.txt
+
+      - name: Ask Claude for unified diff
+        id: ai
+        run: |
+          set -euo pipefail
+          WORKFLOW_JSON=$(jq -Rs . < .ai-fix/$(basename "$TARGET_WORKFLOW"))
+          ERRORS_JSON=$(jq -Rs . < .ai-fix/errors.txt)
+          SAFE_JSON=$(jq -Rs . < .ai-fix/safelist.txt)
+
+          cat > payload.json <<EOF
+          {
+            "model": "claude-3-sonnet-20240229",
+            "max_tokens": 2000,
+            "messages": [
+              {
+                "role": "system",
+                "content": "You are an expert CI engineer. You will output ONLY a unified diff patch bounded to a safelist of files. Keep changes minimal and syntactically correct. If logs show JSON being written as strings, decode them. Ensure curl blocks are correct. Ensure jq filters are type-safe. Do not touch files outside the safelist."
+              },
+              {
+                "role": "user",
+                "content": "Repository: ${{ github.repository }}\\nCommit: ${{ github.event.workflow_run.head_sha }}\\nSafelist globs:\\n$SAFE_JSON\\n\\nFailing workflow file content:\\n$WORKFLOW_JSON\\n\\nTail of error logs:\\n$ERRORS_JSON\\n\\nReturn ONLY a valid unified diff (git patch) that fixes the failure with minimal changes."
+              }
+            ]
+          }
+          EOF
+
+          curl -sS https://api.anthropic.com/v1/messages \
+            -H "x-api-key: $CLAUDE_API_KEY" \
+            -H "anthropic-version": "2023-06-01" \
+            -H "Content-Type: application/json" \
+            -d @payload.json \
+          | jq -r '.content[0].text' > ai.diff || true
+
+          # basic validation
+          if ! grep -q '^diff --git ' ai.diff; then
+            echo "Claude did not return a valid unified diff. Exiting."
+            cat ai.diff || true
+            exit 1
+          fi
+          # sanity guard: limit size to ~50KB
+          if [ "$(wc -c < ai.diff)" -gt 51200 ]; then
+            echo "Proposed diff too large, aborting."
+            exit 1
+          fi
+
+      - name: Create branch and apply patch
+        id: patch
+        run: |
+          set -euo pipefail
+          BASE_BRANCH="${{ github.event.workflow_run.head_branch }}"
+          BRANCH="ai-fix/${BASE_BRANCH}"
+          git checkout -B "$BRANCH" "${{ github.event.workflow_run.head_sha }}"
+          # apply patch
+          git apply --index ai.diff
+
+          # enforce safelist: abort if staged files outside globs
+          echo "Checking staged files are within safelist"
+          SAFE=$(printf "%s\n" "$SAFE_GLOBS")
+          BAD=0
+          while IFS= read -r f; do
+            ok=0
+            while IFS= read -r g; do
+              if python3 - <<PY
+import fnmatch, sys
+f = sys.argv[1]
+g = sys.argv[2]
+print("OK" if fnmatch.fnmatch(f, g) else "")
+PY
+ "$f" "$g" | grep -q OK; then ok=1; break; fi
+            done <<< "$SAFE"
+            if [ "$ok" -ne 1 ]; then echo "File outside safelist: $f"; BAD=1; fi
+          done < <(git diff --cached --name-only)
+          if [ "$BAD" -eq 1 ]; then echo "Patch violated safelist. Aborting."; exit 1; fi
+
+          # attempts counter on branch via a file
+          ATTEMPTS_FILE=".ai-fix-attempts"
+          if git show HEAD:"$ATTEMPTS_FILE" >/dev/null 2>&1; then
+            OLD=$(git show HEAD:"$ATTEMPTS_FILE" | tr -d '\n' || echo 0)
+          else
+            OLD=0
+          fi
+          NEW=$((OLD+1))
+          echo "$NEW" > "$ATTEMPTS_FILE"
+          git add "$ATTEMPTS_FILE"
+
+          if [ "$NEW" -gt "$MAX_ATTEMPTS" ]; then
+            echo "Max attempts ($MAX_ATTEMPTS) reached on this branch. Exiting."
+            exit 1
+          fi
+
+          git commit -m "AI auto-fix attempt $NEW by Claude"
+          git push -u origin "$BRANCH"
+
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Open or update PR
+        id: pr
+        run: |
+          set -euo pipefail
+          BRANCH="${{ steps.patch.outputs.branch }}"
+          TITLE="AI auto-fix for ${GITHUB_REF_NAME:-main}"
+          BODY="Proposed by Claude from failing run ${{ github.event.workflow_run.id }}. Attempt recorded in .ai-fix-attempts."
+          # find existing PR
+          PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number' || true)
+          if [ -z "$PR" ]; then
+            gh pr create --title "$TITLE" --body "$BODY" --head "$BRANCH" --base "${{ github.event.workflow_run.head_branch }}" >/tmp/pr.txt
+            PR=$(sed -n 's/.*pull\/\([0-9]\+\).*/\1/p' /tmp/pr.txt)
+          else
+            gh pr edit "$PR" --body "$BODY"
+          fi
+          echo "number=$PR" >> $GITHUB_OUTPUT
+
+      - name: Enable auto-merge on green
+        run: |
+          set -euo pipefail
+          PR="${{ steps.pr.outputs.number }}"
+          # require checks to pass, then auto-merge with squash
+          gh pr merge "$PR" --auto --squash
