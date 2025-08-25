@@ -9,6 +9,7 @@ permissions:
   contents: write
   pull-requests: write
   actions: write
+  metadata: read
 
 jobs:
   propose-fix:
@@ -21,7 +22,6 @@ jobs:
       TARGET_WORKFLOW: .github/workflows/provision-from-prompt.yml
       # files Claude is allowed to change
       SAFE_GLOBS: |
-        .github/workflows/provision-from-prompt.yml
         website*.json
         image-prompts.json
         child-themes/**/templates/*.html
