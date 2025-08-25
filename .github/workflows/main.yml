@@ -48,25 +48,21 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/actions/runs/${RUN_ID}/logs" \
             -o logs/failure.zip
           unzip -q logs/failure.zip -d logs || true
-
+      
       - name: Collect context
         id: ctx
         run: |
           set -euo pipefail
           SHA="${{ github.event.workflow_run.head_sha }}"
           echo "SHA=$SHA" >> $GITHUB_OUTPUT
-
           echo "=== Changed files at failing SHA ==="
           git fetch --no-tags origin "$SHA"
           git checkout -q "$SHA"
-
           # Gather key files
           mkdir -p .ai-fix
           cp -f "$TARGET_WORKFLOW" .ai-fix/ 2>/dev/null || true
-
           # Tail the last 300 lines of all step logs
           find logs -type f -name '*.txt' -exec tail -n 300 {} + > .ai-fix/errors.txt || true
-
           # Summarise safe globs for the prompt
           printf "%s\n" "$SAFE_GLOBS" > .ai-fix/safelist.txt
 
@@ -77,7 +73,6 @@ jobs:
           WORKFLOW_JSON=$(jq -Rs . < .ai-fix/$(basename "$TARGET_WORKFLOW"))
           ERRORS_JSON=$(jq -Rs . < .ai-fix/errors.txt)
           SAFE_JSON=$(jq -Rs . < .ai-fix/safelist.txt)
-
           cat > payload.json <<EOF
           {
             "model": "claude-3-sonnet-20240229",
@@ -94,14 +89,12 @@ jobs:
             ]
           }
           EOF
-
           curl -sS https://api.anthropic.com/v1/messages \
             -H "x-api-key: $CLAUDE_API_KEY" \
             -H "anthropic-version: 2023-06-01" \
             -H "Content-Type: application/json" \
             -d @payload.json \
           | jq -r '.content[0].text' > ai.diff || true
-
           # basic validation
           if ! grep -q '^diff --git ' ai.diff; then
             echo "Claude did not return a valid unified diff. Exiting."
@@ -123,7 +116,6 @@ jobs:
           git checkout -B "$BRANCH" "${{ github.event.workflow_run.head_sha }}"
           # apply patch
           git apply --index ai.diff
-
           # enforce safelist: abort if staged files outside globs
           echo "Checking staged files are within safelist"
           SAFE=$(printf "%s\n" "$SAFE_GLOBS")
@@ -131,13 +123,15 @@ jobs:
           while IFS= read -r f; do
             ok=0
             while IFS= read -r g; do
-              if python3 - <<PY
-import fnmatch, sys
-f = sys.argv[1]
-g = sys.argv[2]
-print("OK" if fnmatch.fnmatch(f, g) else "")
-PY
- "$f" "$g" | grep -q OK; then ok=1; break; fi
+              if python3 -c "
+          import fnmatch, sys
+          f = sys.argv[1]
+          g = sys.argv[2]
+          print('OK' if fnmatch.fnmatch(f, g) else '')
+          " "$f" "$g" | grep -q OK; then 
+                ok=1
+                break
+              fi
             done <<< "$SAFE"
             if [ "$ok" -ne 1 ]; then echo "File outside safelist: $f"; BAD=1; fi
           done < <(git diff --cached --name-only)
@@ -185,5 +179,7 @@ PY
         run: |
           set -euo pipefail
           PR="${{ steps.pr.outputs.number }}"
+          # require checks to pass, then auto-merge with squash
+          gh pr merge "$PR" --auto --squash
           # require checks to pass, then auto-merge with squash
           gh pr merge "$PR" --auto --squash
