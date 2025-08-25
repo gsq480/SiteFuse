@@ -215,7 +215,7 @@ jobs:
               
               # Fix 2: Ensure heredoc blocks have proper EOF markers
               # This is more complex, so let's just ensure basic structure is correct
-              python3 -c "
+              python3 -c """
 import re
 import sys
 
@@ -233,7 +233,7 @@ content = re.sub(
 
 with open('$TARGET_WORKFLOW', 'w') as f:
     f.write(content)
-"
+"""
               
               if git diff --quiet "${TARGET_WORKFLOW}.bak" "$TARGET_WORKFLOW"; then
                 echo "No changes applied, patch may not be relevant"
@@ -315,9 +315,6 @@ with open('$TARGET_WORKFLOW', 'w') as f:
       - name: Enable auto-merge on green
         run: |
           set -euo pipefail
-          PR="${{ steps.pr.outputs.number }}"
-          # require checks to pass, then auto-merge with squash
-          gh pr merge "$PR" --auto --squash
           PR="${{ steps.pr.outputs.number }}"
           # require checks to pass, then auto-merge with squash
           gh pr merge "$PR" --auto --squash
