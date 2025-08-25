@@ -219,14 +219,14 @@ jobs:
           path: analysis-results/
           retention-days: 7
 
-      - name: Trigger Stage 2 (apply) with PAT
-        if: ${{ steps.attempts.outputs.current == '' || fromJSON(steps.attempts.outputs.current) < fromJSON(env.MAX_ATTEMPTS) }}
+      - name: Trigger application workflow (Stage 2)
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
           echo "[stage1] dispatching Stage 2 with PAT"
+
           API="https://api.github.com/repos/${{ github.repository }}/actions/workflows/claude-apply.yml/dispatches"
           BODY=$(jq -n \
             --arg ref "main" \
@@ -236,18 +236,12 @@ jobs:
             --arg target_sha "${{ github.event.workflow_run.head_sha }}" \
             '{ref:$ref, inputs:{analysis_run_id:$analysis_run_id, trigger_run_id:$trigger_run_id, target_branch:$target_branch, target_sha:$target_sha}}')
 
-          CODE=$(curl -sS -o /tmp/dispatch.out -w "%{http_code}" \
-            -X POST \
-            -H "Authorization: Bearer ${PAT_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            -H "Content-Type: application/json" \
-            -d "$BODY" \
-            "$API")
+          CODE=$(curl -sS -o /tmp/dispatch.out -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer ${PAT_TOKEN}" -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" \
+            -d "$BODY" "$API")
           echo "Dispatch HTTP code: $CODE"
           if [ "$CODE" -lt 200 ] || [ "$CODE" -ge 300 ]; then
             echo "Dispatch failed, response:"; cat /tmp/dispatch.out || true; exit 1
           fi
           echo "Stage 2 dispatch succeeded."
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/claude-apply.yml/dispatches" \
-            -d "{\"ref\":\"main\",\"inputs\":{\"analysis_run_id\":\"${{ github.run_id }}\",\"trigger_run_id\":\"${{ github.event.workflow_run.id }}\",\"target_branch\":\"${{ github.event.workflow_run.head_branch }}\",\"target_sha\":\"${{ github.event.workflow_run.head_sha }}\"}}"
+
