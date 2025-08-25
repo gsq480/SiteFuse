@@ -32,10 +32,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install gh
-        uses: cli/cli-action@v2
-        with:
-          version: latest
+      - name: Install gh CLI
+        run: |
+          type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+          && sudo apt update \
+          && sudo apt install gh -y
 
       - name: Fetch failing run logs
         run: |
@@ -179,7 +183,5 @@ jobs:
         run: |
           set -euo pipefail
           PR="${{ steps.pr.outputs.number }}"
-          # require checks to pass, then auto-merge with squash
-          gh pr merge "$PR" --auto --squash
           # require checks to pass, then auto-merge with squash
           gh pr merge "$PR" --auto --squash
