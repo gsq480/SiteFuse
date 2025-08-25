@@ -137,15 +137,34 @@ jobs:
             exit 1
           fi
           
-          jq -r '.content[0].text' response.json > ai.diff
+          jq -r '.content[0].text' response.json > ai.diff.raw
           
           # Debug: Show what Claude returned
           echo "=== Claude Response Preview ==="
-          head -n 20 ai.diff
+          head -n 20 ai.diff.raw
+          
+          # Strip markdown code fences if present and extract the actual diff
+          if grep -q '^```diff' ai.diff.raw; then
+            echo "Stripping markdown code fences..."
+            sed -n '/^```diff$/,/^```$/p' ai.diff.raw | sed '1d;$d' > ai.diff
+          elif grep -q '^diff --git ' ai.diff.raw; then
+            echo "Raw diff format detected, using as-is..."
+            cp ai.diff.raw ai.diff
+          else
+            echo "Attempting to extract diff from response..."
+            # Try to find diff content even if not perfectly formatted
+            grep -A 1000 '^diff --git ' ai.diff.raw > ai.diff || cp ai.diff.raw ai.diff
+          fi
+          
+          # Debug: Show processed diff
+          echo "=== Processed Diff Preview ==="
+          head -n 10 ai.diff
           
           # basic validation
           if ! grep -q '^diff --git ' ai.diff; then
             echo "Claude did not return a valid unified diff. Full response:"
+            cat ai.diff.raw || echo "ai.diff.raw is empty"
+            echo "=== Processed diff was ==="
             cat ai.diff || echo "ai.diff is empty"
             exit 1
           fi
@@ -227,6 +246,9 @@ jobs:
       - name: Enable auto-merge on green
         run: |
           set -euo pipefail
+          PR="${{ steps.pr.outputs.number }}"
+          # require checks to pass, then auto-merge with squash
+          gh pr merge "$PR" --auto --squash
           PR="${{ steps.pr.outputs.number }}"
           # require checks to pass, then auto-merge with squash
           gh pr merge "$PR" --auto --squash
