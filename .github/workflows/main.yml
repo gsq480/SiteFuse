@@ -96,36 +96,48 @@ jobs:
         run: |
           set -euo pipefail
 
-          WF_BASE="$(basename "$TARGET_WORKFLOW")"
-          if [ -f ".ai-fix/$WF_BASE" ]; then
-            WORKFLOW_JSON="$(jq -Rs . < ".ai-fix/$WF_BASE")"
-          else
-            WORKFLOW_JSON="$(printf '' | jq -Rs .)"
-          fi
-          ERRORS_JSON="$(jq -Rs . < .ai-fix/errors.txt)"
+          # Ensure paths exist
+          WF_PATH=".ai-fix/$(basename "$TARGET_WORKFLOW")"
+          ERR_PATH=".ai-fix/errors.txt"
+          [ -f "$WF_PATH" ] || : > "$WF_PATH"
+          [ -f "$ERR_PATH" ] || : > "$ERR_PATH"
+
+          # Optional, keep logs reasonable in size for clarity
+          # tail -n 2000 "$ERR_PATH" > .ai-fix/errors.truncated.txt || : 
+          # ERR_PATH=".ai-fix/errors.truncated.txt"
 
           echo "=== Debug Info ==="
-          if [ -n "${CLAUDE_API_KEY:-}" ]; then echo "CLAUDE_API_KEY present: yes"; else echo "CLAUDE_API_KEY present: no"; fi
-          echo "Workflow JSON length: $(echo "$WORKFLOW_JSON" | wc -c)"
-          echo "Errors JSON length: $(echo "$ERRORS_JSON" | wc -c)"
+          echo "CLAUDE_API_KEY present: $([ -n "${CLAUDE_API_KEY:-}" ] && echo yes || echo no)"
+          echo "Workflow bytes: $(wc -c < "$WF_PATH" || echo 0)"
+          echo "Errors bytes:   $(wc -c < "$ERR_PATH" || echo 0)"
 
-          USER_CONTENT="Repository: ${{ github.repository }}\nCommit: ${{ github.event.workflow_run.head_sha }}\n\nFailing workflow file content:\n"
-          USER_CONTENT="${USER_CONTENT}$(echo "$WORKFLOW_JSON" | jq -r .)"
-          USER_CONTENT="${USER_CONTENT}\n\nTail of error logs:\n"
-          USER_CONTENT="${USER_CONTENT}$(echo "$ERRORS_JSON" | jq -r .)"
-          USER_CONTENT="${USER_CONTENT}\n\nReturn ONLY a valid unified diff (git patch) that fixes the failure with minimal changes."
-
+          # Build payload WITHOUT huge shell variables. Use --rawfile to slurp file contents.
           jq -n \
             --arg model "claude-sonnet-4-20250514" \
             --argjson max_tokens 4000 \
-            --arg system "You are an expert CI engineer. Output ONLY a unified diff patch. Keep changes minimal and syntactically correct. Fix heredoc and EOF issues. Validate jq and curl usage." \
-            --arg user_content "$USER_CONTENT" \
+            --arg system "You are an expert CI engineer. You will output ONLY a unified diff patch. Keep changes minimal and syntactically correct. If logs show JSON being written as strings, decode them. Ensure curl blocks are correct. Ensure jq filters are type-safe. Fix heredoc blocks and EOF markers." \
+            --rawfile wf "$WF_PATH" \
+            --rawfile errs "$ERR_PATH" \
+            --arg repo "${{ github.repository }}" \
+            --arg sha  "${{ github.event.workflow_run.head_sha }}" \
             '{
               model: $model,
               max_tokens: $max_tokens,
               system: $system,
-              messages: [{ role: "user", content: $user_content }]
+              messages: [
+                {
+                  role: "user",
+                  content:
+                    ("Repository: " + $repo + "\n" +
+                     "Commit: "     + $sha  + "\n\n" +
+                     "Failing workflow file content:\n" + $wf + "\n\n" +
+                     "Tail of error logs:\n" + $errs + "\n\n" +
+                     "Return ONLY a valid unified diff (git patch) that fixes the failure with minimal changes.")
+                }
+              ]
             }' > payload.json
+
+          echo "Payload size: $(wc -c < payload.json) bytes"
 
           HTTP_CODE=$(curl -w "%{http_code}" -sS https://api.anthropic.com/v1/messages \
             -H "x-api-key: $CLAUDE_API_KEY" \
@@ -144,9 +156,10 @@ jobs:
           echo "=== Claude Response Preview ==="
           head -n 20 ai.diff.raw || true
 
+          # Extract unified diff if wrapped in fencing
           if grep -q '^```diff' ai.diff.raw; then
             sed -n '/^```diff$/,/^```$/p' ai.diff.raw | sed '1d;$d' > ai.diff
-          elif grep -q '^diff --git ' ai.diff.raw || grep -q '^--- ' ai.diff.raw; then
+          elif grep -qE '^(diff --git |--- )' ai.diff.raw; then
             cp ai.diff.raw ai.diff
           else
             grep -A 1000 '^--- ' ai.diff.raw > ai.diff || cp ai.diff.raw ai.diff
@@ -155,12 +168,11 @@ jobs:
           echo "=== Processed Diff Preview ==="
           head -n 10 ai.diff || true
 
-          if grep -q '^diff --git ' ai.diff || grep -q '^--- ' ai.diff; then
-            echo "Valid unified diff detected"
-          else
+          if ! grep -qE '^(diff --git |--- )' ai.diff; then
             echo "Invalid diff from Claude"; cat ai.diff.raw || true; exit 1
           fi
 
+          # size guard
           if [ "$(wc -c < ai.diff)" -gt 51200 ]; then
             echo "Proposed diff too large"; exit 1
           fi
