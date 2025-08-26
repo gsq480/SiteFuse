@@ -70,43 +70,20 @@ jobs:
           set -euo pipefail
           [ -n "${OPENAI_API_KEY:-}" ] || { echo "OPENAI_API_KEY is empty"; exit 1; }
           echo "[ai1] generating comprehensive website structure with enhanced prompt"
-
-          # Capture inputs without heredocs
-          printf '%s' "${{ github.event.inputs.prompt }}"   > /tmp/ai_prompt.txt
-          printf '%s' "${{ github.event.inputs.industry }}" > /tmp/ai_industry.txt
-
-          PROMPT="$(cat /tmp/ai_prompt.txt)"
-          INDUSTRY="$(cat /tmp/ai_industry.txt)"
-
+          
+          # Capture inputs
+          PROMPT="${{ github.event.inputs.prompt }}"
+          INDUSTRY="${{ github.event.inputs.industry }}"
+          
           echo "[ai1] Processing prompt: ${PROMPT:0:100}..."
           echo "[ai1] Industry: $INDUSTRY"
-
-          # Build payload
+          
+          # Build payload using jq
           jq -n \
             --arg prompt "$PROMPT" \
             --arg industry "$INDUSTRY" \
-            --arg sys 'You are a professional web designer. You MUST return valid JSON in EXACTLY this structure. Do not wrap in arrays. Return a single JSON object with these exact keys:
-          {
-            "slug": "business-name-in-kebab-case",
-            "name": "Exact Business Name",
-            "tagline": "Compelling tagline",
-            "industry": "detected-industry",
-            "colorPalette": {"primary":"#hexcolor","secondary":"#hexcolor","accent":"#hexcolor"},
-            "typography": {"headingFont":"Google Font Name","bodyFont":"Google Font Name"},
-            "heroSection": {"customHTML":"<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Business Name</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Compelling tagline</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Call to Action</a></div>","heroImage":"https://images.unsplash.com/relevant-photo"},
-            "customSections": [{"title":"Section Name","html":"<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">Section Title</h2><p class=\"text-xl text-gray-600 text-center mb-8\">Section content</p></div></section>"}]
-          }
-          Create industry-appropriate content with realistic business details. Use the exact business name provided. Include 3-5 custom sections relevant to the business type.' \
-            --arg usr "Create a complete professional website JSON for: ${PROMPT}
-          Industry context: ${INDUSTRY}
-          IMPORTANT REQUIREMENTS:
-          - Extract and use the EXACT business name from the prompt
-          - If location is mentioned, incorporate it naturally
-          - Use colours that match the business style described
-          - Create compelling, realistic copy
-          - Include proper calls to action
-          - Make HTML fragments complete with proper Tailwind classes
-          - Return ONLY the JSON object, no other text or explanation" \
+            --arg sys 'You are a professional web designer. Return valid JSON with this structure: {"slug":"kebab-case","name":"Business Name","tagline":"tagline","industry":"industry","colorPalette":{"primary":"#hex","secondary":"#hex","accent":"#hex"},"typography":{"headingFont":"font","bodyFont":"font"},"heroSection":{"customHTML":"html","heroImage":"url"},"customSections":[{"title":"title","html":"html"}]}' \
+            --arg usr "Create website JSON for: ${PROMPT}. Industry: ${INDUSTRY}. Extract exact business name, use appropriate colors, create 3-5 sections." \
             '{
               model: "gpt-4o",
               response_format: {type: "json_object"},
@@ -117,106 +94,49 @@ jobs:
                 {role:"user", content:$usr}
               ]
             }' > /tmp/payload.json
-
+          
           echo "[ai1] calling OpenAI API..."
           HTTP=$(curl -sS -w "\n%{http_code}" "https://api.openai.com/v1/chat/completions" \
             -H "Authorization: Bearer ${OPENAI_API_KEY}" \
             -H "Content-Type: application/json" \
             -d @/tmp/payload.json)
-
+          
           RESP="$(printf "%s" "$HTTP" | sed '$d')"
           CODE="$(printf "%s" "$HTTP" | tail -n1)"
           printf '%s' "$RESP" > ai1-response.json
-
+          
           if [ "$CODE" != "200" ]; then
             echo "[ai1] API error code $CODE"
             jq -r '.error.message // "Unknown API error"' ai1-response.json || echo "Failed to parse error"
-            echo "Response preview:"; head -10 ai1-response.json || true
             exit 1
           fi
-
+          
           if jq -e '.choices[0].message.content' ai1-response.json >/dev/null 2>&1; then
             echo "[ai1] extracting AI content..."
             jq -r '.choices[0].message.content' ai1-response.json > website-step1.json
-            if jq empty website-step1.json; then
-              echo "[ai1] JSON valid"
-              jq -r '{name:.name,tagline:.tagline,industry:.industry,sectionsCount:(.customSections|length)}' website-step1.json || true
-            else
-              echo "[ai1] invalid JSON, writing fallback"
-              cat > website-step1.json <<'EOJSON'
-{
-  "slug": "business-site",
-  "name": "Your Business",
-  "tagline": "Professional services you can trust",
-  "industry": "business",
-  "colorPalette": {
-    "primary": "#2563eb",
-    "secondary": "#3b82f6",
-    "accent": "#1d4ed8"
-  },
-  "typography": {
-    "headingFont": "Inter",
-    "bodyFont": "Inter"
-  },
-  "heroSection": {
-    "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
-    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
-  },
-  "customSections": [{
-    "title": "About Us",
-    "html": "<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"
-  }]
-}
-EOJSON
+            if ! jq empty website-step1.json 2>/dev/null; then
+              echo "[ai1] invalid JSON, using fallback"
+              printf '%s\n' '{"slug":"business-site","name":"Your Business","tagline":"Professional services","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div>Welcome</div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c"},"customSections":[{"title":"About","html":"<div>About Us</div>"}]}' > website-step1.json
             fi
           else
             echo "[ai1] no AI content, using fallback"
-            cat > website-step1.json <<'EOJSON'
-{
-  "slug": "business-site",
-  "name": "Your Business",
-  "tagline": "Professional services you can trust",
-  "industry": "business",
-  "colorPalette": {
-    "primary": "#2563eb",
-    "secondary": "#3b82f6",
-    "accent": "#1d4ed8"
-  },
-  "typography": {
-    "headingFont": "Inter",
-    "bodyFont": "Inter"
-  },
-  "heroSection": {
-    "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
-    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
-  },
-  "customSections": [{
-    "title": "About Us",
-    "html": "<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"
-  }]
-}
-EOJSON
+            printf '%s\n' '{"slug":"business-site","name":"Your Business","tagline":"Professional services","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div>Welcome</div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c"},"customSections":[{"title":"About","html":"<div>About Us</div>"}]}' > website-step1.json
           fi
-
-          rm -f /tmp/ai_prompt.txt /tmp/ai_industry.txt /tmp/payload.json
 
       - name: AI pass 2 - Content enhancement
         shell: bash
         run: |
           set -euo pipefail
           echo "[ai2] enhancing content"
-
-          [ -f website-step1.json ] || { echo "[ai2] no website-step1.json"; printf '{}' > website-step2.json; exit 0; }
-          jq empty website-step1.json >/dev/null 2>&1 || { echo "[ai2] invalid JSON"; cp website-step1.json website-step2.json; exit 0; }
-
+          
+          [ -f website-step1.json ] || { printf '{}' > website-step2.json; exit 0; }
+          
+          if ! jq empty website-step1.json 2>/dev/null; then
+            cp website-step1.json website-step2.json
+            exit 0
+          fi
+          
           jq -n \
-            --arg sys 'You are a UX strategist. Enhance the provided website JSON by:
-          1. Improving the business name and tagline for impact
-          2. Adding more industry specific sections
-          3. Enhancing the hero section HTML
-          4. Creating better calls to action
-          5. Ensuring all HTML uses proper Tailwind classes
-          Return the COMPLETE enhanced JSON object with the same structure. Do not wrap in arrays.' \
             --rawfile base website-step1.json \
             --arg ctx "${{ github.event.inputs.prompt }}" \
             '{
@@ -225,34 +145,25 @@ EOJSON
               temperature: 0.4,
               max_tokens: 4000,
               messages: [
-                {role:"system", content:$sys},
-                {role:"user", content:("Original business context: " + $ctx + "\n\nEnhance this website JSON for better user experience and industry best practices:\n\n" + $base)}
+                {role:"system", content:"Enhance the website JSON with better UX and industry-specific sections."},
+                {role:"user", content:("Context: " + $ctx + "\n\nEnhance:\n" + $base)}
               ]
             }' > /tmp/payload2.json
-
+          
           HTTP=$(curl -sS -w "\n%{http_code}" "https://api.openai.com/v1/chat/completions" \
             -H "Authorization: Bearer ${OPENAI_API_KEY}" \
             -H "Content-Type: application/json" \
             -d @/tmp/payload2.json)
-
+          
           RESP="$(printf "%s" "$HTTP" | sed '$d')"
           CODE="$(printf "%s" "$HTTP" | tail -n1)"
-          printf '%s' "$RESP" > ai2-response.json
-
-          if [ "$CODE" != "200" ]; then
-            echo "[ai2] API error code $CODE"
-            jq -r '.error.message // "Unknown API error"' ai2-response.json || true
-            cp website-step1.json website-step2.json
-          elif jq -e '.choices[0].message.content' ai2-response.json >/dev/null 2>&1; then
-            jq -r '.choices[0].message.content' ai2-response.json > website-step2.json
+          
+          if [ "$CODE" = "200" ]; then
+            printf '%s' "$RESP" | jq -r '.choices[0].message.content // "{}"' > website-step2.json
             if ! jq empty website-step2.json 2>/dev/null; then
-              echo "[ai2] invalid JSON, using step1"
               cp website-step1.json website-step2.json
-            else
-              echo "[ai2] enhancement ok"
             fi
           else
-            echo "[ai2] content missing, using step1"
             cp website-step1.json website-step2.json
           fi
 
@@ -260,16 +171,13 @@ EOJSON
         shell: bash
         run: |
           set -euo pipefail
-          echo "[ai3] technical optimisation, preserving content"
-
+          echo "[ai3] preserving content"
+          
           if [ -f website-step2.json ] && jq empty website-step2.json 2>/dev/null; then
             cp website-step2.json website-step3.json
-            echo "[ai3] preserved content from step 2"
           elif [ -f website-step1.json ]; then
-            echo "[ai3] no valid step2, using step1"
             cp website-step1.json website-step3.json
           else
-            echo "[ai3] no valid input, using fallback"
             printf '{}' > website-step3.json
           fi
 
@@ -277,30 +185,28 @@ EOJSON
         shell: bash
         run: |
           set -euo pipefail
-          echo "[ai4] generating optimised image prompts"
-
+          echo "[ai4] generating image prompts"
+          
+          [ -f website-step3.json ] || { printf '{"images":[]}' > image-prompts.json; exit 0; }
+          
           jq -n \
-            --arg sys 'Create detailed DALL-E prompts for website images. For each image, provide specific, detailed visual description with professional photography style. Return format: {"images":[{"key":"hero","target":"hero","prompt":"detailed prompt","aspect":"16:9","filename":"hero.jpg"}]}' \
             --rawfile content website-step3.json \
             '{
               model: "gpt-4o-mini",
               response_format: {"type": "json_object"},
               messages: [
-                {role:"system", content:$sys},
-                {role:"user", content:("Create image prompts for this business:\n\n" + $content)}
+                {role:"system", content:"Create DALL-E prompts. Return: {\"images\":[{\"key\":\"hero\",\"prompt\":\"prompt\"}]}"},
+                {role:"user", content:("Create image prompts for:\n" + $content)}
               ]
             }' > /tmp/payload4.json
-
+          
           HTTP=$(curl -sS -w "\n%{http_code}" "https://api.openai.com/v1/chat/completions" \
             -H "Authorization: Bearer ${OPENAI_API_KEY}" \
             -H "Content-Type: application/json" \
             -d @/tmp/payload4.json)
           
-          RESP="$(printf "%s" "$HTTP" | sed '$d')"
-          CODE="$(printf "%s" "$HTTP" | tail -n1)"
-          
-          if [ "$CODE" = "200" ]; then
-            printf '%s' "$RESP" | jq -r '.choices[0].message.content // "{\"images\":[]}"' > image-prompts.json
+          if [ "$(printf "%s" "$HTTP" | tail -n1)" = "200" ]; then
+            printf "%s" "$HTTP" | sed '$d' | jq -r '.choices[0].message.content // "{\"images\":[]}"' > image-prompts.json
           else
             printf '{"images":[]}' > image-prompts.json
           fi
@@ -311,174 +217,44 @@ EOJSON
         run: |
           set -euo pipefail
           echo "[merge] merging AI passes"
-
-          # Build fallback website with cat, not jq
-          cat > fallback-website.json <<'EOJSON'
-{
-  "slug": "new-site",
-  "name": "New Site",
-  "tagline": "Welcome to our website",
-  "industry": "business",
-  "designTheme": "modern",
-  "colorPalette": {
-    "primary": "#2563eb",
-    "secondary": "#3b82f6",
-    "accent": "#1d4ed8",
-    "background": "#ffffff",
-    "text": "#1f2937"
-  },
-  "typography": {
-    "headingFont": "Inter",
-    "bodyFont": "Inter",
-    "accentFont": "Inter"
-  },
-  "heroSection": {
-    "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Welcome</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Your trusted partner</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started</a></div>",
-    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
-  },
-  "customSections": [{
-    "key": "about",
-    "title": "About Us",
-    "html": "<div class=\"text-center mb-16\"><h2 class=\"text-4xl font-bold mb-6\">About Us</h2><p class=\"text-xl text-gray-600 max-w-3xl mx-auto\">We provide exceptional services to help your business thrive.</p></div>"
-  }],
-  "imagePrompts": []
-}
-EOJSON
-
-          extract_valid_content() {
-            local input_file="$1"
-            local temp_file="temp_extracted.json"
-            printf '{}' > "$temp_file"
-
-            [ -f "$input_file" ] || { cat "$temp_file"; rm -f "$temp_file"; return; }
-
-            if jq empty "$input_file" >/dev/null 2>&1; then
-              local t; t=$(jq -r 'type' "$input_file" 2>/dev/null || echo "null")
-              case "$t" in
-                object)
-                  jq '{
-                    slug: (.slug // .name // empty | ascii_downcase | gsub("[^a-z0-9]"; "-") | gsub("-+"; "-") | gsub("^-|-$"; "")),
-                    name: (.name // .title // empty),
-                    tagline: (.tagline // .description // .subtitle // empty),
-                    industry: (.industry // empty),
-                    designTheme: (.designTheme // .theme // .style // empty),
-                    colorPalette: (.colorPalette // .colors // empty),
-                    typography: (.typography // .fonts // empty),
-                    heroSection: (.heroSection // empty),
-                    customSections: (.customSections // .sections // empty),
-                    services: (.services // empty),
-                    testimonials: (.testimonials // empty),
-                    contact: (.contact // empty)
-                  } | with_entries(select(.value != null and .value != ""))' "$input_file" > "$temp_file" || printf '{}' > "$temp_file"
-                  ;;
-                array)
-                  if jq -e '.[0]' "$input_file" >/dev/null 2>&1; then
-                    jq '.[0] | {
-                      slug: (.slug // .name // empty | ascii_downcase | gsub("[^a-z0-9]"; "-") | gsub("-+"; "-") | gsub("^-|-$"; "")),
-                      name: (.name // .title // empty),
-                      tagline: (.tagline // .description // .subtitle // empty),
-                      industry: (.industry // empty),
-                      designTheme: (.designTheme // .theme // .style // empty),
-                      colorPalette: (.colorPalette // .colors // empty),
-                      typography: (.typography // .fonts // empty),
-                      heroSection: (.heroSection // empty),
-                      customSections: (.customSections // .sections // empty),
-                      services: (.services // empty),
-                      testimonials: (.testimonials // empty),
-                      contact: (.contact // empty)
-                    } | with_entries(select(.value != null and .value != ""))' "$input_file" > "$temp_file" || printf '{}' > "$temp_file"
-                  fi
-                  ;;
-              esac
-            fi
-            cat "$temp_file"
-            rm -f "$temp_file"
-          }
-
-          echo "[merge] extracting content"
-          extract_valid_content "website-step1.json" > step1-extracted.json
-          extract_valid_content "website-step2.json" > step2-extracted.json
-          extract_valid_content "website-step3.json" > step3-extracted.json
-
-          if [ -f "image-prompts.json" ] && jq empty "image-prompts.json" >/dev/null 2>&1; then
-            if jq -e '.images' "image-prompts.json" >/dev/null 2>&1; then
-              jq '.images // []' "image-prompts.json" > extracted-images.json
-            elif jq -e '. | type == "array"' "image-prompts.json" >/dev/null 2>&1; then
-              cp "image-prompts.json" extracted-images.json
-            else
-              printf '[]' > extracted-images.json
-            fi
-          else
-            printf '[]' > extracted-images.json
-          fi
-
-          jq -s '
-            def deep_merge(a; b):
-              if (a|type) == "object" and (b|type) == "object" then
-                reduce (b|keys_unsorted[]) as $k (a; .[$k] = deep_merge(.[$k]; b[$k]))
-              elif b != null and b != "" and b != {} then b
-              else a end;
-            reduce .[1:] as $layer (.[0]; deep_merge(.; $layer))
-          ' fallback-website.json step1-extracted.json step2-extracted.json step3-extracted.json > website.json
-
-          jq --slurpfile imgs extracted-images.json '.imagePrompts = ($imgs[0] // [])' website.json > website.tmp && mv website.tmp website.json
-
+          
+          # Create fallback
+          printf '%s\n' '{"slug":"new-site","name":"New Site","tagline":"Welcome","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div>Welcome</div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c"},"customSections":[{"title":"About","html":"<div>About</div>"}]}' > fallback.json
+          
+          # Merge files
+          for f in website-step1.json website-step2.json website-step3.json; do
+            [ -f "$f" ] && jq empty "$f" 2>/dev/null && cp "$f" website.json && break
+          done
+          [ -f website.json ] || cp fallback.json website.json
+          
+          # Extract variables
           normalize_color() {
-            local color="${1:-}"
-            [ -n "$color" ] || { printf '#2563eb'; return; }
-            color="${color,,}"; color="${color#\#}"
-            case "${#color}" in
-              3) printf '#%s%s%s%s%s%s' "${color:0:1}" "${color:0:1}" "${color:1:1}" "${color:1:1}" "${color:2:1}" "${color:2:1}";;
-              6) printf '#%s' "$color";;
+            local c="${1:-#2563eb}"
+            c="${c,,}"; c="${c#\#}"
+            case "${#c}" in
+              3) printf '#%s%s%s%s%s%s' "${c:0:1}" "${c:0:1}" "${c:1:1}" "${c:1:1}" "${c:2:1}" "${c:2:1}";;
+              6) printf '#%s' "$c";;
               *) printf '#2563eb';;
             esac
           }
-
-          BRAND="#2563eb"; ACCENT="#3b82f6"
-
-          for path in '.colorPalette.primary' '.colorPalette.brand' '.colors.primary' '.primary' '.colorPalette.secondary'; do
-            TEMP_COLOR=$(jq -r "$path // empty" website.json 2>/dev/null || true)
-            if [ -n "$TEMP_COLOR" ] && [ "$TEMP_COLOR" != "null" ]; then BRAND="$TEMP_COLOR"; break; fi
-          done
-
-          for path in '.colorPalette.accent' '.colorPalette.secondary' '.colors.accent' '.accent' '.colorPalette.primary'; do
-            TEMP_COLOR=$(jq -r "$path // empty" website.json 2>/dev/null || true)
-            if [ -n "$TEMP_COLOR" ] && [ "$TEMP_COLOR" != "null" ] && [ "$TEMP_COLOR" != "$BRAND" ]; then ACCENT="$TEMP_COLOR"; break; fi
-          done
-
-          BRAND=$(normalize_color "$BRAND")
-          ACCENT=$(normalize_color "$ACCENT")
-
-          SLUG=$(jq -r '.slug // (.name | ascii_downcase | gsub("[^a-z0-9]"; "-") | gsub("-+"; "-") | gsub("^-|-$"; "")) // "new-site"' website.json || echo "new-site")
-          [ -n "$SLUG" ] && [ "$SLUG" != "null" ] || SLUG="new-site"
-
-          NAME=$(jq -r '.name // "New Site"' website.json || echo "New Site")
-          [ -n "$NAME" ] && [ "$NAME" != "null" ] || NAME="New Site"
-
-          TAGLINE=$(jq -r '.tagline // "Welcome to our website"' website.json || echo "Welcome to our website")
-          [ -n "$TAGLINE" ] && [ "$TAGLINE" != "null" ] || TAGLINE="Welcome to our website"
-
-          HERO_IMG=$(jq -r '.heroSection.heroImage // empty' website.json || echo "")
-          if [ -z "$HERO_IMG" ] || [ "$HERO_IMG" = "null" ]; then
-            HERO_IMG="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
-          fi
-
+          
+          SLUG=$(jq -r '.slug // "new-site"' website.json)
+          NAME=$(jq -r '.name // "New Site"' website.json)
+          TAGLINE=$(jq -r '.tagline // "Welcome"' website.json)
+          BRAND=$(normalize_color "$(jq -r '.colorPalette.primary // "#2563eb"' website.json)")
+          ACCENT=$(normalize_color "$(jq -r '.colorPalette.accent // "#3b82f6"' website.json)")
+          HERO=$(jq -r '.heroSection.heroImage // "https://images.unsplash.com/photo-1497366216548-37526070297c"' website.json)
+          
           {
             echo "slug=$SLUG"
             echo "name=$NAME"
             echo "tagline=$TAGLINE"
             echo "brand=$BRAND"
             echo "accent=$ACCENT"
-            echo "hero=$HERO_IMG"
+            echo "hero=$HERO"
           } >> "$GITHUB_OUTPUT"
-
-          echo "[merge] Extracted:"
-          echo "  SLUG: $SLUG"
-          echo "  NAME: $NAME"
-          echo "  BRAND: $BRAND"
-          echo "  ACCENT: $ACCENT"
-
-          rm -f fallback-website.json step1-extracted.json step2-extracted.json step3-extracted.json extracted-images.json
+          
+          echo "[merge] Extracted: SLUG=$SLUG, NAME=$NAME"
 
       - name: Generate AI images
         if: ${{ github.event.inputs.generate_images == 'true' }}
@@ -488,15 +264,11 @@ EOJSON
         run: |
           set -euo pipefail
           echo "[images] preparing assets"
-          mkdir -p "$GITHUB_WORKSPACE/${SLUG}-assets/img" tmp_images
-
-          if [ ! -s tmp_images/hero.jpg ]; then
-            echo "[images] downloading fallback hero"
-            curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" \
-              -o tmp_images/hero.jpg --max-time 30 || true
-          fi
-
-          cp -f tmp_images/*.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/" 2>/dev/null || true
+          mkdir -p "${SLUG}-assets/img"
+          
+          # Download fallback hero image
+          curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" \
+            -o "${SLUG}-assets/img/hero.jpg" --max-time 30 || true
 
       - name: Scaffold enhanced theme
         env:
@@ -510,85 +282,117 @@ EOJSON
         run: |
           set -euo pipefail
           echo "[scaffold] creating theme structure"
-
-          THEME_DIR="$GITHUB_WORKSPACE/${SLUG}-child"
+          
+          THEME_DIR="${SLUG}-child"
           mkdir -p "$THEME_DIR/assets/css" "$THEME_DIR/assets/js" "$THEME_DIR/assets/img" "$THEME_DIR/dist"
+          
+          # Copy hero image if exists
+          [ -f "${SLUG}-assets/img/hero.jpg" ] && cp "${SLUG}-assets/img/hero.jpg" "$THEME_DIR/assets/img/hero.jpg"
+          
+          # Create theme files using printf to avoid heredoc issues
+          printf '/*\nTheme Name: %s\nDescription: AI-generated website\nTemplate: sitefuse-base\nVersion: 1.0.0\n*/\n' "$NAME" > "$THEME_DIR/style.css"
+          
+          # Create functions.php
+          printf '<?php\nadd_action("wp_enqueue_scripts", function() {\n' > "$THEME_DIR/functions.php"
+          printf '  wp_enqueue_style("parent", get_template_directory_uri()."/dist/tailwind.css");\n' >> "$THEME_DIR/functions.php"
+          printf '  wp_enqueue_style("child", get_stylesheet_directory_uri()."/dist/tailwind.css");\n' >> "$THEME_DIR/functions.php"
+          printf '});\n' >> "$THEME_DIR/functions.php"
+          
+          # Create minimal CSS
+          printf ':root{--brand:%s;--accent:%s;}\n' "$BRAND" "$ACCENT" > "$THEME_DIR/dist/tailwind.css"
+          printf 'body{font-family:system-ui,sans-serif;}\n' >> "$THEME_DIR/dist/tailwind.css"
+          printf '.container{max-width:1280px;margin:0 auto;padding:0 1rem;}\n' >> "$THEME_DIR/dist/tailwind.css"
+          
+          # Create index.php
+          printf '<?php get_header(); ?>\n' > "$THEME_DIR/index.php"
+          printf '<main class="container py-20">\n' >> "$THEME_DIR/index.php"
+          printf '<?php if(have_posts()):while(have_posts()):the_post();the_content();endwhile;endif; ?>\n' >> "$THEME_DIR/index.php"
+          printf '</main>\n<?php get_footer(); ?>\n' >> "$THEME_DIR/index.php"
+          
+          # Create header.php
+          printf '<!DOCTYPE html><html <?php language_attributes(); ?>>\n' > "$THEME_DIR/header.php"
+          printf '<head><meta charset="<?php bloginfo("charset"); ?>">\n' >> "$THEME_DIR/header.php"
+          printf '<meta name="viewport" content="width=device-width,initial-scale=1">\n' >> "$THEME_DIR/header.php"
+          printf '<?php wp_head(); ?></head>\n' >> "$THEME_DIR/header.php"
+          printf '<body <?php body_class(); ?>>\n' >> "$THEME_DIR/header.php"
+          printf '<header class="container py-4"><h1><?php bloginfo("name"); ?></h1></header>\n' >> "$THEME_DIR/header.php"
+          
+          # Create footer.php
+          printf '<footer class="container py-8 mt-20">\n' > "$THEME_DIR/footer.php"
+          printf '<p>&copy; <?php echo date("Y"); ?> <?php bloginfo("name"); ?></p>\n' >> "$THEME_DIR/footer.php"
+          printf '</footer>\n<?php wp_footer(); ?></body></html>\n' >> "$THEME_DIR/footer.php"
+          
+          # Create front-page.php
+          printf '<?php get_header(); ?>\n' > "$THEME_DIR/front-page.php"
+          printf '<main class="container">\n' >> "$THEME_DIR/front-page.php"
+          printf '<h1>%s</h1>\n' "$NAME" >> "$THEME_DIR/front-page.php"
+          printf '<p>%s</p>\n' "$TAGLINE" >> "$THEME_DIR/front-page.php"
+          printf '</main>\n<?php get_footer(); ?>\n' >> "$THEME_DIR/front-page.php"
 
-          cp -f "$GITHUB_WORKSPACE/${SLUG}-assets/img/hero.jpg" "$THEME_DIR/assets/img/hero.jpg" 2>/dev/null || true
+      - name: Commit theme
+        env:
+          SLUG: ${{ steps.merge.outputs.slug }}
+          NAME: ${{ steps.merge.outputs.name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "[commit] preparing theme commit"
+          
+          mkdir -p child-themes
+          rm -rf "child-themes/${SLUG}-child"
+          mv "${SLUG}-child" "child-themes/${SLUG}-child"
+          
+          git config user.name "SiteFuse AI Bot"
+          git config user.email "ai-bot@sitefuse.com"
+          
+          git add "child-themes/${SLUG}-child" website.json || true
+          git commit -m "feat: AI theme '${NAME}'" || echo "No changes"
+          git push origin main || echo "Push skipped"
 
-          # style.css
-          cat > "$THEME_DIR/style.css" << 'EOF'
-          /*
-          Theme Name: ${NAME}
-          Description: AI-generated professional website built with SiteFuse
-          Template: sitefuse-base
-          Text Domain: ${SLUG}-child
-          Version: 1.0.0
-          */
-          EOF
-          # Substitute variables
-          sed -i "s/\${NAME}/$NAME/g" "$THEME_DIR/style.css"
-          sed -i "s/\${SLUG}/$SLUG/g" "$THEME_DIR/style.css"
-
-          # functions.php
-          cat > "$THEME_DIR/functions.php" << 'PHPEOF'
-          <?php
-          add_action('wp_enqueue_scripts', function () {
-              $parent_css = get_template_directory_uri() . '/dist/tailwind.css';
-              wp_enqueue_style('sitefuse-parent', $parent_css, [], null);
-
-              $child_css_path = get_stylesheet_directory() . '/dist/tailwind.css';
-              $child_css_ver = file_exists($child_css_path) ? filemtime($child_css_path) : '1.0.0';
-              wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $child_css_ver);
-
-              wp_enqueue_script('sitefuse-theme', get_stylesheet_directory_uri() . '/assets/js/theme.js', [], $child_css_ver, true);
-          });
-
-          add_action('after_setup_theme', function () {
-              add_theme_support('post-thumbnails');
-              add_theme_support('custom-logo');
-              add_theme_support('title-tag');
-              register_nav_menus(['primary' => 'Primary Navigation', 'footer' => 'Footer Navigation']);
-          });
-
-          function get_theme_image($image_name, $fallback_url = '') {
-              $theme_image = get_stylesheet_directory_uri() . '/assets/img/' . $image_name;
-              $theme_path = get_stylesheet_directory() . '/assets/img/' . $image_name;
-
-              if (file_exists($theme_path)) {
-                  return $theme_image;
-              }
-              return $fallback_url ?: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop';
-          }
-          PHPEOF
-
-          # tailwind.css with proper variable substitution
-          cat > "$THEME_DIR/assets/css/tailwind.css" << EOF
-          @tailwind base;
-          @tailwind components;
-          @tailwind utilities;
-
-          @layer base {
-            :root {
-              --color-brand-primary: ${BRAND};
-              --color-brand-accent: ${ACCENT};
-              --color-cream: #fefaf6;
-              --color-dark: #1f2937;
-            }
-            html { scroll-behavior: smooth; }
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-              line-height: 1.7;
-              color: var(--color-dark);
-              background-color: var(--color-cream);
-            }
-          }
-
-          @layer components {
-            .container { width: 100%; margin: 0 auto; padding: 0 1rem; max-width: 80rem; }
-            .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.875rem 2rem; border-radius: 0.75rem; font-weight: 600; transition: all 0.3s; text-decoration: none; }
-            .btn-primary { background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent)); color: white; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
-            .btn-primary:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.2); transform: translateY(-2px); }
-            .card { background: white; border-radius: 1rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.08); transition: all 0.3s; }
-            .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--color-dark); }
-            .hero-section { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)); }
+      - name: Deploy to Cloudways
+        env:
+          SLUG: ${{ steps.merge.outputs.slug }}
+          NAME: ${{ steps.merge.outputs.name }}
+          TAGLINE: ${{ steps.merge.outputs.tagline }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "[deploy] deploying to Cloudways"
+          
+          # Deploy parent theme
+          PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base"
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
+            "mkdir -p '$PARENT_DEST'"
+          
+          if [ -d "sitefuse-base" ]; then
+            rsync -avz --delete \
+              -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+              "sitefuse-base/" \
+              "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/"
+          fi
+          
+          # Deploy child theme
+          THEME_DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
+            "mkdir -p '$THEME_DEST'"
+          
+          rsync -avz --delete \
+            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+            "child-themes/${SLUG}-child/" \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$THEME_DEST/"
+          
+          # Copy website.json
+          rsync -avz \
+            -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+            "website.json" \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
+          
+          # Configure WordPress
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
+            "cd '$APP_PATH' && \
+            wp option update blogname '$NAME' --allow-root && \
+            wp option update blogdescription '$TAGLINE' --allow-root && \
+            wp theme activate '${SLUG}-child' --allow-root && \
+            wp rewrite flush --allow-root"
+          
+          echo "Deployment completed: $NAME"
