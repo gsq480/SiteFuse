@@ -143,35 +143,59 @@ jobs:
               jq -r '{name:.name,tagline:.tagline,industry:.industry,sectionsCount:(.customSections|length)}' website-step1.json || true
             else
               echo "[ai1] invalid JSON, writing fallback"
-              jq -n '{
-                slug:"business-site",
-                name:"Your Business",
-                tagline:"Professional services you can trust",
-                industry:"business",
-                colorPalette:{primary:"#2563eb",secondary:"#3b82f6",accent:"#1d4ed8"},
-                typography:{headingFont:"Inter",bodyFont:"Inter"},
-                heroSection:{
-                  customHTML:"<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
-                  heroImage:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
-                },
-                customSections:[{title:"About Us",html:"<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"}]
-              }' > website-step1.json
+              cat > website-step1.json << 'EOJSON'
+{
+  "slug": "business-site",
+  "name": "Your Business",
+  "tagline": "Professional services you can trust",
+  "industry": "business",
+  "colorPalette": {
+    "primary": "#2563eb",
+    "secondary": "#3b82f6",
+    "accent": "#1d4ed8"
+  },
+  "typography": {
+    "headingFont": "Inter",
+    "bodyFont": "Inter"
+  },
+  "heroSection": {
+    "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
+    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
+  },
+  "customSections": [{
+    "title": "About Us",
+    "html": "<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"
+  }]
+}
+EOJSON
             fi
           else
             echo "[ai1] no AI content, using fallback"
-            jq -n '{
-              slug:"business-site",
-              name:"Your Business",
-              tagline:"Professional services you can trust",
-              industry:"business",
-              colorPalette:{primary:"#2563eb",secondary:"#3b82f6",accent:"#1d4ed8"},
-              typography:{headingFont:"Inter",bodyFont:"Inter"},
-              heroSection:{
-                customHTML:"<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
-                heroImage:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
-              },
-              customSections:[{title:"About Us",html:"<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"}]
-            }' > website-step1.json
+            cat > website-step1.json << 'EOJSON'
+{
+  "slug": "business-site",
+  "name": "Your Business",
+  "tagline": "Professional services you can trust",
+  "industry": "business",
+  "colorPalette": {
+    "primary": "#2563eb",
+    "secondary": "#3b82f6",
+    "accent": "#1d4ed8"
+  },
+  "typography": {
+    "headingFont": "Inter",
+    "bodyFont": "Inter"
+  },
+  "heroSection": {
+    "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
+    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
+  },
+  "customSections": [{
+    "title": "About Us",
+    "html": "<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"
+  }]
+}
+EOJSON
           fi
 
           rm -f /tmp/ai_prompt.txt /tmp/ai_industry.txt /tmp/payload.json
@@ -288,22 +312,38 @@ jobs:
           set -euo pipefail
           echo "[merge] merging AI passes"
 
-          # Build fallback website with jq, no heredocs
-          jq -n '{
-            slug:"new-site",
-            name:"New Site",
-            tagline:"Welcome to our website",
-            industry:"business",
-            designTheme:"modern",
-            colorPalette:{primary:"#2563eb",secondary:"#3b82f6",accent:"#1d4ed8",background:"#ffffff",text:"#1f2937"},
-            typography:{headingFont:"Inter",bodyFont:"Inter",accentFont:"Inter"},
-            heroSection:{
-              customHTML:"<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Welcome</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Your trusted partner</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started</a></div>",
-              heroImage:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
-            },
-            customSections:[{key:"about",title:"About Us",html:"<div class=\"text-center mb-16\"><h2 class=\"text-4xl font-bold mb-6\">About Us</h2><p class=\"text-xl text-gray-600 max-w-3xl mx-auto\">We provide exceptional services to help your business thrive.</p></div>"}],
-            imagePrompts:[]
-          }' > fallback-website.json
+          # Build fallback website with cat, not jq
+          cat > fallback-website.json << 'EOJSON'
+{
+  "slug": "new-site",
+  "name": "New Site",
+  "tagline": "Welcome to our website",
+  "industry": "business",
+  "designTheme": "modern",
+  "colorPalette": {
+    "primary": "#2563eb",
+    "secondary": "#3b82f6",
+    "accent": "#1d4ed8",
+    "background": "#ffffff",
+    "text": "#1f2937"
+  },
+  "typography": {
+    "headingFont": "Inter",
+    "bodyFont": "Inter",
+    "accentFont": "Inter"
+  },
+  "heroSection": {
+    "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Welcome</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Your trusted partner</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started</a></div>",
+    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
+  },
+  "customSections": [{
+    "key": "about",
+    "title": "About Us",
+    "html": "<div class=\"text-center mb-16\"><h2 class=\"text-4xl font-bold mb-6\">About Us</h2><p class=\"text-xl text-gray-600 max-w-3xl mx-auto\">We provide exceptional services to help your business thrive.</p></div>"
+  }],
+  "imagePrompts": []
+}
+EOJSON
 
           extract_valid_content() {
             local input_file="$1"
@@ -549,6 +589,9 @@ jobs:
             .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.875rem 2rem; border-radius: 0.75rem; font-weight: 600; transition: all 0.3s; text-decoration: none; }
             .btn-primary { background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent)); color: white; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
             .btn-primary:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.2); transform: translateY(-2px); }
+            .card { background: white; border-radius: 1rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.08); transition: all 0.3s; }
+            .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--color-dark); }
+            .hero-section { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)); }
             .card { background: white; border-radius: 1rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.08); transition: all 0.3s; }
             .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--color-dark); }
             .hero-section { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)); }
