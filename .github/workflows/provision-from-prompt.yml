@@ -143,7 +143,7 @@ jobs:
               jq -r '{name:.name,tagline:.tagline,industry:.industry,sectionsCount:(.customSections|length)}' website-step1.json || true
             else
               echo "[ai1] invalid JSON, writing fallback"
-              cat > website-step1.json << 'EOJSON'
+              cat > website-step1.json <<'EOJSON'
 {
   "slug": "business-site",
   "name": "Your Business",
@@ -171,7 +171,7 @@ EOJSON
             fi
           else
             echo "[ai1] no AI content, using fallback"
-            cat > website-step1.json << 'EOJSON'
+            cat > website-step1.json <<'EOJSON'
 {
   "slug": "business-site",
   "name": "Your Business",
@@ -313,7 +313,7 @@ EOJSON
           echo "[merge] merging AI passes"
 
           # Build fallback website with cat, not jq
-          cat > fallback-website.json << 'EOJSON'
+          cat > fallback-website.json <<'EOJSON'
 {
   "slug": "new-site",
   "name": "New Site",
