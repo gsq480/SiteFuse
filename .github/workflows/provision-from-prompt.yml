@@ -61,7 +61,6 @@ jobs:
           printf '%s\n' "$CLOUDWAYS_KEY" > ~/.ssh/id_rsa_cloudways
           chmod 600 ~/.ssh/id_rsa_cloudways
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
-
       - name: AI pass 1 - Enhanced website structure
         shell: bash
         run: |
@@ -98,58 +97,63 @@ jobs:
             else
               echo "[ai1] invalid JSON, writing fallback"
               cat > website-step1.json <<'EOJSON'
-{
-  "slug": "business-site",
-  "name": "Your Business",
-  "tagline": "Professional services you can trust",
-  "industry": "business",
-  "colorPalette": {
-    "primary": "#2563eb",
-    "secondary": "#3b82f6",
-    "accent": "#1d4ed8"
-  },
-  "typography": {
-    "headingFont": "Inter",
-    "bodyFont": "Inter"
-  },
-  "heroSection": {
-    "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
-    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
-  },
-  "customSections": [{
-    "title": "About Us",
-    "html": "<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"
-  }]
-}
-EOJSON
-            fi
-          else
-            echo "[ai1] no AI content, using fallback"
-            cat > website-step1.json <<'EOJSON'
-{
-  "slug": "business-site",
-  "name": "Your Business",
-  "tagline": "Professional services you can trust",
-  "industry": "business",
-  "colorPalette": {
-    "primary": "#2563eb",
-    "secondary": "#3b82f6",
-    "accent": "#1d4ed8"
-  },
-  "typography": {
-    "headingFont": "Inter",
-    "bodyFont": "Inter"
-  },
-  "heroSection": {
-    "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
-    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
-  },
-  "customSections": [{
-    "title": "About Us",
-    "html": "<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"
-  }]
-}
-EOJSON
+
+          GitHub Actions
+          / .github/workflows/provision-from-prompt.yml
+          Invalid workflow file
+
+          You have an error in your yaml syntax on line 101
+            "slug": "business-site",
+            "name": "Your Business",
+            "tagline": "Professional services you can trust",
+            "industry": "business",
+            "colorPalette": {
+              "primary": "#2563eb",
+              "secondary": "#3b82f6",
+              "accent": "#1d4ed8"
+            },
+            "typography": {
+              "headingFont": "Inter",
+              "bodyFont": "Inter"
+            },
+            "heroSection": {
+              "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
+              "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
+            },
+            "customSections": [{
+              "title": "About Us",
+              "html": "<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"
+            }]
+          }
+          EOJSON
+                      fi
+                    else
+                      echo "[ai1] no AI content, using fallback"
+                      cat > website-step1.json <<'EOJSON'
+          {
+            "slug": "business-site",
+            "name": "Your Business",
+            "tagline": "Professional services you can trust",
+            "industry": "business",
+            "colorPalette": {
+              "primary": "#2563eb",
+              "secondary": "#3b82f6",
+              "accent": "#1d4ed8"
+            },
+            "typography": {
+              "headingFont": "Inter",
+              "bodyFont": "Inter"
+            },
+            "heroSection": {
+              "customHTML": "<div class=\"text-center\"><h1 class=\"text-5xl md:text-7xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl md:text-2xl mb-8 text-gray-100\">Professional services you can trust</p><a href=\"#contact\" class=\"btn btn-primary text-lg px-8 py-4\">Get Started Today</a></div>",
+              "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800&fit=crop"
+            },
+            "customSections": [{
+              "title": "About Us",
+              "html": "<section class=\"py-16 bg-white\"><div class=\"container mx-auto px-4\"><h2 class=\"section-title text-center\">About Us</h2><p class=\"text-xl text-gray-600 text-center mb-8\">We provide exceptional services to help your business thrive.</p></div></section>"
+            }]
+          }
+          EOJSON
           fi
 
           rm -f /tmp/ai_prompt.txt /tmp/ai_industry.txt /tmp/payload.json
@@ -168,8 +172,7 @@ EOJSON
             curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" -o tmp_images/hero.jpg --max-time 30 || true
           fi
           cp -f tmp_images/*.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/" 2>/dev/null || true
-
-      - name:- name: Generate AI images
+      - name: Generate AI images
         if: ${{ fromJSON(github.event.inputs.generate_images) }}
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
@@ -183,7 +186,6 @@ EOJSON
             curl -fsSL "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1600&h=900&fit=crop" -o tmp_images/hero.jpg --max-time 30 || true
           fi
           cp -f tmp_images/*.jpg "$GITHUB_WORKSPACE/${SLUG}-assets/img/" 2>/dev/null || true
-
       - name: Scaffold enhanced theme
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
@@ -392,7 +394,6 @@ EOJSON
             curl -fsSL "${HERO}" -o "$THEME_DIR/assets/img/hero.jpg" --max-time 20 || \
             curl -fsSL "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop" -o "$THEME_DIR/assets/img/hero.jpg" --max-time 20 || true
           fi
-
       - name: Build Tailwind CSS
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
@@ -431,7 +432,6 @@ EOJSON
           .hero-section{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center}
           " > "$THEME_DIR/dist/tailwind.css"
           fi
-
       - name: Debug AI-generated content
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
@@ -449,7 +449,6 @@ EOJSON
             echo "=== CUSTOM SECTIONS ==="
             jq '.customSections | length' website.json || echo "No sections"
           fi
-
       - name: Commit theme
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
@@ -466,7 +465,6 @@ EOJSON
           git add "child-themes/${SLUG}-child" website*.json image-prompts.json || true
           git commit -m "feat: AI-generated theme '${NAME}' from prompt: ${{ github.event.inputs.prompt }}" || echo "No changes"
           git push origin main || echo "Push skipped"
-
       - name: Deploy to Cloudways
         env:
           SLUG: ${{ steps.merge.outputs.slug }}
@@ -513,14 +511,14 @@ EOJSON
           echo "Theme: ${NAME}"
           echo "Colours: ${{ steps.merge.outputs.brand }} / ${{ steps.merge.outputs.accent }}"on: AI-generated professional website built with SiteFuse" >> "$THEME_DIR/style.css"
           printf '%s
-' "Template: sitefuse-base" >> "$THEME_DIR/style.css"
-          printf '%s
-' "Text Domain: ${SLUG}-child" >> "$THEME_DIR/style.css"
-          printf '%s
-' "Version: 1.0.0" >> "$THEME_DIR/style.css"
-          printf '%s
-' "*/" >> "$THEME_DIR/style.css"
-          # functions.php
+          ' "Template: sitefuse-base" >> "$THEME_DIR/style.css"
+                    printf '%s
+          ' "Text Domain: ${SLUG}-child" >> "$THEME_DIR/style.css"
+                    printf '%s
+          ' "Version: 1.0.0" >> "$THEME_DIR/style.css"
+                    printf '%s
+          ' "*/" >> "$THEME_DIR/style.css"
+                    # functions.php
           printf '%b' "<?php
           add_action('wp_enqueue_scripts', function () {
               $parent_css = get_template_directory_uri() . '/dist/tailwind.css';
