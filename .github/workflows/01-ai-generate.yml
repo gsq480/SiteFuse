@@ -1,5 +1,5 @@
 # .github/workflows/01-ai-generate.yml
-- name: Generate website configuration
+      - name: Generate website configuration
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
