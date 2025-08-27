@@ -1,0 +1,249 @@
+# .github/workflows/02-build-theme.yml
+name: Build Theme
+
+on:
+  workflow_dispatch:
+    inputs:
+      config_artifact:
+        description: 'Configuration artifact name'
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      config_artifact:
+        required: true
+        type: string
+    outputs:
+      theme_artifact:
+        description: "Built theme artifact"
+        value: ${{ jobs.build.outputs.artifact_id }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download configuration
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.config_artifact }}
+      
+      - name: Extract configuration values
+        id: config
+        run: |
+          echo "slug=$(jq -r '.slug // "business-site"' website.json)" >> $GITHUB_OUTPUT
+          echo "name=$(jq -r '.name // "Your Business"' website.json)" >> $GITHUB_OUTPUT
+          echo "tagline=$(jq -r '.tagline // "Professional services"' website.json)" >> $GITHUB_OUTPUT
+          echo "brand=$(jq -r '.colorPalette.primary // "#2563eb"' website.json)" >> $GITHUB_OUTPUT
+          echo "accent=$(jq -r '.colorPalette.accent // "#1d4ed8"' website.json)" >> $GITHUB_OUTPUT
+          echo "hero=$(jq -r '.heroSection.heroImage // "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900"' website.json)" >> $GITHUB_OUTPUT
+      
+      - name: Generate theme files
+        env:
+          SLUG: ${{ steps.config.outputs.slug }}
+          NAME: ${{ steps.config.outputs.name }}
+          TAGLINE: ${{ steps.config.outputs.tagline }}
+          BRAND: ${{ steps.config.outputs.brand }}
+          ACCENT: ${{ steps.config.outputs.accent }}
+        run: |
+          # Create theme directory structure
+          THEME_DIR="${SLUG}-child"
+          mkdir -p "$THEME_DIR/assets/css" "$THEME_DIR/assets/js" "$THEME_DIR/assets/img" "$THEME_DIR/dist"
+          
+          # Generate style.css
+          cat > "$THEME_DIR/style.css" << EOF
+          /*
+          Theme Name: ${NAME}
+          Description: AI-generated professional website built with SiteFuse
+          Template: sitefuse-base
+          Text Domain: ${SLUG}-child
+          Version: 1.0.0
+          */
+          EOF
+          
+          # Generate functions.php
+          cat > "$THEME_DIR/functions.php" << 'EOF'
+          <?php
+          add_action('wp_enqueue_scripts', function () {
+              $parent_css = get_template_directory_uri() . '/dist/tailwind.css';
+              wp_enqueue_style('sitefuse-parent', $parent_css, [], null);
+              $child_css_path = get_stylesheet_directory() . '/dist/tailwind.css';
+              $child_css_ver = file_exists($child_css_path) ? filemtime($child_css_path) : '1.0.0';
+              wp_enqueue_style('sitefuse-child', get_stylesheet_directory_uri() . '/dist/tailwind.css', ['sitefuse-parent'], $child_css_ver);
+              wp_enqueue_script('sitefuse-theme', get_stylesheet_directory_uri() . '/assets/js/theme.js', [], $child_css_ver, true);
+          });
+          add_action('after_setup_theme', function () {
+              add_theme_support('post-thumbnails');
+              add_theme_support('custom-logo');
+              add_theme_support('title-tag');
+              register_nav_menus(['primary' => 'Primary Navigation', 'footer' => 'Footer Navigation']);
+          });
+          function get_theme_image($image_name, $fallback_url = '') {
+              $theme_image = get_stylesheet_directory_uri() . '/assets/img/' . $image_name;
+              $theme_path = get_stylesheet_directory() . '/assets/img/' . $image_name;
+              if (file_exists($theme_path)) {
+                  return $theme_image;
+              }
+              return $fallback_url ?: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop';
+          }
+          EOF
+          
+          # Generate base CSS with brand colors
+          cat > "$THEME_DIR/assets/css/tailwind.css" << EOF
+          @tailwind base;
+          @tailwind components;
+          @tailwind utilities;
+          @layer base {
+            :root {
+              --color-brand-primary: ${BRAND};
+              --color-brand-accent: ${ACCENT};
+              --color-cream: #fefaf6;
+              --color-dark: #1f2937;
+            }
+            html { scroll-behavior: smooth; }
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              line-height: 1.7;
+              color: var(--color-dark);
+              background-color: var(--color-cream);
+            }
+          }
+          @layer components {
+            .container { width: 100%; margin: 0 auto; padding: 0 1rem; max-width: 80rem; }
+            .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.875rem 2rem; border-radius: 0.75rem; font-weight: 600; transition: all 0.3s; text-decoration: none; }
+            .btn-primary { background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent)); color: white; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+            .btn-primary:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.2); transform: translateY(-2px); }
+            .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--color-dark); }
+            .hero-section { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)); }
+          }
+          EOF
+          
+          # Copy website config for deployment
+          cp website.json "$THEME_DIR/"
+      
+      - name: Build Tailwind CSS
+        env:
+          SLUG: ${{ steps.config.outputs.slug }}
+        run: |
+          # Download Tailwind CSS binary
+          curl -sL https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.1/tailwindcss-linux-x64 -o tailwindcss
+          chmod +x tailwindcss
+          
+          THEME_DIR="${SLUG}-child"
+          
+          # Generate Tailwind config
+          cat > "$THEME_DIR/tailwind.config.js" << 'EOF'
+          module.exports = {
+            content: ['./**/*.php'],
+            safelist: [
+              'container','btn','btn-primary','section-title','hero-section',
+              'text-center','text-white','bg-white','bg-gray-50','py-16',
+              'px-4','mb-6','mb-8','text-4xl','text-6xl','font-bold'
+            ],
+            theme: { extend: {} },
+            plugins: []
+          }
+          EOF
+          
+          # Build CSS
+          ./tailwindcss --config "$THEME_DIR/tailwind.config.js" --input "$THEME_DIR/assets/css/tailwind.css" --output "$THEME_DIR/dist/tailwind.css" --minify
+      
+      - name: Generate PHP templates
+        env:
+          SLUG: ${{ steps.config.outputs.slug }}
+        run: |
+          THEME_DIR="${SLUG}-child"
+          
+          # Generate front-page.php (simplified)
+          cat > "$THEME_DIR/front-page.php" << 'EOF'
+          <?php
+          get_header();
+          $config = [];
+          $config_path = ABSPATH . 'website.json';
+          if (file_exists($config_path)) {
+              $json_content = file_get_contents($config_path);
+              $decoded = json_decode($json_content, true);
+              if (is_array($decoded)) { $config = $decoded; }
+          }
+          $hero_html = $config['heroSection']['customHTML'] ?? '';
+          $hero_image = $config['heroSection']['heroImage'] ?? get_theme_image('hero.jpg');
+          $site_name = get_bloginfo('name');
+          $site_tagline = get_bloginfo('description');
+          ?>
+          <main id="main" class="site-main">
+            <section class="hero-section relative">
+              <div class="absolute inset-0">
+                <img src="<?php echo esc_url($hero_image); ?>" alt="<?php echo esc_attr($site_name); ?>" class="w-full h-full object-cover" />
+              </div>
+              <div class="relative z-10 container text-center text-white py-24">
+                <?php if (!empty($hero_html)) : ?>
+                  <?php echo wp_kses_post($hero_html); ?>
+                <?php else : ?>
+                  <h1 class="text-4xl font-bold mb-6"><?php echo esc_html($site_name); ?></h1>
+                  <p class="text-xl mb-8"><?php echo esc_html($site_tagline); ?></p>
+                  <a href="#contact" class="btn btn-primary">Get Started</a>
+                <?php endif; ?>
+              </div>
+            </section>
+          </main>
+          <?php get_footer(); ?>
+          EOF
+          
+          # Generate header.php
+          cat > "$THEME_DIR/header.php" << 'EOF'
+          <!DOCTYPE html>
+          <html <?php language_attributes(); ?>>
+          <head>
+            <meta charset="<?php bloginfo('charset'); ?>">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <?php wp_head(); ?>
+          </head>
+          <body <?php body_class('font-sans antialiased'); ?>>
+            <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b">
+              <div class="container">
+                <div class="flex items-center justify-between h-20">
+                  <a href="<?php echo esc_url(home_url('/')); ?>">
+                    <span class="text-2xl font-bold" style="color: var(--color-brand-primary);"><?php bloginfo('name'); ?></span>
+                  </a>
+                  <nav class="hidden lg:flex items-center space-x-4">
+                    <?php wp_nav_menu(['theme_location'=>'primary','container'=>false]); ?>
+                  </nav>
+                </div>
+              </div>
+            </header>
+          EOF
+          
+          # Generate footer.php
+          cat > "$THEME_DIR/footer.php" << 'EOF'
+          <footer class="bg-gray-900 text-gray-300 mt-20">
+            <div class="container py-16">
+              <div class="text-center">
+                <h3 class="text-2xl font-bold mb-4"><?php bloginfo('name'); ?></h3>
+                <p class="mb-6"><?php echo esc_html(get_bloginfo('description')); ?></p>
+                <p class="text-sm">© <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. All rights reserved.</p>
+              </div>
+            </div>
+            <?php wp_footer(); ?>
+          </body>
+          </html>
+          EOF
+          
+          # Generate index.php
+          cat > "$THEME_DIR/index.php" << 'EOF'
+          <?php get_header(); ?>
+          <main id="main" class="container py-20">
+            <?php if (have_posts()) : while (have_posts()) : the_post(); the_content(); endwhile; endif; ?>
+          </main>
+          <?php get_footer(); ?>
+          EOF
+      
+      - name: Upload built theme
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: theme-${{ steps.config.outputs.slug }}-${{ github.run_id }}
+          path: ${{ steps.config.outputs.slug }}-child/
+          retention-days: 1
