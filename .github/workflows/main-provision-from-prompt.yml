@@ -35,7 +35,6 @@ permissions:
   contents: write
   actions: write
 
-# Prevents parallel runs fighting each other on the same ref
 concurrency:
   group: sitefuse-${{ github.ref }}
   cancel-in-progress: false
@@ -55,7 +54,6 @@ jobs:
     needs: generate
     uses: ./.github/workflows/02-build-theme.yml
     with:
-      # Use the actual output name from 01-ai-generate, not a hardcoded guess
       config_artifact: ${{ needs.generate.outputs.config_artifact }}
     secrets: inherit
 
@@ -70,11 +68,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download config and theme
+      - name: List artifacts for this run
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data } = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+              per_page: 100
+            });
+            core.info('Artifacts found:');
+            for (const a of data.artifacts) core.info(`- ${a.name} (${a.size_in_bytes} bytes)`);
+
+      - name: Download config artifact
         uses: actions/download-artifact@v4
         with:
-          # grab both the config and the theme produced in earlier jobs
-          pattern: "*-${{ github.run_id }}"
+          name: ${{ needs.generate.outputs.config_artifact }}
+
+      - name: Download theme artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: theme-*-${{ github.run_id }}
           merge-multiple: true
 
       - name: Sanity check website.json
@@ -89,7 +104,6 @@ jobs:
           echo "name=$(jq -r '.name // "Your Business"' website.json)" >> $GITHUB_OUTPUT
           echo "tagline=$(jq -r '.tagline // "Professional services"' website.json)" >> $GITHUB_OUTPUT
 
-      # We do NOT add child-themes to the repo, build artefacts stay out of git
       - name: Commit website.json
         env:
           PROMPT_TEXT: ${{ inputs.prompt }}
@@ -110,7 +124,6 @@ jobs:
     needs: [generate, build, commit]
     uses: ./.github/workflows/03-deploy.yml
     with:
-      # Matches the name created by 02-build-theme.yml
       theme_artifact: theme-${{ needs.commit.outputs.slug }}-${{ github.run_id }}
       slug:    ${{ needs.commit.outputs.slug }}
       name:    ${{ needs.commit.outputs.name }}
