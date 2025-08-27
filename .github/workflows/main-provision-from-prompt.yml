@@ -1,0 +1,129 @@
+# .github/workflows/main-provision-from-prompt.yml
+name: Create Website from Prompt
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Describe your website, for example "Modern yoga studio with earth tones and mindfulness focus"'
+        required: true
+        type: string
+      industry:
+        description: 'Industry type'
+        required: false
+        type: choice
+        options:
+          - 'auto-detect'
+          - 'restaurant'
+          - 'bakery'
+          - 'yoga-studio'
+          - 'law-firm'
+          - 'photography'
+          - 'consulting'
+          - 'medical'
+          - 'retail'
+          - 'real-estate'
+          - 'technology'
+        default: 'auto-detect'
+      generate_images:
+        description: 'Generate AI images'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  generate:
+    name: Generate Configuration
+    uses: ./.github/workflows/01-ai-generate.yml
+    with:
+      prompt: ${{ inputs.prompt }}
+      industry: ${{ inputs.industry }}
+    secrets: inherit
+
+  build:
+    name: Build Theme
+    needs: generate
+    uses: ./.github/workflows/02-build-theme.yml
+    with:
+      config_artifact: website-config-${{ github.run_id }}
+    secrets: inherit
+
+  commit:
+    name: Commit to Repository
+    needs: [generate, build]
+    runs-on: ubuntu-latest
+    outputs:
+      slug: ${{ steps.extract.outputs.slug }}
+      name: ${{ steps.extract.outputs.name }}
+      tagline: ${{ steps.extract.outputs.tagline }}
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: Download config and theme
+        uses: actions/download-artifact@v4
+        with:
+          pattern: "*-${{ github.run_id }}"
+          merge-multiple: true
+      
+      - name: Extract values for output
+        id: extract
+        run: |
+          echo "slug=$(jq -r '.slug // "business-site"' website.json)" >> $GITHUB_OUTPUT
+          echo "name=$(jq -r '.name // "Your Business"' website.json)" >> $GITHUB_OUTPUT
+          echo "tagline=$(jq -r '.tagline // "Professional services"' website.json)" >> $GITHUB_OUTPUT
+      
+      - name: Organize files
+        env:
+          SLUG: ${{ steps.extract.outputs.slug }}
+        run: |
+          # Create child-themes directory structure
+          mkdir -p child-themes
+          if [ -d "${SLUG}-child" ]; then
+            mv "${SLUG}-child" "child-themes/${SLUG}-child"
+          else
+            echo "Warning: Theme directory ${SLUG}-child not found"
+            ls -la
+          fi
+      
+      - name: Commit to repository
+        env:
+          SLUG: ${{ steps.extract.outputs.slug }}
+          NAME: ${{ steps.extract.outputs.name }}
+        run: |
+          git config user.name "SiteFuse AI Bot"
+          git config user.email "ai-bot@sitefuse.com"
+          git add child-themes/ website.json || true
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "feat: AI-generated theme '${NAME}' from prompt: ${{ inputs.prompt }}"
+            git push origin main
+          fi
+
+  deploy:
+    name: Deploy to Server
+    needs: [generate, build, commit]
+    uses: ./.github/workflows/03-deploy.yml
+    with:
+      theme_artifact: theme-${{ needs.commit.outputs.slug }}-${{ github.run_id }}
+      slug: ${{ needs.commit.outputs.slug }}
+      name: ${{ needs.commit.outputs.name }}
+      tagline: ${{ needs.commit.outputs.tagline }}
+    secrets: inherit
+
+  cleanup:
+    name: Cleanup Artifacts
+    needs: [generate, build, commit, deploy]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete temporary artifacts
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: |
+            website-config-${{ github.run_id }}
+            theme-${{ needs.commit.outputs.slug }}-${{ github.run_id }}
