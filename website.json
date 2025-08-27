@@ -1,24 +1,20 @@
 {
   "colorPalette": {
-    "accent": "#A3B18A",
-    "primary": "#8C7B75",
-    "secondary": "#C2B280"
+    "accent": "#556B2F",
+    "primary": "#8B4513",
+    "secondary": "#D2B48C"
   },
   "customSections": [
     {
-      "html": "<section><h2>Our Philosophy</h2><p>At Modern Yoga Studio, we focus on mindfulness and balance, helping you connect with your inner self through the practice of yoga.</p></section>",
+      "html": "<section><h2>Our Philosophy</h2><p>At Modern Yoga Studio, we believe in the power of mindfulness and connection to the earth. Join us to explore your inner peace.</p></section>",
       "title": "Our Philosophy"
-    },
-    {
-      "html": "<section><h2>Classes Offered</h2><p>We offer a variety of classes for all levels, from beginner to advanced, ensuring a welcoming and inclusive environment for everyone.</p></section>",
-      "title": "Classes Offered"
     }
   ],
   "ecommerce": {
     "enabled": false
   },
   "heroSection": {
-    "customHTML": "<div class=\"text-center\">Find Your Inner Peace at Modern Yoga Studio</div>",
+    "customHTML": "<div class=\"text-center\">Welcome to Your Sanctuary of Peace and Mindfulness</div>",
     "heroImage": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop"
   },
   "industry": "yoga-studio",
@@ -46,7 +42,7 @@
       "layout": "landing",
       "sections": [
         {
-          "html": "<div class=\"text-center\">Find Your Inner Peace at Modern Yoga Studio</div>",
+          "html": "<div class=\"text-center\">Welcome to Your Sanctuary of Peace and Mindfulness</div>",
           "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop",
           "type": "hero"
         },
@@ -93,6 +89,6 @@
   "tagline": "Embrace Mindfulness and Balance",
   "typography": {
     "bodyFont": "Open Sans",
-    "headingFont": "Playfair Display"
+    "headingFont": "Lora"
   }
 }
