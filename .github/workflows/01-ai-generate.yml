@@ -153,3 +153,6 @@ jobs:
           name: website-config-${{ github.run_id }}
           path: website.json
           retention-days: 1
+          name: website-config-${{ github.run_id }}
+          path: website.json
+          retention-days: 1
