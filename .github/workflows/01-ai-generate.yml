@@ -1,5 +1,4 @@
 # .github/workflows/01-ai-generate.yml
-# .github/workflows/01-ai-generate.yml
 name: Generate Website Configuration
 
 on:
