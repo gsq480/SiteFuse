@@ -58,19 +58,24 @@ jobs:
           You are a professional web designer. Return valid JSON with these exact keys: {"slug": "business-name-in-kebab-case", "name": "Business Name", "tagline": "tagline", "industry": "industry", "colorPalette": {"primary":"#hex","secondary":"#hex","accent":"#hex"}, "typography": {"headingFont":"Font","bodyFont":"Font"}, "heroSection": {"customHTML":"<div class=\"text-center\">HTML</div>","heroImage":"https://unsplash.com/photo"}, "customSections": [{"title":"Section","html":"<section>HTML</section>"}]}
           EOF
           
-          # Create payload
-          cat > payload.json << EOF
-          {
-            "model": "gpt-4o",
-            "response_format": {"type": "json_object"},
-            "temperature": 0.3,
-            "max_tokens": 4000,
-            "messages": [
-              {"role": "system", "content": "$(cat system_prompt.txt)"},
-              {"role": "user", "content": "Create website config for: ${{ inputs.prompt }} Industry: ${{ inputs.industry }}"}
-            ]
-          }
-          EOF
+          # Create payload using jq to ensure proper JSON escaping
+          SYSTEM_PROMPT=$(cat system_prompt.txt)
+          USER_PROMPT="Create website config for: ${{ inputs.prompt }} Industry: ${{ inputs.industry }}"
+          
+          jq -n \
+            --arg model "gpt-4o" \
+            --arg system_content "$SYSTEM_PROMPT" \
+            --arg user_content "$USER_PROMPT" \
+            '{
+              model: $model,
+              response_format: {type: "json_object"},
+              temperature: 0.3,
+              max_tokens: 4000,
+              messages: [
+                {role: "system", content: $system_content},
+                {role: "user", content: $user_content}
+              ]
+            }' > payload.json
           
           echo "Calling OpenAI API..."
           
