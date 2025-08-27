@@ -55,7 +55,21 @@ jobs:
           
           # Create system prompt file
           cat > system_prompt.txt << 'EOF'
-          You are a professional web designer. Return valid JSON with these exact keys: {"slug": "business-name-in-kebab-case", "name": "Business Name", "tagline": "tagline", "industry": "industry", "colorPalette": {"primary":"#hex","secondary":"#hex","accent":"#hex"}, "typography": {"headingFont":"Font","bodyFont":"Font"}, "heroSection": {"customHTML":"<div class=\"text-center\">HTML</div>","heroImage":"https://unsplash.com/photo"}, "customSections": [{"title":"Section","html":"<section>HTML</section>"}]}
+          You are a professional web designer. Return valid JSON with these exact keys: {"slug": "business-name-in-kebab-case", "name": "Business Name", "tagline": "tagline", "industry": "industry", "colorPalette": {"primary":"#hex","secondary":"#hex","accent":"#hex"}, "typography": {"headingFont":"Font","bodyFont":"Font"}, "heroSection": {"customHTML":"<div class=\"text-center\">HTML</div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop"}, "customSections": [{"title":"Section","html":"<section>HTML</section>"}]}
+
+          IMPORTANT: For heroImage, you must use this exact format with a real Unsplash photo ID: https://images.unsplash.com/photo-[PHOTOID]?w=1600&h=900&fit=crop
+
+          Use these real Unsplash photo IDs based on industry:
+          - law-firm: photo-1589829545856-d10d557cf95f
+          - restaurant: photo-1414235077428-338989a2e8c0  
+          - yoga-studio: photo-1506905925346-21bda4d32df4
+          - photography: photo-1452587925148-ce544e77e70d
+          - consulting: photo-1497366216548-37526070297c
+          - medical: photo-1559757148-5c350d0d3c56
+          - retail: photo-1441986300917-64674bd600d8
+          - real-estate: photo-1560518883-ce09059eeffa
+          - technology: photo-1518770660439-4636190af475
+          - bakery: photo-1517433670267-08bbd4be890f
           EOF
           
           # Create payload using jq to ensure proper JSON escaping
