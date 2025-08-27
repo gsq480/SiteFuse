@@ -1,0 +1,142 @@
+# .github/workflows/03-deploy.yml
+name: Deploy Theme
+
+on:
+  workflow_dispatch:
+    inputs:
+      theme_artifact:
+        description: 'Theme artifact name'
+        required: true
+        type: string
+      slug:
+        description: 'Theme slug'
+        required: true
+        type: string
+      name:
+        description: 'Site name'
+        required: true
+        type: string
+      tagline:
+        description: 'Site tagline'
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      theme_artifact:
+        required: true
+        type: string
+      slug:
+        required: true
+        type: string
+      name:
+        required: true
+        type: string
+      tagline:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
+      CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
+      CLOUDWAYS_KEY: ${{ secrets.CLOUDWAYS_KEY }}
+      APP_PATH: ${{ secrets.APP_PATH }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download built theme
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.theme_artifact }}
+          path: theme-files/
+      
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "$CLOUDWAYS_KEY" > ~/.ssh/id_rsa_cloudways
+          chmod 600 ~/.ssh/id_rsa_cloudways
+          ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
+      
+      - name: Deploy parent theme
+        run: |
+          # Deploy base theme if it exists
+          if [ -d "sitefuse-base" ]; then
+            PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base"
+            ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'"
+            rsync -avz --delete -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+              "sitefuse-base/" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/"
+          fi
+      
+      - name: Deploy child theme
+        env:
+          SLUG: ${{ inputs.slug }}
+        run: |
+          # Deploy child theme
+          THEME_DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$THEME_DEST'"
+          rsync -avz --delete -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+            "theme-files/" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$THEME_DEST/"
+          
+          # Deploy website config
+          if [ -f "theme-files/website.json" ]; then
+            rsync -avz -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+              "theme-files/website.json" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
+          fi
+      
+      - name: Configure WordPress
+        env:
+          SLUG: ${{ inputs.slug }}
+          NAME: ${{ inputs.name }}
+          TAGLINE: ${{ inputs.tagline }}
+        run: |
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "
+            cd '$APP_PATH'
+            
+            # Update site settings
+            wp option update blogname '$NAME' --allow-root
+            wp option update blogdescription '$TAGLINE' --allow-root
+            
+            # Activate theme
+            wp theme activate '${SLUG}-child' --allow-root
+            
+            # Create basic pages if they don't exist
+            if [ \$(wp post list --post_type=page --name=home --format=count --allow-root) -eq 0 ]; then
+              HOME_ID=\$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --porcelain --allow-root)
+              wp option update show_on_front page --allow-root
+              wp option update page_on_front \$HOME_ID --allow-root
+            fi
+            
+            wp post create --post_type=page --post_title='About' --post_name='about' --post_status=publish --allow-root 2>/dev/null || true
+            wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --allow-root 2>/dev/null || true
+            wp post create --post_type=page --post_title='Contact' --post_name='contact' --post_status=publish --allow-root 2>/dev/null || true
+            
+            # Setup navigation menu
+            wp menu delete 'Primary Menu' --allow-root 2>/dev/null || true
+            wp menu create 'Primary Menu' --allow-root
+            
+            HOME_ID=\$(wp post list --post_type=page --name=home --field=ID --allow-root | head -1)
+            ABOUT_ID=\$(wp post list --post_type=page --name=about --field=ID --allow-root | head -1)
+            SERVICES_ID=\$(wp post list --post_type=page --name=services --field=ID --allow-root | head -1)
+            CONTACT_ID=\$(wp post list --post_type=page --name=contact --field=ID --allow-root | head -1)
+            
+            [ -n \"\$HOME_ID\" ] && wp menu item add-post 'Primary Menu' \$HOME_ID --title='Home' --allow-root
+            [ -n \"\$ABOUT_ID\" ] && wp menu item add-post 'Primary Menu' \$ABOUT_ID --title='About' --allow-root
+            [ -n \"\$SERVICES_ID\" ] && wp menu item add-post 'Primary Menu' \$SERVICES_ID --title='Services' --allow-root
+            [ -n \"\$CONTACT_ID\" ] && wp menu item add-post 'Primary Menu' \$CONTACT_ID --title='Contact' --allow-root
+            
+            wp menu location assign 'Primary Menu' primary --allow-root
+            wp rewrite flush --allow-root
+          "
+      
+      - name: Report deployment
+        env:
+          NAME: ${{ inputs.name }}
+          SLUG: ${{ inputs.slug }}
+        run: |
+          echo "✅ Deployment completed successfully!"
+          echo "📱 Site Name: ${NAME}"
+          echo "🔧 Theme: ${SLUG}-child"
+          echo "🌐 Check your Cloudways dashboard to view the deployed site"
