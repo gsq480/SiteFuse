@@ -1,85 +1,95 @@
 # .github/workflows/01-ai-generate.yml
-name: Generate Website Configuration
-
-on:
-  workflow_dispatch:
-    inputs:
-      prompt:
-        description: 'Describe your website'
-        required: true
-        type: string
-      industry:
-        description: 'Industry type'
-        required: false
-        type: choice
-        options: ['auto-detect', 'restaurant', 'bakery', 'yoga-studio', 'law-firm', 'photography', 'consulting', 'medical', 'retail', 'real-estate', 'technology']
-        default: 'auto-detect'
-  workflow_call:
-    inputs:
-      prompt:
-        required: true
-        type: string
-      industry:
-        required: false
-        type: string
-        default: 'auto-detect'
-    outputs:
-      config_artifact:
-        description: "Generated website configuration"
-        value: ${{ jobs.generate.outputs.artifact_id }}
-
-jobs:
-  generate:
-    runs-on: ubuntu-latest
-    outputs:
-      artifact_id: ${{ steps.upload.outputs.artifact-id }}
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Generate website configuration
+- name: Generate website configuration
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # Create system prompt file to avoid expression length limits
+          set -euo pipefail
+          
+          echo "🤖 Starting AI generation process..."
+          echo "Prompt: ${{ inputs.prompt }}"
+          echo "Industry: ${{ inputs.industry }}"
+          
+          # Validate API key exists
+          if [ -z "${OPENAI_API_KEY:-}" ]; then
+            echo "❌ ERROR: OPENAI_API_KEY is not set"
+            exit 1
+          fi
+          
+          echo "✅ API key is present (length: ${#OPENAI_API_KEY})"
+          
+          # Create system prompt file
           cat > system_prompt.txt << 'EOF'
           You are a professional web designer. Return valid JSON with these exact keys:
           {"slug": "business-name-in-kebab-case", "name": "Business Name", "tagline": "tagline", "industry": "industry", "colorPalette": {"primary":"#hex","secondary":"#hex","accent":"#hex"}, "typography": {"headingFont":"Font","bodyFont":"Font"}, "heroSection": {"customHTML":"<div class=\"text-center\">HTML</div>","heroImage":"https://unsplash.com/photo"}, "customSections": [{"title":"Section","html":"<section>HTML</section>"}]}
           EOF
           
-          # Call OpenAI API
-          curl -X POST "https://api.openai.com/v1/chat/completions" \
+          # Create payload
+          cat > payload.json << EOF
+          {
+            "model": "gpt-4o",
+            "response_format": {"type": "json_object"},
+            "temperature": 0.3,
+            "max_tokens": 4000,
+            "messages": [
+              {"role": "system", "content": "$(cat system_prompt.txt)"},
+              {"role": "user", "content": "Create website config for: ${{ inputs.prompt }} Industry: ${{ inputs.industry }}"}
+            ]
+          }
+          EOF
+          
+          echo "📡 Calling OpenAI API..."
+          
+          # Call OpenAI API with better error handling
+          HTTP_CODE=$(curl -w "%{http_code}" -o api_response.json -s \
+            -X POST "https://api.openai.com/v1/chat/completions" \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "{
-              \"model\": \"gpt-4o\",
-              \"response_format\": {\"type\": \"json_object\"},
-              \"temperature\": 0.3,
-              \"max_tokens\": 4000,
-              \"messages\": [
-                {\"role\": \"system\", \"content\": \"$(cat system_prompt.txt)\"},
-                {\"role\": \"user\", \"content\": \"Create website config for: ${{ inputs.prompt }} Industry: ${{ inputs.industry }}\"}
-              ]
-            }" > api_response.json
+            -d @payload.json)
           
-          # Extract configuration or use fallback
-          if jq -e '.choices[0].message.content' api_response.json > /dev/null; then
-            jq -r '.choices[0].message.content' api_response.json > website.json
+          echo "🔍 HTTP Status Code: $HTTP_CODE"
+          
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "❌ API call failed with status $HTTP_CODE"
+            echo "Response body:"
+            cat api_response.json || echo "Could not read response"
+            echo "Using fallback configuration..."
+            USE_FALLBACK=true
           else
+            echo "✅ API call successful"
+            echo "Raw API response:"
+            cat api_response.json
+            USE_FALLBACK=false
+          fi
+          
+          # Process response
+          if [ "$USE_FALLBACK" = "false" ]; then
+            if jq -e '.choices[0].message.content' api_response.json > /dev/null 2>&1; then
+              echo "📝 Extracting AI content..."
+              jq -r '.choices[0].message.content' api_response.json > website.json
+              
+              # Validate the extracted JSON
+              if jq empty website.json 2>/dev/null; then
+                echo "✅ Generated valid JSON:"
+                jq '.' website.json
+              else
+                echo "❌ Generated invalid JSON, using fallback"
+                USE_FALLBACK=true
+              fi
+            else
+              echo "❌ No content in API response, using fallback"
+              USE_FALLBACK=true
+            fi
+          fi
+          
+          # Use fallback if needed
+          if [ "$USE_FALLBACK" = "true" ]; then
+            echo "📋 Creating fallback configuration..."
             cat > website.json << 'EOF'
-          {"slug":"business-site","name":"Your Business","tagline":"Professional services you can trust","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div class=\"text-center\"><h1 class=\"text-5xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl mb-8\">Professional services</p><a href=\"#contact\" class=\"btn btn-primary\">Get Started</a></div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800"},"customSections":[{"title":"About","html":"<section class=\"py-16\"><h2 class=\"text-3xl font-bold text-center mb-8\">About Us</h2><p class=\"text-center\">Professional services.</p></section>"}]}
+          {"slug":"business-site","name":"Your Business","tagline":"Professional services you can trust","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div class=\"text-center\"><h1 class=\"text-5xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl mb-8 text-gray-100\">Professional services</p><a href=\"#contact\" class=\"btn btn-primary\">Get Started</a></div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800"},"customSections":[{"title":"About","html":"<section class=\"py-16\"><h2 class=\"text-3xl font-bold text-center mb-8\">About Us</h2><p class=\"text-center\">Professional services.</p></section>"}]}
           EOF
           fi
           
-          # Validate JSON
-          if ! jq empty website.json 2>/dev/null; then
-            echo "Generated invalid JSON, using fallback"
-            echo '{"slug":"business-site","name":"Your Business","tagline":"Professional services","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<h1>Your Business</h1>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c"},"customSections":[{"title":"About","html":"<section><h2>About Us</h2></section>"}]}' > website.json
-          fi
-      
-      - name: Upload configuration
-        id: upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: website-config-${{ github.run_id }}
-          path: website.json
-          retention-days: 1
+          echo "🎯 Final configuration:"
+          jq '.' website.json
+          
+          echo "🎉 AI generation complete!"
