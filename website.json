@@ -1,29 +1,33 @@
 {
-    "slug": "modern-law-firm-specializing-in-technology-startups",
-    "name": "Modern Law Firm",
-    "tagline": "Expert Legal Solutions for Tech Startups",
-    "industry": "Legal Services",
+    "slug": "modern-yoga-studio",
+    "name": "Modern Yoga Studio",
+    "tagline": "Find Your Inner Peace",
+    "industry": "yoga-studio",
     "colorPalette": {
-        "primary": "#2C3E50",
-        "secondary": "#ECF0F1",
-        "accent": "#3498DB"
+        "primary": "#8B7765",
+        "secondary": "#D9BBA9",
+        "accent": "#C8C2AE"
     },
     "typography": {
-        "headingFont": "Roboto",
+        "headingFont": "Montserrat",
         "bodyFont": "Open Sans"
     },
     "heroSection": {
-        "customHTML": "<div class=\"text-center\">Providing Trust and Expertise for Your Tech Startup</div>",
-        "heroImage": "https://unsplash.com/photos/6anudmpILw4"
+        "customHTML": "<div class=\"text-center\">Welcome to Modern Yoga Studio</div>",
+        "heroImage": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop"
     },
     "customSections": [
         {
-            "title": "Our Expertise",
-            "html": "<section><h2>Expertise in Technology Law</h2><p>We specialize in providing legal solutions tailored for technology startups, ensuring compliance and protection in a rapidly evolving industry.</p></section>"
+            "title": "Our Philosophy",
+            "html": "<section><h2>Our Philosophy</h2><p>At Modern Yoga Studio, we believe in the power of mindfulness and the importance of connecting with nature. Our classes are designed to help you find balance and tranquility in your everyday life.</p></section>"
         },
         {
-            "title": "Client Testimonials",
-            "html": "<section><h2>What Our Clients Say</h2><p>Read testimonials from our satisfied clients who trust us with their legal needs.</p></section>"
+            "title": "Classes and Schedule",
+            "html": "<section><h2>Classes and Schedule</h2><p>We offer a variety of classes suitable for all levels. Check out our schedule to find the perfect class for you.</p></section>"
+        },
+        {
+            "title": "Meet Our Instructors",
+            "html": "<section><h2>Meet Our Instructors</h2><p>Our experienced instructors are here to guide you on your yoga journey. Learn more about their backgrounds and teaching styles.</p></section>"
         }
     ]
 }
