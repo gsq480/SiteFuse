@@ -119,9 +119,7 @@ jobs:
           # Use fallback if needed
           if [ "$USE_FALLBACK" = "true" ]; then
             echo "Creating fallback configuration..."
-            cat > website.json << 'EOF'
-          {"slug":"business-site","name":"Your Business","tagline":"Professional services you can trust","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div class=\"text-center\"><h1 class=\"text-5xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl mb-8 text-gray-100\">Professional services</p><a href=\"#contact\" class=\"btn btn-primary\">Get Started</a></div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800"},"customSections":[{"title":"About","html":"<section class=\"py-16\"><h2 class=\"text-3xl font-bold text-center mb-8\">About Us</h2><p class=\"text-center\">Professional services.</p></section>"}]}
-          EOF
+            echo '{"slug":"business-site","name":"Your Business","tagline":"Professional services you can trust","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div class=\"text-center\"><h1 class=\"text-5xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl mb-8 text-gray-100\">Professional services</p><a href=\"#contact\" class=\"btn btn-primary\">Get Started</a></div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800"},"customSections":[{"title":"About","html":"<section class=\"py-16\"><h2 class=\"text-3xl font-bold text-center mb-8\">About Us</h2><p class=\"text-center\">Professional services.</p></section>"}]}' > website.json
           fi
           
           echo "Final configuration:"
@@ -136,6 +134,3 @@ jobs:
           name: website-config-${{ github.run_id }}
           path: website.json
           retention-days: 1
-          jq '.' website.json
-          
-          echo "AI generation complete!"
