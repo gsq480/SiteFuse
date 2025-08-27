@@ -1,4 +1,41 @@
 # .github/workflows/01-ai-generate.yml
+# .github/workflows/01-ai-generate.yml
+name: Generate Website Configuration
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Describe your website'
+        required: true
+        type: string
+      industry:
+        description: 'Industry type'
+        required: false
+        type: string
+        default: 'auto-detect'
+  workflow_call:
+    inputs:
+      prompt:
+        required: true
+        type: string
+      industry:
+        required: false
+        type: string
+        default: 'auto-detect'
+    outputs:
+      config_artifact:
+        description: "Generated website configuration"
+        value: ${{ jobs.generate.outputs.artifact_id }}
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v4
+      
       - name: Generate website configuration
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -19,8 +56,7 @@
           
           # Create system prompt file
           cat > system_prompt.txt << 'EOF'
-          You are a professional web designer. Return valid JSON with these exact keys:
-          {"slug": "business-name-in-kebab-case", "name": "Business Name", "tagline": "tagline", "industry": "industry", "colorPalette": {"primary":"#hex","secondary":"#hex","accent":"#hex"}, "typography": {"headingFont":"Font","bodyFont":"Font"}, "heroSection": {"customHTML":"<div class=\"text-center\">HTML</div>","heroImage":"https://unsplash.com/photo"}, "customSections": [{"title":"Section","html":"<section>HTML</section>"}]}
+          You are a professional web designer. Return valid JSON with these exact keys: {"slug": "business-name-in-kebab-case", "name": "Business Name", "tagline": "tagline", "industry": "industry", "colorPalette": {"primary":"#hex","secondary":"#hex","accent":"#hex"}, "typography": {"headingFont":"Font","bodyFont":"Font"}, "heroSection": {"customHTML":"<div class=\"text-center\">HTML</div>","heroImage":"https://unsplash.com/photo"}, "customSections": [{"title":"Section","html":"<section>HTML</section>"}]}
           EOF
           
           # Create payload
@@ -90,6 +126,17 @@
           fi
           
           echo "Final configuration:"
+          jq '.' website.json
+          
+          echo "AI generation complete!"
+      
+      - name: Upload configuration
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-config-${{ github.run_id }}
+          path: website.json
+          retention-days: 1
           jq '.' website.json
           
           echo "AI generation complete!"
