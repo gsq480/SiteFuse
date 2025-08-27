@@ -13,18 +13,18 @@ on:
         required: false
         type: choice
         options:
-          - 'auto-detect'
-          - 'restaurant'
-          - 'bakery'
-          - 'yoga-studio'
-          - 'law-firm'
-          - 'photography'
-          - 'consulting'
-          - 'medical'
-          - 'retail'
-          - 'real-estate'
-          - 'technology'
-        default: 'auto-detect'
+          - auto-detect
+          - restaurant
+          - bakery
+          - yoga-studio
+          - law-firm
+          - photography
+          - consulting
+          - medical
+          - retail
+          - real-estate
+          - technology
+        default: auto-detect
       generate_images:
         description: 'Generate AI images'
         required: false
@@ -35,6 +35,11 @@ permissions:
   contents: write
   actions: write
 
+# Prevents parallel runs fighting each other on the same ref
+concurrency:
+  group: sitefuse-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   generate:
     name: Generate Configuration
@@ -42,6 +47,7 @@ jobs:
     with:
       prompt: ${{ inputs.prompt }}
       industry: ${{ inputs.industry }}
+      generate_images: ${{ inputs.generate_images }}
     secrets: inherit
 
   build:
@@ -49,11 +55,12 @@ jobs:
     needs: generate
     uses: ./.github/workflows/02-build-theme.yml
     with:
-      config_artifact: website-config-${{ github.run_id }}
+      # Use the actual output name from 01-ai-generate, not a hardcoded guess
+      config_artifact: ${{ needs.generate.outputs.config_artifact }}
     secrets: inherit
 
   commit:
-    name: Commit to Repository
+    name: Commit website.json only
     needs: [generate, build]
     runs-on: ubuntu-latest
     outputs:
@@ -62,45 +69,39 @@ jobs:
       tagline: ${{ steps.extract.outputs.tagline }}
     steps:
       - uses: actions/checkout@v4
-        
+
       - name: Download config and theme
         uses: actions/download-artifact@v4
         with:
+          # grab both the config and the theme produced in earlier jobs
           pattern: "*-${{ github.run_id }}"
           merge-multiple: true
-      
+
+      - name: Sanity check website.json
+        run: |
+          test -s website.json || { echo "website.json missing"; exit 1; }
+          jq '.' website.json >/dev/null
+
       - name: Extract values for output
         id: extract
         run: |
           echo "slug=$(jq -r '.slug // "business-site"' website.json)" >> $GITHUB_OUTPUT
           echo "name=$(jq -r '.name // "Your Business"' website.json)" >> $GITHUB_OUTPUT
           echo "tagline=$(jq -r '.tagline // "Professional services"' website.json)" >> $GITHUB_OUTPUT
-      
-      - name: Organize files
+
+      # We do NOT add child-themes to the repo, build artefacts stay out of git
+      - name: Commit website.json
         env:
-          SLUG: ${{ steps.extract.outputs.slug }}
-        run: |
-          # Create child-themes directory structure
-          mkdir -p child-themes
-          if [ -d "${SLUG}-child" ]; then
-            mv "${SLUG}-child" "child-themes/${SLUG}-child"
-          else
-            echo "Warning: Theme directory ${SLUG}-child not found"
-            ls -la
-          fi
-      
-      - name: Commit to repository
-        env:
-          SLUG: ${{ steps.extract.outputs.slug }}
+          PROMPT_TEXT: ${{ inputs.prompt }}
           NAME: ${{ steps.extract.outputs.name }}
         run: |
-          git config user.name "SiteFuse AI Bot"
+          git config user.name  "SiteFuse AI Bot"
           git config user.email "ai-bot@sitefuse.com"
-          git add child-themes/ website.json || true
+          git add website.json || true
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "feat: AI-generated theme '${NAME}' from prompt: ${{ inputs.prompt }}"
+            git commit -m "feat: AI website config for '${NAME}' from prompt: ${PROMPT_TEXT}"
             git push origin main
           fi
 
@@ -109,9 +110,10 @@ jobs:
     needs: [generate, build, commit]
     uses: ./.github/workflows/03-deploy.yml
     with:
+      # Matches the name created by 02-build-theme.yml
       theme_artifact: theme-${{ needs.commit.outputs.slug }}-${{ github.run_id }}
-      slug: ${{ needs.commit.outputs.slug }}
-      name: ${{ needs.commit.outputs.name }}
+      slug:    ${{ needs.commit.outputs.slug }}
+      name:    ${{ needs.commit.outputs.name }}
       tagline: ${{ needs.commit.outputs.tagline }}
     secrets: inherit
 
@@ -125,5 +127,5 @@ jobs:
         uses: geekyeggo/delete-artifact@v2
         with:
           name: |
-            website-config-${{ github.run_id }}
+            ${{ needs.generate.outputs.config_artifact }}
             theme-${{ needs.commit.outputs.slug }}-${{ github.run_id }}
