@@ -112,13 +112,8 @@ jobs:
         if: env.USE_FALLBACK == 'false'
         run: |
           set -euo pipefail
-          # Extract model content
           jq -er '.choices[0].message.content' api_response.json > website.raw
-
-          # Strip code fences if present
           sed -E 's/^```json[[:space:]]*$//; s/^```[[:space:]]*$//; s/```[[:space:]]*$//' website.raw > website.json || true
-
-          # Validate JSON
           if ! jq empty website.json 2>/dev/null; then
             echo "Model returned invalid JSON"
             echo "USE_FALLBACK=true" >> $GITHUB_ENV
@@ -128,16 +123,13 @@ jobs:
         if: env.USE_FALLBACK == 'false'
         run: |
           set -euo pipefail
-          # Remove stray whitespace and ensure colour strings have no line breaks
           jq '
             .colorPalette.primary   |= (tostring | gsub("\\s";"")) |
             .colorPalette.secondary |= (tostring | gsub("\\s";"")) |
             .colorPalette.accent    |= (tostring | gsub("\\s";""))
           ' website.json > website.clean.json
-
           mv website.clean.json website.json
 
-          # Minimum required keys with safe defaults (no guessing, simple fallbacks)
           jq -n --slurpfile w website.json '
             ($w[0] // {}) as $x |
             {
