@@ -1,29 +1,94 @@
 {
-  "slug": "canberra-cycling-club",
-  "name": "Canberra Cycling Club",
-  "tagline": "Ride Together, Ride Strong",
-  "industry": "sports",
   "colorPalette": {
-    "primary": "#0056b3",
-    "secondary": "#ffcc00",
-    "accent": "#e63946"
-  },
-  "typography": {
-    "headingFont": "Montserrat",
-    "bodyFont": "Open Sans"
-  },
-  "heroSection": {
-    "customHTML": "<div class=\"text-center\">Welcome to Canberra Cycling Club</div>",
-    "heroImage": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop"
+    "accent": "#ff5722",
+    "primary": "#0a0a0a",
+    "secondary": "#ffffff"
   },
   "customSections": [
     {
-      "title": "About Us",
-      "html": "<section>We are a community of cycling enthusiasts in Canberra, dedicated to promoting the sport and organizing events for riders of all levels.</section>"
+      "html": "<section>At Test, we strive to push the boundaries of technology to create innovative solutions for a better tomorrow.</section>",
+      "title": "Our Mission"
+    }
+  ],
+  "ecommerce": {
+    "enabled": false
+  },
+  "heroSection": {
+    "customHTML": "<div class=\"text-center\">Welcome to the Future of Technology</div>",
+    "heroImage": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&h=900&fit=crop"
+  },
+  "industry": "technology",
+  "name": "Test",
+  "nav": [
+    {
+      "href": "/",
+      "label": "Home"
     },
     {
-      "title": "Upcoming Events",
-      "html": "<section>Join us for our next ride! Check out our events calendar for more details.</section>"
+      "href": "/about",
+      "label": "About"
+    },
+    {
+      "href": "/services",
+      "label": "Services"
+    },
+    {
+      "href": "/contact",
+      "label": "Contact"
     }
-  ]
+  ],
+  "pages": [
+    {
+      "layout": "landing",
+      "sections": [
+        {
+          "html": "<div class=\"text-center\">Welcome to the Future of Technology</div>",
+          "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&h=900&fit=crop",
+          "type": "hero"
+        },
+        {
+          "html": "<section><h2>About</h2><p>Starter section.</p></section>",
+          "type": "content"
+        }
+      ],
+      "slug": "home",
+      "title": "Home"
+    },
+    {
+      "sections": [
+        {
+          "html": "<section><h2>About</h2><p>About content.</p></section>",
+          "type": "content"
+        }
+      ],
+      "slug": "about",
+      "title": "About"
+    },
+    {
+      "sections": [
+        {
+          "html": "<section><h2>Services</h2><p>What we offer.</p></section>",
+          "type": "content"
+        }
+      ],
+      "slug": "services",
+      "title": "Services"
+    },
+    {
+      "sections": [
+        {
+          "html": "<section><h2>Contact</h2><p>Get in touch.</p></section>",
+          "type": "content"
+        }
+      ],
+      "slug": "contact",
+      "title": "Contact"
+    }
+  ],
+  "slug": "test",
+  "tagline": "Innovating the Future",
+  "typography": {
+    "bodyFont": "Open Sans",
+    "headingFont": "Roboto"
+  }
 }
