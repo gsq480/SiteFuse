@@ -1,33 +1,29 @@
 {
-    "slug": "modern-yoga-studio",
-    "name": "Modern Yoga Studio",
-    "tagline": "Find Your Inner Peace",
-    "industry": "Health & Wellness",
+    "slug": "modern-law-firm-specializing-in-technology-startups",
+    "name": "Modern Law Firm",
+    "tagline": "Expert Legal Solutions for Tech Startups",
+    "industry": "Legal Services",
     "colorPalette": {
-        "primary": "#8C7B75",
-        "secondary": "#D9C8B3",
-        "accent": "#A3B18A"
+        "primary": "#2C3E50",
+        "secondary": "#ECF0F1",
+        "accent": "#3498DB"
     },
     "typography": {
-        "headingFont": "Playfair Display",
+        "headingFont": "Roboto",
         "bodyFont": "Open Sans"
     },
     "heroSection": {
-        "customHTML": "<div class=\"text-center\">Welcome to Modern Yoga Studio</div>",
-        "heroImage": "https://unsplash.com/photos/8manzosDSGM"
+        "customHTML": "<div class=\"text-center\">Providing Trust and Expertise for Your Tech Startup</div>",
+        "heroImage": "https://unsplash.com/photos/6anudmpILw4"
     },
     "customSections": [
         {
-            "title": "Our Philosophy",
-            "html": "<section><h2>Our Philosophy</h2><p>At Modern Yoga Studio, we believe in the power of mindfulness and connection to the earth. Join us to explore your practice in a serene and supportive environment.</p></section>"
+            "title": "Our Expertise",
+            "html": "<section><h2>Expertise in Technology Law</h2><p>We specialize in providing legal solutions tailored for technology startups, ensuring compliance and protection in a rapidly evolving industry.</p></section>"
         },
         {
-            "title": "Classes",
-            "html": "<section><h2>Classes</h2><p>We offer a variety of classes to suit all levels, from beginner to advanced. Check our schedule to find the perfect class for you.</p></section>"
-        },
-        {
-            "title": "Instructors",
-            "html": "<section><h2>Instructors</h2><p>Meet our experienced and passionate instructors who are here to guide you on your yoga journey.</p></section>"
+            "title": "Client Testimonials",
+            "html": "<section><h2>What Our Clients Say</h2><p>Read testimonials from our satisfied clients who trust us with their legal needs.</p></section>"
         }
     ]
 }
