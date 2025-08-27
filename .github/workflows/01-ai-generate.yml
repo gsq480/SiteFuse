@@ -18,6 +18,7 @@ on:
         required: false
         type: boolean
         default: false
+
   workflow_call:
     inputs:
       prompt:
@@ -33,14 +34,12 @@ on:
         default: false
     outputs:
       config_artifact:
-        description: "Generated website configuration"
-        value: ${{ jobs.generate.outputs.artifact_id }}
+        description: "Generated website configuration artifact name"
+        value: website-config-${{ github.run_id }}
 
 jobs:
   generate:
     runs-on: ubuntu-latest
-    outputs:
-      artifact_id: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - uses: actions/checkout@v4
 
@@ -136,7 +135,6 @@ jobs:
       - name: Normalise website.json to required schema
         run: |
           set -euo pipefail
-          # Ensure all required keys exist and fill defaults for downstream jobs
           jq -S '
             .slug        //= "business-site" |
             .name        //= "Your Business" |
