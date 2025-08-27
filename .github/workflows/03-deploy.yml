@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       theme_artifact:
-        description: 'Theme artifact name'
+        description: 'Theme artifact name (theme-<slug>-<run_id>)'
         required: true
         type: string
       slug:
@@ -41,8 +41,8 @@ jobs:
     env:
       CLOUDWAYS_HOST: ${{ secrets.CLOUDWAYS_HOST }}
       CLOUDWAYS_USER: ${{ secrets.CLOUDWAYS_USER }}
-      CLOUDWAYS_KEY: ${{ secrets.CLOUDWAYS_KEY }}
-      APP_PATH: ${{ secrets.APP_PATH }}
+      CLOUDWAYS_KEY:  ${{ secrets.CLOUDWAYS_KEY }}
+      APP_PATH:       ${{ secrets.APP_PATH }}
     steps:
       - uses: actions/checkout@v4
 
@@ -61,36 +61,118 @@ jobs:
           chmod 600 ~/.ssh/id_rsa_cloudways
           ssh-keyscan -H "$CLOUDWAYS_HOST" >> ~/.ssh/known_hosts
 
-      - name: Deploy parent theme if present
+      - name: Sanity check remote APP_PATH
+        run: |
+          set -e
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
+            "APP_PATH='${APP_PATH}' bash -s" <<'EOS'
+          set -euo pipefail
+          : "${APP_PATH:?APP_PATH is not set on remote}"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "Remote APP_PATH does not exist: $APP_PATH" >&2
+            exit 1
+          fi
+          echo "OK: APP_PATH is $APP_PATH"
+          EOS
+
+      - name: Deploy parent theme (optional)
         run: |
           set -e
           if [ -d "sitefuse-base" ]; then
             PARENT_DEST="$APP_PATH/wp-content/themes/sitefuse-base"
-            ssh -i ~/.ssh/id_rsa_cloudways "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'"
-            rsync -avz --delete -e 'ssh -i ~/.ssh/id_rsa_cloudways' \
+            ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$PARENT_DEST'"
+            rsync -avz --delete -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
               "sitefuse-base/" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$PARENT_DEST/"
+          else
+            echo "sitefuse-base/ not found; skipping parent theme deploy"
           fi
 
-      - name: Deploy child theme and website.json
+      - name: Deploy child theme + website.json
         env:
           SLUG: ${{ inputs.slug }}
         run: |
           set -e
           THEME_DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
-          ssh -i ~/.ssh/id_rsa_cloudways "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$THEME_DEST'"
-          rsync -avz --delete -e 'ssh -i ~/.ssh/id_rsa_cloudways' \
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$THEME_DEST'"
+
+          rsync -avz --delete -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
             "theme-files/" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$THEME_DEST/"
 
           if [ -f "theme-files/website.json" ]; then
-            rsync -avz -e 'ssh -i ~/.ssh/id_rsa_cloudways' \
+            rsync -avz -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
               "theme-files/website.json" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
+          else
+            echo "website.json not found in theme-files; skipping"
           fi
 
-      - name: Install MU plugin fallback renderer
+      - name: Configure WordPress (theme, pages, menu)
+        env:
+          SLUG:    ${{ inputs.slug }}
+          NAME:    ${{ inputs.name }}
+          TAGLINE: ${{ inputs.tagline }}
         run: |
           set -e
-          ssh -i ~/.ssh/id_rsa_cloudways "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "bash -s" << 'EOS'
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
+            "APP_PATH='${APP_PATH}' SLUG='${SLUG}' NAME='${NAME}' TAGLINE='${TAGLINE}' bash -s" <<'EOS'
+          set -euo pipefail
+          cd "$APP_PATH"
+
+          # Basic settings
+          wp option update blogname       "$NAME"    --allow-root
+          wp option update blogdescription "$TAGLINE" --allow-root
+
+          # Activate theme
+          wp theme activate "${SLUG}-child" --allow-root
+
+          # Replace core pages to avoid duplicates
+          # Home (static front page)
+          if wp post exists $(wp post list --post_type=page --name=home --field=ID --allow-root | head -1) --allow-root; then
+            HOME_ID=$(wp post list --post_type=page --name=home --field=ID --allow-root | head -1)
+            wp post update $HOME_ID --post_title='Home' --post_status=publish --allow-root
+          else
+            HOME_ID=$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --porcelain --allow-root)
+          fi
+          wp option update show_on_front page     --allow-root
+          wp option update page_on_front  $HOME_ID --allow-root
+
+          # Remove and recreate About/Services/Contact (prevents duplicates)
+          for slug in about services contact; do
+            IDS=$(wp post list --post_type=page --name="$slug" --field=ID --allow-root)
+            if [ -n "$IDS" ]; then
+              for id in $IDS; do wp post delete $id --force --allow-root; done
+            fi
+          done
+          wp post create --post_type=page --post_title='About'    --post_name='about'    --post_status=publish --allow-root
+          wp post create --post_type=page --post_title='Services' --post_name='services' --post_status=publish --allow-root
+          wp post create --post_type=page --post_title='Contact'  --post_name='contact'  --post_status=publish --allow-root
+
+          # Rebuild the Primary Menu cleanly
+          wp menu delete 'Primary Menu' --allow-root 2>/dev/null || true
+          wp menu create 'Primary Menu' --allow-root
+
+          HOME_ID=$(wp post list --post_type=page --name=home     --field=ID --allow-root | head -1)
+          ABOUT_ID=$(wp post list --post_type=page --name=about    --field=ID --allow-root | head -1)
+          SERVICES_ID=$(wp post list --post_type=page --name=services --field=ID --allow-root | head -1)
+          CONTACT_ID=$(wp post list --post_type=page --name=contact  --field=ID --allow-root | head -1)
+
+          [ -n "$HOME_ID"     ] && wp menu item add-post 'Primary Menu' $HOME_ID     --title='Home'     --allow-root
+          [ -n "$ABOUT_ID"    ] && wp menu item add-post 'Primary Menu' $ABOUT_ID    --title='About'    --allow-root
+          [ -n "$SERVICES_ID" ] && wp menu item add-post 'Primary Menu' $SERVICES_ID --title='Services' --allow-root
+          [ -n "$CONTACT_ID"  ] && wp menu item add-post 'Primary Menu' $CONTACT_ID  --title='Contact'  --allow-root
+
+          wp menu location assign 'Primary Menu' primary --allow-root
+          wp rewrite flush --allow-root
+          EOS
+
+      - name: Install mu-plugin for rendering home from website.json
+        run: |
           set -e
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
+            "APP_PATH='${APP_PATH}' bash -s" <<'EOS'
+          set -euo pipefail
+          : "${APP_PATH:?APP_PATH is not set on remote}"
           MU_DIR="$APP_PATH/wp-content/mu-plugins"
           mkdir -p "$MU_DIR"
           cat > "$MU_DIR/sitefuse-home.php" <<'PHP'
@@ -135,145 +217,12 @@ jobs:
           PHP
           EOS
 
-      - name: Provision site from website.json
-        env:
-          SLUG: ${{ inputs.slug }}
-          NAME: ${{ inputs.name }}
-          TAGLINE: ${{ inputs.tagline }}
-        run: |
-          set -e
-          ssh -i ~/.ssh/id_rsa_cloudways "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "bash -s" << 'EOS'
-          set -e
-          cd "$APP_PATH"
-
-          # Basic checks
-          if ! command -v wp >/dev/null 2>&1; then
-            echo "wp-cli not found"
-            exit 1
-          fi
-          if [ ! -f "website.json" ]; then
-            echo "website.json not found at $APP_PATH"
-            exit 1
-          fi
-
-          # Site identity
-          wp option update blogname "$NAME" --allow-root
-          wp option update blogdescription "$TAGLINE" --allow-root
-
-          # Activate child theme
-          wp theme activate "${SLUG}-child" --allow-root
-
-          # Drive provisioning from JSON
-          php -r '
-            $app = getenv("APP_PATH") ?: ".";
-            $j = file_get_contents($app . "/website.json");
-            $d = json_decode($j, true) ?: [];
-            $pages = $d["pages"] ?? [];
-            $nav   = $d["nav"]   ?? [];
-            $ecom  = (bool)($d["ecommerce"]["enabled"] ?? false);
-
-            // Upsert pages from pages[]
-            $seenSlugs = [];
-            foreach ($pages as $p) {
-              $slug = $p["slug"] ?? "";
-              $title = $p["title"] ?? "";
-              if ($slug === "" || $title === "") continue;
-              $seenSlugs[] = $slug;
-
-              $id = trim(shell_exec("wp post list --post_type=page --name=" . escapeshellarg($slug) . " --field=ID --allow-root"));
-              if ($id === "") {
-                $id = trim(shell_exec("wp post create --post_type=page --post_status=publish --post_name=" . escapeshellarg($slug) . " --post_title=" . escapeshellarg($title) . " --porcelain --allow-root"));
-              } else {
-                shell_exec("wp post update $id --post_title=" . escapeshellarg($title) . " --allow-root");
-              }
-
-              // Compose content: prefer registered patterns, fallback to raw HTML
-              $sections = $p["sections"] ?? [];
-              $content = "";
-              $i = 0;
-              foreach ($sections as $_) {
-                $content .= "<!-- wp:pattern {\"slug\":\"sitefuse/{$slug}-{$i}\"} /-->\n";
-                $i++;
-              }
-              if ($content === "" && !empty($sections)) {
-                foreach ($sections as $s) {
-                  $html = $s["html"] ?? "";
-                  if ($html) $content .= $html . "\n";
-                }
-              }
-
-              $tmp = tempnam(sys_get_temp_dir(), "sf-");
-              file_put_contents($tmp, $content);
-              shell_exec("wp post update $id --post_content=" . escapeshellarg($tmp) . " --allow-root");
-              @unlink($tmp);
-            }
-
-            // Delete any existing pages not present in JSON pages[]
-            // Keep a conservative exclude list
-            $exclude = ["privacy-policy","shop","cart","checkout","my-account","terms","conditions","refunds","returns"];
-            $allSlugs = array_filter(explode("\n", trim(shell_exec("wp post list --post_type=page --field=post_name --allow-root"))));
-            foreach ($allSlugs as $slug) {
-              if ($slug === "" || in_array($slug, $exclude, true)) continue;
-              if (!in_array($slug, $seenSlugs, true)) {
-                $id = trim(shell_exec("wp post list --post_type=page --name=" . escapeshellarg($slug) . " --field=ID --allow-root"));
-                if ($id !== "") {
-                  shell_exec("wp post delete $id --force --allow-root");
-                }
-              }
-            }
-
-            // Set Home as static front page if present
-            $homeId = trim(shell_exec("wp post list --post_type=page --name=home --field=ID --allow-root | head -1"));
-            if ($homeId !== "") {
-              shell_exec("wp option update show_on_front page --allow-root");
-              shell_exec("wp option update page_on_front $homeId --allow-root");
-            }
-
-            // Build Primary Menu from nav[]
-            shell_exec("wp menu delete \"Primary Menu\" --allow-root 2>/dev/null || true");
-            shell_exec("wp menu create \"Primary Menu\" --allow-root");
-
-            foreach ($nav as $item) {
-              $label = $item["label"] ?? "";
-              $href  = $item["href"]  ?? "/";
-              if ($label === "") continue;
-
-              $slug = trim($href, "/");
-              if ($href === "/") {
-                $pid = trim(shell_exec("wp post list --post_type=page --name=home --field=ID --allow-root"));
-                if ($pid !== "") {
-                  shell_exec("wp menu item add-post \"Primary Menu\" $pid --title=" . escapeshellarg($label) . " --allow-root");
-                  continue;
-                }
-              }
-              if ($slug !== "") {
-                $pid = trim(shell_exec("wp post list --post_type=page --name=" . escapeshellarg($slug) . " --field=ID --allow-root"));
-                if ($pid !== "") {
-                  shell_exec("wp menu item add-post \"Primary Menu\" $pid --title=" . escapeshellarg($label) . " --allow-root");
-                  continue;
-                }
-              }
-              shell_exec("wp menu item add-custom \"Primary Menu\" " . escapeshellarg($label) . " " . escapeshellarg($href) . " --allow-root");
-            }
-            shell_exec("wp menu location assign \"Primary Menu\" primary --allow-root");
-
-            // Optional WooCommerce pages
-            if ($ecom) {
-              shell_exec("wp plugin install woocommerce --activate --allow-root");
-              shell_exec("wp wc tool run install_pages --user=1 --allow-root || true");
-            }
-          ' | sed -e "s/^/remote: /"
-
-          # Flush permalinks at the end
-          wp rewrite flush --allow-root
-          EOS
-
       - name: Report deployment
         env:
           NAME: ${{ inputs.name }}
           SLUG: ${{ inputs.slug }}
         run: |
-          echo "Deployment complete."
-          echo "Site: ${NAME}"
-          echo "Theme: ${SLUG}-child"
-          echo "Pages are now in sync with website.json"
+          echo "✅ Deployment completed!"
+          echo "📱 Site Name: ${NAME}"
+          echo "🔧 Theme: ${SLUG}-child"
+          echo "🌐 Visit via your Cloudways domain for this app"
