@@ -1,33 +1,29 @@
 {
-    "slug": "modern-yoga-studio",
-    "name": "Modern Yoga Studio",
-    "tagline": "Find Your Inner Peace",
-    "industry": "yoga-studio",
-    "colorPalette": {
-        "primary": "#8B7765",
-        "secondary": "#D9BBA9",
-        "accent": "#C8C2AE"
+  "slug": "marley-modern-yoga-studio",
+  "name": "Marley Modern Yoga Studio",
+  "tagline": "Embrace Mindfulness and Balance",
+  "industry": "yoga-studio",
+  "colorPalette": {
+    "primary": "#8B7765",
+    "secondary": "#C2B280",
+    "accent": "#D9D0C1"
+  },
+  "typography": {
+    "headingFont": "Montserrat",
+    "bodyFont": "Open Sans"
+  },
+  "heroSection": {
+    "customHTML": "<div class=\"text-center\">Welcome to Marley, where mindfulness meets movement.</div>",
+    "heroImage": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop"
+  },
+  "customSections": [
+    {
+      "title": "Our Philosophy",
+      "html": "<section><h2>Our Philosophy</h2><p>At Marley, we believe in the power of mindfulness and movement to transform lives. Join us to find your balance.</p></section>"
     },
-    "typography": {
-        "headingFont": "Montserrat",
-        "bodyFont": "Open Sans"
-    },
-    "heroSection": {
-        "customHTML": "<div class=\"text-center\">Welcome to Modern Yoga Studio</div>",
-        "heroImage": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop"
-    },
-    "customSections": [
-        {
-            "title": "Our Philosophy",
-            "html": "<section><h2>Our Philosophy</h2><p>At Modern Yoga Studio, we believe in the power of mindfulness and the importance of connecting with nature. Our classes are designed to help you find balance and tranquility in your everyday life.</p></section>"
-        },
-        {
-            "title": "Classes and Schedule",
-            "html": "<section><h2>Classes and Schedule</h2><p>We offer a variety of classes suitable for all levels. Check out our schedule to find the perfect class for you.</p></section>"
-        },
-        {
-            "title": "Meet Our Instructors",
-            "html": "<section><h2>Meet Our Instructors</h2><p>Our experienced instructors are here to guide you on your yoga journey. Learn more about their backgrounds and teaching styles.</p></section>"
-        }
-    ]
+    {
+      "title": "Classes",
+      "html": "<section><h2>Classes</h2><p>Explore our diverse range of yoga classes designed for all levels, from beginners to advanced practitioners.</p></section>"
+    }
+  ]
 }
