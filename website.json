@@ -1,1 +1,33 @@
-{"slug":"business-site","name":"Your Business","tagline":"Professional services you can trust","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div class=\"text-center\"><h1 class=\"text-5xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl mb-8 text-gray-100\">Professional services</p><a href=\"#contact\" class=\"btn btn-primary\">Get Started</a></div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800"},"customSections":[{"title":"About","html":"<section class=\"py-16\"><h2 class=\"text-3xl font-bold text-center mb-8\">About Us</h2><p class=\"text-center\">Professional services.</p></section>"}]}
+{
+    "slug": "modern-yoga-studio",
+    "name": "Modern Yoga Studio",
+    "tagline": "Find Your Inner Peace",
+    "industry": "Health & Wellness",
+    "colorPalette": {
+        "primary": "#8C7B75",
+        "secondary": "#D9C8B3",
+        "accent": "#A3B18A"
+    },
+    "typography": {
+        "headingFont": "Playfair Display",
+        "bodyFont": "Open Sans"
+    },
+    "heroSection": {
+        "customHTML": "<div class=\"text-center\">Welcome to Modern Yoga Studio</div>",
+        "heroImage": "https://unsplash.com/photos/8manzosDSGM"
+    },
+    "customSections": [
+        {
+            "title": "Our Philosophy",
+            "html": "<section><h2>Our Philosophy</h2><p>At Modern Yoga Studio, we believe in the power of mindfulness and connection to the earth. Join us to explore your practice in a serene and supportive environment.</p></section>"
+        },
+        {
+            "title": "Classes",
+            "html": "<section><h2>Classes</h2><p>We offer a variety of classes to suit all levels, from beginner to advanced. Check our schedule to find the perfect class for you.</p></section>"
+        },
+        {
+            "title": "Instructors",
+            "html": "<section><h2>Instructors</h2><p>Meet our experienced and passionate instructors who are here to guide you on your yoga journey.</p></section>"
+        }
+    ]
+}
