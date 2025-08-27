@@ -5,17 +5,17 @@
         run: |
           set -euo pipefail
           
-          echo "🤖 Starting AI generation process..."
+          echo "Starting AI generation process..."
           echo "Prompt: ${{ inputs.prompt }}"
           echo "Industry: ${{ inputs.industry }}"
           
           # Validate API key exists
           if [ -z "${OPENAI_API_KEY:-}" ]; then
-            echo "❌ ERROR: OPENAI_API_KEY is not set"
+            echo "ERROR: OPENAI_API_KEY is not set"
             exit 1
           fi
           
-          echo "✅ API key is present (length: ${#OPENAI_API_KEY})"
+          echo "API key is present (length: ${#OPENAI_API_KEY})"
           
           # Create system prompt file
           cat > system_prompt.txt << 'EOF'
@@ -37,7 +37,7 @@
           }
           EOF
           
-          echo "📡 Calling OpenAI API..."
+          echo "Calling OpenAI API..."
           
           # Call OpenAI API with better error handling
           HTTP_CODE=$(curl -w "%{http_code}" -o api_response.json -s \
@@ -46,16 +46,16 @@
             -H "Content-Type: application/json" \
             -d @payload.json)
           
-          echo "🔍 HTTP Status Code: $HTTP_CODE"
+          echo "HTTP Status Code: $HTTP_CODE"
           
           if [ "$HTTP_CODE" != "200" ]; then
-            echo "❌ API call failed with status $HTTP_CODE"
+            echo "API call failed with status $HTTP_CODE"
             echo "Response body:"
             cat api_response.json || echo "Could not read response"
             echo "Using fallback configuration..."
             USE_FALLBACK=true
           else
-            echo "✅ API call successful"
+            echo "API call successful"
             echo "Raw API response:"
             cat api_response.json
             USE_FALLBACK=false
@@ -64,32 +64,32 @@
           # Process response
           if [ "$USE_FALLBACK" = "false" ]; then
             if jq -e '.choices[0].message.content' api_response.json > /dev/null 2>&1; then
-              echo "📝 Extracting AI content..."
+              echo "Extracting AI content..."
               jq -r '.choices[0].message.content' api_response.json > website.json
               
               # Validate the extracted JSON
               if jq empty website.json 2>/dev/null; then
-                echo "✅ Generated valid JSON:"
+                echo "Generated valid JSON:"
                 jq '.' website.json
               else
-                echo "❌ Generated invalid JSON, using fallback"
+                echo "Generated invalid JSON, using fallback"
                 USE_FALLBACK=true
               fi
             else
-              echo "❌ No content in API response, using fallback"
+              echo "No content in API response, using fallback"
               USE_FALLBACK=true
             fi
           fi
           
           # Use fallback if needed
           if [ "$USE_FALLBACK" = "true" ]; then
-            echo "📋 Creating fallback configuration..."
+            echo "Creating fallback configuration..."
             cat > website.json << 'EOF'
           {"slug":"business-site","name":"Your Business","tagline":"Professional services you can trust","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div class=\"text-center\"><h1 class=\"text-5xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl mb-8 text-gray-100\">Professional services</p><a href=\"#contact\" class=\"btn btn-primary\">Get Started</a></div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800"},"customSections":[{"title":"About","html":"<section class=\"py-16\"><h2 class=\"text-3xl font-bold text-center mb-8\">About Us</h2><p class=\"text-center\">Professional services.</p></section>"}]}
           EOF
           fi
           
-          echo "🎯 Final configuration:"
+          echo "Final configuration:"
           jq '.' website.json
           
-          echo "🎉 AI generation complete!"
+          echo "AI generation complete!"
