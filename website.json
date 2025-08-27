@@ -1,1 +1,29 @@
-{"slug":"business-site","name":"Your Business","tagline":"Professional services you can trust","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div class=\"text-center\"><h1 class=\"text-5xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl mb-8 text-gray-100\">Professional services</p><a href=\"#contact\" class=\"btn btn-primary\">Get Started</a></div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800"},"customSections":[{"title":"About","html":"<section class=\"py-16\"><h2 class=\"text-3xl font-bold text-center mb-8\">About Us</h2><p class=\"text-center\">Professional services.</p></section>"}]}
+{
+  "slug": "canberra-cycling-club",
+  "name": "Canberra Cycling Club",
+  "tagline": "Ride Together, Ride Strong",
+  "industry": "sports",
+  "colorPalette": {
+    "primary": "#0056b3",
+    "secondary": "#ffcc00",
+    "accent": "#e63946"
+  },
+  "typography": {
+    "headingFont": "Montserrat",
+    "bodyFont": "Open Sans"
+  },
+  "heroSection": {
+    "customHTML": "<div class=\"text-center\">Welcome to Canberra Cycling Club</div>",
+    "heroImage": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop"
+  },
+  "customSections": [
+    {
+      "title": "About Us",
+      "html": "<section>We are a community of cycling enthusiasts in Canberra, dedicated to promoting the sport and organizing events for riders of all levels.</section>"
+    },
+    {
+      "title": "Upcoming Events",
+      "html": "<section>Join us for our next ride! Check out our events calendar for more details.</section>"
+    }
+  ]
+}
