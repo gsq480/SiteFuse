@@ -1,24 +1,28 @@
 {
   "colorPalette": {
-    "accent": "#ff5722",
-    "primary": "#0a0a0a",
-    "secondary": "#ffffff"
+    "accent": "#A3B18A",
+    "primary": "#8C7B75",
+    "secondary": "#C2B280"
   },
   "customSections": [
     {
-      "html": "<section>At Test, we strive to push the boundaries of technology to create innovative solutions for a better tomorrow.</section>",
-      "title": "Our Mission"
+      "html": "<section><h2>Our Philosophy</h2><p>At Modern Yoga Studio, we focus on mindfulness and balance, helping you connect with your inner self through the practice of yoga.</p></section>",
+      "title": "Our Philosophy"
+    },
+    {
+      "html": "<section><h2>Classes Offered</h2><p>We offer a variety of classes for all levels, from beginner to advanced, ensuring a welcoming and inclusive environment for everyone.</p></section>",
+      "title": "Classes Offered"
     }
   ],
   "ecommerce": {
     "enabled": false
   },
   "heroSection": {
-    "customHTML": "<div class=\"text-center\">Welcome to the Future of Technology</div>",
-    "heroImage": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&h=900&fit=crop"
+    "customHTML": "<div class=\"text-center\">Find Your Inner Peace at Modern Yoga Studio</div>",
+    "heroImage": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop"
   },
-  "industry": "technology",
-  "name": "Test",
+  "industry": "yoga-studio",
+  "name": "Modern Yoga Studio",
   "nav": [
     {
       "href": "/",
@@ -42,8 +46,8 @@
       "layout": "landing",
       "sections": [
         {
-          "html": "<div class=\"text-center\">Welcome to the Future of Technology</div>",
-          "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&h=900&fit=crop",
+          "html": "<div class=\"text-center\">Find Your Inner Peace at Modern Yoga Studio</div>",
+          "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop",
           "type": "hero"
         },
         {
@@ -85,10 +89,10 @@
       "title": "Contact"
     }
   ],
-  "slug": "test",
-  "tagline": "Innovating the Future",
+  "slug": "modern-yoga-studio",
+  "tagline": "Embrace Mindfulness and Balance",
   "typography": {
     "bodyFont": "Open Sans",
-    "headingFont": "Roboto"
+    "headingFont": "Playfair Display"
   }
 }
