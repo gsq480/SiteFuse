@@ -1,29 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#CB997E",
-      "bg": "#F3F4ED",
-      "primary": "#6B705C",
-      "secondary": "#B7B7A4",
-      "text": "#3A3A3A"
+      "accent": "#FFC107",
+      "bg": "#F5F5F5",
+      "primary": "#FF5722",
+      "secondary": "#795548",
+      "text": "#212121"
     },
     "fonts": {
       "body": "Open Sans",
-      "heading": "Lora"
+      "heading": "Lobster"
     }
   },
   "hero": {
     "cta": {
       "href": "#contact",
-      "label": "Join Us Today"
+      "label": "Visit Us"
     },
-    "image": "https://images.unsplash.com/photo-1531887004013-5b20c369bdb2?w=1600&h=900&fit=crop",
+    "image": "https://images.unsplash.com/photo-1515169078181-7e43227a5b97?w=1600&h=900&fit=crop",
     "overlay": 0.3,
-    "subtitle": "Discover the transformative power of yoga tailored for your holistic well-being",
-    "title": "Embrace a Journey to Mindful Living"
+    "subtitle": "Where Canberra meets the rich flavors of the archipelago",
+    "title": "Discover Authentic Indonesian Coffee"
   },
-  "industry": "yoga-studio",
-  "name": "Serene Breath Studio",
+  "industry": "restaurant/cafe",
+  "name": "Monkey Bean Café",
   "pages": [
     {
       "blocks": [
@@ -31,36 +31,52 @@
           "type": "hero"
         },
         {
-          "content": "We at Serene Breath Studio welcome you to a space where mindfulness merges with movement. Our instructors ensure that your experience is personal and transformative, paving your path to inner peace.",
+          "content": "Experience singles origins, unique blends, and in-house roasting processes.",
+          "type": "features"
+        },
+        {
+          "content": "Explore our distinctive menu showcasing Indonesian coffees and homemade treats.",
+          "type": "menu"
+        },
+        {
+          "content": "Learn about Monkey Bean's journey and commitment to quality sourced directly from Indonesian farms.",
           "type": "about"
         },
         {
-          "content": "Our classes range from beginner to advanced, each designed to cultivate mindfulness, flexibility, and strength. Join our sunrise sessions or unwind during evening practices.",
-          "type": "classes"
-        },
-        {
-          "content": "Strengthen not just your body but also your mind. Experience reduced stress, improved focus, and enhanced wellness through our unique approach to yoga.",
-          "type": "benefits"
+          "content": "Visual delight showcasing our café ambiance, coffee creations, and brewing process.",
+          "type": "gallery"
         },
         {
           "content": [
             {
-              "author": "Ana P.",
-              "quote": "Transformative experience that calmed my spirit. A blessing in every session!"
+              "name": "Sophie T.",
+              "quote": "A hidden gem with the best Sumatran blend in town."
             },
             {
-              "author": "Michael B.",
-              "quote": "A nurturing environment that supports personal growth and mindfulness."
+              "name": "Liam G.",
+              "quote": "A truly delightful encounter with Indonesian flavors."
+            },
+            {
+              "name": "Emma K.",
+              "quote": "Their unique coffee profiles are unmissable."
             }
           ],
           "type": "testimonials"
         },
         {
-          "content": "Get a glimpse into our daily life at Serene Breath Studio via our introduction video, showcasing the community and ambiance that await you.",
-          "type": "video"
+          "content": "Join our newsletter to get exclusive promotions and updates.",
+          "cta": {
+            "href": "#newsletter",
+            "label": "Sign-Up"
+          },
+          "type": "cta"
         },
         {
-          "content": "Ready to start your journey with us? Send us a message to schedule a visit or ask any questions.",
+          "content": "Open Monday to Sunday, 7 AM - 7 PM",
+          "type": "hours"
+        },
+        {
+          "content": "Reach out to us for any inquiries or reservations.",
           "type": "contact-form"
         }
       ],
@@ -69,13 +85,13 @@
       "title": "Home"
     }
   ],
-  "slug": "serene-breath-studio",
+  "slug": "monkey-bean-cafe",
   "style": {
     "elev": "low",
     "radius": 12,
-    "recipe": "minimal",
-    "shapes": "soft",
-    "variant": "b"
+    "recipe": "playful",
+    "shapes": "rounded",
+    "variant": "a"
   },
-  "tagline": "Find Your Inner Calm Through Mindful Practice"
+  "tagline": "Taste the Essence of Indonesia"
 }
