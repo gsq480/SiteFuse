@@ -237,6 +237,24 @@ jobs:
               @apply shadow-xl;
               transform: translateY(-2px);
             }
+
+            /* Navigation styling */
+            nav ul {
+              @apply flex list-none m-0 p-0;
+              gap: 1.5rem;
+            }
+
+            nav ul li {
+              @apply m-0;
+            }
+
+            nav ul li a {
+              @apply text-gray-700 font-medium no-underline transition-colors duration-200;
+            }
+
+            nav ul li a:hover {
+              color: var(--color-brand-primary);
+            }
           }
 
           /* Mobile-first responsive utilities */
@@ -353,11 +371,16 @@ jobs:
             <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b">
               <div class="container">
                 <div class="flex items-center justify-between h-20">
-                  <a href="<?php echo esc_url(home_url('/')); ?>">
-                    <span class="text-2xl font-bold" style="color: var(--color-brand-primary);"><?php bloginfo('name'); ?></span>
+                  <a href="<?php echo esc_url(home_url('/')); ?>" class="text-2xl font-bold no-underline" style="color: var(--color-brand-primary);">
+                    <?php bloginfo('name'); ?>
                   </a>
-                  <nav class="hidden lg:flex items-center space-x-4">
-                    <?php wp_nav_menu(['theme_location'=>'primary','container'=>false]); ?>
+                  <nav class="hidden lg:block">
+                    <?php wp_nav_menu([
+                      'theme_location' => 'primary',
+                      'container' => false,
+                      'menu_class' => '',
+                      'fallback_cb' => false
+                    ]); ?>
                   </nav>
                 </div>
               </div>
