@@ -1,29 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#f2a921",
-      "bg": "#f4f4f4",
-      "primary": "#111111",
-      "secondary": "#b21243",
-      "text": "#333333"
+      "accent": "#FFB300",
+      "bg": "#F1F8E9",
+      "primary": "#4CAF50",
+      "secondary": "#1B5E20",
+      "text": "#212121"
     },
     "fonts": {
-      "body": "Roboto",
-      "heading": "Bebas Neue"
+      "body": "Poppins",
+      "heading": "Fredoka One"
     }
   },
   "hero": {
     "cta": {
       "href": "#products",
-      "label": "Explore Inventory"
+      "label": "Browse Our Products"
     },
-    "image": "https://images.unsplash.com/photo-1565084754119-dcacf5750469?w=1600&h=900&fit=crop",
+    "image": "",
     "overlay": 0.4,
-    "subtitle": "Unleash your Spirit. Find your Perfect Ride.",
-    "title": "Experience the Power of Throttle & Rev"
+    "subtitle": "Discover diverse selections tailored to enhance your lifestyle.",
+    "title": "Canberra's Top Cannabis Store"
   },
   "industry": "retail",
-  "name": "Throttle & Rev Motorbikes",
+  "name": "CannaBliss Canberra",
   "pages": [
     {
       "blocks": [
@@ -31,61 +31,91 @@
           "type": "hero"
         },
         {
-          "content": [
-            "Latest Models",
-            "Custom Builds",
-            "Accessories",
-            "Maintenance Services"
-          ],
+          "content": {
+            "columns": [
+              {
+                "icon": "",
+                "text": "Explore our extensive selection, from flowers to edibles.",
+                "title": "Wide Range"
+              },
+              {
+                "icon": "",
+                "text": "Rely on our knowledgeable staff for personalized advice.",
+                "title": "Expert Guidance"
+              },
+              {
+                "icon": "",
+                "text": "We prioritize eco-friendly practices in sourcing and packaging.",
+                "title": "Sustainable Approaches"
+              }
+            ],
+            "introduction": "Why Choose CannaBliss Canberra?"
+          },
           "type": "features"
         },
         {
-          "content": "Browse our range of high-performance motorbikes—designed for racers, cruisers, and urban explorers.",
+          "categories": [
+            {
+              "category": "Flowers",
+              "intro": "Dive into our fragrant selection of top-quality flowers."
+            },
+            {
+              "category": "Edibles",
+              "intro": "Enjoy delicious edibles crafted with care and quality."
+            },
+            {
+              "category": "CBD Products",
+              "intro": "Experience the calming effects with our range of CBD products."
+            }
+          ],
+          "title": "Premium Collections",
           "type": "products"
         },
         {
-          "content": "Showcasing exhilarating rides and custom builds captured in their natural element.",
-          "type": "gallery"
+          "mission": "At CannaBliss Canberra, our mission is to enhance lives through high-quality, responsibly-sourced cannabis products.",
+          "type": "about"
         },
         {
-          "content": [
-            "Performance Guaranteed",
-            "Expert Technicians",
-            "Premium Quality Parts",
-            "Unmatched Customization"
+          "items": [
+            "Special discounts for loyalty members",
+            "Educational workshops and events",
+            "Free consultations with purchase"
           ],
-          "type": "benefits"
+          "title": "Customer Benefits",
+          "type": "customer-benefits"
         },
         {
-          "content": [
-            "Featured in Ride On Magazine",
-            "Partnered with Top Builders",
-            "Endorsed by Professional Riders"
-          ],
-          "type": "social-proof"
-        },
-        {
-          "content": [
+          "quotes": [
             {
-              "name": "Jake P.",
-              "quote": "Throttle & Rev transformed my riding experience!"
+              "name": "Emma V.",
+              "quote": "The selection is incredible and the staff are always helpful!"
             },
             {
-              "name": "Sophia L.",
-              "quote": "Unbelievable quality and customization options!"
+              "name": "Liam S.",
+              "quote": "My go-to place for the best edibles in Canberra!"
+            },
+            {
+              "name": "Sophia C.",
+              "quote": "I love the eco-friendly approach CannaBliss takes."
             }
           ],
-          "type": "testimonials"
+          "type": "reviews"
         },
         {
-          "content": {
-            "href": "#contact",
-            "label": "Visit Us Today"
-          },
+          "text": "Visit us: Mon-Sat: 9 AM - 8 PM, Sun: 10 AM - 6 PM",
+          "title": "Store Hours",
+          "type": "hours"
+        },
+        {
+          "cta_href": "#newsletter",
+          "cta_label": "Sign Up Now",
+          "details": "Subscribe for the latest product releases and member-only discounts.",
+          "offer": "Join our Tribe",
           "type": "cta"
         },
         {
-          "content": "Reach out to our team for any inquiries or to schedule a test ride.",
+          "description": "Have questions or feedback? We'd love to hear from you.",
+          "title": "Get in Touch",
           "type": "contact-form"
         }
       ],
@@ -94,13 +124,13 @@
       "title": "Home"
     }
   ],
-  "slug": "throttle-rev-motorbikes",
+  "slug": "cannabliss-canberra",
   "style": {
     "elev": "med",
-    "radius": 6,
-    "recipe": "brutalist",
-    "shapes": "angled",
-    "variant": "c"
+    "radius": 12,
+    "recipe": "playful",
+    "shapes": "soft",
+    "variant": "b"
   },
-  "tagline": "Ride the Future with Confidence"
+  "tagline": "Elevate Your Experience - Premium Cannabis for All"
 }
