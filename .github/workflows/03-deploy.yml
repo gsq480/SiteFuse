@@ -516,3 +516,18 @@ jobs:
               TITLE=$(tr '[:lower:]' '[:upper:]' <<< ${slug:0:1})${slug:1}
               ID=$(wp post create --post_type=page --post_title="$TITLE" --post_name="$slug" --post_status=publish --porcelain --allow-root)
             fi
+            [ -n "$ID" ] && wp menu item add-post 'Primary Menu' "$ID" --title="$(tr '[:lower:]' '[:upper:]' <<< ${slug:0:1})${slug:1}" --allow-root
+          done
+          wp menu location assign 'Primary Menu' primary --allow-root
+          wp rewrite flush --allow-root
+          EOS
+
+      - name: Report deployment
+        env:
+          NAME: ${{ inputs.name }}
+          SLUG: ${{ inputs.slug }}
+        run: |
+          echo "✅ Deployment completed!"
+          echo "🏢 Site Name: ${NAME}"
+          echo "🔧 Theme: ${SLUG}-child"
+          echo "🌐 Visit via your Cloudways domain for this app"
