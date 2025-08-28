@@ -1,5 +1,4 @@
 # .github/workflows/03-deploy.yml
-# .github/workflows/03-deploy.yml
 name: Deploy Theme
 
 on:
