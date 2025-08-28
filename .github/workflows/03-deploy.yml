@@ -5,35 +5,27 @@ on:
   workflow_dispatch:
     inputs:
       theme_artifact:
-        description: "Theme artifact name (theme-<slug>-<run_id>)"
+        description: 'Theme artifact name (theme-<slug>-<run_id>)'
         required: true
         type: string
       slug:
-        description: "Theme slug"
+        description: 'Theme slug'
         required: true
         type: string
       name:
-        description: "Site name"
+        description: 'Site name'
         required: true
         type: string
       tagline:
-        description: "Site tagline"
+        description: 'Site tagline'
         required: true
         type: string
   workflow_call:
     inputs:
-      theme_artifact:
-        required: true
-        type: string
-      slug:
-        required: true
-        type: string
-      name:
-        required: true
-        type: string
-      tagline:
-        required: true
-        type: string
+      theme_artifact: { required: true, type: string }
+      slug:           { required: true, type: string }
+      name:           { required: true, type: string }
+      tagline:        { required: true, type: string }
 
 jobs:
   deploy:
@@ -66,7 +58,15 @@ jobs:
           set -e
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
             "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "test -d '$APP_PATH' || { echo 'Remote APP_PATH does not exist: $APP_PATH'; exit 1; }"
+            "APP_PATH='${APP_PATH}' bash -s" <<'EOS'
+          set -euo pipefail
+          : "${APP_PATH:?APP_PATH is not set on remote}"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "Remote APP_PATH does not exist: $APP_PATH" >&2
+            exit 1
+          fi
+          echo "OK: APP_PATH is $APP_PATH"
+          EOS
 
       - name: Deploy child theme + website.json
         env:
@@ -75,17 +75,167 @@ jobs:
           set -e
           THEME_DEST="$APP_PATH/wp-content/themes/${SLUG}-child"
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" "mkdir -p '$THEME_DEST'"
-
           rsync -avz --delete -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
             "theme-files/" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$THEME_DEST/"
-
-          # also copy website.json into app root for mu-plugin access
           if [ -f "theme-files/website.json" ]; then
             rsync -avz -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
               "theme-files/website.json" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
           fi
 
-      - name: Configure WordPress
+      - name: Install/Update mu-plugin (renderer for new schema + back-compat)
+        run: |
+          set -e
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
+            "APP_PATH='${APP_PATH}' bash -s" <<'EOS'
+          set -euo pipefail
+          : "${APP_PATH:?APP_PATH is not set on remote}"
+          MU_DIR="$APP_PATH/wp-content/mu-plugins"
+          mkdir -p "$MU_DIR"
+          cat > "$MU_DIR/sitefuse-home.php" <<'PHP'
+          <?php
+          /*
+           * Plugin Name: SiteFuse Home Renderer
+           * Description: Shortcode [sitefuse_home] renders Home from website.json (new schema with fallback).
+           */
+          add_shortcode('sitefuse_home', function () {
+              $p = ABSPATH . 'website.json';
+              $cfg = is_readable($p) ? json_decode(file_get_contents($p), true) ?: [] : [];
+
+              // Back-compat shims
+              if (!isset($cfg['hero']) && isset($cfg['heroSection'])) {
+                  $cfg['hero'] = [
+                      'title'    => get_bloginfo('name'),
+                      'subtitle' => get_bloginfo('description'),
+                      'cta'      => ['label' => 'Get Started', 'href' => '#contact'],
+                      'image'    => $cfg['heroSection']['heroImage'] ?? '',
+                      'overlay'  => 0.35,
+                  ];
+              }
+              if (!isset($cfg['pages']) && isset($cfg['customSections'])) {
+                  $blocks = [];
+                  foreach ($cfg['customSections'] as $s) {
+                      $blocks[] = ['type' => 'html', 'html' => $s['html'] ?? ''];
+                  }
+                  $cfg['pages'] = [[ 'slug'=>'home','title'=>'Home','layout'=>'landing','blocks'=>$blocks ]];
+              }
+
+              $esc = fn($s) => esc_html($s ?? '');
+              $img = function ($url, $alt = '') {
+                  if (!$url) return '';
+                  return '<img src="'.esc_url($url).'" alt="'.esc_attr($alt).'" class="w-full h-full object-cover" />';
+              };
+
+              // pick home page
+              $home = ['blocks' => []];
+              if (!empty($cfg['pages']) && is_array($cfg['pages'])) {
+                  foreach ($cfg['pages'] as $page) {
+                      if (($page['slug'] ?? '') === 'home') { $home = $page; break; }
+                  }
+                  if (empty($home['blocks'])) { $home = $cfg['pages'][0]; }
+              }
+
+              ob_start();
+
+              // HERO
+              $hero = $cfg['hero'] ?? [];
+              $overlay = isset($hero['overlay']) ? floatval($hero['overlay']) : 0.35;
+              ?>
+              <section class="hero-section relative">
+                <div class="absolute inset-0">
+                  <?php echo $img($hero['image'] ?? '', get_bloginfo('name')); ?>
+                  <div class="absolute inset-0" style="background:rgba(0,0,0,<?php echo esc_attr($overlay); ?>)"></div>
+                </div>
+                <div class="relative z-10 container text-center text-white py-24">
+                  <h1 class="text-4xl font-bold mb-4"><?php echo $esc($hero['title'] ?? get_bloginfo('name')); ?></h1>
+                  <p class="text-lg mb-8 opacity-90"><?php echo $esc($hero['subtitle'] ?? get_bloginfo('description')); ?></p>
+                  <?php if (!empty($hero['cta']['label'])): ?>
+                    <a class="btn btn-primary" href="<?php echo esc_url($hero['cta']['href'] ?? '#contact'); ?>">
+                      <?php echo $esc($hero['cta']['label']); ?>
+                    </a>
+                  <?php endif; ?>
+                </div>
+              </section>
+              <?php
+
+              // Simple block renderers
+              $render = [
+                'html' => function($b) { echo $b['html'] ?? ''; },
+
+                'features' => function($b) use ($esc) {
+                  $items = $b['items'] ?? [];
+                  $cols  = max(2, min(4, intval($b['columns'] ?? 3)));
+                  echo '<section class="py-16"><div class="container grid gap-6" style="grid-template-columns:repeat('.$cols.',minmax(0,1fr))">';
+                  foreach ($items as $it) {
+                    echo '<div class="p-6 rounded-xl bg-white/90 shadow">';
+                    echo '<h3 class="font-bold mb-2">'.$esc($it['title'] ?? 'Feature').'</h3>';
+                    echo '<p class="opacity-80">'.$esc($it['text'] ?? '').'</p>';
+                    echo '</div>';
+                  }
+                  echo '</div></section>';
+                },
+
+                'testimonial' => function($b) use ($esc) {
+                  echo '<section class="py-16"><div class="container text-center max-w-3xl mx-auto">';
+                  echo '<blockquote class="text-2xl italic mb-4">“'.$esc($b['quote'] ?? '').'”</blockquote>';
+                  echo '<div class="opacity-70">— '.$esc($b['author'] ?? 'Happy client').'</div>';
+                  echo '</div></section>';
+                },
+
+                'cta' => function($b) use ($esc) {
+                  $btn = $b['button'] ?? [];
+                  echo '<section class="py-16"><div class="container text-center">';
+                  echo '<p class="text-lg mb-6">'.$esc($b['text'] ?? '').'</p>';
+                  if (!empty($btn['label'])) {
+                    echo '<a class="btn btn-primary" href="'.esc_url($btn['href'] ?? '#').'">'.$esc($btn['label']).'</a>';
+                  }
+                  echo '</div></section>';
+                },
+
+                'service-cards' => function($b) use ($esc) {
+                  $items = $b['items'] ?? [];
+                  echo '<section class="py-16"><div class="container grid gap-6" style="grid-template-columns:repeat(3,minmax(0,1fr))">';
+                  foreach ($items as $it) {
+                    echo '<div class="p-6 rounded-xl bg-white/90 shadow">';
+                    echo '<h3 class="font-bold mb-2">'.$esc($it['title'] ?? 'Service').'</h3>';
+                    echo '<p class="opacity-80">'.$esc($it['text'] ?? '').'</p>';
+                    echo '</div>';
+                  }
+                  echo '</div></section>';
+                },
+
+                'two-col' => function($b) {
+                  $title = esc_html($b['title'] ?? '');
+                  echo '<section class="py-16"><div class="container">';
+                  if ($title) echo '<h2 class="section-title mb-8">'.$title.'</h2>';
+                  echo '<div class="grid gap-8" style="grid-template-columns:repeat(2,minmax(0,1fr))">';
+                  echo '<div class="prose">'.wp_kses_post($b['left'] ?? '').'</div>';
+                  echo '<div class="prose">'.wp_kses_post($b['right'] ?? '').'</div>';
+                  echo '</div></div></section>';
+                },
+
+                'contact-form' => function() {
+                  echo '<section class="py-16"><div class="container max-w-3xl mx-auto text-center">';
+                  echo '<h2 class="section-title mb-6">Contact</h2>';
+                  echo '<p class="mb-8">Replace with your favourite form plugin shortcode.</p>';
+                  echo '<div class="p-6 rounded-xl bg-white/90 shadow">[contact-form-7 id="1"]</div>';
+                  echo '</div></section>';
+                },
+              ];
+
+              foreach ($home['blocks'] ?? [] as $b) {
+                  $type = $b['type'] ?? 'html';
+                  if (isset($render[$type]) && is_callable($render[$type])) {
+                      $render[$type]($b);
+                  }
+              }
+
+              return ob_get_clean();
+          });
+          PHP
+          EOS
+
+      - name: Configure WordPress (theme, pages, menu, homepage content)
         env:
           SLUG:    ${{ inputs.slug }}
           NAME:    ${{ inputs.name }}
@@ -93,65 +243,45 @@ jobs:
         run: |
           set -e
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "cd '$APP_PATH' && \
-             wp option update blogname       '$NAME'    --allow-root && \
-             wp option update blogdescription '$TAGLINE' --allow-root && \
-             wp theme activate '${SLUG}-child' --allow-root && \
-             wp rewrite flush --allow-root"
+            "APP_PATH='${APP_PATH}' SLUG='${SLUG}' NAME='${NAME}' TAGLINE='${TAGLINE}' bash -s" <<'EOS'
+          set -euo pipefail
+          cd "$APP_PATH"
 
-      - name: Install mu-plugin for home rendering
-        run: |
-          set -e
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "mkdir -p '$APP_PATH/wp-content/mu-plugins' && cat > '$APP_PATH/wp-content/mu-plugins/sitefuse-home.php'" <<'PHP'
-          <?php
-          /*
-           * Plugin Name: SiteFuse Home Renderer
-           * Description: Shortcode [sitefuse_home] renders hero, blocks and custom sections from website.json
-           */
-          add_shortcode('sitefuse_home', function () {
-              $p = ABSPATH . 'website.json';
-              $cfg = is_readable($p) ? json_decode(file_get_contents($p), true) ?: [] : [];
-              ob_start();
+          wp option update blogname        "$NAME"    --allow-root
+          wp option update blogdescription "$TAGLINE" --allow-root
 
-              // Prefer new hero schema
-              if (!empty($cfg['hero'])) {
-                $h = $cfg['hero'];
-                echo '<section class="hero-section relative"><div class="relative z-10 container text-center text-white py-24">';
-                if (!empty($h['title'])) echo '<h1 class="text-4xl font-bold mb-6">'.esc_html($h['title']).'</h1>';
-                if (!empty($h['subtitle'])) echo '<p class="text-xl mb-8">'.esc_html($h['subtitle']).'</p>';
-                if (!empty($h['cta']['label'])) echo '<a class="btn btn-primary" href="'.esc_url($h['cta']['href']).'">'.esc_html($h['cta']['label']).'</a>';
-                echo '</div></section>';
-              }
+          wp theme activate "${SLUG}-child" --allow-root
 
-              // Custom raw HTML sections
-              if (!empty($cfg['customSections'])) {
-                foreach ($cfg['customSections'] as $i => $s) {
-                  if (!empty($s['html'])) {
-                    echo "\n<!-- ai-section-$i -->\n";
-                    echo wp_kses_post($s['html']);
-                  }
-                }
-              }
+          # Home page that renders the shortcode
+          HOME_ID=$(wp post list --post_type=page --name=home --field=ID --allow-root | head -1)
+          if [ -z "$HOME_ID" ]; then
+            HOME_ID=$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --porcelain --allow-root)
+          fi
+          wp post update "$HOME_ID" --post_content='[sitefuse_home]' --allow-root
+          wp option update show_on_front page --allow-root
+          wp option update page_on_front "$HOME_ID" --allow-root
 
-              // Rich block rendering
-              if (!empty($cfg['pages'])) {
-                foreach ($cfg['pages'] as $p) {
-                  if ($p['slug'] === 'home' && !empty($p['blocks'])) {
-                    if (function_exists('sitefuse_render_blocks')) {
-                      sitefuse_render_blocks($p['blocks']);
-                    }
-                  }
-                }
-              }
-              return ob_get_clean();
-          });
-          PHP
+          # Rebuild Primary Menu
+          wp menu delete 'Primary Menu' --allow-root 2>/dev/null || true
+          wp menu create 'Primary Menu' --allow-root
+          for slug in home about services contact; do
+            ID=$(wp post list --post_type=page --name="$slug" --field=ID --allow-root | head -1)
+            if [ -z "$ID" ] && [ "$slug" != "home" ]; then
+              TITLE=$(tr '[:lower:]' '[:upper:]' <<< ${slug:0:1})${slug:1}
+              ID=$(wp post create --post_type=page --post_title="$TITLE" --post_name="$slug" --post_status=publish --porcelain --allow-root)
+            fi
+            [ -n "$ID" ] && wp menu item add-post 'Primary Menu' "$ID" --title="$(tr '[:lower:]' '[:upper:]' <<< ${slug:0:1})${slug:1}" --allow-root
+          done
+          wp menu location assign 'Primary Menu' primary --allow-root
+          wp rewrite flush --allow-root
+          EOS
 
       - name: Report deployment
+        env:
+          NAME: ${{ inputs.name }}
+          SLUG: ${{ inputs.slug }}
         run: |
-          echo "✅ Deployment completed"
-          echo "📱 Site: ${{ inputs.name }}"
-          echo "🔧 Theme: ${{ inputs.slug }}-child"
-          echo "🌐 Visit via your Cloudways domain"
+          echo "✅ Deployment completed!"
+          echo "📱 Site Name: ${NAME}"
+          echo "🔧 Theme: ${SLUG}-child"
+          echo "🌐 Visit via your Cloudways domain for this app"
