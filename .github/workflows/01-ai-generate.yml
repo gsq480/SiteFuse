@@ -58,31 +58,77 @@ jobs:
             exit 1
           fi
 
-          # System prompt to constrain the model to valid JSON with known keys
           cat > system_prompt.txt << 'EOF'
-          You are a professional web designer. Return valid JSON with these exact keys:
-          {"slug":"business-name-in-kebab-case","name":"Business Name","tagline":"tagline","industry":"industry","colorPalette":{"primary":"#hex","secondary":"#hex","accent":"#hex"},"typography":{"headingFont":"Font","bodyFont":"Font"},"heroSection":{"customHTML":"<div class=\"text-center\">HTML</div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop"},"customSections":[{"title":"Section","html":"<section>HTML</section>"}]}
+          You are a senior brand, UX and content designer. Return STRICT JSON, no prose.
 
-          IMPORTANT: For heroImage, use this exact format with a real Unsplash photo ID:
-          https://images.unsplash.com/photo-[PHOTOID]?w=1600&h=900&fit=crop
+          Schema:
+          {
+            "slug": "kebab-case-name",
+            "name": "Business Name",
+            "tagline": "Short promise",
+            "industry": "one-of: restaurant, bakery, yoga-studio, law-firm, photography, consulting, medical, retail, real-estate, technology",
+            "style": {
+              "recipe": "one-of: minimal, editorial, brutalist, elegant, playful, tech",
+              "variant": "a,b,c",
+              "shapes": "squircle|angled|soft",
+              "radius": 6,
+              "elev": "low|med|high"
+            },
+            "brand": {
+              "colors": {"primary":"#hex","secondary":"#hex","accent":"#hex","bg":"#hex","text":"#hex"},
+              "fonts": {"heading":"Inter","body":"Inter"}
+            },
+            "hero": {
+              "title":"H1",
+              "subtitle":"One-line benefit",
+              "cta":{"label":"Primary CTA","href":"#contact"},
+              "image":"https://images.unsplash.com/photo-[ID]?w=1600&h=900&fit=crop",
+              "overlay": 0.35
+            },
+            "nav": [{"label":"Home","href":"/"},{"label":"Page","href":"/page"}],
+            "pages": [
+              {
+                "slug":"home",
+                "title":"Home",
+                "layout":"landing",
+                "blocks":[
+                  {"type":"hero"},
+                  {"type":"features","columns":3,"items":[{"title":"...","text":"..."}, {"title":"...","text":"..."}, {"title":"...","text":"..."}]},
+                  {"type":"testimonial","quote":"...","author":"..."},
+                  {"type":"cta","text":"...","button":{"label":"...","href":"/contact"}}
+                ]
+              },
+              {
+                "slug":"services","title":"Services",
+                "blocks":[
+                  {"type":"service-cards","items":[{"title":"...","text":"..."},{"title":"...","text":"..."}]}
+                ]
+              },
+              {
+                "slug":"about","title":"About",
+                "blocks":[{"type":"two-col","title":"Our story","left":"<p>...</p>","right":"<p>...</p>"}]
+              },
+              {
+                "slug":"contact","title":"Contact",
+                "blocks":[{"type":"contact-form"}]
+              }
+            ],
+            "media": [{"name":"hero.jpg","url":"https://images.unsplash.com/photo-[ID]?w=1600&h=900&fit=crop"}],
+            "seo": {"title":"SEO Title","description":"SEO description","keywords":["a","b","c"]},
+            "ecommerce":{"enabled":false}
+          }
 
-          Use these Unsplash photo IDs based on industry:
-          - law-firm: photo-1589829545856-d10d557cf95f
-          - restaurant: photo-1414235077428-338989a2e8c0
-          - yoga-studio: photo-1506905925346-21bda4d32df4
-          - photography: photo-1452587925148-ce544e77e70d
-          - consulting: photo-1497366216548-37526070297c
-          - medical: photo-1559757148-5c350d0d3c56
-          - retail: photo-1441986300917-64674bd600d8
-          - real-estate: photo-1560518883-ce09059eeffa
-          - technology: photo-1518770660439-4636190af475
-          - bakery: photo-1517433670267-08bbd4be890f
+          Rules:
+          - Choose a style.recipe and variant that fit the industry, and vary per request so sites don’t look the same.
+          - Use contrasting colours that pass AA for body text on bg.
+          - Fonts must be common Google Fonts by family name only.
+          - Hero image must use a real Unsplash photo ID as shown.
+          - Write short, sensible placeholder copy that matches the business type.
           EOF
 
           SYSTEM_PROMPT=$(cat system_prompt.txt)
           USER_PROMPT="Create website config for: ${{ inputs.prompt }} Industry: ${{ inputs.industry }}"
 
-          # Build payload
           jq -n \
             --arg model "gpt-4o" \
             --arg system_content "$SYSTEM_PROMPT" \
@@ -90,7 +136,7 @@ jobs:
             '{
               model: $model,
               response_format: {type: "json_object"},
-              temperature: 0.3,
+              temperature: 0.9,
               max_tokens: 4000,
               messages: [
                 {role: "system", content: $system_content},
@@ -128,7 +174,7 @@ jobs:
           if [ "$USE_FALLBACK" = "true" ]; then
             echo "Using fallback configuration"
             cat > website.json << 'JSON'
-          {"slug":"business-site","name":"Your Business","tagline":"Professional services you can trust","industry":"business","colorPalette":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"},"typography":{"headingFont":"Inter","bodyFont":"Inter"},"heroSection":{"customHTML":"<div class=\"text-center\"><h1 class=\"text-5xl font-bold mb-6 text-white\">Your Business</h1><p class=\"text-xl mb-8 text-gray-100\">Professional services</p><a href=\"#contact\" class=\"btn btn-primary\">Get Started</a></div>","heroImage":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=800"},"customSections":[{"title":"About","html":"<section class=\"py-16\"><h2 class=\"text-3xl font-bold text-center mb-8\">About Us</h2><p class=\"text-center\">Professional services.</p></section>"}]}
+          {"slug":"business-site","name":"Your Business","tagline":"Professional services you can trust","industry":"business","brand":{"colors":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8","bg":"#0b1320","text":"#111827"},"fonts":{"heading":"Inter","body":"Inter"}},"hero":{"title":"Your Business","subtitle":"Professional services","cta":{"label":"Get Started","href":"#contact"},"image":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop","overlay":0.35},"pages":[{"slug":"home","title":"Home","layout":"landing","blocks":[{"type":"hero"},{"type":"features","columns":3,"items":[{"title":"Quality","text":"We care a lot."},{"title":"Speed","text":"We move fast."},{"title":"Support","text":"We’re here."}]},{"type":"testimonial","quote":"They’re great!","author":"Happy Client"},{"type":"cta","text":"Ready to go?","button":{"label":"Contact us","href":"/contact"}}]}]}
           JSON
           fi
 
@@ -139,24 +185,12 @@ jobs:
             .slug        //= "business-site" |
             .name        //= "Your Business" |
             .tagline     //= "Professional services you can trust" |
-            .nav         //= [
-              {"label":"Home","href":"/"},
-              {"label":"About","href":"/about"},
-              {"label":"Services","href":"/services"},
-              {"label":"Contact","href":"/contact"}
-            ] |
-            .pages       //= [
-              {"slug":"home","title":"Home","layout":"landing","sections":[
-                {"type":"hero","html":(.heroSection.customHTML // "<h1>Welcome</h1>"),"image":(.heroSection.heroImage // "")},
-                {"type":"content","html":"<section><h2>About</h2><p>Starter section.</p></section>"}
-              ]},
-              {"slug":"about","title":"About","sections":[{"type":"content","html":"<section><h2>About</h2><p>About content.</p></section>"}]},
-              {"slug":"services","title":"Services","sections":[{"type":"content","html":"<section><h2>Services</h2><p>What we offer.</p></section>"}]},
-              {"slug":"contact","title":"Contact","sections":[{"type":"content","html":"<section><h2>Contact</h2><p>Get in touch.</p></section>"}]}
-            ] |
-            .colorPalette //= {"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8"} |
-            .typography   //= {"headingFont":"Inter","bodyFont":"Inter"} |
-            .ecommerce    //= {"enabled": false}
+            .brand.colors //= {"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8","bg":"#0b1320","text":"#111827"} |
+            .brand.fonts  //= {"heading":"Inter","body":"Inter"} |
+            .hero.overlay //= 0.35 |
+            .nav         //= [{"label":"Home","href":"/"},{"label":"About","href":"/about"},{"label":"Services","href":"/services"},{"label":"Contact","href":"/contact"}] |
+            .pages       //= [{"slug":"home","title":"Home","layout":"landing","blocks":[{"type":"hero"}]}] |
+            .ecommerce   //= {"enabled": false}
           ' website.json > website.normalised.json
           mv website.normalised.json website.json
 
