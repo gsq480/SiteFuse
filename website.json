@@ -1,40 +1,50 @@
 {
-  "colorPalette": {
-    "accent": "#ffcc00",
-    "primary": "#0056b3",
-    "secondary": "#ffffff"
-  },
-  "customSections": [
-    {
-      "html": "<section><h2>About Canberra Cycling Club</h2><p>Canberra Cycling Club is dedicated to promoting cycling as a sport and recreational activity in the Canberra region. We offer a range of events and activities for cyclists of all levels.</p></section>",
-      "title": "About Us"
+  "brand": {
+    "colors": {
+      "accent": "#b22222",
+      "bg": "#fffaf0",
+      "primary": "#8b4513",
+      "secondary": "#f0e68c",
+      "text": "#333333"
     },
-    {
-      "html": "<section><h2>Upcoming Events</h2><p>Stay tuned for our upcoming cycling events and races. Whether you're a seasoned cyclist or a beginner, there's something for everyone.</p></section>",
-      "title": "Upcoming Events"
+    "fonts": {
+      "body": "Open Sans",
+      "heading": "Merriweather"
     }
-  ],
+  },
   "ecommerce": {
     "enabled": false
   },
-  "heroSection": {
-    "customHTML": "<div class=\"text-center\"><h1>Welcome to Canberra Cycling Club</h1><p>Join us for exhilarating rides and community events.</p></div>",
-    "heroImage": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&h=900&fit=crop"
+  "hero": {
+    "cta": {
+      "href": "#contact",
+      "label": "Book Now"
+    },
+    "image": "https://images.unsplash.com/photo-1590595900562-d2b9e784a10c?w=1600&h=900&fit=crop",
+    "overlay": 0.35,
+    "subtitle": "Experience the ultimate relaxation in our state-of-the-art saunas.",
+    "title": "Unwind in Luxury"
   },
-  "industry": "sports",
-  "name": "Canberra Cycling Club",
+  "industry": "consulting",
+  "media": [
+    {
+      "name": "hero.jpg",
+      "url": "https://images.unsplash.com/photo-1590595900562-d2b9e784a10c?w=1600&h=900&fit=crop"
+    }
+  ],
+  "name": "Canberra Sauna",
   "nav": [
     {
       "href": "/",
       "label": "Home"
     },
     {
-      "href": "/about",
-      "label": "About"
-    },
-    {
       "href": "/services",
       "label": "Services"
+    },
+    {
+      "href": "/about",
+      "label": "About"
     },
     {
       "href": "/contact",
@@ -43,56 +53,105 @@
   ],
   "pages": [
     {
-      "layout": "landing",
-      "sections": [
+      "blocks": [
         {
-          "html": "<div class=\"text-center\"><h1>Welcome to Canberra Cycling Club</h1><p>Join us for exhilarating rides and community events.</p></div>",
-          "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&h=900&fit=crop",
           "type": "hero"
         },
         {
-          "html": "<section><h2>About</h2><p>Starter section.</p></section>",
-          "type": "content"
+          "columns": 3,
+          "items": [
+            {
+              "text": "Premium sauna experiences for ultimate relaxation.",
+              "title": "Luxury Saunas"
+            },
+            {
+              "text": "Highly trained professionals to guide your experience.",
+              "title": "Professional Staff"
+            },
+            {
+              "text": "Tailored solutions to suit your needs.",
+              "title": "Custom Packages"
+            }
+          ],
+          "type": "features"
+        },
+        {
+          "author": "Jane Doe",
+          "quote": "The best sauna experience I've ever had!",
+          "type": "testimonial"
+        },
+        {
+          "button": {
+            "href": "/contact",
+            "label": "Contact Us"
+          },
+          "text": "Ready to relax and rejuvenate? Contact us to book your session.",
+          "type": "cta"
         }
       ],
+      "layout": "landing",
       "slug": "home",
       "title": "Home"
     },
     {
-      "sections": [
+      "blocks": [
         {
-          "html": "<section><h2>About</h2><p>About content.</p></section>",
-          "type": "content"
-        }
-      ],
-      "slug": "about",
-      "title": "About"
-    },
-    {
-      "sections": [
-        {
-          "html": "<section><h2>Services</h2><p>What we offer.</p></section>",
-          "type": "content"
+          "items": [
+            {
+              "text": "Deep detoxification through safe and efficient infrared heat.",
+              "title": "Infrared Sauna"
+            },
+            {
+              "text": "Classic high-temperature saunas to cleanse and relax.",
+              "title": "Traditional Sauna"
+            }
+          ],
+          "type": "service-cards"
         }
       ],
       "slug": "services",
       "title": "Services"
     },
     {
-      "sections": [
+      "blocks": [
         {
-          "html": "<section><h2>Contact</h2><p>Get in touch.</p></section>",
-          "type": "content"
+          "left": "<p>Founded in Canberra, our mission is to provide unparalleled sauna experiences to help you unwind and restore balance.</p>",
+          "right": "<p>Our state-of-the-art facilities and professional staff ensure that your time with us is calming and rejuvenating.</p>",
+          "title": "Our story",
+          "type": "two-col"
+        }
+      ],
+      "slug": "about",
+      "title": "About"
+    },
+    {
+      "blocks": [
+        {
+          "type": "contact-form"
         }
       ],
       "slug": "contact",
       "title": "Contact"
     }
   ],
-  "slug": "canberra-cycling-club",
-  "tagline": "Ride Together, Thrive Together",
-  "typography": {
-    "bodyFont": "Roboto",
-    "headingFont": "Montserrat"
-  }
+  "seo": {
+    "description": "Experience luxury saunas in Canberra. Book your session today and indulge in relaxation.",
+    "keywords": [
+      "sauna",
+      "relaxation",
+      "Canberra",
+      "wellness",
+      "spa"
+    ],
+    "title": "Canberra Sauna - Relax, Rejuvenate, Revive"
+  },
+  "slug": "canberra-sauna",
+  "style": {
+    "elev": "med",
+    "radius": 15,
+    "recipe": "elegant",
+    "shapes": "soft",
+    "variant": "b"
+  },
+  "tagline": "Relax, Rejuvenate, Revive"
 }
