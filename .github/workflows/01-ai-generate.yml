@@ -93,6 +93,12 @@ jobs:
           - map: Location map
           - hours: Business hours
           - booking: Appointment booking
+            
+          IMAGE-FRIENDLY BLOCK SHAPES, REQUIRED FIELDS:
+          - hero: { title, subtitle, cta, image: "", overlay }  leave hero.image empty, it will be generated later
+          - gallery: { title?, images: [ { alt: "meaningful description", url: "" }, ... ] }  always include 6–12 images with alt and leave url empty
+          - team: { title?, members: [ { name, role, bio, photo: "" }, ... ] }  leave photo empty
+          - services: { title?, items: [ { title, text, price?, icon: "" }, ... ] }  leave icon empty  
 
           DESIGN VARIETY RULES:
           1. Restaurants/Cafes: 6-10 sections (hero, menu, about, gallery, reviews, hours, contact)
@@ -134,7 +140,7 @@ jobs:
               "title": "Compelling headline specific to business",
               "subtitle": "Benefit-focused subtitle that's unique",
               "cta": {"label": "Action-oriented CTA", "href": "#contact"},
-              "image": "https://images.unsplash.com/photo-VERIFIED-ID?w=1600&h=900&fit=crop",
+              "image": "",
               "overlay": 0.2-0.5
             },
             "pages": [
@@ -166,6 +172,12 @@ jobs:
             * Photography: 1452587925148-ce544e77e70d, 1606983340077-e4d9b3a5d6b9, 1516035069371-29a1b244cc32
             * Law/Professional: 1589829545856-d10d557cf95f, 1521737711867-e3b97375f902, 1560472354-b33ff0c44a5a
           - Use Google Fonts that match the business personality
+          IMAGE PLACEHOLDER RULES:
+          - Do not insert stock URLs for hero, gallery, team photos, or service icons
+          - Always include the fields listed above and leave image URLs empty strings ""
+          - Provide rich, specific alt text for each gallery image so a downstream process can generate accurate visuals
+          - Write realistic people names and roles for team members so portraits can be generated
+          - Do not use the Unsplash IDs list for hero, gallery, team photos, or service icons, leave those URLs empty; other blocks may still use stock images if needed.
 
           UNIQUENESS REQUIREMENTS:
           - No two sites should have the same section combination
@@ -245,7 +257,7 @@ jobs:
               "title": "Your Custom Business Solution",
               "subtitle": "Professionally crafted services",
               "cta": {"label": "Get Started", "href": "#contact"},
-              "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop",
+              "image": "",
               "overlay": 0.35
             },
             "pages": [
@@ -284,21 +296,50 @@ jobs:
             .style       //= {"recipe": "elegant", "variant": "a", "shapes": "soft", "radius": 8, "elev": "med"} |
             .brand.colors //= {"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8","bg":"#f8fafc","text":"#111827"} |
             .brand.fonts  //= {"heading":"Inter","body":"Inter"} |
+            .hero        //= {} |
             .hero.overlay //= 0.35 |
+            .hero.image   //= "" |
             .pages       //= [{"slug":"home","title":"Home","layout":"landing","blocks":[{"type":"hero"}]}] |
-            
-            # Ensure home page always starts with hero
-            if .pages then 
-              .pages = (.pages | map(
-                if .slug == "home" then
-                  .blocks = (
-                    if (.blocks | length) > 0 and (.blocks[0].type != "hero") then
-                      [{"type": "hero"}] + .blocks
-                    else .blocks end
-                  )
+
+            # Ensure home starts with hero
+            (.pages |= map(
+              if .slug == "home" and ((.blocks|length) > 0 and (.blocks[0].type != "hero")) 
+                then .blocks = ([{"type":"hero"}] + .blocks) 
                 else . end
-              ))
-            else . end
+            )) |
+
+            # Ensure gallery, team, services placeholders exist and are shaped correctly
+            (.pages |= map(
+              .blocks |= map(
+                if .type == "gallery" then
+                  .images = ((.images // []) 
+                    | map({
+                        alt: (.alt // "Gallery image"),
+                        url: (.url // "")
+                      }))
+                  | (if (.images|length) == 0 then
+                      [{alt:"Gallery image 1",url:""},{alt:"Gallery image 2",url:""},{alt:"Gallery image 3",url:""}]
+                    else . end)
+                elif .type == "team" then
+                  .members = ((.members // []) 
+                    | map({
+                        name: (.name // "Team Member"),
+                        role: (.role // "Role"),
+                        bio:  (.bio  // ""),
+                        photo: (.photo // "")
+                      }))
+                elif .type == "services" then
+                  .items = ((.items // [])
+                    | map({
+                        title: (.title // "Service"),
+                        text:  (.text  // ""),
+                        price: (.price // null),
+                        icon:  (.icon  // "")
+                      }))
+                else .
+                end
+              )
+            ))
           ' website.json > website.enhanced.json
           
           mv website.enhanced.json website.json
@@ -311,10 +352,125 @@ jobs:
             echo "Warning: Generated config seems too simple, this might indicate AI generation issues"
           fi
 
+      - name: Strip any prefilled image URLs if generating images
+        if: ${{ inputs.generate_images }}
+        run: |
+          set -euo pipefail
+          jq '
+            .hero.image = "" |
+            (.pages |= map(
+              .blocks |= map(
+                if .type == "gallery" then
+                  .images = ((.images // []) | map(.url = "" | .))
+                elif .type == "team" then
+                  .members = ((.members // []) | map(.photo = "" | .))
+                elif .type == "services" then
+                  .items = ((.items // []) | map(.icon = "" | .))
+                else .
+                end
+              )
+            ))
+          ' website.json > website.tmp.json
+          mv website.tmp.json website.json
+      
+      - name: Generate AI images for hero, gallery, team, services
+        if: ${{ inputs.generate_images }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          gen_image() {
+            local prompt="$1"; local size="${2:-1024x1024}"; local url=""
+            for attempt in 1 2 3; do
+              url=$(curl -sS -X POST "https://api.openai.com/v1/images/generations" \
+                -H "Authorization: Bearer $OPENAI_API_KEY" \
+                -H "Content-Type: application/json" \
+                -d "$(jq -n --arg prompt "$prompt" --arg size "$size" \
+                  '{model:"gpt-image-1", prompt:$prompt, n:1, size:$size}')" \
+              | jq -r '.data[0].url // empty')
+              [ -n "$url" ] && { echo "$url"; return 0; }
+              sleep 2
+            done
+            echo ""
+          }
+
+          tmpfile=$(mktemp)
+          cp website.json "$tmpfile"
+
+          # 1) Hero image
+          HERO_PROMPT=$(jq -r '
+            [ .hero.title, .industry, "website hero photo" ]
+            | map(select(. != null and . != "")) | join(" ")
+          ' "$tmpfile")
+          if [ -n "$HERO_PROMPT" ]; then
+            # Use a square size and let CSS crop, this is the most reliable option
+            HERO_URL=$(gen_image "$HERO_PROMPT" "1024x1024")
+            jq --arg url "$HERO_URL" '.hero.image = $url' "$tmpfile" > website.json
+            mv website.json "$tmpfile"
+          fi
+
+          # Helper: count pages
+          PAGES_LEN=$(jq '.pages | length' "$tmpfile")
+          for p in $(seq 0 $((PAGES_LEN-1))); do
+            BLOCKS_LEN=$(jq ".pages[$p].blocks | length" "$tmpfile")
+            for b in $(seq 0 $((BLOCKS_LEN-1))); do
+              TYPE=$(jq -r ".pages[$p].blocks[$b].type // empty" "$tmpfile")
+
+          # 2) Gallery images
+          if [ "$TYPE" = "gallery" ]; then
+            IMG_LEN=$(jq ".pages[$p].blocks[$b].images | length" "$tmpfile")
+            if [ "$IMG_LEN" -gt 0 ]; then
+              for i in $(seq 0 $((IMG_LEN-1))); do
+                PROMPT=$(jq -r ".pages[$p].blocks[$b].images[$i].alt // \"gallery photo\"" "$tmpfile")
+                URL=$(gen_image "$PROMPT" "1024x1024")
+                jq --arg url "$URL" ".pages[$p].blocks[$b].images[$i].url = \$url" "$tmpfile" > website.json
+                mv website.json "$tmpfile"
+              done
+            fi
+          fi
+
+          # 3) Team member photos
+          if [ "$TYPE" = "team" ]; then
+            MEM_LEN=$(jq ".pages[$p].blocks[$b].members | length" "$tmpfile")
+            if [ "$MEM_LEN" -gt 0 ]; then
+              for i in $(seq 0 $((MEM_LEN-1))); do
+                PROMPT=$(jq -r ".pages[$p].blocks[$b].members[$i] |
+                  [ .name, (.role // \"\"), \"professional portrait\" ]
+                  | map(select(. != null and . != \"\")) | join(\" \")" "$tmpfile")
+                URL=$(gen_image "$PROMPT" "512x512")
+                jq --arg url "$URL" ".pages[$p].blocks[$b].members[$i].photo = \$url" "$tmpfile" > website.json
+                mv website.json "$tmpfile"
+              done
+            fi
+          fi
+
+          # 4) Services icons
+          if [ "$TYPE" = "services" ]; then
+            ITM_LEN=$(jq ".pages[$p].blocks[$b].items | length" "$tmpfile")
+            if [ "$ITM_LEN" -gt 0 ]; then
+              for i in $(seq 0 $((ITM_LEN-1))); do
+                PROMPT=$(jq -r ".pages[$p].blocks[$b].items[$i] |
+                  [ .title, \"flat vector icon, no text, simple\" ]
+                  | map(select(. != null and . != \"\")) | join(\" \")" "$tmpfile")
+                URL=$(gen_image "$PROMPT" "512x512")
+                jq --arg url "$URL" ".pages[$p].blocks[$b].items[$i].icon = \$url" "$tmpfile" > website.json
+                mv website.json "$tmpfile"
+              done
+            fi
+          fi
+
+            done
+          done
+
+          cp "$tmpfile" website.json
+          rm "$tmpfile"
+          echo "✅ Images generated and injected into website.json"
+
+
       - name: Upload configuration
         uses: actions/upload-artifact@v4
         with:
           name: website-config-${{ github.run_id }}
           path: website.json
           retention-days: 1
-
