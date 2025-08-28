@@ -134,7 +134,7 @@ jobs:
               "title": "Compelling headline specific to business",
               "subtitle": "Benefit-focused subtitle that's unique",
               "cta": {"label": "Action-oriented CTA", "href": "#contact"},
-              "image": "https://source.unsplash.com/1600x900/?business-appropriate-keywords",
+              "image": "https://images.unsplash.com/photo-VERIFIED-ID?w=1600&h=900&fit=crop",
               "overlay": 0.2-0.5
             },
             "pages": [
@@ -159,7 +159,12 @@ jobs:
           - Make testimonials sound authentic with realistic names
           - Vary the number and types of sections dramatically between different prompts
           - Choose colors that match the industry and mood (warm for restaurants, professional for law, calming for yoga, etc.)
-          - Select appropriate Unsplash keywords that match the business (yoga,meditation,wellness for yoga studios, restaurant,dining,food for restaurants, etc.)
+          - Use verified working Unsplash photo IDs from these categories:
+            * Spa/Wellness: 1540979388821-28d9b8e4cf88, 1571019613454-1cb2f99b2d8b, 1506905925346-21bda4d32df4
+            * Restaurant/Food: 1517248135467-4c7edcad34c4, 1504674900247-0877df9cc836, 1552566626-52f8b28a1ff1
+            * Business/Office: 1497366216548-37526070297c, 1589829545856-d10d557cf95f, 1423666639041-f56206448028
+            * Photography: 1452587925148-ce544e77e70d, 1606983340077-e4d9b3a5d6b9, 1516035069371-29a1b244cc32
+            * Law/Professional: 1589829545856-d10d557cf95f, 1521737711867-e3b97375f902, 1560472354-b33ff0c44a5a
           - Use Google Fonts that match the business personality
 
           UNIQUENESS REQUIREMENTS:
@@ -240,7 +245,7 @@ jobs:
               "title": "Your Custom Business Solution",
               "subtitle": "Professionally crafted services",
               "cta": {"label": "Get Started", "href": "#contact"},
-              "image": "https://source.unsplash.com/1600x900/?business,office,professional",
+              "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop",
               "overlay": 0.35
             },
             "pages": [
@@ -309,6 +314,9 @@ jobs:
       - name: Upload configuration
         uses: actions/upload-artifact@v4
         with:
+          name: website-config-${{ github.run_id }}
+          path: website.json
+          retention-days: 1
           name: website-config-${{ github.run_id }}
           path: website.json
           retention-days: 1
