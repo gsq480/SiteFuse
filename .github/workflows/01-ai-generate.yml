@@ -1,4 +1,5 @@
 # .github/workflows/01-ai-generate.yml
+# .github/workflows/01-ai-generate.yml
 name: Generate Website Configuration
 
 on:
@@ -59,75 +60,119 @@ jobs:
           fi
 
           cat > system_prompt.txt << 'EOF'
-          You are a senior brand, UX and content designer. Return STRICT JSON, no prose.
+          You are a senior UX designer and content strategist. Your job is to analyze the user's request and create a UNIQUE, custom website structure that perfectly fits their specific business needs.
 
-          Schema:
+          IMPORTANT: Make each site completely different! Vary the number of sections, content types, and layout based on what makes sense for that specific business.
+
+          Available block types you can use:
+          - hero: Hero section with title, subtitle, CTA, background image
+          - features: Grid of feature cards (2-4 columns)
+          - services: Service offerings in cards
+          - testimonial: Single testimonial quote
+          - testimonials: Multiple testimonials grid
+          - cta: Call-to-action section
+          - about: About us content
+          - portfolio: Portfolio/gallery grid
+          - team: Team member cards
+          - pricing: Pricing tables
+          - faq: Frequently asked questions
+          - contact-form: Contact form section
+          - stats: Statistics/numbers section
+          - process: Step-by-step process
+          - benefits: Benefits grid
+          - locations: Multiple locations
+          - menu: Restaurant/cafe menu
+          - classes: Class schedules (yoga, fitness, etc)
+          - gallery: Image gallery
+          - blog-preview: Recent blog posts
+          - newsletter: Email signup
+          - social-proof: Logos/brands
+          - two-col: Two column content
+          - three-col: Three column content
+          - full-width-text: Full width text section
+          - video: Video section
+          - map: Location map
+          - hours: Business hours
+          - booking: Appointment booking
+
+          DESIGN VARIETY RULES:
+          1. Restaurants/Cafes: 6-10 sections (hero, menu, about, gallery, reviews, hours, contact)
+          2. Yoga Studios: 4-7 sections (hero, classes, benefits, testimonials, pricing, contact)
+          3. Law Firms: 5-8 sections (hero, services, about, team, testimonials, cta, contact)
+          4. Photography: 4-6 sections (hero, portfolio, about, services, testimonials, contact)
+          5. Consulting: 6-9 sections (hero, services, process, about, testimonials, stats, cta, contact)
+          6. Medical: 5-8 sections (hero, services, about, team, hours, insurance, contact)
+          7. Real Estate: 6-10 sections (hero, listings, services, about, testimonials, stats, contact)
+          8. Retail: 5-9 sections (hero, products, about, benefits, reviews, cta, contact)
+
+          Return ONLY valid JSON in this schema:
           {
-            "slug": "kebab-case-name",
-            "name": "Business Name",
-            "tagline": "Short promise",
-            "industry": "one-of: restaurant, bakery, yoga-studio, law-firm, photography, consulting, medical, retail, real-estate, technology",
+            "slug": "unique-kebab-case-name",
+            "name": "Creative Business Name",
+            "tagline": "Compelling unique tagline",
+            "industry": "detected-industry",
             "style": {
-              "recipe": "one-of: minimal, editorial, brutalist, elegant, playful, tech",
-              "variant": "a,b,c",
+              "recipe": "minimal|editorial|brutalist|elegant|playful|tech",
+              "variant": "a|b|c",
               "shapes": "squircle|angled|soft",
-              "radius": 6,
+              "radius": 4|6|8|12|16,
               "elev": "low|med|high"
             },
             "brand": {
-              "colors": {"primary":"#hex","secondary":"#hex","accent":"#hex","bg":"#hex","text":"#hex"},
-              "fonts": {"heading":"Inter","body":"Inter"}
+              "colors": {
+                "primary": "#hex-color",
+                "secondary": "#hex-color", 
+                "accent": "#hex-color",
+                "bg": "#hex-color",
+                "text": "#hex-color"
+              },
+              "fonts": {
+                "heading": "Google-Font-Name",
+                "body": "Google-Font-Name"
+              }
             },
             "hero": {
-              "title":"H1",
-              "subtitle":"One-line benefit",
-              "cta":{"label":"Primary CTA","href":"#contact"},
-              "image":"https://images.unsplash.com/photo-[ID]?w=1600&h=900&fit=crop",
-              "overlay": 0.35
+              "title": "Compelling headline specific to business",
+              "subtitle": "Benefit-focused subtitle that's unique",
+              "cta": {"label": "Action-oriented CTA", "href": "#contact"},
+              "image": "https://images.unsplash.com/photo-SPECIFIC-ID?w=1600&h=900&fit=crop",
+              "overlay": 0.2-0.5
             },
-            "nav": [{"label":"Home","href":"/"},{"label":"Page","href":"/page"}],
             "pages": [
               {
-                "slug":"home",
-                "title":"Home",
-                "layout":"landing",
-                "blocks":[
-                  {"type":"hero"},
-                  {"type":"features","columns":3,"items":[{"title":"...","text":"..."}, {"title":"...","text":"..."}, {"title":"...","text":"..."}]},
-                  {"type":"testimonial","quote":"...","author":"..."},
-                  {"type":"cta","text":"...","button":{"label":"...","href":"/contact"}}
+                "slug": "home",
+                "title": "Home", 
+                "layout": "landing",
+                "blocks": [
+                  // CUSTOMIZE THIS ARRAY! Make it unique for each business type
+                  // Use different combinations and quantities of blocks
+                  // Write specific, engaging content for each block
+                  {"type": "hero"},
+                  // Add 3-12 more blocks that make sense for this specific business
                 ]
-              },
-              {
-                "slug":"services","title":"Services",
-                "blocks":[
-                  {"type":"service-cards","items":[{"title":"...","text":"..."},{"title":"...","text":"..."}]}
-                ]
-              },
-              {
-                "slug":"about","title":"About",
-                "blocks":[{"type":"two-col","title":"Our story","left":"<p>...</p>","right":"<p>...</p>"}]
-              },
-              {
-                "slug":"contact","title":"Contact",
-                "blocks":[{"type":"contact-form"}]
               }
-            ],
-            "media": [{"name":"hero.jpg","url":"https://images.unsplash.com/photo-[ID]?w=1600&h=900&fit=crop"}],
-            "seo": {"title":"SEO Title","description":"SEO description","keywords":["a","b","c"]},
-            "ecommerce":{"enabled":false}
+            ]
           }
 
-          Rules:
-          - Choose a style.recipe and variant that fit the industry, and vary per request so sites don’t look the same.
-          - Use contrasting colours that pass AA for body text on bg.
-          - Fonts must be common Google Fonts by family name only.
-          - Hero image must use a real Unsplash photo ID as shown.
-          - Write short, sensible placeholder copy that matches the business type.
+          CONTENT RULES:
+          - Write specific, engaging copy that sounds natural for that business type
+          - Use industry-specific terminology and benefits
+          - Make testimonials sound authentic with realistic names
+          - Vary the number and types of sections dramatically between different prompts
+          - Choose colors that match the industry and mood (warm for restaurants, professional for law, calming for yoga, etc.)
+          - Select appropriate Unsplash photo IDs that match the business (search unsplash.com for ideas)
+          - Use Google Fonts that match the business personality
+
+          UNIQUENESS REQUIREMENTS:
+          - No two sites should have the same section combination
+          - Content should be specific to the business type and prompt
+          - Visual style should vary significantly
+          - Section order should make logical sense for that business
+          - Always include hero first, contact/CTA toward the end
           EOF
 
           SYSTEM_PROMPT=$(cat system_prompt.txt)
-          USER_PROMPT="Create website config for: ${{ inputs.prompt }} Industry: ${{ inputs.industry }}"
+          USER_PROMPT="Create a unique website configuration for: ${{ inputs.prompt }}. Industry context: ${{ inputs.industry }}. Make this completely different from any other site - unique sections, content, and structure that perfectly fits this specific business."
 
           jq -n \
             --arg model "gpt-4o" \
@@ -136,7 +181,7 @@ jobs:
             '{
               model: $model,
               response_format: {type: "json_object"},
-              temperature: 0.9,
+              temperature: 1.1,
               max_tokens: 4000,
               messages: [
                 {role: "system", content: $system_content},
@@ -174,33 +219,101 @@ jobs:
           if [ "$USE_FALLBACK" = "true" ]; then
             echo "Using fallback configuration"
             cat > website.json << 'JSON'
-          {"slug":"business-site","name":"Your Business","tagline":"Professional services you can trust","industry":"business","brand":{"colors":{"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8","bg":"#0b1320","text":"#111827"},"fonts":{"heading":"Inter","body":"Inter"}},"hero":{"title":"Your Business","subtitle":"Professional services","cta":{"label":"Get Started","href":"#contact"},"image":"https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop","overlay":0.35},"pages":[{"slug":"home","title":"Home","layout":"landing","blocks":[{"type":"hero"},{"type":"features","columns":3,"items":[{"title":"Quality","text":"We care a lot."},{"title":"Speed","text":"We move fast."},{"title":"Support","text":"We’re here."}]},{"type":"testimonial","quote":"They’re great!","author":"Happy Client"},{"type":"cta","text":"Ready to go?","button":{"label":"Contact us","href":"/contact"}}]}]}
+          {
+            "slug": "unique-business-site",
+            "name": "Custom Business",
+            "tagline": "Tailored solutions for your needs", 
+            "industry": "business",
+            "brand": {
+              "colors": {
+                "primary": "#2563eb",
+                "secondary": "#3b82f6", 
+                "accent": "#1d4ed8",
+                "bg": "#f8fafc",
+                "text": "#111827"
+              },
+              "fonts": {
+                "heading": "Inter",
+                "body": "Inter"
+              }
+            },
+            "hero": {
+              "title": "Your Custom Business Solution",
+              "subtitle": "Professionally crafted services",
+              "cta": {"label": "Get Started", "href": "#contact"},
+              "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop",
+              "overlay": 0.35
+            },
+            "pages": [
+              {
+                "slug": "home",
+                "title": "Home",
+                "layout": "landing", 
+                "blocks": [
+                  {"type": "hero"},
+                  {"type": "features", "columns": 3, "items": [
+                    {"title": "Quality Service", "text": "We deliver excellence in everything we do."},
+                    {"title": "Fast Response", "text": "Quick turnaround times for all projects."},
+                    {"title": "Expert Support", "text": "Professional guidance every step of the way."}
+                  ]},
+                  {"type": "about", "title": "About Us", "content": "We are dedicated professionals committed to your success."},
+                  {"type": "testimonial", "quote": "Outstanding service and results!", "author": "Sarah Johnson"},
+                  {"type": "cta", "text": "Ready to get started?", "button": {"label": "Contact Us", "href": "#contact"}},
+                  {"type": "contact-form"}
+                ]
+              }
+            ]
+          }
           JSON
           fi
 
-      - name: Normalise website.json to required schema
+      - name: Validate and enhance generated config
         run: |
           set -euo pipefail
+          
+          # Ensure required fields exist and add any missing defaults
           jq -S '
-            .slug        //= "business-site" |
-            .name        //= "Your Business" |
-            .tagline     //= "Professional services you can trust" |
-            .brand.colors //= {"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8","bg":"#0b1320","text":"#111827"} |
+            .slug        //= ("generated-site-" + (now | tostring)) |
+            .name        //= "Generated Business" |
+            .tagline     //= "Professional services" |
+            .industry    //= "business" |
+            .style       //= {"recipe": "elegant", "variant": "a", "shapes": "soft", "radius": 8, "elev": "med"} |
+            .brand.colors //= {"primary":"#2563eb","secondary":"#3b82f6","accent":"#1d4ed8","bg":"#f8fafc","text":"#111827"} |
             .brand.fonts  //= {"heading":"Inter","body":"Inter"} |
             .hero.overlay //= 0.35 |
-            .nav         //= [{"label":"Home","href":"/"},{"label":"About","href":"/about"},{"label":"Services","href":"/services"},{"label":"Contact","href":"/contact"}] |
             .pages       //= [{"slug":"home","title":"Home","layout":"landing","blocks":[{"type":"hero"}]}] |
-            .ecommerce   //= {"enabled": false}
-          ' website.json > website.normalised.json
-          mv website.normalised.json website.json
+            
+            # Ensure home page always starts with hero
+            if .pages then 
+              .pages = (.pages | map(
+                if .slug == "home" then
+                  .blocks = (
+                    if (.blocks | length) > 0 and (.blocks[0].type != "hero") then
+                      [{"type": "hero"}] + .blocks
+                    else .blocks end
+                  )
+                else . end
+              ))
+            else . end
+          ' website.json > website.enhanced.json
+          
+          mv website.enhanced.json website.json
 
-          echo "Normalised website.json:"
+          echo "Enhanced website.json:"
           jq '.' website.json
+
+          # Validate that we have a proper structure
+          if ! jq -e '.pages[0].blocks | length >= 2' website.json >/dev/null; then
+            echo "Warning: Generated config seems too simple, this might indicate AI generation issues"
+          fi
 
       - name: Upload configuration
         id: upload
         uses: actions/upload-artifact@v4
         with:
+          name: website-config-${{ github.run_id }}
+          path: website.json
+          retention-days: 1
           name: website-config-${{ github.run_id }}
           path: website.json
           retention-days: 1
