@@ -1,56 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#FFD700",
-      "bg": "#FFFFFF",
-      "primary": "#FF6F61",
-      "secondary": "#4A4A4A",
-      "text": "#333333"
+      "accent": "#D9CAB3",
+      "bg": "#F3F2E0",
+      "primary": "#78634C",
+      "secondary": "#A1A27A",
+      "text": "#5E5E5C"
     },
     "fonts": {
-      "body": "Roboto",
-      "heading": "Poppins"
+      "body": "Open Sans",
+      "heading": "Merriweather"
     }
-  },
-  "ecommerce": {
-    "enabled": false
   },
   "hero": {
     "cta": {
-      "href": "#contact",
-      "label": "Book Now"
+      "href": "#classes",
+      "label": "View Class Schedule"
     },
-    "image": "https://images.unsplash.com/photo-1616627562821-7a6fffcbf4df?w=1600&h=900&fit=crop",
-    "overlay": 0.35,
-    "subtitle": "Experience the ultimate relaxation, anywhere you are.",
-    "title": "Sauna on Wheels"
+    "image": "https://images.unsplash.com/photo-1566552729091-c3c5794e6c18?w=1600&h=900&fit=crop",
+    "overlay": 0.3,
+    "subtitle": "Embrace mindfulness and harmony in an oasis of calm",
+    "title": "Find Your Inner Peace"
   },
-  "industry": "retail",
-  "media": [
-    {
-      "name": "hero.jpg",
-      "url": "https://images.unsplash.com/photo-1616627562821-7a6fffcbf4df?w=1600&h=900&fit=crop"
-    }
-  ],
-  "name": "Sauna on Wheels",
-  "nav": [
-    {
-      "href": "/",
-      "label": "Home"
-    },
-    {
-      "href": "/services",
-      "label": "Services"
-    },
-    {
-      "href": "/about",
-      "label": "About"
-    },
-    {
-      "href": "/contact",
-      "label": "Contact"
-    }
-  ],
+  "industry": "yoga",
+  "name": "Zen Mindflow Yoga",
   "pages": [
     {
       "blocks": [
@@ -58,99 +31,47 @@
           "type": "hero"
         },
         {
-          "columns": 3,
-          "items": [
+          "content": "Explore our diverse class offerings to suit all levels and lifestyles. From gentle Hatha Yoga to invigorating Vinyasa and meditative Yin Yoga, we provide a nurturing environment for everyone.",
+          "type": "classes"
+        },
+        {
+          "content": "Experience the benefits of yoga: enhanced mental clarity, holistic wellness, and a stronger connection with your body and environment.",
+          "type": "benefits"
+        },
+        {
+          "content": [
             {
-              "text": "Our sauna can be set up at your location quickly and easily.",
-              "title": "Portable Comfort"
+              "name": "Lena, Beginner",
+              "quote": "Zen Mindflow has transformed my yoga practice. The teachers are amazing!"
             },
             {
-              "text": "Reserve your session from the comfort of your home.",
-              "title": "Book Anytime"
-            },
-            {
-              "text": "Enjoy a premium sauna experience wherever you are.",
-              "title": "Relaxation Guaranteed"
+              "name": "Isaac, Regular Attendee",
+              "quote": "A peaceful retreat in the city. I always leave feeling grounded."
             }
           ],
-          "type": "features"
+          "type": "testimonials"
         },
         {
-          "author": "Jane Doe",
-          "quote": "The most refreshing and convenient sauna experience I've ever had!",
-          "type": "testimonial"
+          "content": "Choose a membership plan that fits your lifestyle. Options available for monthly passes, class bundles, and drop-ins.",
+          "type": "pricing"
         },
         {
-          "button": {
-            "href": "/contact",
-            "label": "Get Started"
-          },
-          "text": "Ready to unwind? Book your on-site sauna session now.",
-          "type": "cta"
+          "content": "Reach out to us for any queries or to book a class. Our friendly team is here to assist you.",
+          "type": "contact-form"
         }
       ],
       "layout": "landing",
       "slug": "home",
       "title": "Home"
-    },
-    {
-      "blocks": [
-        {
-          "items": [
-            {
-              "text": "Perfect for personal relaxation. Sauna setup for one.",
-              "title": "Individual Session"
-            },
-            {
-              "text": "Enjoy with friends or family. Fits up to 6 people.",
-              "title": "Group Session"
-            }
-          ],
-          "type": "service-cards"
-        }
-      ],
-      "slug": "services",
-      "title": "Services"
-    },
-    {
-      "blocks": [
-        {
-          "left": "<p>Founded to bring relaxation to every doorstep, we offer mobile sauna services across the ACT region.</p>",
-          "right": "<p>Our mission is to provide a unique and convenient way to enjoy a traditional sauna experience without leaving your home.</p>",
-          "title": "Our Story",
-          "type": "two-col"
-        }
-      ],
-      "slug": "about",
-      "title": "About"
-    },
-    {
-      "blocks": [
-        {
-          "type": "contact-form"
-        }
-      ],
-      "slug": "contact",
-      "title": "Contact"
     }
   ],
-  "seo": {
-    "description": "Sauna on Wheels offers a unique mobile sauna experience delivered to your location in the ACT region.",
-    "keywords": [
-      "mobile sauna",
-      "sauna delivery",
-      "ACT sauna",
-      "relaxation"
-    ],
-    "title": "Sauna on Wheels - Mobile Sauna Services in ACT"
-  },
-  "slug": "mobile-sauna-act",
+  "slug": "zen-mindflow-yoga",
   "style": {
     "elev": "med",
-    "radius": 6,
-    "recipe": "playful",
-    "shapes": "rounded",
+    "radius": 12,
+    "recipe": "elegant",
+    "shapes": "soft",
     "variant": "b"
   },
-  "tagline": "Relaxation Delivered to You"
+  "tagline": "Unite Body and Mind in Tranquility"
 }
