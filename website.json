@@ -1,12 +1,12 @@
 {
   "colorPalette": {
     "accent": "#A3A380",
-    "primary": "#8B7765",
-    "secondary": "#C5B9A5"
+    "primary": "#8B5E3C",
+    "secondary": "#C2B280"
   },
   "customSections": [
     {
-      "html": "<section><p>At Modern Yoga Studio, we focus on mindfulness and connection with the earth. Join us to explore your inner peace.</p></section>",
+      "html": "<section>At Modern Yoga Studio, we focus on mindfulness and connecting with the earth. Join us to find your balance.</section>",
       "title": "Our Philosophy"
     }
   ],
@@ -88,7 +88,7 @@
   "slug": "modern-yoga-studio",
   "tagline": "Find Your Inner Peace",
   "typography": {
-    "bodyFont": "Lato",
-    "headingFont": "Playfair Display"
+    "bodyFont": "Open Sans",
+    "headingFont": "Montserrat"
   }
 }
