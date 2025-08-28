@@ -1,29 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#FFC107",
-      "bg": "#F5F5F5",
-      "primary": "#FF5722",
-      "secondary": "#795548",
-      "text": "#212121"
+      "accent": "#1f2937",
+      "bg": "#f8f8f8",
+      "primary": "#c04a2b",
+      "secondary": "#d1d5db",
+      "text": "#1f2937"
     },
     "fonts": {
-      "body": "Open Sans",
-      "heading": "Lobster"
+      "body": "Inter",
+      "heading": "Playfair Display"
     }
   },
   "hero": {
     "cta": {
       "href": "#contact",
-      "label": "Visit Us"
+      "label": "Book Now"
     },
-    "image": "https://images.unsplash.com/photo-1515169078181-7e43227a5b97?w=1600&h=900&fit=crop",
-    "overlay": 0.3,
-    "subtitle": "Where Canberra meets the rich flavors of the archipelago",
-    "title": "Discover Authentic Indonesian Coffee"
+    "image": "https://source.unsplash.com/1600x900/?nordic,spa,steamwood,stone",
+    "overlay": 0.35,
+    "subtitle": "Discover the Healing Power of Fusion Therapies",
+    "title": "Nordic Tranquility Awaits"
   },
-  "industry": "restaurant/cafe",
-  "name": "Monkey Bean Café",
+  "industry": "wellness-spa",
+  "name": "Canberra Sauna & Wellness",
   "pages": [
     {
       "blocks": [
@@ -31,67 +31,133 @@
           "type": "hero"
         },
         {
-          "content": "Experience singles origins, unique blends, and in-house roasting processes.",
+          "content": "<h2>Why Heat & Cold Works</h2><div><strong>Increased circulation:</strong> Heat and cold stimulate blood flow leading to enhanced oxygen delivery.<sup>[1]</sup></div><div><strong>Muscle recovery:</strong> Contrast therapy reduces inflammation and speeds up healing.<sup>[2]</sup></div><div><strong>Mental clarity:</strong> Saunas promote release of endorphins assisting relaxation.<sup>[3]</sup></div>",
+          "type": "three-col"
+        },
+        {
+          "content": "<h2>Experiences</h2><div><div><strong>Private Sauna</strong><p>Exclusive tranquility with guided sessions.</p></div><div><strong>Contrast Therapy</strong><p>Rejuvenate with alternating heat and cold.</p></div><div><strong>Guided Breathwork</strong><p>Focus your mind and breathe with purpose.</p></div></div>",
           "type": "features"
         },
         {
-          "content": "Explore our distinctive menu showcasing Indonesian coffees and homemade treats.",
-          "type": "menu"
+          "content": "<div><blockquote>A transformative experience for my body and soul! I felt invigorated and at peace.</blockquote><p>- Sage N., Local Enthusiast</p></div><img src='https://source.unsplash.com/1600x900/?sauna,calm' alt='Relaxed visitor in sauna' />",
+          "type": "two-col"
         },
         {
-          "content": "Learn about Monkey Bean's journey and commitment to quality sourced directly from Indonesian farms.",
-          "type": "about"
+          "content": "<div><strong>Harmonize Membership</strong><p>From $45/week for unlimited access.</p></div><div><strong>Day Pass</strong><p>Feel the difference, as needed.</p></div><div><strong>Gift Cards</strong><p>Share wellness with loved ones.</p></div>",
+          "type": "pricing"
         },
         {
-          "content": "Visual delight showcasing our café ambiance, coffee creations, and brewing process.",
-          "type": "gallery"
+          "content": "<h3>Stay Informed, Stay Balanced</h3><p>Join our newsletter for tips and specials. Trusted by</p><div class='logo-strip'><img src='/images/logos/media1.png' alt='Brand 1'><img src='/images/logos/media2.png' alt='Brand 2'></div>",
+          "type": "newsletter"
         },
         {
-          "content": [
-            {
-              "name": "Sophie T.",
-              "quote": "A hidden gem with the best Sumatran blend in town."
-            },
-            {
-              "name": "Liam G.",
-              "quote": "A truly delightful encounter with Indonesian flavors."
-            },
-            {
-              "name": "Emma K.",
-              "quote": "Their unique coffee profiles are unmissable."
-            }
-          ],
-          "type": "testimonials"
+          "content": "<ul><li><strong>What should I bring?</strong> Comfortable attire, water, and an open mind.</li><li><strong>Is it safe for everyone?</strong> Consult your doctor if pregnant or have a medical condition.</li><li><strong>Are there hygiene rules?</strong> Yes, please shower before use.</li></ul>",
+          "type": "faq"
         },
         {
-          "content": "Join our newsletter to get exclusive promotions and updates.",
-          "cta": {
-            "href": "#newsletter",
-            "label": "Sign-Up"
-          },
+          "content": "<div><h3>Embrace Wellness Today</h3><a href='#contact' class='btn-cta'>Try Contrast Therapy</a></div>",
           "type": "cta"
-        },
-        {
-          "content": "Open Monday to Sunday, 7 AM - 7 PM",
-          "type": "hours"
-        },
-        {
-          "content": "Reach out to us for any inquiries or reservations.",
-          "type": "contact-form"
         }
       ],
       "layout": "landing",
       "slug": "home",
       "title": "Home"
+    },
+    {
+      "blocks": [
+        {
+          "content": "<div class='experience-detail'><h2>Private Sauna</h2><p><strong>Duration:</strong> 45 minutes</p><p>Your personal retreat - heat soaks and invigorates.</p><div><strong>What to bring:</strong> Towel and calm intention.</div><small><em>Contraindications:</em> Not recommended for heart conditions.</small></div>",
+          "type": "features"
+        },
+        {
+          "content": "<div class='experience-detail'><h2>Contrast Therapy</h2><p><strong>Duration:</strong> 60 minutes</p><p>Improve circulation with alternating temperatures.</p><p>Perfect for gym recovery.</p><small><em>Note:</em> Pregnant guests should avoid.</small></div>",
+          "type": "features"
+        },
+        {
+          "content": "<div class='experience-detail'><h2>Guided Breathwork</h2><p><strong>Duration:</strong> 30 minutes</p><p>Deep breathing techniques to reduce stress.</p><small><em>Note:</em> Asthma sufferers consult first.</small></div>",
+          "type": "features"
+        },
+        {
+          "content": "<div class='carousel'><div class='carousel-item'>“A serene haven”</div><div class='carousel-item'>“Human craftsmanship fills the environment”</div></div>",
+          "type": "carousel"
+        }
+      ],
+      "layout": "service",
+      "slug": "experiences",
+      "title": "Experiences"
+    },
+    {
+      "blocks": [
+        {
+          "content": "<table><tr><th>Membership</th><th>Rates</th></tr><tr><td>Starter</td><td>$29/week</td></tr><tr><td>Recover</td><td>$39/week</td></tr><tr><td>Peak</td><td>$49/week</td></tr></table><div><span>Explore a Day Pass!</span><button class='btn-pass'>Choose Your Experience</button></div><div><small>Special 15% discounts for students and athletes.</small></div>",
+          "type": "pricing"
+        },
+        {
+          "content": "<div><h3>Join a Community Focused on Health</h3><p>Gift cards available for immediate purchase.</p><a href='#contact' class='btn-cta'>Join Membership</a></div>",
+          "type": "cta"
+        }
+      ],
+      "layout": "grid",
+      "slug": "pricing",
+      "title": "Pricing"
+    },
+    {
+      "blocks": [
+        {
+          "content": "<h2>Our Story</h2><p>This sanctuary was founded to share the ancient benefits of sauna for modern wellness.</p><img src='https://source.unsplash.com/1600x900/?wellness,journey' alt='Founder placeholder'>",
+          "type": "full-width-text"
+        },
+        {
+          "content": "<div class='values'><h2>Our Values</h2><ul><li>Sustainability</li><li>Craftsmanship</li><li>Dedication to Health</li></ul><p>Committed to low water usage and ethical cedar sourcing.</p></div>",
+          "type": "features"
+        }
+      ],
+      "layout": "story",
+      "slug": "about",
+      "title": "About Us"
+    },
+    {
+      "blocks": [
+        {
+          "content": "<div class='articles'><h2>Latest Insights</h2><div>Discover holistic approaches to a balanced life.</div><article><h3>5 Benefits of Sauna Therapy</h3><small>October 2023</small><p>Unlock unwinding solely through heat.</p></article><article><h3>Understanding Breathwork</h3><small>October 2023</small><p>Breath control strategies for high productivity.</p></article></div>",
+          "type": "blog-preview"
+        },
+        {
+          "content": "<div><h3>Enrich Your Knowledge</h3><a href='#'>Read Journal</a></div>",
+          "type": "cta"
+        }
+      ],
+      "layout": "grid",
+      "slug": "journal",
+      "title": "Journal"
+    },
+    {
+      "blocks": [
+        {
+          "content": "<p>Find Us Conveniently Located in Canberra City Center.</p><img src='https://source.unsplash.com/1600x900/?city-map' alt='Canberra map'/>",
+          "type": "map"
+        },
+        {
+          "content": "<h2>Hours & Info</h2><ul><li>Mon-Fri: 6am - 9pm</li><li>Sat: 7am - 7pm</li><li>Sun: 8am - 6pm</li></ul><p>{$ parking-tips }</p>",
+          "type": "hours"
+        },
+        {
+          "content": "<h3>Contact Us</h3>Feel free to drop us a message for any inquiries.",
+          "type": "contact-form"
+        }
+      ],
+      "layout": "details",
+      "slug": "contact",
+      "title": "Contact"
     }
   ],
-  "slug": "monkey-bean-cafe",
+  "slug": "canberra-sauna-and-wellness",
   "style": {
     "elev": "low",
     "radius": 12,
-    "recipe": "playful",
-    "shapes": "rounded",
-    "variant": "a"
+    "recipe": "elegant",
+    "shapes": "soft",
+    "variant": "c"
   },
-  "tagline": "Taste the Essence of Indonesia"
+  "tagline": "Experience Nordic Tranquility"
 }
