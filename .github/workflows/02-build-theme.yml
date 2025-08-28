@@ -16,12 +16,13 @@ on:
     outputs:
       theme_artifact:
         description: "Built theme artifact"
-        value: ${{ jobs.build.outputs.artifact_id }}
+        value: theme-${{ jobs.build.outputs.slug }}-${{ github.run_id }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
+      slug: ${{ steps.config.outputs.slug }}
       artifact_id: ${{ steps.upload.outputs['artifact-id'] }}
     steps:
       - uses: actions/checkout@v4
@@ -31,37 +32,14 @@ jobs:
         with:
           name: ${{ inputs.config_artifact }}
 
-      - name: Validate website.json
-        run: |
-          set -e
-          cat > schema.json <<'SCHEMA'
-          {
-            "type":"object",
-            "required":["slug","name","tagline","nav","pages","colorPalette","typography","ecommerce"],
-            "properties":{
-              "slug":{"type":"string"},
-              "name":{"type":"string"},
-              "tagline":{"type":"string"},
-              "nav":{"type":"array","items":{"type":"object","required":["label","href"]}},
-              "pages":{"type":"array","items":{"type":"object","required":["slug","title","sections"]}},
-              "colorPalette":{"type":"object","required":["primary","secondary","accent"]},
-              "typography":{"type":"object","required":["headingFont","bodyFont"]},
-              "ecommerce":{"type":"object","properties":{"enabled":{"type":"boolean"}}}
-            }
-          }
-          SCHEMA
-          npm -g i ajv-cli >/dev/null 2>&1
-          ajv validate -s schema.json -d website.json
-
       - name: Extract configuration values
         id: config
         run: |
           echo "slug=$(jq -r '.slug // "business-site"' website.json)"        >> $GITHUB_OUTPUT
           echo "name=$(jq -r '.name // "Your Business"' website.json)"        >> $GITHUB_OUTPUT
           echo "tagline=$(jq -r '.tagline // "Professional services"' website.json)" >> $GITHUB_OUTPUT
-          echo "brand=$(jq -r '.colorPalette.primary // "#2563eb"' website.json)"   >> $GITHUB_OUTPUT
-          echo "accent=$(jq -r '.colorPalette.accent // "#1d4ed8"' website.json)"   >> $GITHUB_OUTPUT
-          echo "hero=$(jq -r '.heroSection.heroImage // ""' website.json)"          >> $GITHUB_OUTPUT
+          echo "brand=$(jq -r '.brand.colors.primary // "#2563eb"' website.json)"   >> $GITHUB_OUTPUT
+          echo "accent=$(jq -r '.brand.colors.accent  // "#1d4ed8"' website.json)"   >> $GITHUB_OUTPUT
 
       - name: Generate theme files
         env:
@@ -82,11 +60,11 @@ jobs:
           Description: AI-generated professional website built with SiteFuse
           Template: sitefuse-base
           Text Domain: ${SLUG}-child
-          Version: 1.1.0
+          Version: 1.2.0
           */
           EOF
 
-          # functions.php (adds pattern category too)
+          # functions.php
           cat > "$THEME_DIR/functions.php" << 'EOF'
           <?php
           add_action('wp_enqueue_scripts', function () {
@@ -102,11 +80,6 @@ jobs:
               add_theme_support('custom-logo');
               add_theme_support('title-tag');
               register_nav_menus(['primary' => 'Primary Navigation', 'footer' => 'Footer Navigation']);
-          });
-          add_action('init', function () {
-              if (function_exists('register_block_pattern_category')) {
-                  register_block_pattern_category('sitefuse', ['label' => __('SiteFuse', 'sitefuse')]);
-              }
           });
           function get_theme_image($image_name, $fallback_url = '') {
               $theme_image = get_stylesheet_directory_uri() . '/assets/img/' . $image_name;
@@ -142,7 +115,7 @@ jobs:
             .btn-primary { background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-accent)); color: white; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
             .btn-primary:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.2); transform: translateY(-2px); }
             .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--color-dark); }
-            .hero-section { position: relative; min-height: 80vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(0,0,0,0.35), rgba(0,0,0,0.55)); }
+            .hero-section { position: relative; min-height: 80vh; display: flex; align-items: center; justify-content: center; }
           }
           EOF
 
@@ -163,7 +136,8 @@ jobs:
             safelist: [
               'container','btn','btn-primary','section-title','hero-section',
               'text-center','text-white','bg-white','bg-gray-50','py-16',
-              'px-4','mb-6','mb-8','text-4xl','text-6xl','font-bold'
+              'px-4','mb-6','mb-8','text-4xl','text-6xl','font-bold',
+              'grid','gap-6','rounded-xl','shadow','opacity-90','max-w-3xl','mx-auto'
             ],
             theme: { extend: {} },
             plugins: []
@@ -171,63 +145,18 @@ jobs:
           EOF
           ./tailwindcss --config "$THEME_DIR/tailwind.config.js" --input "$THEME_DIR/assets/css/tailwind.css" --output "$THEME_DIR/dist/tailwind.css" --minify
 
-      - name: Generate PHP templates including customSections loop
+      - name: Generate PHP templates (front-page uses shortcode)
         env:
           SLUG: ${{ steps.config.outputs.slug }}
         run: |
           set -e
           THEME_DIR="${SLUG}-child"
 
-          # front-page.php with customSections rendering
+          # front-page.php delegates to shortcode
           cat > "$THEME_DIR/front-page.php" << 'EOF'
-          <?php
-          get_header();
-
-          $config = [];
-          $path = ABSPATH . 'website.json';
-          if (file_exists($path) && is_readable($path)) {
-              $raw = file_get_contents($path);
-              $data = json_decode($raw, true);
-              if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
-                  $config = $data;
-              }
-          }
-
-          $hero_html  = $config['heroSection']['customHTML'] ?? '';
-          $hero_image = $config['heroSection']['heroImage'] ?? get_theme_image('hero.jpg');
-          $site_name  = get_bloginfo('name');
-          $site_tag   = get_bloginfo('description');
-          ?>
+          <?php get_header(); ?>
           <main id="main" class="site-main">
-            <section class="hero-section relative">
-              <div class="absolute inset-0">
-                <?php if ($hero_image): ?>
-                  <img src="<?php echo esc_url($hero_image); ?>" alt="<?php echo esc_attr($site_name); ?>" class="w-full h-full object-cover" />
-                <?php endif; ?>
-              </div>
-              <div class="relative z-10 container text-center text-white py-24">
-                <?php
-                if (!empty($hero_html)) {
-                  echo wp_kses_post($hero_html);
-                } else {
-                  echo '<h1 class="text-4xl font-bold mb-6">'.esc_html($site_name).'</h1>';
-                  echo '<p class="text-xl mb-8">'.esc_html($site_tag).'</p>';
-                  echo '<a href="#contact" class="btn btn-primary">Get Started</a>';
-                }
-                ?>
-              </div>
-            </section>
-
-            <?php
-            if (!empty($config['customSections']) && is_array($config['customSections'])) {
-                foreach ($config['customSections'] as $i => $section) {
-                    if (!empty($section['html']) && is_string($section['html'])) {
-                        echo "\n<!-- ai-section-$i -->\n";
-                        echo wp_kses_post($section['html']);
-                    }
-                }
-            }
-            ?>
+            <?php echo do_shortcode('[sitefuse_home]'); ?>
           </main>
           <?php get_footer(); ?>
           EOF
@@ -279,33 +208,6 @@ jobs:
           </main>
           <?php get_footer(); ?>
           EOF
-
-      - name: Generate block patterns from pages[].sections[]
-        env:
-          SLUG: ${{ steps.config.outputs.slug }}
-        run: |
-          set -e
-          THEME_DIR="${SLUG}-child"
-          mkdir -p "$THEME_DIR/patterns"
-          i=0
-          jq -c '.pages[] | {slug,sections}' website.json | while read -r page; do
-            page_slug=$(jq -r '.slug' <<<"$page")
-            jq -c '.sections[]' <<<"$page" | while read -r section; do
-              title=$(jq -r '.type // "section"' <<<"$section")
-              html=$(jq -r '.html // ""' <<<"$section")
-              printf '%s\n' \
-                "<?php" \
-                "/**" \
-                " * Title: ${title^} (${page_slug})" \
-                " * Slug: sitefuse/${page_slug}-${i}" \
-                " * Categories: sitefuse" \
-                " */" \
-                "?>" \
-                "$html" \
-                > "$THEME_DIR/patterns/${page_slug}-${i}.php"
-              i=$((i+1))
-            done
-          done
 
       - name: Upload built theme
         id: upload
