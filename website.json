@@ -1,29 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#D9CAB3",
-      "bg": "#F3F2E0",
-      "primary": "#78634C",
-      "secondary": "#A1A27A",
-      "text": "#5E5E5C"
+      "accent": "#CB997E",
+      "bg": "#F3F4ED",
+      "primary": "#6B705C",
+      "secondary": "#B7B7A4",
+      "text": "#3A3A3A"
     },
     "fonts": {
       "body": "Open Sans",
-      "heading": "Merriweather"
+      "heading": "Lora"
     }
   },
   "hero": {
     "cta": {
-      "href": "#classes",
-      "label": "View Class Schedule"
+      "href": "#contact",
+      "label": "Join Us Today"
     },
-    "image": "https://images.unsplash.com/photo-1566552729091-c3c5794e6c18?w=1600&h=900&fit=crop",
+    "image": "https://images.unsplash.com/photo-1531887004013-5b20c369bdb2?w=1600&h=900&fit=crop",
     "overlay": 0.3,
-    "subtitle": "Embrace mindfulness and harmony in an oasis of calm",
-    "title": "Find Your Inner Peace"
+    "subtitle": "Discover the transformative power of yoga tailored for your holistic well-being",
+    "title": "Embrace a Journey to Mindful Living"
   },
-  "industry": "yoga",
-  "name": "Zen Mindflow Yoga",
+  "industry": "yoga-studio",
+  "name": "Serene Breath Studio",
   "pages": [
     {
       "blocks": [
@@ -31,32 +31,36 @@
           "type": "hero"
         },
         {
-          "content": "Explore our diverse class offerings to suit all levels and lifestyles. From gentle Hatha Yoga to invigorating Vinyasa and meditative Yin Yoga, we provide a nurturing environment for everyone.",
+          "content": "We at Serene Breath Studio welcome you to a space where mindfulness merges with movement. Our instructors ensure that your experience is personal and transformative, paving your path to inner peace.",
+          "type": "about"
+        },
+        {
+          "content": "Our classes range from beginner to advanced, each designed to cultivate mindfulness, flexibility, and strength. Join our sunrise sessions or unwind during evening practices.",
           "type": "classes"
         },
         {
-          "content": "Experience the benefits of yoga: enhanced mental clarity, holistic wellness, and a stronger connection with your body and environment.",
+          "content": "Strengthen not just your body but also your mind. Experience reduced stress, improved focus, and enhanced wellness through our unique approach to yoga.",
           "type": "benefits"
         },
         {
           "content": [
             {
-              "name": "Lena, Beginner",
-              "quote": "Zen Mindflow has transformed my yoga practice. The teachers are amazing!"
+              "author": "Ana P.",
+              "quote": "Transformative experience that calmed my spirit. A blessing in every session!"
             },
             {
-              "name": "Isaac, Regular Attendee",
-              "quote": "A peaceful retreat in the city. I always leave feeling grounded."
+              "author": "Michael B.",
+              "quote": "A nurturing environment that supports personal growth and mindfulness."
             }
           ],
           "type": "testimonials"
         },
         {
-          "content": "Choose a membership plan that fits your lifestyle. Options available for monthly passes, class bundles, and drop-ins.",
-          "type": "pricing"
+          "content": "Get a glimpse into our daily life at Serene Breath Studio via our introduction video, showcasing the community and ambiance that await you.",
+          "type": "video"
         },
         {
-          "content": "Reach out to us for any queries or to book a class. Our friendly team is here to assist you.",
+          "content": "Ready to start your journey with us? Send us a message to schedule a visit or ask any questions.",
           "type": "contact-form"
         }
       ],
@@ -65,13 +69,13 @@
       "title": "Home"
     }
   ],
-  "slug": "zen-mindflow-yoga",
+  "slug": "serene-breath-studio",
   "style": {
-    "elev": "med",
+    "elev": "low",
     "radius": 12,
-    "recipe": "elegant",
+    "recipe": "minimal",
     "shapes": "soft",
     "variant": "b"
   },
-  "tagline": "Unite Body and Mind in Tranquility"
+  "tagline": "Find Your Inner Calm Through Mindful Practice"
 }
