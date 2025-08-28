@@ -474,3 +474,30 @@ jobs:
           name: website-config-${{ github.run_id }}
           path: website.json
           retention-days: 1
+
+      - name: Assert images were written and list any empties
+        if: ${{ inputs.generate_images }}
+        run: |
+          set -euo pipefail
+          echo "Checking for empty image fields..."
+          empty=\$(jq -r '
+            [
+              .hero.image,
+              (.pages[]?.blocks[]? | select(.type=="gallery").images[]?.url),
+              (.pages[]?.blocks[]? | select(.type=="team").members[]?.photo),
+              (.pages[]?.blocks[]? | select(.type=="services").items[]?.icon)
+            ] | map(select(. == null or . == "")) | length
+          ' website.json)
+          if [ "\$empty" -gt 0 ]; then
+            echo "Found \$empty empty image fields:" >&2
+            jq -r '
+              paths(scalars)
+              | select(
+                  (getpath(.) == "" or getpath(.) == null)
+                  and ((.|tostring) | test("hero.image|images\\.[0-9]+\\.url|members\\.[0-9]+\\.photo|items\\.[0-9]+\\.icon"))
+                )
+              | (map(tostring)|join("."))
+            ' website.json >&2
+            exit 3
+          fi
+          echo "All image fields are populated."
