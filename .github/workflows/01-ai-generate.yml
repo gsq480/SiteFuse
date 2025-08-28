@@ -387,7 +387,7 @@ jobs:
                 -H "Authorization: Bearer $OPENAI_API_KEY" \
                 -H "Content-Type: application/json" \
                 -d "$(jq -n --arg prompt "$prompt" --arg size "$size" \
-                  '{model:"gpt-image-1", prompt:$prompt, n:1, size:$size}')" \
+                  '{model:"gpt-image-1", prompt:$prompt, n:1, size:$size, response_format:"url", quality:"high"}')" \
               | jq -r '.data[0].url // empty')
               [ -n "$url" ] && { echo "$url"; return 0; }
               sleep 2
@@ -495,7 +495,7 @@ jobs:
               paths(scalars)
               | select(
                   (.[-1] == "image" or .[-1] == "url" or .[-1] == "photo" or .[-1] == "icon")
-                  and (getpath(.) == "")
+                  and ((getpath(.) == "") or (getpath(.) == null))
                 )
               | map(tostring) | join(".")
             ' website.json >&2
