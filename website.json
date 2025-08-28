@@ -1,29 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#c04a2b",
-      "bg": "#F5F5F5",
-      "primary": "#1f2937",
-      "secondary": "#D3D3D3",
-      "text": "#1f2937"
+      "accent": "#f4a261",
+      "bg": "#f0efeb",
+      "primary": "#2a9d8f",
+      "secondary": "#264653",
+      "text": "#2c3e50"
     },
     "fonts": {
-      "body": "Nunito Sans",
-      "heading": "Playfair Display"
+      "body": "Lato",
+      "heading": "Roboto"
     }
   },
   "hero": {
     "cta": {
       "href": "#contact",
-      "label": "Book Now"
+      "label": "Book Your Visit"
     },
-    "image": "https://images.unsplash.com/photo-1540979388821-28d9b8e4cf88?w=1600&h=900&fit=crop",
-    "overlay": 0.35,
-    "subtitle": "Science-backed heat & cold benefits",
-    "title": "Revitalize with Nordic Rituals"
+    "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop",
+    "overlay": 0.3,
+    "subtitle": "We offer accessible and personalized medical services seven days a week.",
+    "title": "Quick, Reliable Care Without the Wait"
   },
-  "industry": "wellness",
-  "name": "Canberra Sauna & Wellness",
+  "industry": "medical",
+  "name": "Canberra Walk-In Clinic",
   "pages": [
     {
       "blocks": [
@@ -31,113 +31,47 @@
           "type": "hero"
         },
         {
-          "content": [
-            {
-              "citation": "(* Journal of Clinical Medicine)",
-              "text": "Enhanced recovery & stress reduction.*",
-              "title": "Heat for Healing"
-            },
-            {
-              "citation": "(* Experimental Physiology)",
-              "text": "Boosts mental acuity & immunity.*",
-              "title": "Cold for Clarity"
-            },
-            {
-              "citation": "(* Frontiers in Psychology)",
-              "text": "Reduces anxiety and improves sleep.*",
-              "title": "Breath for Balance"
-            }
-          ],
-          "type": "features"
+          "content": "At Canberra Walk-In Clinic, we are dedicated to providing immediate medical attention without the hassle of appointments. Our team of experienced practitioners is here to meet your healthcare needs with efficiency and care.",
+          "type": "about"
         },
         {
-          "content": [
-            {
-              "description": "Your personal retreat away from the noise.",
-              "title": "Private Sauna"
-            },
-            {
-              "description": "The ultimate equilibrium of heat and cold.",
-              "title": "Contrast Therapy"
-            },
-            {
-              "description": "Unlock your inner calm with expert-led sessions.",
-              "title": "Guided Breathwork"
-            }
-          ],
+          "content": "Our clinic offers a comprehensive range of services including general check-ups, vaccinations, minor injury treatments, and chronic disease management.",
           "type": "services"
         },
         {
-          "content": {
-            "name": "Tara E.",
-            "position": "Finance Executive",
-            "quote": "The contrast therapy invigorates like nothing else."
-          },
-          "type": "testimonial"
+          "content": "Over 15,000 patients treated successfully. Open all week from 8 am to 8 pm. Fast commitment to healthcare.",
+          "type": "stats"
+        },
+        {
+          "content": "Get in touch with us for more information or to book your walk-in appointment today.",
+          "type": "contact-form"
         },
         {
           "content": [
             {
-              "cta": {
-                "href": "#pricing",
-                "label": "See Details"
-              },
-              "price": "$45/month",
-              "title": "Starter"
+              "name": "John M.",
+              "quote": "The best walk-in service I've ever experienced. Quick and friendly!"
             },
             {
-              "cta": {
-                "href": "#pricing",
-                "label": "Discover More"
-              },
-              "price": "$80/month",
-              "title": "Recover"
-            },
-            {
-              "cta": {
-                "href": "#pricing",
-                "label": "Explore Benefits"
-              },
-              "price": "$120/month",
-              "title": "Peak"
+              "name": "Sara T.",
+              "quote": "Great staff and reliable care, highly recommend them!"
             }
           ],
-          "type": "pricing"
+          "type": "testimonials"
         },
         {
-          "content": {
-            "cta": {
-              "href": "#",
-              "label": "Join Now"
-            },
-            "prompt": "Stay Informed with Our Expert Tips"
-          },
-          "type": "newsletter"
+          "content": "Conveniently located at the heart of Canberra, our clinic is easy to find.",
+          "type": "map"
         },
         {
-          "content": [
-            {
-              "answer": "Bring a swimsuit and water bottle. Towels are provided.",
-              "question": "What should I bring?"
-            },
-            {
-              "answer": "Sessions can vary, but typically last between 45-60 minutes.",
-              "question": "How long is each session?"
-            },
-            {
-              "answer": "Consult a doctor if you have health concerns before visiting.",
-              "question": "Are services safe for everyone?"
-            }
-          ],
-          "type": "faq"
+          "content": "Monday - Sunday: 8 am - 8 pm",
+          "type": "hours"
         },
         {
-          "content": {
-            "cta": {
-              "href": "#booking",
-              "label": "Book Now"
-            },
-            "text": "Experience Nordic Calm Today"
+          "content": "Don’t wait in line, experience quality healthcare right when you need it.",
+          "cta": {
+            "href": "#contact",
+            "label": "Visit Us Today"
           },
           "type": "cta"
         }
@@ -145,224 +79,15 @@
       "layout": "landing",
       "slug": "home",
       "title": "Home"
-    },
-    {
-      "blocks": [
-        {
-          "content": {
-            "description": "Relax in a serene space crafted just for you. Sessions are 45 minutes. Recommended for anyone needing solitude and relaxation.",
-            "images": [
-              "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1600&h=900&fit=crop"
-            ],
-            "title": "Private Sauna"
-          },
-          "note": "Contraindication: Not advised for pregnant women.",
-          "type": "two-col"
-        },
-        {
-          "content": {
-            "description": "60 minutes of profound balance. Half sauna, half cold plunge. Perfect for athletes; refresh the body and mind.",
-            "images": [
-              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop"
-            ],
-            "title": "Contrast Therapy"
-          },
-          "note": "Contraindication: Cardiovascular issues.",
-          "type": "two-col"
-        },
-        {
-          "content": {
-            "description": "An hour that changes everything. Suitable for beginners. Enhance mood, relieve anxiety and improve sleep.",
-            "images": [
-              "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop"
-            ],
-            "title": "Guided Breathwork"
-          },
-          "note": "Contraindication: Chronic obstructive pulmonary disease.",
-          "type": "two-col"
-        }
-      ],
-      "slug": "experiences",
-      "title": "Experiences"
-    },
-    {
-      "blocks": [
-        {
-          "content": [
-            {
-              "cta": {
-                "href": "#",
-                "label": "Subscribe"
-              },
-              "details": "Includes access to sauna twice a month.",
-              "price": "$45/month",
-              "title": "Starter"
-            },
-            {
-              "cta": {
-                "href": "#",
-                "label": "See Flexible Options"
-              },
-              "details": "Thrice-a-week wellness exploration.",
-              "price": "$80/month",
-              "title": "Recover"
-            },
-            {
-              "cta": {
-                "href": "#",
-                "label": "Maximize Your Wellbeing"
-              },
-              "details": "Unlimited access. Recommendations for enthusiasts.",
-              "price": "$120/month",
-              "title": "Peak"
-            },
-            {
-              "cta": {
-                "href": "#",
-                "label": "Purchase Gift Card"
-              },
-              "description": "Give health & relaxation.",
-              "price": "Varies",
-              "title": "Gift Cards"
-            }
-          ],
-          "content_media": [
-            {
-              "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1600&h=900&fit=crop"
-            }
-          ],
-          "type": "pricing"
-        },
-        {
-          "content": {
-            "cta": {
-              "href": "#",
-              "label": "Try Contrast"
-            },
-            "text": "Explore Special Offers for Students & Athletes"
-          },
-          "type": "cta"
-        }
-      ],
-      "slug": "pricing",
-      "title": "Pricing"
-    },
-    {
-      "blocks": [
-        {
-          "content": {
-            "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop",
-            "text": "Founded by wellness advocate, Emma S; combining years of passion and personal experience in healing practices."
-          },
-          "type": "two-col"
-        },
-        {
-          "content": [
-            {
-              "description": "Crafted experiences, focused on essence over excess.",
-              "title": "Simplicity"
-            },
-            {
-              "description": "Genuine practices, mirrored in Scandinavian traditions.",
-              "title": "Authenticity"
-            },
-            {
-              "description": "From Handpicked cedar to responsible water usage; a conscious choice.",
-              "title": "Sustainability"
-            }
-          ],
-          "type": "values"
-        }
-      ],
-      "slug": "about",
-      "title": "About"
-    },
-    {
-      "blocks": [
-        {
-          "content": [
-            {
-              "metadata": "Written on Jan 15, 2023",
-              "summary": "Dive into the physiological and psychological benefits of regular sauna sessions. Explore our research.",
-              "title": "Harnessing Heat for Better Health"
-            },
-            {
-              "metadata": "Dec 28, 2022",
-              "summary": "Discover how citrus aromas amplify your cold plunge experience.",
-              "title": "Citrus-Infused Cool Downs"
-            },
-            {
-              "metadata": "Dec 10, 2022",
-              "summary": "Understand the power of guided breathwork and its impact on urban lifestyles.",
-              "title": "Guided Breathwork & The Modern Mind"
-            }
-          ],
-          "type": "blog-preview"
-        }
-      ],
-      "slug": "journal",
-      "title": "Journal"
-    },
-    {
-      "blocks": [
-        {
-          "content": {
-            "coordinates": "lat: -35.2820; long: 149.1286",
-            "description": "Located in Canberra City, marked for easy access."
-          },
-          "type": "map"
-        },
-        {
-          "content": {
-            "friday": "9:00 AM - 8:00 PM",
-            "monday": "9:00 AM - 8:00 PM",
-            "saturday": "10:00 AM - 6:00 PM",
-            "sunday": "11:00 AM - 5:00 PM",
-            "thursday": "9:00 AM - 8:00 PM",
-            "tuesday": "9:00 AM - 8:00 PM",
-            "wednesday": "9:00 AM - 8:00 PM"
-          },
-          "type": "hours"
-        },
-        {
-          "content": [
-            {
-              "answer": "Yes, ample parking is available on-site, with street parking nearby.",
-              "question": "Is there parking?"
-            },
-            {
-              "answer": "Reach us through the form below or call us directly.",
-              "question": "How can I contact you?"
-            }
-          ],
-          "type": "faq"
-        },
-        {
-          "content": {
-            "cta": {
-              "href": "#",
-              "label": "Contact Us"
-            },
-            "fields": [
-              "Name",
-              "Email",
-              "Message"
-            ]
-          },
-          "type": "contact-form"
-        }
-      ],
-      "slug": "contact",
-      "title": "Contact"
     }
   ],
-  "slug": "canberra-sauna-wellness",
+  "slug": "canberra-medical-walk-in",
   "style": {
-    "elev": "low",
-    "radius": 10,
+    "elev": "med",
+    "radius": 12,
     "recipe": "elegant",
     "shapes": "soft",
-    "variant": "b"
+    "variant": "c"
   },
-  "tagline": "Experience Nordic Calm & Science-backed Renewal"
+  "tagline": "Your Convenient Healthcare Partner in Canberra"
 }
