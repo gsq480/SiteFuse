@@ -308,12 +308,8 @@ jobs:
           fi
 
       - name: Upload configuration
-        id: upload
         uses: actions/upload-artifact@v4
         with:
-          name: website-config-${{ github.run_id }}
-          path: website.json
-          retention-days: 1
           name: website-config-${{ github.run_id }}
           path: website.json
           retention-days: 1
