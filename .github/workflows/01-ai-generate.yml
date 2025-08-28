@@ -477,10 +477,11 @@ jobs:
 
       - name: Assert images were written and list any empties
         if: ${{ inputs.generate_images }}
+        shell: bash
         run: |
           set -euo pipefail
           echo "Checking for empty image fields..."
-          empty=\$(jq -r '
+          empty=$(jq -r '
             [
               .hero.image,
               (.pages[]?.blocks[]? | select(.type=="gallery").images[]?.url),
@@ -488,15 +489,15 @@ jobs:
               (.pages[]?.blocks[]? | select(.type=="services").items[]?.icon)
             ] | map(select(. == null or . == "")) | length
           ' website.json)
-          if [ "\$empty" -gt 0 ]; then
-            echo "Found \$empty empty image fields:" >&2
+          if [ "$empty" -gt 0 ]; then
+            echo "Found $empty empty image fields:" >&2
             jq -r '
               paths(scalars)
               | select(
-                  (getpath(.) == "" or getpath(.) == null)
-                  and ((.|tostring) | test("hero.image|images\\.[0-9]+\\.url|members\\.[0-9]+\\.photo|items\\.[0-9]+\\.icon"))
+                  (.[-1] == "image" or .[-1] == "url" or .[-1] == "photo" or .[-1] == "icon")
+                  and (getpath(.) == "")
                 )
-              | (map(tostring)|join("."))
+              | map(tostring) | join(".")
             ' website.json >&2
             exit 3
           fi
