@@ -1,15 +1,15 @@
 {
   "brand": {
     "colors": {
-      "accent": "#b22222",
-      "bg": "#fffaf0",
-      "primary": "#8b4513",
-      "secondary": "#f0e68c",
+      "accent": "#FFD700",
+      "bg": "#FFFFFF",
+      "primary": "#FF6F61",
+      "secondary": "#4A4A4A",
       "text": "#333333"
     },
     "fonts": {
-      "body": "Open Sans",
-      "heading": "Merriweather"
+      "body": "Roboto",
+      "heading": "Poppins"
     }
   },
   "ecommerce": {
@@ -20,19 +20,19 @@
       "href": "#contact",
       "label": "Book Now"
     },
-    "image": "https://images.unsplash.com/photo-1590595900562-d2b9e784a10c?w=1600&h=900&fit=crop",
+    "image": "https://images.unsplash.com/photo-1616627562821-7a6fffcbf4df?w=1600&h=900&fit=crop",
     "overlay": 0.35,
-    "subtitle": "Experience the ultimate relaxation in our state-of-the-art saunas.",
-    "title": "Unwind in Luxury"
+    "subtitle": "Experience the ultimate relaxation, anywhere you are.",
+    "title": "Sauna on Wheels"
   },
-  "industry": "consulting",
+  "industry": "retail",
   "media": [
     {
       "name": "hero.jpg",
-      "url": "https://images.unsplash.com/photo-1590595900562-d2b9e784a10c?w=1600&h=900&fit=crop"
+      "url": "https://images.unsplash.com/photo-1616627562821-7a6fffcbf4df?w=1600&h=900&fit=crop"
     }
   ],
-  "name": "Canberra Sauna",
+  "name": "Sauna on Wheels",
   "nav": [
     {
       "href": "/",
@@ -61,31 +61,31 @@
           "columns": 3,
           "items": [
             {
-              "text": "Premium sauna experiences for ultimate relaxation.",
-              "title": "Luxury Saunas"
+              "text": "Our sauna can be set up at your location quickly and easily.",
+              "title": "Portable Comfort"
             },
             {
-              "text": "Highly trained professionals to guide your experience.",
-              "title": "Professional Staff"
+              "text": "Reserve your session from the comfort of your home.",
+              "title": "Book Anytime"
             },
             {
-              "text": "Tailored solutions to suit your needs.",
-              "title": "Custom Packages"
+              "text": "Enjoy a premium sauna experience wherever you are.",
+              "title": "Relaxation Guaranteed"
             }
           ],
           "type": "features"
         },
         {
           "author": "Jane Doe",
-          "quote": "The best sauna experience I've ever had!",
+          "quote": "The most refreshing and convenient sauna experience I've ever had!",
           "type": "testimonial"
         },
         {
           "button": {
             "href": "/contact",
-            "label": "Contact Us"
+            "label": "Get Started"
           },
-          "text": "Ready to relax and rejuvenate? Contact us to book your session.",
+          "text": "Ready to unwind? Book your on-site sauna session now.",
           "type": "cta"
         }
       ],
@@ -98,12 +98,12 @@
         {
           "items": [
             {
-              "text": "Deep detoxification through safe and efficient infrared heat.",
-              "title": "Infrared Sauna"
+              "text": "Perfect for personal relaxation. Sauna setup for one.",
+              "title": "Individual Session"
             },
             {
-              "text": "Classic high-temperature saunas to cleanse and relax.",
-              "title": "Traditional Sauna"
+              "text": "Enjoy with friends or family. Fits up to 6 people.",
+              "title": "Group Session"
             }
           ],
           "type": "service-cards"
@@ -115,9 +115,9 @@
     {
       "blocks": [
         {
-          "left": "<p>Founded in Canberra, our mission is to provide unparalleled sauna experiences to help you unwind and restore balance.</p>",
-          "right": "<p>Our state-of-the-art facilities and professional staff ensure that your time with us is calming and rejuvenating.</p>",
-          "title": "Our story",
+          "left": "<p>Founded to bring relaxation to every doorstep, we offer mobile sauna services across the ACT region.</p>",
+          "right": "<p>Our mission is to provide a unique and convenient way to enjoy a traditional sauna experience without leaving your home.</p>",
+          "title": "Our Story",
           "type": "two-col"
         }
       ],
@@ -135,23 +135,22 @@
     }
   ],
   "seo": {
-    "description": "Experience luxury saunas in Canberra. Book your session today and indulge in relaxation.",
+    "description": "Sauna on Wheels offers a unique mobile sauna experience delivered to your location in the ACT region.",
     "keywords": [
-      "sauna",
-      "relaxation",
-      "Canberra",
-      "wellness",
-      "spa"
+      "mobile sauna",
+      "sauna delivery",
+      "ACT sauna",
+      "relaxation"
     ],
-    "title": "Canberra Sauna - Relax, Rejuvenate, Revive"
+    "title": "Sauna on Wheels - Mobile Sauna Services in ACT"
   },
-  "slug": "canberra-sauna",
+  "slug": "mobile-sauna-act",
   "style": {
     "elev": "med",
-    "radius": 15,
-    "recipe": "elegant",
-    "shapes": "soft",
+    "radius": 6,
+    "recipe": "playful",
+    "shapes": "rounded",
     "variant": "b"
   },
-  "tagline": "Relax, Rejuvenate, Revive"
+  "tagline": "Relaxation Delivered to You"
 }
