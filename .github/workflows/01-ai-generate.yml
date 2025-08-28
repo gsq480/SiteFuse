@@ -1,5 +1,4 @@
 # .github/workflows/01-ai-generate.yml
-# .github/workflows/01-ai-generate.yml
 name: Generate Website Configuration
 
 on:
@@ -135,7 +134,7 @@ jobs:
               "title": "Compelling headline specific to business",
               "subtitle": "Benefit-focused subtitle that's unique",
               "cta": {"label": "Action-oriented CTA", "href": "#contact"},
-              "image": "https://images.unsplash.com/photo-SPECIFIC-ID?w=1600&h=900&fit=crop",
+              "image": "https://source.unsplash.com/1600x900/?business-appropriate-keywords",
               "overlay": 0.2-0.5
             },
             "pages": [
@@ -160,7 +159,7 @@ jobs:
           - Make testimonials sound authentic with realistic names
           - Vary the number and types of sections dramatically between different prompts
           - Choose colors that match the industry and mood (warm for restaurants, professional for law, calming for yoga, etc.)
-          - Select appropriate Unsplash photo IDs that match the business (search unsplash.com for ideas)
+          - Select appropriate Unsplash keywords that match the business (yoga,meditation,wellness for yoga studios, restaurant,dining,food for restaurants, etc.)
           - Use Google Fonts that match the business personality
 
           UNIQUENESS REQUIREMENTS:
@@ -241,7 +240,7 @@ jobs:
               "title": "Your Custom Business Solution",
               "subtitle": "Professionally crafted services",
               "cta": {"label": "Get Started", "href": "#contact"},
-              "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop",
+              "image": "https://source.unsplash.com/1600x900/?business,office,professional",
               "overlay": 0.35
             },
             "pages": [
@@ -310,6 +309,9 @@ jobs:
       - name: Upload configuration
         uses: actions/upload-artifact@v4
         with:
+          name: website-config-${{ github.run_id }}
+          path: website.json
+          retention-days: 1
           name: website-config-${{ github.run_id }}
           path: website.json
           retention-days: 1
