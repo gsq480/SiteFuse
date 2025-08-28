@@ -7,3 +7,5 @@ spec.json
 
 id_rsa_cloudways
 id_rsa_cloudways.pub
+
+wp-content/
