@@ -1,29 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#f4a261",
-      "bg": "#f0efeb",
-      "primary": "#2a9d8f",
-      "secondary": "#264653",
-      "text": "#2c3e50"
+      "accent": "#f2a921",
+      "bg": "#f4f4f4",
+      "primary": "#111111",
+      "secondary": "#b21243",
+      "text": "#333333"
     },
     "fonts": {
-      "body": "Lato",
-      "heading": "Roboto"
+      "body": "Roboto",
+      "heading": "Bebas Neue"
     }
   },
   "hero": {
     "cta": {
-      "href": "#contact",
-      "label": "Book Your Visit"
+      "href": "#products",
+      "label": "Explore Inventory"
     },
-    "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop",
-    "overlay": 0.3,
-    "subtitle": "We offer accessible and personalized medical services seven days a week.",
-    "title": "Quick, Reliable Care Without the Wait"
+    "image": "https://images.unsplash.com/photo-1565084754119-dcacf5750469?w=1600&h=900&fit=crop",
+    "overlay": 0.4,
+    "subtitle": "Unleash your Spirit. Find your Perfect Ride.",
+    "title": "Experience the Power of Throttle & Rev"
   },
-  "industry": "medical",
-  "name": "Canberra Walk-In Clinic",
+  "industry": "retail",
+  "name": "Throttle & Rev Motorbikes",
   "pages": [
     {
       "blocks": [
@@ -31,49 +31,62 @@
           "type": "hero"
         },
         {
-          "content": "At Canberra Walk-In Clinic, we are dedicated to providing immediate medical attention without the hassle of appointments. Our team of experienced practitioners is here to meet your healthcare needs with efficiency and care.",
-          "type": "about"
+          "content": [
+            "Latest Models",
+            "Custom Builds",
+            "Accessories",
+            "Maintenance Services"
+          ],
+          "type": "features"
         },
         {
-          "content": "Our clinic offers a comprehensive range of services including general check-ups, vaccinations, minor injury treatments, and chronic disease management.",
-          "type": "services"
+          "content": "Browse our range of high-performance motorbikes—designed for racers, cruisers, and urban explorers.",
+          "type": "products"
         },
         {
-          "content": "Over 15,000 patients treated successfully. Open all week from 8 am to 8 pm. Fast commitment to healthcare.",
-          "type": "stats"
+          "content": "Showcasing exhilarating rides and custom builds captured in their natural element.",
+          "type": "gallery"
         },
         {
-          "content": "Get in touch with us for more information or to book your walk-in appointment today.",
-          "type": "contact-form"
+          "content": [
+            "Performance Guaranteed",
+            "Expert Technicians",
+            "Premium Quality Parts",
+            "Unmatched Customization"
+          ],
+          "type": "benefits"
+        },
+        {
+          "content": [
+            "Featured in Ride On Magazine",
+            "Partnered with Top Builders",
+            "Endorsed by Professional Riders"
+          ],
+          "type": "social-proof"
         },
         {
           "content": [
             {
-              "name": "John M.",
-              "quote": "The best walk-in service I've ever experienced. Quick and friendly!"
+              "name": "Jake P.",
+              "quote": "Throttle & Rev transformed my riding experience!"
             },
             {
-              "name": "Sara T.",
-              "quote": "Great staff and reliable care, highly recommend them!"
+              "name": "Sophia L.",
+              "quote": "Unbelievable quality and customization options!"
             }
           ],
           "type": "testimonials"
         },
         {
-          "content": "Conveniently located at the heart of Canberra, our clinic is easy to find.",
-          "type": "map"
-        },
-        {
-          "content": "Monday - Sunday: 8 am - 8 pm",
-          "type": "hours"
-        },
-        {
-          "content": "Don’t wait in line, experience quality healthcare right when you need it.",
-          "cta": {
+          "content": {
             "href": "#contact",
             "label": "Visit Us Today"
           },
           "type": "cta"
+        },
+        {
+          "content": "Reach out to our team for any inquiries or to schedule a test ride.",
+          "type": "contact-form"
         }
       ],
       "layout": "landing",
@@ -81,13 +94,13 @@
       "title": "Home"
     }
   ],
-  "slug": "canberra-medical-walk-in",
+  "slug": "throttle-rev-motorbikes",
   "style": {
     "elev": "med",
-    "radius": 12,
-    "recipe": "elegant",
-    "shapes": "soft",
+    "radius": 6,
+    "recipe": "brutalist",
+    "shapes": "angled",
     "variant": "c"
   },
-  "tagline": "Your Convenient Healthcare Partner in Canberra"
+  "tagline": "Ride the Future with Confidence"
 }
