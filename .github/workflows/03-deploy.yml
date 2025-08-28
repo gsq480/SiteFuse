@@ -448,6 +448,26 @@ jobs:
                       echo '</div></div></section>';
                   },
 
+                  'newsletter' => function($b) use ($esc) {
+                      ?>
+                      <section class="py-20 bg-primary text-white">
+                        <div class="container max-w-2xl mx-auto text-center">
+                          <?php if (!empty($b['title'])): ?>
+                            <h2 class="text-3xl font-bold mb-4"><?php echo $esc($b['title']); ?></h2>
+                          <?php endif; ?>
+                          <p class="text-lg mb-8 opacity-90"><?php echo $esc($b['text'] ?? 'Stay updated with our latest news.'); ?></p>
+                          <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                            <input type="email" placeholder="Enter your email" 
+                                   class="flex-1 px-4 py-3 rounded-lg text-gray-800" />
+                            <button class="btn btn-secondary whitespace-nowrap">
+                              <?php echo $esc($b['button_text'] ?? 'Subscribe'); ?>
+                            </button>
+                          </div>
+                        </div>
+                      </section>
+                      <?php
+                  },
+
                   // Fallback handlers
                   'html' => function($b) { echo wp_kses_post($b['html'] ?? $b['content'] ?? ''); },
                   'service-cards' => function($b) use ($render) { return $render['services']($b); },
@@ -528,6 +548,9 @@ jobs:
           SLUG: ${{ inputs.slug }}
         run: |
           echo "✅ Deployment completed!"
+          echo "🏢 Site Name: ${NAME}"
+          echo "🔧 Theme: ${SLUG}-child"
+          echo "🌐 Visit via your Cloudways domain for this app"
           echo "🏢 Site Name: ${NAME}"
           echo "🔧 Theme: ${SLUG}-child"
           echo "🌐 Visit via your Cloudways domain for this app"
