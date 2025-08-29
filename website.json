@@ -1,29 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#D7B49E",
-      "bg": "#F4ECE3",
-      "primary": "#855E42",
-      "secondary": "#A5AA69",
-      "text": "#403D39"
+      "accent": "#F4E398",
+      "bg": "#F9F7ED",
+      "primary": "#5A8F7B",
+      "secondary": "#D1B38D",
+      "text": "#3A3D42"
     },
     "fonts": {
-      "body": "Lato",
-      "heading": "Josefin Sans"
+      "body": "Lora",
+      "heading": "Montserrat"
     }
   },
   "hero": {
     "cta": {
-      "href": "#classes",
+      "href": "#contact",
       "label": "Join a Class"
     },
-    "image": "Generating image: Welcome to Serene Earth Yoga Studio yoga professional website hero banner (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-gP7fXQ7iQIEpgYvfKVijW8Dh.png?st=2025-08-29T12%3A34%3A20Z&se=2025-08-29T14%3A34%3A20Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=70313862-61f1-446b-9bb2-fa32b037e024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T13%3A34%3A20Z&ske=2025-08-30T13%3A34%3A20Z&sks=b&skv=2024-08-04&sig=zm2u%2Br%2BPOQW%2BRWKQuuV20SWHViu0jIQtwuQv%2B1zQFRg%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-gP7fXQ7iQIEpgYvfKVijW8Dh.png?st=2025-08-29T12%3A34%3A20Z&se=2025-08-29T14%3A34%3A20Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=70313862-61f1-446b-9bb2-fa32b037e024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T13%3A34%3A20Z&ske=2025-08-30T13%3A34%3A20Z&sks=b&skv=2024-08-04&sig=zm2u%2Br%2BPOQW%2BRWKQuuV20SWHViu0jIQtwuQv%2B1zQFRg%3D",
-    "overlay": 0.4,
-    "subtitle": "Where Mindfulness Meets Modern Living",
-    "title": "Welcome to Serene Earth Yoga Studio"
+    "image": "Generating image: Balance and Mindfulness in Harmony with Nature wellness professional website hero banner (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-LCjCsvbApajnVSW5HXiD4OFr.png?st=2025-08-29T21%3A30%3A40Z&se=2025-08-29T23%3A30%3A40Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T13%3A18%3A08Z&ske=2025-08-30T13%3A18%3A08Z&sks=b&skv=2024-08-04&sig=9O4scz6zpQ1nnoxbr1iuCO2agECqTSv/0EagTe18CuY%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-LCjCsvbApajnVSW5HXiD4OFr.png?st=2025-08-29T21%3A30%3A40Z&se=2025-08-29T23%3A30%3A40Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T13%3A18%3A08Z&ske=2025-08-30T13%3A18%3A08Z&sks=b&skv=2024-08-04&sig=9O4scz6zpQ1nnoxbr1iuCO2agECqTSv/0EagTe18CuY%3D",
+    "overlay": 0.3,
+    "subtitle": "Explore a sanctuary where yoga meets tranquility.",
+    "title": "Balance and Mindfulness in Harmony with Nature"
   },
-  "industry": "yoga",
-  "name": "Serene Earth Yoga Studio",
+  "industry": "wellness",
+  "name": "Zen Earth Yoga Studio",
   "pages": [
     {
       "blocks": [
@@ -31,76 +31,90 @@
           "type": "hero"
         },
         {
-          "content": {
-            "left": {
-              "text": "At Serene Earth Yoga Studio, we believe in the healing power of mindfulness and yoga. Our classes are designed to nurture growth, encourage balance, and instill serenity in your daily life.",
-              "title": "Our Philosophy"
-            },
-            "right": {
-              "alt": "Interior of a peaceful yoga studio with earth-toned decor",
-              "image": ""
-            }
-          },
-          "type": "two-col"
-        },
-        {
-          "schedules": [
+          "items": [
             {
-              "description": "A dynamic sequence of movements with breath awareness.",
-              "name": "Vinyasa Flow",
-              "time": "Mondays & Wednesdays, 6 PM"
+              "text": "Improve flexibility and strength in a serene environment.",
+              "title": "Physical Well-being"
             },
             {
-              "description": "Gentle poses focused on relaxation and renewal.",
-              "name": "Restorative Yoga",
-              "time": "Fridays, 5 PM"
+              "text": "Unlock focus and reduce stress through mindful practices.",
+              "title": "Mental Clarity"
             },
             {
-              "description": "Guided meditations to enhance mindfulness and presence.",
-              "name": "Meditation Sessions",
-              "time": "Sundays, 9 AM"
+              "text": "Connect with like-minded individuals centered on growth.",
+              "title": "Community"
             }
           ],
-          "title": "Class Offerings",
+          "title": "Benefits of Yoga",
+          "type": "benefits"
+        },
+        {
+          "items": [
+            {
+              "price": "$15 per class",
+              "text": "Mornings & Evenings",
+              "title": "Vinyasa Flow"
+            },
+            {
+              "price": "$12 per class",
+              "text": "Afternoons",
+              "title": "Yin Yoga"
+            },
+            {
+              "price": "Included with other classes",
+              "text": "Daily",
+              "title": "Meditation"
+            }
+          ],
+          "title": "Class Schedules",
           "type": "classes"
         },
         {
           "items": [
             {
-              "text": "Increase your range of motion and relieve muscle tension.",
-              "title": "Enhanced Flexibility"
+              "name": "Julia H.",
+              "quote": "Zen Earth is my sanctuary in a busy world. I leave feeling renewed."
             },
             {
-              "text": "Learn techniques to manage stress and cultivate calm.",
-              "title": "Stress Reduction"
-            },
-            {
-              "text": "Boost your concentration and mental clarity.",
-              "title": "Better Focus"
+              "name": "Marcus P.",
+              "quote": "The instructors are thoughtful, creating a mindful yoga practice."
             }
           ],
-          "type": "benefits"
-        },
-        {
-          "quotes": [
-            {
-              "name": "Emily D.",
-              "text": "Practicing here has transformed my mental and physical well-being!"
-            },
-            {
-              "name": "Michael T.",
-              "text": "A truly peaceful experience that rejuvenates the soul."
-            },
-            {
-              "name": "Chloe S.",
-              "text": "The instructors’ guidance has been invaluable on my yoga journey."
-            }
-          ],
-          "title": "What Our Yogis Say",
+          "title": "What Our Clients Say",
           "type": "testimonials"
         },
         {
-          "subtitle": "Ready to embark on your mindfulness journey? Contact us today!",
+          "images": [
+            {
+              "alt": "Relaxed class in dimly lit yoga room",
+              "url": "Generating image: Relaxed class in dimly lit yoga room (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-U7uYtySiri1UMpGRhZIoDbYd.png?st=2025-08-29T21%3A30%3A57Z&se=2025-08-29T23%3A30%3A57Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=52f8f7b3-ca8d-4b21-9807-8b9df114d84c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T22%3A30%3A57Z&ske=2025-08-30T22%3A30%3A57Z&sks=b&skv=2024-08-04&sig=I5Z3wd50sWZmcF2hWVJNNDIMkbf3nsvnTa9vJSG4KJk%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-U7uYtySiri1UMpGRhZIoDbYd.png?st=2025-08-29T21%3A30%3A57Z&se=2025-08-29T23%3A30%3A57Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=52f8f7b3-ca8d-4b21-9807-8b9df114d84c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T22%3A30%3A57Z&ske=2025-08-30T22%3A30%3A57Z&sks=b&skv=2024-08-04&sig=I5Z3wd50sWZmcF2hWVJNNDIMkbf3nsvnTa9vJSG4KJk%3D"
+            },
+            {
+              "alt": "Instructor leading outdoor yoga session",
+              "url": "Generating image: Instructor leading outdoor yoga session (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-PBtSiylGTQLLPoVlBKGeCWUP.png?st=2025-08-29T21%3A31%3A10Z&se=2025-08-29T23%3A31%3A10Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T15%3A26%3A13Z&ske=2025-08-30T15%3A26%3A13Z&sks=b&skv=2024-08-04&sig=wih2saqe1L%2B/gxf/FXxvshOkYeMGXpLsyFvVDx10LJk%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-PBtSiylGTQLLPoVlBKGeCWUP.png?st=2025-08-29T21%3A31%3A10Z&se=2025-08-29T23%3A31%3A10Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T15%3A26%3A13Z&ske=2025-08-30T15%3A26%3A13Z&sks=b&skv=2024-08-04&sig=wih2saqe1L%2B/gxf/FXxvshOkYeMGXpLsyFvVDx10LJk%3D"
+            },
+            {
+              "alt": "Cozy, welcoming lounge with natural decor",
+              "url": "Generating image: Cozy, welcoming lounge with natural decor (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-bFLvGX0u846U4CyFe4rqcRds.png?st=2025-08-29T21%3A31%3A28Z&se=2025-08-29T23%3A31%3A28Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=70313862-61f1-446b-9bb2-fa32b037e024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T21%3A00%3A19Z&ske=2025-08-30T21%3A00%3A19Z&sks=b&skv=2024-08-04&sig=IzKZN26u46wBkF9dWKGuO7gH1f/OEQNe6J729ZV9tI8%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-bFLvGX0u846U4CyFe4rqcRds.png?st=2025-08-29T21%3A31%3A28Z&se=2025-08-29T23%3A31%3A28Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=70313862-61f1-446b-9bb2-fa32b037e024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T21%3A00%3A19Z&ske=2025-08-30T21%3A00%3A19Z&sks=b&skv=2024-08-04&sig=IzKZN26u46wBkF9dWKGuO7gH1f/OEQNe6J729ZV9tI8%3D"
+            },
+            {
+              "alt": "Detail of calming meditation space",
+              "url": "Generating image: Detail of calming meditation space (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-yYZ4jK5Rbu8ZxyQMHT2YyZ0v.png?st=2025-08-29T21%3A31%3A42Z&se=2025-08-29T23%3A31%3A42Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T16%3A16%3A49Z&ske=2025-08-30T16%3A16%3A49Z&sks=b&skv=2024-08-04&sig=xV2icWVBNqIA8UbJeyV4sHiRwFIpjwlXAxWXs7KbBrg%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-yYZ4jK5Rbu8ZxyQMHT2YyZ0v.png?st=2025-08-29T21%3A31%3A42Z&se=2025-08-29T23%3A31%3A42Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T16%3A16%3A49Z&ske=2025-08-30T16%3A16%3A49Z&sks=b&skv=2024-08-04&sig=xV2icWVBNqIA8UbJeyV4sHiRwFIpjwlXAxWXs7KbBrg%3D"
+            },
+            {
+              "alt": "Group of yogis in a beginners class",
+              "url": "Generating image: Group of yogis in a beginners class (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-MvVQN3RevI72PC10xkMGf456.png?st=2025-08-29T21%3A31%3A54Z&se=2025-08-29T23%3A31%3A54Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=67205dde-9780-4119-bbff-6343b48e42b6&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-28T23%3A52%3A52Z&ske=2025-08-29T23%3A52%3A52Z&sks=b&skv=2024-08-04&sig=vbeZ3O570FnfKf703gQsgIWFb5yZevdWnTxu8KhJ5SY%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-MvVQN3RevI72PC10xkMGf456.png?st=2025-08-29T21%3A31%3A54Z&se=2025-08-29T23%3A31%3A54Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=67205dde-9780-4119-bbff-6343b48e42b6&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-28T23%3A52%3A52Z&ske=2025-08-29T23%3A52%3A52Z&sks=b&skv=2024-08-04&sig=vbeZ3O570FnfKf703gQsgIWFb5yZevdWnTxu8KhJ5SY%3D"
+            },
+            {
+              "alt": "Hand-painted decor with wellness quotes",
+              "url": "Generating image: Hand-painted decor with wellness quotes (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-YDckmVpQbsgqD8Fu2KkN6iIU.png?st=2025-08-29T21%3A32%3A10Z&se=2025-08-29T23%3A32%3A10Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=f245bf7a-16fa-44e0-959a-8c745daf7e3d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T07%3A34%3A35Z&ske=2025-08-30T07%3A34%3A35Z&sks=b&skv=2024-08-04&sig=8emokw7URtabheKfsCJhmJSavmxZSaKxHXRRkhe1n9g%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-YDckmVpQbsgqD8Fu2KkN6iIU.png?st=2025-08-29T21%3A32%3A10Z&se=2025-08-29T23%3A32%3A10Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=f245bf7a-16fa-44e0-959a-8c745daf7e3d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T07%3A34%3A35Z&ske=2025-08-30T07%3A34%3A35Z&sks=b&skv=2024-08-04&sig=8emokw7URtabheKfsCJhmJSavmxZSaKxHXRRkhe1n9g%3D"
+            }
+          ],
+          "title": "Studio Vibes",
+          "type": "gallery"
+        },
+        {
+          "text": "Have questions? Reach out - we’d love to hear from you.",
           "title": "Get in Touch",
           "type": "contact-form"
         }
@@ -110,7 +124,7 @@
       "title": "Home"
     }
   ],
-  "slug": "serene-earth-yoga",
+  "slug": "zen-earth-yoga-studio",
   "style": {
     "elev": "low",
     "radius": 12,
@@ -118,5 +132,5 @@
     "shapes": "soft",
     "variant": "b"
   },
-  "tagline": "Cultivate Inner Peace, One Breath at a Time"
+  "tagline": "Find Your Balance, Embrace the Earth"
 }
