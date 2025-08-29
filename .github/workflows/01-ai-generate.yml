@@ -381,57 +381,160 @@ jobs:
           set -euo pipefail
 
           gen_image() {
-            local prompt="$1"; local size="${2:-1024x1024}"; local url=""
+            local prompt="$1"
+            local size="${2:-1024x1024}"
+            local url=""
+            
             for attempt in 1 2 3; do
+              echo "Generating image: $prompt (attempt $attempt)"
               url=$(curl -sS -X POST "https://api.openai.com/v1/images/generations" \
                 -H "Authorization: Bearer $OPENAI_API_KEY" \
                 -H "Content-Type: application/json" \
                 -d "$(jq -n --arg prompt "$prompt" --arg size "$size" \
-                  '{model:"dall-e-3", prompt:$prompt, n:1, size:$size, response_format:"url", quality:"high"}')" \
-              | jq -r '.data[0].url // empty')
-              [ -n "$url" ] && { echo "$url"; return 0; }
+                  '{model:"dall-e-3", prompt:$prompt, n:1, size:$size, response_format:"url", quality:"standard"}')" \
+              | jq -r '.data[0].url // empty' 2>/dev/null)
+              
+              if [ -n "$url" ]; then
+                echo "Generated: $url"
+                echo "$url"
+                return 0
+              fi
+              
+              echo "Attempt $attempt failed, retrying..."
               sleep 2
             done
+            
+            echo "Failed to generate image after 3 attempts"
             echo ""
           }
 
           tmpfile=$(mktemp)
           cp website.json "$tmpfile"
 
-          # 1) Hero image
+          echo "Starting image generation..."
+
+          # Generate hero image
           HERO_PROMPT=$(jq -r '
-            [ .hero.title, .industry, "website hero photo" ]
+            [ .hero.title, .industry, "professional website hero banner" ]
             | map(select(. != null and . != "")) | join(" ")
           ' "$tmpfile")
+          
           if [ -n "$HERO_PROMPT" ]; then
-            # Use a square size and let CSS crop, this is the most reliable option
+            echo "Generating hero image..."
             HERO_URL=$(gen_image "$HERO_PROMPT" "1024x1024")
-            jq --arg url "$HERO_URL" '.hero.image = $url' "$tmpfile" > website.json
-            mv website.json "$tmpfile"
-          fi
-
-          # Helper: count pages
-          PAGES_LEN=$(jq '.pages | length' "$tmpfile")
-          for p in $(seq 0 $((PAGES_LEN-1))); do
-            BLOCKS_LEN=$(jq ".pages[$p].blocks | length" "$tmpfile")
-            for b in $(seq 0 $((BLOCKS_LEN-1))); do
-              TYPE=$(jq -r ".pages[$p].blocks[$b].type // empty" "$tmpfile")
-
-          # 2) Gallery images
-          if [ "$TYPE" = "gallery" ]; then
-            IMG_LEN=$(jq ".pages[$p].blocks[$b].images | length" "$tmpfile")
-            if [ "$IMG_LEN" -gt 0 ]; then
-              for i in $(seq 0 $((IMG_LEN-1))); do
-                PROMPT=$(jq -r ".pages[$p].blocks[$b].images[$i].alt // \"gallery photo\"" "$tmpfile")
-                URL=$(gen_image "$PROMPT" "1024x1024")
-                jq --arg url "$URL" ".pages[$p].blocks[$b].images[$i].url = \$url" "$tmpfile" > website.json
-                mv website.json "$tmpfile"
-              done
+            if [ -n "$HERO_URL" ]; then
+              jq --arg url "$HERO_URL" '.hero.image = $url' "$tmpfile" > website_temp.json
+              mv website_temp.json "$tmpfile"
             fi
           fi
 
-          # 3) Team member photos
-          if [ "$TYPE" = "team" ]; then
-            MEM_LEN=$(jq ".pages[$p].blocks[$b].members | length" "$tmpfile")
-            if [ "$MEM_LEN" -gt 0 ]; then
-              for i in $(seq 0 $((M
+          # Process gallery, team, and service images
+          PAGES_COUNT=$(jq '.pages | length' "$tmpfile")
+          
+          for page_idx in $(seq 0 $((PAGES_COUNT-1))); do
+            BLOCKS_COUNT=$(jq ".pages[$page_idx].blocks | length" "$tmpfile")
+            
+            for block_idx in $(seq 0 $((BLOCKS_COUNT-1))); do
+              BLOCK_TYPE=$(jq -r ".pages[$page_idx].blocks[$block_idx].type // empty" "$tmpfile")
+
+              case "$BLOCK_TYPE" in
+                "gallery")
+                  echo "Processing gallery block..."
+                  IMAGES_COUNT=$(jq ".pages[$page_idx].blocks[$block_idx].images | length" "$tmpfile")
+                  
+                  for img_idx in $(seq 0 $((IMAGES_COUNT-1))); do
+                    ALT_TEXT=$(jq -r ".pages[$page_idx].blocks[$block_idx].images[$img_idx].alt // \"gallery image\"" "$tmpfile")
+                    IMAGE_URL=$(gen_image "$ALT_TEXT" "1024x1024")
+                    
+                    if [ -n "$IMAGE_URL" ]; then
+                      jq --arg url "$IMAGE_URL" ".pages[$page_idx].blocks[$block_idx].images[$img_idx].url = \$url" "$tmpfile" > website_temp.json
+                      mv website_temp.json "$tmpfile"
+                    fi
+                  done
+                  ;;
+                  
+                "team")
+                  echo "Processing team block..."
+                  MEMBERS_COUNT=$(jq ".pages[$page_idx].blocks[$block_idx].members | length" "$tmpfile")
+                  
+                  for member_idx in $(seq 0 $((MEMBERS_COUNT-1))); do
+                    MEMBER_NAME=$(jq -r ".pages[$page_idx].blocks[$block_idx].members[$member_idx].name // \"team member\"" "$tmpfile")
+                    MEMBER_ROLE=$(jq -r ".pages[$page_idx].blocks[$block_idx].members[$member_idx].role // \"\"" "$tmpfile")
+                    PROMPT="$MEMBER_NAME $MEMBER_ROLE professional business portrait"
+                    
+                    PHOTO_URL=$(gen_image "$PROMPT" "512x512")
+                    
+                    if [ -n "$PHOTO_URL" ]; then
+                      jq --arg url "$PHOTO_URL" ".pages[$page_idx].blocks[$block_idx].members[$member_idx].photo = \$url" "$tmpfile" > website_temp.json
+                      mv website_temp.json "$tmpfile"
+                    fi
+                  done
+                  ;;
+                  
+                "services")
+                  echo "Processing services block..."
+                  ITEMS_COUNT=$(jq ".pages[$page_idx].blocks[$block_idx].items | length" "$tmpfile")
+                  
+                  for item_idx in $(seq 0 $((ITEMS_COUNT-1))); do
+                    SERVICE_TITLE=$(jq -r ".pages[$page_idx].blocks[$block_idx].items[$item_idx].title // \"service\"" "$tmpfile")
+                    PROMPT="$SERVICE_TITLE flat vector icon simple minimalist"
+                    
+                    ICON_URL=$(gen_image "$PROMPT" "512x512")
+                    
+                    if [ -n "$ICON_URL" ]; then
+                      jq --arg url "$ICON_URL" ".pages[$page_idx].blocks[$block_idx].items[$item_idx].icon = \$url" "$tmpfile" > website_temp.json
+                      mv website_temp.json "$tmpfile"
+                    fi
+                  done
+                  ;;
+              esac
+            done
+          done
+
+          cp "$tmpfile" website.json
+          rm -f "$tmpfile" website_temp.json
+          echo "Image generation completed"
+
+      - name: Validate image generation results
+        if: ${{ inputs.generate_images }}
+        run: |
+          set -euo pipefail
+          
+          echo "Checking image generation results..."
+          
+          # Count total expected vs populated images
+          hero_expected=$(jq -r 'if .hero then 1 else 0 end' website.json)
+          hero_populated=$(jq -r 'if .hero.image != "" and .hero.image != null then 1 else 0 end' website.json)
+          
+          gallery_expected=$(jq '[.pages[]?.blocks[]? | select(.type=="gallery") | .images[]?] | length' website.json)
+          gallery_populated=$(jq '[.pages[]?.blocks[]? | select(.type=="gallery") | .images[]? | select(.url != "" and .url != null)] | length' website.json)
+          
+          team_expected=$(jq '[.pages[]?.blocks[]? | select(.type=="team") | .members[]?] | length' website.json)
+          team_populated=$(jq '[.pages[]?.blocks[]? | select(.type=="team") | .members[]? | select(.photo != "" and .photo != null)] | length' website.json)
+          
+          services_expected=$(jq '[.pages[]?.blocks[]? | select(.type=="services") | .items[]?] | length' website.json)
+          services_populated=$(jq '[.pages[]?.blocks[]? | select(.type=="services") | .items[]? | select(.icon != "" and .icon != null)] | length' website.json)
+          
+          echo "Image generation summary:"
+          echo "Hero: $hero_populated/$hero_expected"
+          echo "Gallery: $gallery_populated/$gallery_expected"
+          echo "Team: $team_populated/$team_expected"
+          echo "Services: $services_populated/$services_expected"
+          
+          total_expected=$((hero_expected + gallery_expected + team_expected + services_expected))
+          total_populated=$((hero_populated + gallery_populated + team_populated + services_populated))
+          
+          echo "Total: $total_populated/$total_expected images generated"
+          
+          if [ "$total_populated" -lt "$total_expected" ]; then
+            echo "Warning: Some images failed to generate, but continuing deployment..."
+          else
+            echo "All images generated successfully!"
+          fi
+
+      - name: Upload configuration
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-config-${{ github.run_id }}
+          path: website.json
+          retention-days: 1
