@@ -1,29 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#F4E398",
-      "bg": "#F9F7ED",
-      "primary": "#5A8F7B",
-      "secondary": "#D1B38D",
-      "text": "#3A3D42"
+      "accent": "#2a9d8f",
+      "bg": "#f4f4f4",
+      "primary": "#264653",
+      "secondary": "#e76f51",
+      "text": "#333333"
     },
     "fonts": {
-      "body": "Lora",
+      "body": "Open Sans",
       "heading": "Montserrat"
     }
   },
   "hero": {
     "cta": {
-      "href": "#contact",
-      "label": "Join a Class"
+      "href": "#portfolio",
+      "label": "Explore My Work"
     },
-    "image": "Generating image: Balance and Mindfulness in Harmony with Nature wellness professional website hero banner (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-LCjCsvbApajnVSW5HXiD4OFr.png?st=2025-08-29T21%3A30%3A40Z&se=2025-08-29T23%3A30%3A40Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T13%3A18%3A08Z&ske=2025-08-30T13%3A18%3A08Z&sks=b&skv=2024-08-04&sig=9O4scz6zpQ1nnoxbr1iuCO2agECqTSv/0EagTe18CuY%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-LCjCsvbApajnVSW5HXiD4OFr.png?st=2025-08-29T21%3A30%3A40Z&se=2025-08-29T23%3A30%3A40Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T13%3A18%3A08Z&ske=2025-08-30T13%3A18%3A08Z&sks=b&skv=2024-08-04&sig=9O4scz6zpQ1nnoxbr1iuCO2agECqTSv/0EagTe18CuY%3D",
+    "image": "Generating image: Designing Seamless User Journeys UX Design professional website hero banner (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-M19xsN33fP6TmrdqL1Ag4fIc.png?st=2025-08-29T21%3A45%3A00Z&se=2025-08-29T23%3A45%3A00Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T22%3A45%3A00Z&ske=2025-08-30T22%3A45%3A00Z&sks=b&skv=2024-08-04&sig=7JEGGURhU%2BJPRn57cI5XLGvsM3kTKTG7OU99SfwLh/U%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-M19xsN33fP6TmrdqL1Ag4fIc.png?st=2025-08-29T21%3A45%3A00Z&se=2025-08-29T23%3A45%3A00Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T22%3A45%3A00Z&ske=2025-08-30T22%3A45%3A00Z&sks=b&skv=2024-08-04&sig=7JEGGURhU%2BJPRn57cI5XLGvsM3kTKTG7OU99SfwLh/U%3D",
     "overlay": 0.3,
-    "subtitle": "Explore a sanctuary where yoga meets tranquility.",
-    "title": "Balance and Mindfulness in Harmony with Nature"
+    "subtitle": "From concepts to reality, discover intuitive and engaging digital experiences.",
+    "title": "Designing Seamless User Journeys"
   },
-  "industry": "wellness",
-  "name": "Zen Earth Yoga Studio",
+  "industry": "UX Design",
+  "name": "Glen Sinnott's Visions",
   "pages": [
     {
       "blocks": [
@@ -31,91 +31,89 @@
           "type": "hero"
         },
         {
-          "items": [
-            {
-              "text": "Improve flexibility and strength in a serene environment.",
-              "title": "Physical Well-being"
-            },
-            {
-              "text": "Unlock focus and reduce stress through mindful practices.",
-              "title": "Mental Clarity"
-            },
-            {
-              "text": "Connect with like-minded individuals centered on growth.",
-              "title": "Community"
-            }
-          ],
-          "title": "Benefits of Yoga",
-          "type": "benefits"
+          "content": "With over a decade of experience in crafting intuitive user experiences, Glen Sinnott specializes in designing digital products that drive engagement and elevate user satisfaction.",
+          "type": "about"
         },
         {
           "items": [
             {
-              "price": "$15 per class",
-              "text": "Mornings & Evenings",
-              "title": "Vinyasa Flow"
+              "description": "Revamping the user journey of a predominant e-commerce platform to improve conversion rates.",
+              "title": "E-commerce Platform Design"
             },
             {
-              "price": "$12 per class",
-              "text": "Afternoons",
-              "title": "Yin Yoga"
+              "description": "Creating an engaging interface to help users track their health and fitness goals seamlessly.",
+              "title": "Mobile App for Health Tracking"
             },
             {
-              "price": "Included with other classes",
-              "text": "Daily",
-              "title": "Meditation"
+              "description": "A comprehensive redesign effort to boost readership through an improved user interface.",
+              "title": "Website Redesign for Tech Blog"
             }
           ],
-          "title": "Class Schedules",
-          "type": "classes"
+          "title": "Featured Works",
+          "type": "portfolio"
         },
         {
           "items": [
             {
-              "name": "Julia H.",
-              "quote": "Zen Earth is my sanctuary in a busy world. I leave feeling renewed."
+              "icon": "Generating image: Design Strategy flat vector icon simple minimalist (attempt 1)\nAttempt 1 failed, retrying...\nGenerating image: Design Strategy flat vector icon simple minimalist (attempt 2)\nAttempt 2 failed, retrying...\nGenerating image: Design Strategy flat vector icon simple minimalist (attempt 3)\nAttempt 3 failed, retrying...\nFailed to generate image after 3 attempts",
+              "price": null,
+              "text": "Tailoring your product's look and feel to meet user needs and business goals.",
+              "title": "Design Strategy"
             },
             {
-              "name": "Marcus P.",
-              "quote": "The instructors are thoughtful, creating a mindful yoga practice."
+              "icon": "Generating image: UI/UX Design flat vector icon simple minimalist (attempt 1)\nAttempt 1 failed, retrying...\nGenerating image: UI/UX Design flat vector icon simple minimalist (attempt 2)\nAttempt 2 failed, retrying...\nGenerating image: UI/UX Design flat vector icon simple minimalist (attempt 3)\nAttempt 3 failed, retrying...\nFailed to generate image after 3 attempts",
+              "price": null,
+              "text": "Delivering user-centric design that is both engaging and functional.",
+              "title": "UI/UX Design"
+            },
+            {
+              "icon": "Generating image: User Research flat vector icon simple minimalist (attempt 1)\nAttempt 1 failed, retrying...\nGenerating image: User Research flat vector icon simple minimalist (attempt 2)\nAttempt 2 failed, retrying...\nGenerating image: User Research flat vector icon simple minimalist (attempt 3)\nAttempt 3 failed, retrying...\nFailed to generate image after 3 attempts",
+              "price": null,
+              "text": "Leveraging insights to drive informed design decisions.",
+              "title": "User Research"
             }
           ],
-          "title": "What Our Clients Say",
+          "title": "Design Expertise",
+          "type": "services"
+        },
+        {
+          "items": [
+            {
+              "company": "HealthTech Innovations",
+              "name": "Sophia Tran",
+              "quote": "Glen's keen understanding of user behavior significantly enhanced our product appeal."
+            },
+            {
+              "company": "Commerce Corp",
+              "name": "Mark Kent",
+              "quote": "His thoughtful design strategy lifted our brand presence drastically."
+            }
+          ],
+          "title": "What Clients Say",
           "type": "testimonials"
         },
         {
-          "images": [
+          "content": "Awards & Recognitions",
+          "entries": [
             {
-              "alt": "Relaxed class in dimly lit yoga room",
-              "url": "Generating image: Relaxed class in dimly lit yoga room (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-U7uYtySiri1UMpGRhZIoDbYd.png?st=2025-08-29T21%3A30%3A57Z&se=2025-08-29T23%3A30%3A57Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=52f8f7b3-ca8d-4b21-9807-8b9df114d84c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T22%3A30%3A57Z&ske=2025-08-30T22%3A30%3A57Z&sks=b&skv=2024-08-04&sig=I5Z3wd50sWZmcF2hWVJNNDIMkbf3nsvnTa9vJSG4KJk%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-U7uYtySiri1UMpGRhZIoDbYd.png?st=2025-08-29T21%3A30%3A57Z&se=2025-08-29T23%3A30%3A57Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=52f8f7b3-ca8d-4b21-9807-8b9df114d84c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T22%3A30%3A57Z&ske=2025-08-30T22%3A30%3A57Z&sks=b&skv=2024-08-04&sig=I5Z3wd50sWZmcF2hWVJNNDIMkbf3nsvnTa9vJSG4KJk%3D"
+              "text": "2020 Leading UX Designer by DesignDaily"
             },
             {
-              "alt": "Instructor leading outdoor yoga session",
-              "url": "Generating image: Instructor leading outdoor yoga session (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-PBtSiylGTQLLPoVlBKGeCWUP.png?st=2025-08-29T21%3A31%3A10Z&se=2025-08-29T23%3A31%3A10Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T15%3A26%3A13Z&ske=2025-08-30T15%3A26%3A13Z&sks=b&skv=2024-08-04&sig=wih2saqe1L%2B/gxf/FXxvshOkYeMGXpLsyFvVDx10LJk%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-PBtSiylGTQLLPoVlBKGeCWUP.png?st=2025-08-29T21%3A31%3A10Z&se=2025-08-29T23%3A31%3A10Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T15%3A26%3A13Z&ske=2025-08-30T15%3A26%3A13Z&sks=b&skv=2024-08-04&sig=wih2saqe1L%2B/gxf/FXxvshOkYeMGXpLsyFvVDx10LJk%3D"
-            },
-            {
-              "alt": "Cozy, welcoming lounge with natural decor",
-              "url": "Generating image: Cozy, welcoming lounge with natural decor (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-bFLvGX0u846U4CyFe4rqcRds.png?st=2025-08-29T21%3A31%3A28Z&se=2025-08-29T23%3A31%3A28Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=70313862-61f1-446b-9bb2-fa32b037e024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T21%3A00%3A19Z&ske=2025-08-30T21%3A00%3A19Z&sks=b&skv=2024-08-04&sig=IzKZN26u46wBkF9dWKGuO7gH1f/OEQNe6J729ZV9tI8%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-bFLvGX0u846U4CyFe4rqcRds.png?st=2025-08-29T21%3A31%3A28Z&se=2025-08-29T23%3A31%3A28Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=70313862-61f1-446b-9bb2-fa32b037e024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T21%3A00%3A19Z&ske=2025-08-30T21%3A00%3A19Z&sks=b&skv=2024-08-04&sig=IzKZN26u46wBkF9dWKGuO7gH1f/OEQNe6J729ZV9tI8%3D"
-            },
-            {
-              "alt": "Detail of calming meditation space",
-              "url": "Generating image: Detail of calming meditation space (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-yYZ4jK5Rbu8ZxyQMHT2YyZ0v.png?st=2025-08-29T21%3A31%3A42Z&se=2025-08-29T23%3A31%3A42Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T16%3A16%3A49Z&ske=2025-08-30T16%3A16%3A49Z&sks=b&skv=2024-08-04&sig=xV2icWVBNqIA8UbJeyV4sHiRwFIpjwlXAxWXs7KbBrg%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-yYZ4jK5Rbu8ZxyQMHT2YyZ0v.png?st=2025-08-29T21%3A31%3A42Z&se=2025-08-29T23%3A31%3A42Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T16%3A16%3A49Z&ske=2025-08-30T16%3A16%3A49Z&sks=b&skv=2024-08-04&sig=xV2icWVBNqIA8UbJeyV4sHiRwFIpjwlXAxWXs7KbBrg%3D"
-            },
-            {
-              "alt": "Group of yogis in a beginners class",
-              "url": "Generating image: Group of yogis in a beginners class (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-MvVQN3RevI72PC10xkMGf456.png?st=2025-08-29T21%3A31%3A54Z&se=2025-08-29T23%3A31%3A54Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=67205dde-9780-4119-bbff-6343b48e42b6&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-28T23%3A52%3A52Z&ske=2025-08-29T23%3A52%3A52Z&sks=b&skv=2024-08-04&sig=vbeZ3O570FnfKf703gQsgIWFb5yZevdWnTxu8KhJ5SY%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-MvVQN3RevI72PC10xkMGf456.png?st=2025-08-29T21%3A31%3A54Z&se=2025-08-29T23%3A31%3A54Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=67205dde-9780-4119-bbff-6343b48e42b6&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-28T23%3A52%3A52Z&ske=2025-08-29T23%3A52%3A52Z&sks=b&skv=2024-08-04&sig=vbeZ3O570FnfKf703gQsgIWFb5yZevdWnTxu8KhJ5SY%3D"
-            },
-            {
-              "alt": "Hand-painted decor with wellness quotes",
-              "url": "Generating image: Hand-painted decor with wellness quotes (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-YDckmVpQbsgqD8Fu2KkN6iIU.png?st=2025-08-29T21%3A32%3A10Z&se=2025-08-29T23%3A32%3A10Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=f245bf7a-16fa-44e0-959a-8c745daf7e3d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T07%3A34%3A35Z&ske=2025-08-30T07%3A34%3A35Z&sks=b&skv=2024-08-04&sig=8emokw7URtabheKfsCJhmJSavmxZSaKxHXRRkhe1n9g%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-YDckmVpQbsgqD8Fu2KkN6iIU.png?st=2025-08-29T21%3A32%3A10Z&se=2025-08-29T23%3A32%3A10Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=f245bf7a-16fa-44e0-959a-8c745daf7e3d&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T07%3A34%3A35Z&ske=2025-08-30T07%3A34%3A35Z&sks=b&skv=2024-08-04&sig=8emokw7URtabheKfsCJhmJSavmxZSaKxHXRRkhe1n9g%3D"
+              "text": "Recipient of Best Mobile App Design, 2019"
             }
           ],
-          "title": "Studio Vibes",
-          "type": "gallery"
+          "type": "full-width-text"
         },
         {
-          "text": "Have questions? Reach out - we’d love to hear from you.",
-          "title": "Get in Touch",
+          "content": "Let's give your users the experience they deserve.",
+          "cta": {
+            "href": "#contact",
+            "label": "Contact Me"
+          },
+          "type": "cta"
+        },
+        {
+          "title": "Get In Touch",
           "type": "contact-form"
         }
       ],
@@ -124,13 +122,13 @@
       "title": "Home"
     }
   ],
-  "slug": "zen-earth-yoga-studio",
+  "slug": "glen-sinnott-ux-designer-portfolio",
   "style": {
     "elev": "low",
-    "radius": 12,
-    "recipe": "elegant",
+    "radius": 8,
+    "recipe": "minimal",
     "shapes": "soft",
-    "variant": "b"
+    "variant": "a"
   },
-  "tagline": "Find Your Balance, Embrace the Earth"
+  "tagline": "Crafting Experiences, Elevating Journeys"
 }
