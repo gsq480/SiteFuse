@@ -342,6 +342,18 @@ jobs:
           EOF
           ./tailwindcss --config "$THEME_DIR/tailwind.config.js" --input "$THEME_DIR/assets/css/tailwind.css" --output "$THEME_DIR/dist/tailwind.css" --minify
 
+          - name: Create theme JavaScript file
+          env:
+            SLUG: ${{ steps.config.outputs.slug }}
+          run: |
+            THEME_DIR="${SLUG}-child"
+            cat > "$THEME_DIR/assets/js/theme.js" << 'EOF'
+            // Theme JavaScript
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('Theme JS loaded');
+                // Add interactive functionality here
+            });
+            EOF    
       - name: Generate PHP templates (front-page uses shortcode)
         env:
           SLUG: ${{ steps.config.outputs.slug }}
