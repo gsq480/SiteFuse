@@ -1,0 +1,137 @@
+{
+  "brand": {
+    "colors": {
+      "accent": "#93c47d",
+      "bg": "#1a1a1a",
+      "primary": "#4b4f56",
+      "secondary": "#676b73",
+      "text": "#ffffff"
+    },
+    "fonts": {
+      "body": "Lato",
+      "heading": "Merriweather"
+    }
+  },
+  "hero": {
+    "cta": {
+      "href": "#booking",
+      "label": "Book Your Escape"
+    },
+    "image": "",
+    "overlay": 0.4,
+    "subtitle": "Unwind with our holistic retreats and bespoke therapies",
+    "title": "Discover Serenity within the Capital"
+  },
+  "industry": "wellness",
+  "name": "Cannabliss Canberra",
+  "pages": [
+    {
+      "blocks": [
+        {
+          "type": "hero"
+        },
+        {
+          "items": [
+            {
+              "icon": "",
+              "price": null,
+              "text": "Natural treatments to detoxify and rejuvenate your senses.",
+              "title": "Herbal Therapy"
+            },
+            {
+              "icon": "",
+              "price": null,
+              "text": "Guided sessions to calm the mind and restore balance.",
+              "title": "Meditation Classes"
+            },
+            {
+              "icon": "",
+              "price": null,
+              "text": "Personalized advice on integrating CBD into your wellness routine.",
+              "title": "CBD Consultants"
+            }
+          ],
+          "title": "Our Offerings",
+          "type": "services"
+        },
+        {
+          "content": "Cannabliss Canberra is a sanctuary for relaxation and rejuvenation nestled in the heart of Australia's capital. Our expert team of therapists and consultants pairs ancient wellness practices with modern solutions for a truly holistic experience.",
+          "type": "about"
+        },
+        {
+          "images": [
+            {
+              "alt": "Serene meditation room with dim lighting and yoga mats",
+              "url": ""
+            },
+            {
+              "alt": "Herbal therapy station with essential oils and herbs",
+              "url": ""
+            },
+            {
+              "alt": "Bright, welcoming reception area with warm decor",
+              "url": ""
+            },
+            {
+              "alt": "Relaxation lounge with plush seating and tranquil vibes",
+              "url": ""
+            },
+            {
+              "alt": "Luxury personal treatment rooms for deep relaxation",
+              "url": ""
+            },
+            {
+              "alt": "Group meditation session with skilled guide",
+              "url": ""
+            }
+          ],
+          "title": "Our Sanctuary",
+          "type": "gallery"
+        },
+        {
+          "quote": "Cannabliss transformed my wellness routine with their personalized consultations and serene environment. – Sarah Thompson",
+          "type": "testimonial"
+        },
+        {
+          "steps": [
+            {
+              "text": "Select from a variety of tailored experiences.",
+              "title": "Choose Your Retreat"
+            },
+            {
+              "text": "Our team personalizes each session for optimal benefit.",
+              "title": "Consult with Experts"
+            },
+            {
+              "text": "Enjoy bespoke therapies in our calming sanctuary.",
+              "title": "Immerse in Relaxation"
+            },
+            {
+              "text": "Leave revitalized and rebalanced, ready to embrace life.",
+              "title": "Achieve Balance"
+            }
+          ],
+          "title": "Your Path to Bliss",
+          "type": "process"
+        },
+        {
+          "content": "We'd love to help you find your bliss. Contact us today to learn more about our offerings.",
+          "title": "Get in Touch",
+          "type": "contact-form"
+        }
+      ],
+      "layout": "landing",
+      "slug": "home",
+      "title": "Home"
+    }
+  ],
+  "slug": "cannabliss-canberra",
+  "style": {
+    "elev": "low",
+    "radius": 12,
+    "recipe": "editorial",
+    "shapes": "soft",
+    "variant": "b"
+  },
+  "tagline": "Elevate Your Mind and Body in Tranquility"
+}

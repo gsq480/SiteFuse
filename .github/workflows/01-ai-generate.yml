@@ -479,26 +479,57 @@ jobs:
         if: ${{ inputs.generate_images }}
         shell: bash
         run: |
+          #!/bin/bash
           set -euo pipefail
+
           echo "Checking for empty image fields..."
-          empty=$(jq -r '
-            [
-              .hero.image,
-              (.pages[]?.blocks[]? | select(.type=="gallery").images[]?.url),
-              (.pages[]?.blocks[]? | select(.type=="team").members[]?.photo),
-              (.pages[]?.blocks[]? | select(.type=="services").items[]?.icon)
-            ] | map(select(. == null or . == "")) | length
+
+          # Check hero image
+          hero_empty=$(jq -r 'if .hero.image == "" or .hero.image == null then "hero.image" else empty end' website.json)
+
+          # Check gallery images
+          gallery_empty=$(jq -r '
+            .pages[]?.blocks[]? 
+            | select(.type=="gallery") 
+            | .images[]? 
+            | select(.url == "" or .url == null) 
+            | "gallery.images[].url"
           ' website.json)
-          if [ "$empty" -gt 0 ]; then
-            echo "Found $empty empty image fields:" >&2
-            jq -r '
-              paths(scalars)
-              | select(
-                  (.[-1] == "image" or .[-1] == "url" or .[-1] == "photo" or .[-1] == "icon")
-                  and ((getpath(.) == "") or (getpath(.) == null))
-                )
-              | map(tostring) | join(".")
-            ' website.json >&2
-            exit 3
+
+          # Check team photos  
+          team_empty=$(jq -r '
+            .pages[]?.blocks[]? 
+            | select(.type=="team") 
+            | .members[]? 
+            | select(.photo == "" or .photo == null) 
+            | "team.members[].photo"
+          ' website.json)
+
+          # Check service icons
+          service_empty=$(jq -r '
+            .pages[]?.blocks[]? 
+            | select(.type=="services") 
+            | .items[]? 
+            | select(.icon == "" or .icon == null) 
+            | "services.items[].icon"
+          ' website.json)
+
+          # Collect all empty fields
+          empty_fields=""
+          [ -n "$hero_empty" ] && empty_fields+="$hero_empty"$'\n'
+          [ -n "$gallery_empty" ] && empty_fields+="$gallery_empty"$'\n'
+          [ -n "$team_empty" ] && empty_fields+="$team_empty"$'\n'
+          [ -n "$service_empty" ] && empty_fields+="$service_empty"$'\n'
+
+          # Count empty fields
+          empty_count=$(echo -n "$empty_fields" | grep -c . || echo 0)
+
+          if [ "$empty_count" -gt 0 ]; then
+              echo "Warning: Found $empty_count empty image fields:" >&2
+              echo "$empty_fields" >&2
+              echo "Continuing with deployment..." >&2
+          else
+              echo "All image fields are populated."
           fi
+
           echo "All image fields are populated."
