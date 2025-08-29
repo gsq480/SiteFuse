@@ -1,29 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#FFB300",
-      "bg": "#F1F8E9",
-      "primary": "#4CAF50",
-      "secondary": "#1B5E20",
-      "text": "#212121"
+      "accent": "#D7B49E",
+      "bg": "#F4ECE3",
+      "primary": "#855E42",
+      "secondary": "#A5AA69",
+      "text": "#403D39"
     },
     "fonts": {
-      "body": "Poppins",
-      "heading": "Fredoka One"
+      "body": "Lato",
+      "heading": "Josefin Sans"
     }
   },
   "hero": {
     "cta": {
-      "href": "#products",
-      "label": "Browse Our Products"
+      "href": "#classes",
+      "label": "Join a Class"
     },
-    "image": "",
+    "image": "Generating image: Welcome to Serene Earth Yoga Studio yoga professional website hero banner (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-gP7fXQ7iQIEpgYvfKVijW8Dh.png?st=2025-08-29T12%3A34%3A20Z&se=2025-08-29T14%3A34%3A20Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=70313862-61f1-446b-9bb2-fa32b037e024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T13%3A34%3A20Z&ske=2025-08-30T13%3A34%3A20Z&sks=b&skv=2024-08-04&sig=zm2u%2Br%2BPOQW%2BRWKQuuV20SWHViu0jIQtwuQv%2B1zQFRg%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-gP7fXQ7iQIEpgYvfKVijW8Dh.png?st=2025-08-29T12%3A34%3A20Z&se=2025-08-29T14%3A34%3A20Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=70313862-61f1-446b-9bb2-fa32b037e024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T13%3A34%3A20Z&ske=2025-08-30T13%3A34%3A20Z&sks=b&skv=2024-08-04&sig=zm2u%2Br%2BPOQW%2BRWKQuuV20SWHViu0jIQtwuQv%2B1zQFRg%3D",
     "overlay": 0.4,
-    "subtitle": "Discover diverse selections tailored to enhance your lifestyle.",
-    "title": "Canberra's Top Cannabis Store"
+    "subtitle": "Where Mindfulness Meets Modern Living",
+    "title": "Welcome to Serene Earth Yoga Studio"
   },
-  "industry": "retail",
-  "name": "CannaBliss Canberra",
+  "industry": "yoga",
+  "name": "Serene Earth Yoga Studio",
   "pages": [
     {
       "blocks": [
@@ -32,89 +32,75 @@
         },
         {
           "content": {
-            "columns": [
-              {
-                "icon": "",
-                "text": "Explore our extensive selection, from flowers to edibles.",
-                "title": "Wide Range"
-              },
-              {
-                "icon": "",
-                "text": "Rely on our knowledgeable staff for personalized advice.",
-                "title": "Expert Guidance"
-              },
-              {
-                "icon": "",
-                "text": "We prioritize eco-friendly practices in sourcing and packaging.",
-                "title": "Sustainable Approaches"
-              }
-            ],
-            "introduction": "Why Choose CannaBliss Canberra?"
+            "left": {
+              "text": "At Serene Earth Yoga Studio, we believe in the healing power of mindfulness and yoga. Our classes are designed to nurture growth, encourage balance, and instill serenity in your daily life.",
+              "title": "Our Philosophy"
+            },
+            "right": {
+              "alt": "Interior of a peaceful yoga studio with earth-toned decor",
+              "image": ""
+            }
           },
-          "type": "features"
+          "type": "two-col"
         },
         {
-          "categories": [
+          "schedules": [
             {
-              "category": "Flowers",
-              "intro": "Dive into our fragrant selection of top-quality flowers."
+              "description": "A dynamic sequence of movements with breath awareness.",
+              "name": "Vinyasa Flow",
+              "time": "Mondays & Wednesdays, 6 PM"
             },
             {
-              "category": "Edibles",
-              "intro": "Enjoy delicious edibles crafted with care and quality."
+              "description": "Gentle poses focused on relaxation and renewal.",
+              "name": "Restorative Yoga",
+              "time": "Fridays, 5 PM"
             },
             {
-              "category": "CBD Products",
-              "intro": "Experience the calming effects with our range of CBD products."
+              "description": "Guided meditations to enhance mindfulness and presence.",
+              "name": "Meditation Sessions",
+              "time": "Sundays, 9 AM"
             }
           ],
-          "title": "Premium Collections",
-          "type": "products"
-        },
-        {
-          "mission": "At CannaBliss Canberra, our mission is to enhance lives through high-quality, responsibly-sourced cannabis products.",
-          "type": "about"
+          "title": "Class Offerings",
+          "type": "classes"
         },
         {
           "items": [
-            "Special discounts for loyalty members",
-            "Educational workshops and events",
-            "Free consultations with purchase"
+            {
+              "text": "Increase your range of motion and relieve muscle tension.",
+              "title": "Enhanced Flexibility"
+            },
+            {
+              "text": "Learn techniques to manage stress and cultivate calm.",
+              "title": "Stress Reduction"
+            },
+            {
+              "text": "Boost your concentration and mental clarity.",
+              "title": "Better Focus"
+            }
           ],
-          "title": "Customer Benefits",
-          "type": "customer-benefits"
+          "type": "benefits"
         },
         {
           "quotes": [
             {
-              "name": "Emma V.",
-              "quote": "The selection is incredible and the staff are always helpful!"
+              "name": "Emily D.",
+              "text": "Practicing here has transformed my mental and physical well-being!"
             },
             {
-              "name": "Liam S.",
-              "quote": "My go-to place for the best edibles in Canberra!"
+              "name": "Michael T.",
+              "text": "A truly peaceful experience that rejuvenates the soul."
             },
             {
-              "name": "Sophia C.",
-              "quote": "I love the eco-friendly approach CannaBliss takes."
+              "name": "Chloe S.",
+              "text": "The instructors’ guidance has been invaluable on my yoga journey."
             }
           ],
-          "type": "reviews"
+          "title": "What Our Yogis Say",
+          "type": "testimonials"
         },
         {
-          "text": "Visit us: Mon-Sat: 9 AM - 8 PM, Sun: 10 AM - 6 PM",
-          "title": "Store Hours",
-          "type": "hours"
-        },
-        {
-          "cta_href": "#newsletter",
-          "cta_label": "Sign Up Now",
-          "details": "Subscribe for the latest product releases and member-only discounts.",
-          "offer": "Join our Tribe",
-          "type": "cta"
-        },
-        {
-          "description": "Have questions or feedback? We'd love to hear from you.",
+          "subtitle": "Ready to embark on your mindfulness journey? Contact us today!",
           "title": "Get in Touch",
           "type": "contact-form"
         }
@@ -124,13 +110,13 @@
       "title": "Home"
     }
   ],
-  "slug": "cannabliss-canberra",
+  "slug": "serene-earth-yoga",
   "style": {
-    "elev": "med",
+    "elev": "low",
     "radius": 12,
-    "recipe": "playful",
+    "recipe": "elegant",
     "shapes": "soft",
     "variant": "b"
   },
-  "tagline": "Elevate Your Experience - Premium Cannabis for All"
+  "tagline": "Cultivate Inner Peace, One Breath at a Time"
 }
