@@ -1,11 +1,11 @@
 {
   "brand": {
     "colors": {
-      "accent": "#ffe8d6",
-      "bg": "#f4f1de",
-      "primary": "#6b705c",
-      "secondary": "#a5a58d",
-      "text": "#6b705c"
+      "accent": "#445352",
+      "bg": "#F9F5ED",
+      "primary": "#8D6845",
+      "secondary": "#C2A878",
+      "text": "#4A3C31"
     },
     "fonts": {
       "body": "Lato",
@@ -14,16 +14,16 @@
   },
   "hero": {
     "cta": {
-      "href": "#contact",
-      "label": "Book Your Relaxation"
+      "href": "#classes",
+      "label": "Join a Class"
     },
-    "image": "Generating image: Welcome to Canberra's Premier Sauna Refuge wellness professional website hero banner (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-6L4jECt0ncXCW6ngJFhIq96Q.png?st=2025-08-30T12%3A48%3A21Z&se=2025-08-30T14%3A48%3A21Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T13%3A48%3A21Z&ske=2025-08-31T13%3A48%3A21Z&sks=b&skv=2024-08-04&sig=SXyHHXpvKz30Ez2qLyxBdS1oN9BseY2CBcY2/uhBLoY%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-6L4jECt0ncXCW6ngJFhIq96Q.png?st=2025-08-30T12%3A48%3A21Z&se=2025-08-30T14%3A48%3A21Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T13%3A48%3A21Z&ske=2025-08-31T13%3A48%3A21Z&sks=b&skv=2024-08-04&sig=SXyHHXpvKz30Ez2qLyxBdS1oN9BseY2CBcY2/uhBLoY%3D",
-    "overlay": 0.3,
-    "subtitle": "Indulge your senses and rejuvenate your spirit in our state-of-the-art facilities.",
-    "title": "Welcome to Canberra's Premier Sauna Refuge"
+    "image": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-rZ7eg9CEtmqyZxmsL3lEpzDg.png?st=2025-08-30T13%3A10%3A09Z&se=2025-08-30T15%3A10%3A09Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T14%3A10%3A09Z&ske=2025-08-31T14%3A10%3A09Z&sks=b&skv=2024-08-04&sig=/AKBU77kOglbnLQ8zknsTwKtrk/S1V%2BY2m6wX8Pzklw%3D",
+    "overlay": 0.4,
+    "subtitle": "Embrace tranquility with mindful yoga practices designed for all levels",
+    "title": "Transform Your Mind and Body"
   },
   "industry": "wellness",
-  "name": "Canberra Soothing Sauna",
+  "name": "Zen Flow Yoga Studio",
   "pages": [
     {
       "blocks": [
@@ -31,130 +31,81 @@
           "type": "hero"
         },
         {
-          "content": "Nestled in the heart of Canberra, Canberra Soothing Sauna offers a serene escape from the daily grind. Our carefully designed sauna treatments are tailor-made to provide ultimate relaxation and rejuvenation, leaving you feeling refreshed and invigorated.",
-          "title": "About Us",
-          "type": "about"
-        },
-        {
-          "items": [
-            {
-              "icon": "Generating image: Traditional Finnish Sauna flat vector icon simple minimalist (attempt 1)\nAttempt 1 failed, retrying...\nGenerating image: Traditional Finnish Sauna flat vector icon simple minimalist (attempt 2)\nAttempt 2 failed, retrying...\nGenerating image: Traditional Finnish Sauna flat vector icon simple minimalist (attempt 3)\nAttempt 3 failed, retrying...\nFailed to generate image after 3 attempts",
-              "price": null,
-              "text": "Feel the deep cleansing power of our authentic Finnish sauna, providing the perfect blend of heat and humidity to detoxify your body.",
-              "title": "Traditional Finnish Sauna"
-            },
-            {
-              "icon": "Generating image: Infrared Sauna Therapy flat vector icon simple minimalist (attempt 1)\nAttempt 1 failed, retrying...\nGenerating image: Infrared Sauna Therapy flat vector icon simple minimalist (attempt 2)\nAttempt 2 failed, retrying...\nGenerating image: Infrared Sauna Therapy flat vector icon simple minimalist (attempt 3)\nAttempt 3 failed, retrying...\nFailed to generate image after 3 attempts",
-              "price": null,
-              "text": "Experience effective healing and pain relief with our cutting-edge infrared sauna, embracing innovative technology for enhanced comfort.",
-              "title": "Infrared Sauna Therapy"
-            },
-            {
-              "icon": "Generating image: Aromatic Steam Room flat vector icon simple minimalist (attempt 1)\nAttempt 1 failed, retrying...\nGenerating image: Aromatic Steam Room flat vector icon simple minimalist (attempt 2)\nAttempt 2 failed, retrying...\nGenerating image: Aromatic Steam Room flat vector icon simple minimalist (attempt 3)\nAttempt 3 failed, retrying...\nFailed to generate image after 3 attempts",
-              "price": null,
-              "text": "Elevate your senses with therapeutic steam blended with essential oils, promoting relaxation and skin revitalization.",
-              "title": "Aromatic Steam Room"
-            }
-          ],
-          "title": "Our Offerings",
-          "type": "services"
-        },
-        {
-          "items": [
-            {
-              "text": "Experience profound relaxation as you leave your stresses behind and enter a state of pure tranquility.",
-              "title": "Stress Reduction"
-            },
-            {
-              "text": "Promote a natural detox process and cleanse your body effortlessly with our soothing therapies.",
-              "title": "Detoxification"
-            },
-            {
-              "text": "Our sauna sessions enhance blood circulation, promoting cellular health and healing in the body.",
-              "title": "Improved Circulation"
-            }
-          ],
-          "title": "Benefits of Spa Therapy",
+          "content": {
+            "items": [
+              {
+                "text": "Guided mindfulness sessions for stress relief"
+              },
+              {
+                "text": "Cozy and inclusive studio environment"
+              },
+              {
+                "text": "Experienced instructors with personalized guidance"
+              },
+              {
+                "text": "Community events and workshops for holistic growth"
+              }
+            ],
+            "title": "Why Choose Us?"
+          },
           "type": "benefits"
         },
         {
-          "images": [
-            {
-              "alt": "Beautiful interior of a modern sauna with soft, warm lighting",
-              "url": "Generating image: Beautiful interior of a modern sauna with soft, warm lighting (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-ruVZTG0FcSDViR7PVaPcl1Nj.png?st=2025-08-30T12%3A48%3A58Z&se=2025-08-30T14%3A48%3A58Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T07%3A11%3A14Z&ske=2025-08-31T07%3A11%3A14Z&sks=b&skv=2024-08-04&sig=W5Ae4uVeaad76yHoFAcvgPqx/BS9UhX0vCmgSBwnvYw%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-ruVZTG0FcSDViR7PVaPcl1Nj.png?st=2025-08-30T12%3A48%3A58Z&se=2025-08-30T14%3A48%3A58Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T07%3A11%3A14Z&ske=2025-08-31T07%3A11%3A14Z&sks=b&skv=2024-08-04&sig=W5Ae4uVeaad76yHoFAcvgPqx/BS9UhX0vCmgSBwnvYw%3D"
-            },
-            {
-              "alt": "Lavish steam room with white marble design and aromatic vapors filling the air",
-              "url": "Generating image: Lavish steam room with white marble design and aromatic vapors filling the air (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-JHN3f2TuKgqLehhH4xLirGqe.png?st=2025-08-30T12%3A49%3A12Z&se=2025-08-30T14%3A49%3A12Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T07%3A58%3A37Z&ske=2025-08-31T07%3A58%3A37Z&sks=b&skv=2024-08-04&sig=FS0ADRjI28GlJ4Pi1aKHm4h/dnkO4xRr/R%2B4k3W9H/4%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-JHN3f2TuKgqLehhH4xLirGqe.png?st=2025-08-30T12%3A49%3A12Z&se=2025-08-30T14%3A49%3A12Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T07%3A58%3A37Z&ske=2025-08-31T07%3A58%3A37Z&sks=b&skv=2024-08-04&sig=FS0ADRjI28GlJ4Pi1aKHm4h/dnkO4xRr/R%2B4k3W9H/4%3D"
-            },
-            {
-              "alt": "Infrared sauna with comfortable seating and gentle red lights",
-              "url": "Generating image: Infrared sauna with comfortable seating and gentle red lights (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-zJzZm5ttoupFr8WMVauADxvi.png?st=2025-08-30T12%3A49%3A26Z&se=2025-08-30T14%3A49%3A26Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=52f8f7b3-ca8d-4b21-9807-8b9df114d84c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T07%3A11%3A36Z&ske=2025-08-31T07%3A11%3A36Z&sks=b&skv=2024-08-04&sig=hRVNTUNL7ZEx9478W4Rfg6u367rZZV6VLA3dC6oA5Yw%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-zJzZm5ttoupFr8WMVauADxvi.png?st=2025-08-30T12%3A49%3A26Z&se=2025-08-30T14%3A49%3A26Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=52f8f7b3-ca8d-4b21-9807-8b9df114d84c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T07%3A11%3A36Z&ske=2025-08-31T07%3A11%3A36Z&sks=b&skv=2024-08-04&sig=hRVNTUNL7ZEx9478W4Rfg6u367rZZV6VLA3dC6oA5Yw%3D"
-            },
-            {
-              "alt": "Relaxed individuals meditating inside a spacious Finnish sauna",
-              "url": "Generating image: Relaxed individuals meditating inside a spacious Finnish sauna (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-eW0fv52STLqEYzsBHfi9qmbt.png?st=2025-08-30T12%3A49%3A44Z&se=2025-08-30T14%3A49%3A44Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=1726b4ce-fee1-450b-8b92-1731ad8745f6&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T18%3A35%3A29Z&ske=2025-08-30T18%3A35%3A29Z&sks=b&skv=2024-08-04&sig=NzZudHh/qbc4V000/jP4bx9sOPqi9Okd%2BDfxkvv5TRY%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-eW0fv52STLqEYzsBHfi9qmbt.png?st=2025-08-30T12%3A49%3A44Z&se=2025-08-30T14%3A49%3A44Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=1726b4ce-fee1-450b-8b92-1731ad8745f6&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T18%3A35%3A29Z&ske=2025-08-30T18%3A35%3A29Z&sks=b&skv=2024-08-04&sig=NzZudHh/qbc4V000/jP4bx9sOPqi9Okd%2BDfxkvv5TRY%3D"
-            },
-            {
-              "alt": "Essential oils displayed artfully in a luxurious spa setting",
-              "url": "Generating image: Essential oils displayed artfully in a luxurious spa setting (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-OikNLr7TPRLjGZf4nMhTkGDP.png?st=2025-08-30T12%3A50%3A00Z&se=2025-08-30T14%3A50%3A00Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T13%3A50%3A00Z&ske=2025-08-31T13%3A50%3A00Z&sks=b&skv=2024-08-04&sig=kXJSIAsU2UdBfwooVVUvZESONclU%2Brd34Wipj%2BIXoK8%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-OikNLr7TPRLjGZf4nMhTkGDP.png?st=2025-08-30T12%3A50%3A00Z&se=2025-08-30T14%3A50%3A00Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T13%3A50%3A00Z&ske=2025-08-31T13%3A50%3A00Z&sks=b&skv=2024-08-04&sig=kXJSIAsU2UdBfwooVVUvZESONclU%2Brd34Wipj%2BIXoK8%3D"
-            },
-            {
-              "alt": "Refreshing herbal teas and water served in an inviting lounge area",
-              "url": "Generating image: Refreshing herbal teas and water served in an inviting lounge area (attempt 1)\nGenerated: https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-KMjGx030uZHaXHXwzwWj7DzD.png?st=2025-08-30T12%3A50%3A15Z&se=2025-08-30T14%3A50%3A15Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=fbf4b681-538a-442a-8e58-f3b99f10cd54&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T13%3A50%3A15Z&ske=2025-08-31T13%3A50%3A15Z&sks=b&skv=2024-08-04&sig=zl7LDHg2r0wpiQzQ1MiX9jExdzm4j8oMPPPNKajkbZU%3D\nhttps://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-KMjGx030uZHaXHXwzwWj7DzD.png?st=2025-08-30T12%3A50%3A15Z&se=2025-08-30T14%3A50%3A15Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=fbf4b681-538a-442a-8e58-f3b99f10cd54&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T13%3A50%3A15Z&ske=2025-08-31T13%3A50%3A15Z&sks=b&skv=2024-08-04&sig=zl7LDHg2r0wpiQzQ1MiX9jExdzm4j8oMPPPNKajkbZU%3D"
-            }
-          ],
-          "title": "See Our Sanctuary",
-          "type": "gallery"
+          "content": {
+            "items": [
+              {
+                "text": "Start your day with vitality",
+                "title": "Morning Flow"
+              },
+              {
+                "text": "Deep relaxation techniques for all",
+                "title": "Restorative Yoga"
+              },
+              {
+                "text": "Combine gentle yoga with meditative practices",
+                "title": "Yin and Meditation"
+              },
+              {
+                "text": "Midday retreat for relaxation",
+                "title": "Lunch Break Rejuvenation"
+              }
+            ],
+            "subtitle": "Explore classes designed for peace and presence",
+            "title": "Our Classes"
+          },
+          "type": "classes"
         },
         {
-          "items": [
-            {
-              "author": "Jessica H.",
-              "quote": "The best relaxation experience in Canberra. My sessions have become a ritual!"
-            },
-            {
-              "author": "Richard M.",
-              "quote": "A hidden gem, providing an unparalleled level of comfort and care. Highly recommend!"
-            },
-            {
-              "author": "Emily T.",
-              "quote": "The stress just melts away. The staff and environment are exceptional!"
-            }
-          ],
-          "title": "What Our Guests Say",
-          "type": "testimonials"
+          "content": {
+            "name": "Sophia Larson",
+            "quote": "Finding Zen Flow Yoga transformed my life. The instructors are warm and welcoming, and the classes allow me to leave my stress at the door."
+          },
+          "type": "testimonial"
         },
         {
-          "steps": [
-            {
-              "text": "Contact us online or via phone to schedule your personalized sauna session.",
-              "title": "Make a Booking"
-            },
-            {
-              "text": "Arrive a few minutes early to get acquainted with our amenities.",
-              "title": "Arrival and Preparation"
-            },
-            {
-              "text": "Enter a world of tranquility with our taxiway treatments designed exclusively for you.",
-              "title": "Relax and Enjoy"
-            },
-            {
-              "text": "Conclude with a cup of herbal tea while you bask in the afterglow of relaxation.",
-              "title": "Post-Sauna Relaxation"
-            }
-          ],
-          "type": "process"
+          "content": {
+            "text": "Founded on the principles of mindfulness and community, Zen Flow Yoga Studio offers a safe haven to all looking to deepen their yoga practice. Nestled in a serene location, our earth-toned interior provides a peaceful retreat from the bustling world. At Zen Flow, we believe yoga is a personal journey towards inner peace, empowerment, and community.",
+            "title": "About Zen Flow"
+          },
+          "type": "about"
         },
         {
-          "text": "Ready to renew and revitalize? Reach out to us with your inquiries or appointment requests, and our friendly team will assist you in every way possible.",
-          "title": "Get in Touch",
+          "content": {
+            "cta": {
+              "href": "#contact",
+              "label": "Book Now"
+            },
+            "text": "Experience the calming effects of yoga with your first class on us. Call or book online to reserve your spot today.",
+            "title": "Sign Up for a Free Intro Class"
+          },
+          "type": "cta"
+        },
+        {
+          "content": {
+            "subtitle": "We're here to answer all your questions and help you get started.",
+            "title": "Get In Touch"
+          },
           "type": "contact-form"
-        },
-        {
-          "text": "Conveniently located in Canberra's central district, the Canberra Soothing Sauna is accessible and waiting for your arrival.",
-          "title": "Our Location",
-          "type": "map"
         }
       ],
       "layout": "landing",
@@ -162,7 +113,7 @@
       "title": "Home"
     }
   ],
-  "slug": "canberra-soothing-sauna",
+  "slug": "zen-flow-yoga-studio",
   "style": {
     "elev": "low",
     "radius": 16,
@@ -170,5 +121,5 @@
     "shapes": "soft",
     "variant": "b"
   },
-  "tagline": "Find Your Inner Peace with Our Revitalizing Sauna Experience"
+  "tagline": "Cultivate Peace and Presence"
 }
