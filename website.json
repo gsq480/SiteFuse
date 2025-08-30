@@ -1,11 +1,11 @@
 {
   "brand": {
     "colors": {
-      "accent": "#445352",
-      "bg": "#F9F5ED",
-      "primary": "#8D6845",
-      "secondary": "#C2A878",
-      "text": "#4A3C31"
+      "accent": "#F2C572",
+      "bg": "#F7F6F0",
+      "primary": "#7A6D5D",
+      "secondary": "#A6A58B",
+      "text": "#4C433C"
     },
     "fonts": {
       "body": "Lato",
@@ -14,16 +14,16 @@
   },
   "hero": {
     "cta": {
-      "href": "#classes",
-      "label": "Join a Class"
+      "href": "#gallery",
+      "label": "Explore Our Collection"
     },
-    "image": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-rZ7eg9CEtmqyZxmsL3lEpzDg.png?st=2025-08-30T13%3A10%3A09Z&se=2025-08-30T15%3A10%3A09Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T14%3A10%3A09Z&ske=2025-08-31T14%3A10%3A09Z&sks=b&skv=2024-08-04&sig=/AKBU77kOglbnLQ8zknsTwKtrk/S1V%2BY2m6wX8Pzklw%3D",
+    "image": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-2oQWMtyZIkidcOBUKtgqpIqW.png?st=2025-08-30T18%3A21%3A17Z&se=2025-08-30T20%3A21%3A17Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T22%3A02%3A30Z&ske=2025-08-30T22%3A02%3A30Z&sks=b&skv=2024-08-04&sig=WHvaj/XbTu3fdTDX8WHoyUjyaIArrkkgiy5iLmbmZiQ%3D",
     "overlay": 0.4,
-    "subtitle": "Embrace tranquility with mindful yoga practices designed for all levels",
-    "title": "Transform Your Mind and Body"
+    "subtitle": "Experience the warmth and comfort of our high-quality saunas, designed to elevate your relaxation",
+    "title": "Escape & Rejuvenate with Our Premium Saunas"
   },
-  "industry": "wellness",
-  "name": "Zen Flow Yoga Studio",
+  "industry": "sauna-retailer",
+  "name": "Serene Saunas",
   "pages": [
     {
       "blocks": [
@@ -31,80 +31,103 @@
           "type": "hero"
         },
         {
-          "content": {
-            "items": [
-              {
-                "text": "Guided mindfulness sessions for stress relief"
-              },
-              {
-                "text": "Cozy and inclusive studio environment"
-              },
-              {
-                "text": "Experienced instructors with personalized guidance"
-              },
-              {
-                "text": "Community events and workshops for holistic growth"
-              }
-            ],
-            "title": "Why Choose Us?"
-          },
-          "type": "benefits"
+          "images": [
+            {
+              "alt": "Interior view of a modern infrared sauna",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-LZGyaSiilrmO6aaVwKn2LlzE.png?st=2025-08-30T18%3A21%3A29Z&se=2025-08-30T20%3A21%3A29Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=fbf4b681-538a-442a-8e58-f3b99f10cd54&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T19%3A21%3A29Z&ske=2025-08-31T19%3A21%3A29Z&sks=b&skv=2024-08-04&sig=RgYv1AdyHySl/U088CssLLj6K1F5VHpEsXxn1oxQJn4%3D"
+            },
+            {
+              "alt": "Outdoor sauna with a wooden finish in garden setting",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-de3jqRQgITxjQCyQAFBXVJox.png?st=2025-08-30T18%3A21%3A42Z&se=2025-08-30T20%3A21%3A42Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T19%3A21%3A42Z&ske=2025-08-31T19%3A21%3A42Z&sks=b&skv=2024-08-04&sig=U/XbYSJITaDrtbPgQWbnOew6osbALmVluFDdZ2hx1H4%3D"
+            },
+            {
+              "alt": "Traditional Finnish sauna made from cedar wood",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-4g4jInMEugfRCCyBb0xfzDLp.png?st=2025-08-30T18%3A21%3A58Z&se=2025-08-30T20%3A21%3A58Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T01%3A22%3A05Z&ske=2025-08-31T01%3A22%3A05Z&sks=b&skv=2024-08-04&sig=O75%2BPSerc0EkOtOIa7bXkcMvIs6oZ5QSWCjXHeVankA%3D"
+            },
+            {
+              "alt": "Luxury sauna interior with LED lighting",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-DFFRDz77kT1qkAb9kSMoi8G6.png?st=2025-08-30T18%3A22%3A12Z&se=2025-08-30T20%3A22%3A12Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=1726b4ce-fee1-450b-8b92-1731ad8745f6&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T08%3A59%3A58Z&ske=2025-08-31T08%3A59%3A58Z&sks=b&skv=2024-08-04&sig=IlCAR%2B79H95KcM2LpK6BmcSx5I4k4sfXWSn/Gb%2BDwRE%3D"
+            },
+            {
+              "alt": "Compact home sauna model with adjustable temperature settings",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-6a0uh8OOwG8ko26JyEEWllTx.png?st=2025-08-30T18%3A22%3A25Z&se=2025-08-30T20%3A22%3A25Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T19%3A22%3A25Z&ske=2025-08-31T19%3A22%3A25Z&sks=b&skv=2024-08-04&sig=D6GSMjzYeZ1tw/p/HbRTQAlt6DH2%2BzyPh58okmvIZUs%3D"
+            },
+            {
+              "alt": "Sauna with a glass door allowing view of outside forest",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-h87dNoefmWIIJDj3pRw8oyjC.png?st=2025-08-30T18%3A22%3A37Z&se=2025-08-30T20%3A22%3A37Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=fbf4b681-538a-442a-8e58-f3b99f10cd54&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T19%3A22%3A37Z&ske=2025-08-31T19%3A22%3A37Z&sks=b&skv=2024-08-04&sig=tvwJwHd%2B4zh9T1QZzIujfcRdZ%2B5N4DGNJ5vz9wqTMoc%3D"
+            }
+          ],
+          "title": "Gallery",
+          "type": "gallery"
         },
         {
-          "content": {
-            "items": [
-              {
-                "text": "Start your day with vitality",
-                "title": "Morning Flow"
-              },
-              {
-                "text": "Deep relaxation techniques for all",
-                "title": "Restorative Yoga"
-              },
-              {
-                "text": "Combine gentle yoga with meditative practices",
-                "title": "Yin and Meditation"
-              },
-              {
-                "text": "Midday retreat for relaxation",
-                "title": "Lunch Break Rejuvenation"
-              }
-            ],
-            "subtitle": "Explore classes designed for peace and presence",
-            "title": "Our Classes"
-          },
-          "type": "classes"
+          "columns": 3,
+          "items": [
+            {
+              "icon": "",
+              "text": "Utilize the latest technology for deeper heat penetration.",
+              "title": "Infrared Saunas"
+            },
+            {
+              "icon": "",
+              "text": "Experience the age-old methods of relaxation.",
+              "title": "Traditional Saunas"
+            },
+            {
+              "icon": "",
+              "text": "Perfect for enjoying nature while you unwind.",
+              "title": "Outdoor Models"
+            },
+            {
+              "icon": "",
+              "text": "Tailored setups to fit your space and style.",
+              "title": "Custom Designs"
+            }
+          ],
+          "type": "features"
         },
         {
-          "content": {
-            "name": "Sophia Larson",
-            "quote": "Finding Zen Flow Yoga transformed my life. The instructors are warm and welcoming, and the classes allow me to leave my stress at the door."
-          },
-          "type": "testimonial"
-        },
-        {
-          "content": {
-            "text": "Founded on the principles of mindfulness and community, Zen Flow Yoga Studio offers a safe haven to all looking to deepen their yoga practice. Nestled in a serene location, our earth-toned interior provides a peaceful retreat from the bustling world. At Zen Flow, we believe yoga is a personal journey towards inner peace, empowerment, and community.",
-            "title": "About Zen Flow"
-          },
+          "content": "At Serene Saunas, we are dedicated to providing you with the highest quality saunas that deliver comfort and relaxation. Our models are crafted with the finest materials and cutting-edge technology to ensure you find peace and relief in every session.",
+          "title": "About Us",
           "type": "about"
         },
         {
-          "content": {
-            "cta": {
-              "href": "#contact",
-              "label": "Book Now"
+          "items": [
+            {
+              "text": "Aid in the removal of toxins from the body through sweating.",
+              "title": "Detoxification"
             },
-            "text": "Experience the calming effects of yoga with your first class on us. Call or book online to reserve your spot today.",
-            "title": "Sign Up for a Free Intro Class"
+            {
+              "text": "Enhance blood flow and heart health with regular sauna use.",
+              "title": "Improved Circulation"
+            },
+            {
+              "text": "Relax your muscles and mind in the warmth.",
+              "title": "Stress Relief"
+            },
+            {
+              "text": "Achieve glowing skin by clearing out impurities.",
+              "title": "Skin Health"
+            }
+          ],
+          "title": "Health Benefits",
+          "type": "benefits"
+        },
+        {
+          "author": "Ellie Thompson",
+          "quote": "I never knew how much a difference a sauna could make in my wellness routine until I purchased from Serene Saunas. Absolutely transformative!",
+          "type": "testimonial"
+        },
+        {
+          "content": "Discover the perfect sauna experience for your space and lifestyle. Browse our collection and start your journey to relaxation today.",
+          "cta": {
+            "href": "#products",
+            "label": "Shop Now"
           },
+          "title": "Get Inspired",
           "type": "cta"
         },
         {
-          "content": {
-            "subtitle": "We're here to answer all your questions and help you get started.",
-            "title": "Get In Touch"
-          },
           "type": "contact-form"
         }
       ],
@@ -113,13 +136,13 @@
       "title": "Home"
     }
   ],
-  "slug": "zen-flow-yoga-studio",
+  "slug": "serene-saunas",
   "style": {
-    "elev": "low",
-    "radius": 16,
+    "elev": "med",
+    "radius": 12,
     "recipe": "elegant",
     "shapes": "soft",
     "variant": "b"
   },
-  "tagline": "Cultivate Peace and Presence"
+  "tagline": "Find Your Escape within Luxurious Heat"
 }
