@@ -68,7 +68,7 @@ jobs:
           echo "OK: APP_PATH is $APP_PATH"
           EOF
 
-      - name: Deploy child theme + website.json
+      - name: Deploy child theme and website.json
         env:
           SLUG: ${{ inputs.slug }}
         run: |
@@ -81,343 +81,36 @@ jobs:
             rsync -avz -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
               "theme-files/website.json" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
           fi
-      - name: Upload blocks-config.json to server
-        run: |
-          set -euo pipefail
-          ssh -o StrictHostKeyChecking=no -i "$CLOUDWAYS_KEY" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "mkdir -p '$APP_PATH/wp-content/mu-plugins/sitefuse'"
-          scp -o StrictHostKeyChecking=no -i "$CLOUDWAYS_KEY" blocks-config.json \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/wp-content/mu-plugins/sitefuse/blocks-config.json"
 
-      - name: Install/Update enhanced mu-plugin (supports all block types)
+      - name: Deploy mu-plugins from repo
         run: |
           set -e
-          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
-            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "APP_PATH='${APP_PATH}' bash -s" <<'EOF'
-          set -euo pipefail
-          : "${APP_PATH:?APP_PATH is not set on remote}"
-          MU_DIR="$APP_PATH/wp-content/mu-plugins"
-          mkdir -p "$MU_DIR"
-          cat > "$MU_DIR/sitefuse-home.php" <<'PHP'
-          <?php
-          /*
-           * Plugin Name: SiteFuse Enhanced Home Renderer
-           * Description: Shortcode [sitefuse_home] renders dynamic layouts from website.json
-           * Version: 2.0.0
-           */
-          add_shortcode('sitefuse_home', function () {
-              $p = ABSPATH . 'website.json';
-              $cfg = is_readable($p) ? json_decode(file_get_contents($p), true) ?: [] : [];
+          # Ensure remote folder exists
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
+            "mkdir -p '$APP_PATH/wp-content/mu-plugins/sitefuse'"
+          # Sync your repo mu-plugin folder (edit path if you placed it elsewhere)
+          if [ -d "wp-content/mu-plugins/sitefuse" ]; then
+            rsync -avz --delete -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
+              wp-content/mu-plugins/sitefuse/ \
+              "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/wp-content/mu-plugins/sitefuse/"
+          else
+            echo "Warning: wp-content/mu-plugins/sitefuse not found in repo, skipping sync"
+          fi
 
-              // Back-compat shims
-              if (!isset($cfg['hero']) && isset($cfg['heroSection'])) {
-                  $cfg['hero'] = [
-                      'title'    => get_bloginfo('name'),
-                      'subtitle' => get_bloginfo('description'),
-                      'cta'      => ['label' => 'Get Started', 'href' => '#contact'],
-                      'image'    => $cfg['heroSection']['heroImage'] ?? '',
-                      'overlay'  => 0.35,
-                  ];
-              }
-              if (!isset($cfg['pages']) && isset($cfg['customSections'])) {
-                  $blocks = [];
-                  foreach ($cfg['customSections'] as $s) {
-                      $blocks[] = ['type' => 'html', 'html' => $s['html'] ?? ''];
-                  }
-                  $cfg['pages'] = [[ 'slug'=>'home','title'=>'Home','layout'=>'landing','blocks'=>$blocks ]];
-              }
+      - name: Upload blocks-config.json to server
+        run: |
+          set -e
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa_cloudways \
+            blocks-config.json \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/wp-content/mu-plugins/sitefuse/blocks-config.json"
 
-              $esc = fn($s) => esc_html($s ?? '');
-              $img = function ($url, $alt = '') {
-                  if (!$url) return '';
-                  return '<img src="'.esc_url($url).'" alt="'.esc_attr($alt).'" class="w-full h-full object-cover" />';
-              };
-
-              // Pick home page
-              $home = ['blocks' => []];
-              if (!empty($cfg['pages']) && is_array($cfg['pages'])) {
-                  foreach ($cfg['pages'] as $page) {
-                      if (($page['slug'] ?? '') === 'home') { $home = $page; break; }
-                  }
-                  if (empty($home['blocks'])) { $home = $cfg['pages'][0]; }
-              }
-
-              ob_start();
-
-              // Enhanced block renderers
-              $render = [
-                  'hero' => function($b) use ($cfg, $esc, $img) {
-                      $hero = $cfg['hero'] ?? [];
-                      $overlay = isset($hero['overlay']) ? floatval($hero['overlay']) : 0.35;
-                      ?>
-                      <section class="hero-section relative min-h-screen flex items-center">
-                        <div class="absolute inset-0">
-                          <?php echo $img($hero['image'] ?? '', get_bloginfo('name')); ?>
-                          <div class="absolute inset-0" style="background:rgba(0,0,0,<?php echo esc_attr($overlay); ?>)"></div>
-                        </div>
-                        <div class="relative z-10 container text-center text-white py-24">
-                          <h1 class="text-6xl font-bold mb-6"><?php echo $esc($hero['title'] ?? get_bloginfo('name')); ?></h1>
-                          <p class="text-xl mb-10 opacity-90 max-w-3xl mx-auto"><?php echo $esc($hero['subtitle'] ?? get_bloginfo('description')); ?></p>
-                          <?php if (!empty($hero['cta']['label'])): ?>
-                            <a class="btn btn-primary text-lg px-8 py-4" href="<?php echo esc_url($hero['cta']['href'] ?? '#contact'); ?>">
-                              <?php echo $esc($hero['cta']['label']); ?>
-                            </a>
-                          <?php endif; ?>
-                        </div>
-                      </section>
-                      <?php
-                  },
-
-                  'features' => function($b) use ($esc) {
-                      $items = $b['items'] ?? [];
-                      $cols  = max(2, min(4, intval($b['columns'] ?? 3)));
-                      ?>
-                      <section class="py-20 bg-white">
-                        <div class="container">
-                          <?php if (!empty($b['title'])): ?>
-                            <h2 class="section-title text-center mb-16"><?php echo $esc($b['title']); ?></h2>
-                          <?php endif; ?>
-                          <div class="grid gap-8" style="grid-template-columns:repeat(<?php echo $cols; ?>,minmax(0,1fr))">
-                            <?php foreach ($items as $item): ?>
-                              <div class="text-center p-6">
-                                <?php if (!empty($item['icon'])): ?>
-                                  <div class="mb-4 text-4xl"><?php echo $esc($item['icon']); ?></div>
-                                <?php endif; ?>
-                                <h3 class="text-xl font-bold mb-4"><?php echo $esc($item['title'] ?? 'Feature'); ?></h3>
-                                <p class="text-gray-600 leading-relaxed"><?php echo $esc($item['text'] ?? ''); ?></p>
-                              </div>
-                            <?php endforeach; ?>
-                          </div>
-                        </div>
-                      </section>
-                      <?php
-                  },
-
-                  'services' => function($b) use ($esc) {
-                      $items = $b['items'] ?? [];
-                      ?>
-                      <section class="py-20 bg-gray-50">
-                        <div class="container">
-                          <?php if (!empty($b['title'])): ?>
-                            <h2 class="section-title text-center mb-16"><?php echo $esc($b['title']); ?></h2>
-                          <?php endif; ?>
-                          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                            <?php foreach ($items as $item): ?>
-                              <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                                <h3 class="text-xl font-bold mb-4"><?php echo $esc($item['title'] ?? 'Service'); ?></h3>
-                                <p class="text-gray-600 mb-6"><?php echo $esc($item['text'] ?? ''); ?></p>
-                                <?php if (!empty($item['price'])): ?>
-                                  <div class="text-2xl font-bold text-primary"><?php echo $esc($item['price']); ?></div>
-                                <?php endif; ?>
-                              </div>
-                            <?php endforeach; ?>
-                          </div>
-                        </div>
-                      </section>
-                      <?php
-                  },
-
-                  'testimonial' => function($b) use ($esc) {
-                      ?>
-                      <section class="py-20 bg-primary text-white">
-                        <div class="container text-center max-w-4xl mx-auto">
-                          <blockquote class="text-3xl italic mb-8">"<?php echo $esc($b['quote'] ?? ''); ?>"</blockquote>
-                          <div class="text-lg opacity-90">— <?php echo $esc($b['author'] ?? 'Happy Client'); ?></div>
-                        </div>
-                      </section>
-                      <?php
-                  },
-
-                  'testimonials' => function($b) use ($esc) {
-                      $items = $b['items'] ?? [];
-                      ?>
-                      <section class="py-20">
-                        <div class="container">
-                          <?php if (!empty($b['title'])): ?>
-                            <h2 class="section-title text-center mb-16"><?php echo $esc($b['title']); ?></h2>
-                          <?php endif; ?>
-                          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                            <?php foreach ($items as $item): ?>
-                              <div class="bg-white p-6 rounded-xl shadow">
-                                <div class="text-yellow-400 mb-4">★★★★★</div>
-                                <p class="mb-4 italic">"<?php echo $esc($item['quote'] ?? ''); ?>"</p>
-                                <div class="font-semibold"><?php echo $esc($item['author'] ?? 'Customer'); ?></div>
-                              </div>
-                            <?php endforeach; ?>
-                          </div>
-                        </div>
-                      </section>
-                      <?php
-                  },
-
-                  'cta' => function($b) use ($esc) {
-                      ?>
-                      <section class="py-20 bg-primary text-white text-center">
-                        <div class="container max-w-3xl mx-auto">
-                          <?php if (!empty($b['title'])): ?>
-                            <h2 class="text-4xl font-bold mb-6"><?php echo $esc($b['title']); ?></h2>
-                          <?php endif; ?>
-                          <p class="text-xl mb-8 opacity-90"><?php echo $esc($b['text'] ?? ''); ?></p>
-                          <?php $btn = $b['button'] ?? []; if (!empty($btn['label'])): ?>
-                            <a class="btn btn-secondary text-lg px-8 py-4" href="<?php echo esc_url($btn['href'] ?? '#'); ?>">
-                              <?php echo $esc($btn['label']); ?>
-                            </a>
-                          <?php endif; ?>
-                        </div>
-                      </section>
-                      <?php
-                  },
-
-                  'about' => function($b) use ($esc) {
-                      ?>
-                      <section class="py-20">
-                        <div class="container max-w-4xl mx-auto">
-                          <?php if (!empty($b['title'])): ?>
-                            <h2 class="section-title text-center mb-16"><?php echo $esc($b['title']); ?></h2>
-                          <?php endif; ?>
-                          <div class="prose prose-lg max-w-none">
-                            <?php echo wp_kses_post($b['content'] ?? $b['text'] ?? ''); ?>
-                          </div>
-                        </div>
-                      </section>
-                      <?php
-                  },
-
-                  'contact-form' => function($b) use ($esc) {
-                      ?>
-                      <section class="py-20" id="contact">
-                        <div class="container max-w-3xl mx-auto">
-                          <?php if (!empty($b['title'])): ?>
-                            <h2 class="section-title text-center mb-16"><?php echo $esc($b['title']); ?></h2>
-                          <?php endif; ?>
-                          <div class="bg-white p-8 rounded-xl shadow-lg">
-                            <p class="text-center mb-8 text-gray-600">
-                              <?php echo $esc($b['text'] ?? 'Get in touch with us today.'); ?>
-                            </p>
-                            <div class="text-center">
-                              <p class="mb-4">Replace with your favorite contact form plugin shortcode:</p>
-                              <code class="bg-gray-100 px-3 py-1 rounded">[contact-form-7 id="1"]</code>
-                            </div>
-                          </div>
-                        </div>
-                      </section>
-                      <?php
-                  },
-
-                  'pricing' => function($b) use ($esc) {
-                      $plans = $b['plans'] ?? [];
-                      ?>
-                      <section class="py-20 bg-gray-50">
-                        <div class="container">
-                          <?php if (!empty($b['title'])): ?>
-                            <h2 class="section-title text-center mb-16"><?php echo $esc($b['title']); ?></h2>
-                          <?php endif; ?>
-                          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
-                            <?php foreach ($plans as $plan): ?>
-                              <div class="bg-white p-8 rounded-xl shadow-lg text-center <?php echo ($plan['featured'] ?? false) ? 'ring-2 ring-primary' : ''; ?>">
-                                <h3 class="text-2xl font-bold mb-4"><?php echo $esc($plan['name'] ?? 'Plan'); ?></h3>
-                                <div class="text-4xl font-bold mb-6"><?php echo $esc($plan['price'] ?? '$99'); ?></div>
-                                <ul class="text-left mb-8 space-y-2">
-                                  <?php foreach ($plan['features'] ?? [] as $feature): ?>
-                                    <li class="flex items-center">
-                                      <span class="text-green-500 mr-2">✓</span>
-                                      <?php echo $esc($feature); ?>
-                                    </li>
-                                  <?php endforeach; ?>
-                                </ul>
-                                <a class="btn <?php echo ($plan['featured'] ?? false) ? 'btn-primary' : 'btn-secondary'; ?> w-full" 
-                                   href="<?php echo esc_url($plan['cta']['href'] ?? '#contact'); ?>">
-                                  <?php echo $esc($plan['cta']['label'] ?? 'Choose Plan'); ?>
-                                </a>
-                              </div>
-                            <?php endforeach; ?>
-                          </div>
-                        </div>
-                      </section>
-                      <?php
-                  },
-
-                  'team' => function($b) use ($esc, $img) {
-                      $members = $b['members'] ?? [];
-                      echo '<section class="py-20 bg-gray-50"><div class="container">';
-                      if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.$esc($b['title']).'</h2>';
-                      echo '<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">';
-                      foreach ($members as $member) {
-                          echo '<div class="bg-white p-6 rounded-xl shadow text-center">';
-                          if (!empty($member['photo'])) echo '<div class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">'.$img($member['photo'], $member['name'] ?? 'Team member').'</div>';
-                          echo '<h3 class="font-bold text-xl mb-2">'.$esc($member['name'] ?? 'Team Member').'</h3>';
-                          echo '<div class="text-primary font-medium mb-3">'.$esc($member['role'] ?? '').'</div>';
-                          echo '<p class="text-gray-600">'.$esc($member['bio'] ?? '').'</p></div>';
-                      }
-                      echo '</div></div></section>';
-                  },
-
-                  'classes' => function($b) use ($esc) {
-                      $schedule = $b['schedule'] ?? [];
-                      echo '<section class="py-20 bg-gray-50"><div class="container">';
-                      if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.$esc($b['title']).'</h2>';
-                      echo '<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">';
-                      foreach ($schedule as $class) {
-                          echo '<div class="bg-white p-6 rounded-xl shadow">';
-                          echo '<h3 class="font-bold text-xl mb-3">'.$esc($class['name'] ?? 'Class').'</h3>';
-                          echo '<div class="space-y-2 text-gray-600">';
-                          if (!empty($class['time'])) echo '<div><strong>Time:</strong> '.$esc($class['time']).'</div>';
-                          if (!empty($class['instructor'])) echo '<div><strong>Instructor:</strong> '.$esc($class['instructor']).'</div>';
-                          echo '</div>';
-                          if (!empty($class['description'])) echo '<p class="mt-4 text-gray-600">'.$esc($class['description']).'</p>';
-                          echo '</div>';
-                      }
-                      echo '</div></div></section>';
-                  },
-
-                  'two-col' => function($b) use ($esc) {
-                      echo '<section class="py-20"><div class="container">';
-                      if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.$esc($b['title']).'</h2>';
-                      echo '<div class="grid gap-12 lg:grid-cols-2 items-center">';
-                      echo '<div class="prose prose-lg max-w-none">';
-                      echo wp_kses_post(is_string($b['left'] ?? '') ? $b['left'] : ($b['content'] ?? ''));
-                      echo '</div>';
-                      echo '<div class="prose prose-lg max-w-none">';
-                      echo wp_kses_post(is_string($b['right'] ?? '') ? $b['right'] : '');
-                      echo '</div>';
-                      echo '</div></div></section>';
-                  },
-
-                  'service-cards' => function($b) use ($esc) {
-                      $items = $b['items'] ?? [];
-                      echo '<section class="py-20 bg-gray-50"><div class="container">';
-                      if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.$esc($b['title']).'</h2>';
-                      echo '<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">';
-                      foreach ($items as $item) {
-                          echo '<div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">';
-                          echo '<h3 class="text-xl font-bold mb-4">'.$esc($item['title'] ?? 'Service').'</h3>';
-                          echo '<p class="text-gray-600 mb-6">'.$esc($item['text'] ?? '').'</p>';
-                          if (!empty($item['price'])) echo '<div class="text-2xl font-bold text-primary">'.$esc($item['price']).'</div>';
-                          echo '</div>';
-                      }
-                      echo '</div></div></section>';
-                  },
-
-                  'html' => function($b) { 
-                      echo wp_kses_post($b['html'] ?? $b['content'] ?? ''); 
-                  },
-              ];
-
-              // Render all blocks from the home page
-              foreach ($home['blocks'] ?? [] as $block) {
-                  $type = $block['type'] ?? 'html';
-                  if (isset($render[$type]) && is_callable($render[$type])) {
-                      $render[$type]($block);
-                  } else {
-                      echo '<section class="py-20"><div class="container"><p class="text-center text-gray-500">Unknown block type: ' . esc_html($type) . '</p></div></section>';
-                  }
-              }
-
-              return ob_get_clean();
-          });
-          PHP
-          EOF
+      - name: Verify mu-plugin and config on server
+        run: |
+          set -e
+          ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
+            "ls -la '$APP_PATH/wp-content/mu-plugins/sitefuse' && \
+             test -f '$APP_PATH/wp-content/mu-plugins/sitefuse/sitefuse-home.php' && echo 'mu-plugin OK' && \
+             test -f '$APP_PATH/wp-content/mu-plugins/sitefuse/blocks-config.json' && echo 'blocks-config OK'"
 
       - name: Configure WordPress (theme, pages, menu, homepage content)
         env:
@@ -462,7 +155,7 @@ jobs:
           NAME: ${{ inputs.name }}
           SLUG: ${{ inputs.slug }}
         run: |
-          echo "✅ Deployment completed!"
+          echo "✅ Deployment completed"
           echo "🏢 Site Name: ${NAME}"
           echo "🔧 Theme: ${SLUG}-child"
           echo "🌐 Visit via your Cloudways domain for this app"
