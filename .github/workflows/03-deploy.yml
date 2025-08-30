@@ -81,6 +81,13 @@ jobs:
             rsync -avz -e 'ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no' \
               "theme-files/website.json" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/"
           fi
+      - name: Upload blocks-config.json to server
+        run: |
+          set -euo pipefail
+          ssh -o StrictHostKeyChecking=no -i "$CLOUDWAYS_KEY" "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
+            "mkdir -p '$APP_PATH/wp-content/mu-plugins/sitefuse'"
+          scp -o StrictHostKeyChecking=no -i "$CLOUDWAYS_KEY" blocks-config.json \
+            "$CLOUDWAYS_USER@$CLOUDWAYS_HOST:$APP_PATH/wp-content/mu-plugins/sitefuse/blocks-config.json"
 
       - name: Install/Update enhanced mu-plugin (supports all block types)
         run: |
