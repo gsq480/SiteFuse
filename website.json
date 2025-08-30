@@ -1,29 +1,29 @@
 {
   "brand": {
     "colors": {
-      "accent": "#F2C572",
-      "bg": "#F7F6F0",
-      "primary": "#7A6D5D",
-      "secondary": "#A6A58B",
-      "text": "#4C433C"
+      "accent": "#34D1C4",
+      "bg": "#FFF5E1",
+      "primary": "#A234F4",
+      "secondary": "#F4D35E",
+      "text": "#4B4B4B"
     },
     "fonts": {
-      "body": "Lato",
-      "heading": "Playfair Display"
+      "body": "Quicksand",
+      "heading": "Comfortaa"
     }
   },
   "hero": {
     "cta": {
-      "href": "#gallery",
-      "label": "Explore Our Collection"
+      "href": "#products",
+      "label": "Shop Our Collection"
     },
-    "image": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-2oQWMtyZIkidcOBUKtgqpIqW.png?st=2025-08-30T18%3A21%3A17Z&se=2025-08-30T20%3A21%3A17Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T22%3A02%3A30Z&ske=2025-08-30T22%3A02%3A30Z&sks=b&skv=2024-08-04&sig=WHvaj/XbTu3fdTDX8WHoyUjyaIArrkkgiy5iLmbmZiQ%3D",
-    "overlay": 0.4,
-    "subtitle": "Experience the warmth and comfort of our high-quality saunas, designed to elevate your relaxation",
-    "title": "Escape & Rejuvenate with Our Premium Saunas"
+    "image": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-BJSPtU3MR9XADtN7kNtZKQMh.png?st=2025-08-30T19%3A17%3A20Z&se=2025-08-30T21%3A17%3A20Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=1726b4ce-fee1-450b-8b92-1731ad8745f6&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T20%3A17%3A20Z&ske=2025-08-31T20%3A17%3A20Z&sks=b&skv=2024-08-04&sig=CSMCKVMXtIzIoN%2BIPTqN9xcfRgiY6BDIValoS%2BIaUlc%3D",
+    "overlay": 0.3,
+    "subtitle": "Handmade, ethically sourced, and as unique as you are",
+    "title": "Discover Your Inner Peace with Vibrant Platonic Garb"
   },
-  "industry": "sauna-retailer",
-  "name": "Serene Saunas",
+  "industry": "retail",
+  "name": "The Hippy Hub",
   "pages": [
     {
       "blocks": [
@@ -31,103 +31,104 @@
           "type": "hero"
         },
         {
-          "images": [
-            {
-              "alt": "Interior view of a modern infrared sauna",
-              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-LZGyaSiilrmO6aaVwKn2LlzE.png?st=2025-08-30T18%3A21%3A29Z&se=2025-08-30T20%3A21%3A29Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=fbf4b681-538a-442a-8e58-f3b99f10cd54&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T19%3A21%3A29Z&ske=2025-08-31T19%3A21%3A29Z&sks=b&skv=2024-08-04&sig=RgYv1AdyHySl/U088CssLLj6K1F5VHpEsXxn1oxQJn4%3D"
-            },
-            {
-              "alt": "Outdoor sauna with a wooden finish in garden setting",
-              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-de3jqRQgITxjQCyQAFBXVJox.png?st=2025-08-30T18%3A21%3A42Z&se=2025-08-30T20%3A21%3A42Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T19%3A21%3A42Z&ske=2025-08-31T19%3A21%3A42Z&sks=b&skv=2024-08-04&sig=U/XbYSJITaDrtbPgQWbnOew6osbALmVluFDdZ2hx1H4%3D"
-            },
-            {
-              "alt": "Traditional Finnish sauna made from cedar wood",
-              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-4g4jInMEugfRCCyBb0xfzDLp.png?st=2025-08-30T18%3A21%3A58Z&se=2025-08-30T20%3A21%3A58Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=8c7ba6b3-5a55-4cb2-a31e-3fe3f598c469&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T01%3A22%3A05Z&ske=2025-08-31T01%3A22%3A05Z&sks=b&skv=2024-08-04&sig=O75%2BPSerc0EkOtOIa7bXkcMvIs6oZ5QSWCjXHeVankA%3D"
-            },
-            {
-              "alt": "Luxury sauna interior with LED lighting",
-              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-DFFRDz77kT1qkAb9kSMoi8G6.png?st=2025-08-30T18%3A22%3A12Z&se=2025-08-30T20%3A22%3A12Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=1726b4ce-fee1-450b-8b92-1731ad8745f6&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T08%3A59%3A58Z&ske=2025-08-31T08%3A59%3A58Z&sks=b&skv=2024-08-04&sig=IlCAR%2B79H95KcM2LpK6BmcSx5I4k4sfXWSn/Gb%2BDwRE%3D"
-            },
-            {
-              "alt": "Compact home sauna model with adjustable temperature settings",
-              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-6a0uh8OOwG8ko26JyEEWllTx.png?st=2025-08-30T18%3A22%3A25Z&se=2025-08-30T20%3A22%3A25Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T19%3A22%3A25Z&ske=2025-08-31T19%3A22%3A25Z&sks=b&skv=2024-08-04&sig=D6GSMjzYeZ1tw/p/HbRTQAlt6DH2%2BzyPh58okmvIZUs%3D"
-            },
-            {
-              "alt": "Sauna with a glass door allowing view of outside forest",
-              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-h87dNoefmWIIJDj3pRw8oyjC.png?st=2025-08-30T18%3A22%3A37Z&se=2025-08-30T20%3A22%3A37Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=fbf4b681-538a-442a-8e58-f3b99f10cd54&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T19%3A22%3A37Z&ske=2025-08-31T19%3A22%3A37Z&sks=b&skv=2024-08-04&sig=tvwJwHd%2B4zh9T1QZzIujfcRdZ%2B5N4DGNJ5vz9wqTMoc%3D"
-            }
-          ],
-          "title": "Gallery",
-          "type": "gallery"
-        },
-        {
-          "columns": 3,
-          "items": [
-            {
-              "icon": "",
-              "text": "Utilize the latest technology for deeper heat penetration.",
-              "title": "Infrared Saunas"
-            },
-            {
-              "icon": "",
-              "text": "Experience the age-old methods of relaxation.",
-              "title": "Traditional Saunas"
-            },
-            {
-              "icon": "",
-              "text": "Perfect for enjoying nature while you unwind.",
-              "title": "Outdoor Models"
-            },
-            {
-              "icon": "",
-              "text": "Tailored setups to fit your space and style.",
-              "title": "Custom Designs"
-            }
-          ],
-          "type": "features"
-        },
-        {
-          "content": "At Serene Saunas, we are dedicated to providing you with the highest quality saunas that deliver comfort and relaxation. Our models are crafted with the finest materials and cutting-edge technology to ensure you find peace and relief in every session.",
-          "title": "About Us",
+          "content": "Located in the heart of Canberra, The Hippy Hub is your sanctuary for unique, hand-crafted lifestyle items. From clothing and accessories to home decor, all our products encourage harmony and peace of mind.",
+          "heading": "About Us",
           "type": "about"
         },
         {
           "items": [
             {
-              "text": "Aid in the removal of toxins from the body through sweating.",
-              "title": "Detoxification"
+              "image": "",
+              "text": "Expressive hand-crafted jewelry to elevate your everyday outfit.",
+              "title": "Bohemian Beads"
             },
             {
-              "text": "Enhance blood flow and heart health with regular sauna use.",
-              "title": "Improved Circulation"
-            },
-            {
-              "text": "Relax your muscles and mind in the warmth.",
-              "title": "Stress Relief"
-            },
-            {
-              "text": "Achieve glowing skin by clearing out impurities.",
-              "title": "Skin Health"
+              "image": "",
+              "text": "Vividly colored rugs made by traditional artisans to brighten any space.",
+              "title": "Comfy Eastern Rugs"
             }
           ],
-          "title": "Health Benefits",
+          "title": "Our Collection",
+          "type": "products"
+        },
+        {
+          "items": [
+            {
+              "text": "Every item tells a story of sustainable craftsmanship.",
+              "title": "Ethically Sourced"
+            },
+            {
+              "text": "Exclusive designs that are made with love and care.",
+              "title": "Handcrafted Pieces"
+            },
+            {
+              "text": "Supporting community artisans from around the world.",
+              "title": "Local Support"
+            }
+          ],
+          "title": "Why Choose Us?",
           "type": "benefits"
         },
         {
-          "author": "Ellie Thompson",
-          "quote": "I never knew how much a difference a sauna could make in my wellness routine until I purchased from Serene Saunas. Absolutely transformative!",
-          "type": "testimonial"
+          "items": [
+            {
+              "name": "Willow Brown",
+              "quote": "I love how unique and vibrant the products are! They're the perfect reflection of my lifestyle."
+            },
+            {
+              "name": "Jasper Moon",
+              "quote": "Finding ethically-sourced items in Canberra has never been easier. The Hippy Hub is a gem!"
+            }
+          ],
+          "title": "Happy Customers",
+          "type": "testimonials"
         },
         {
-          "content": "Discover the perfect sauna experience for your space and lifestyle. Browse our collection and start your journey to relaxation today.",
+          "images": [
+            {
+              "alt": "Handwoven wall tapestry with fringe detailing",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-6rLtp3GXHeHdPbX0BRQh7GNz.png?st=2025-08-30T19%3A17%3A34Z&se=2025-08-30T21%3A17%3A34Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=52f8f7b3-ca8d-4b21-9807-8b9df114d84c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T15%3A14%3A39Z&ske=2025-08-31T15%3A14%3A39Z&sks=b&skv=2024-08-04&sig=GQFt%2B/v18TZ%2Br1/PnGBAGISYxH620EyUtuoP%2BoGbdoo%3D"
+            },
+            {
+              "alt": "Bright, eclectic earrings on display",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-TybyHTxQTKI57SCjSuFtRxOy.png?st=2025-08-30T19%3A17%3A49Z&se=2025-08-30T21%3A17%3A49Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=70313862-61f1-446b-9bb2-fa32b037e024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T21%3A10%3A17Z&ske=2025-08-30T21%3A10%3A17Z&sks=b&skv=2024-08-04&sig=rlC0ljdKayCODCuBzRrk61omvSTxveZgx%2B8n/FYG7zQ%3D"
+            },
+            {
+              "alt": "A festival outfit featuring colorful textiles",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-RhYHtb4NjAwXkvX1uTvSTS3p.png?st=2025-08-30T19%3A18%3A06Z&se=2025-08-30T21%3A18%3A06Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T20%3A18%3A06Z&ske=2025-08-31T20%3A18%3A06Z&sks=b&skv=2024-08-04&sig=5Pnpc7QDLkj5onDqLH6Wx7aYgOfw1piQzyC28CMOFeQ%3D"
+            },
+            {
+              "alt": "Unique, handmade patterned rugs",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-5eDLRY5NH3SAK2yi8hMjEkYR.png?st=2025-08-30T19%3A18%3A19Z&se=2025-08-30T21%3A18%3A19Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=fbf4b681-538a-442a-8e58-f3b99f10cd54&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T20%3A18%3A19Z&ske=2025-08-31T20%3A18%3A19Z&sks=b&skv=2024-08-04&sig=kUZOVgEuLRPGWYRjNDDeDIWBU9fr7bRnNvPVQt5YuSk%3D"
+            },
+            {
+              "alt": "Tranquil shop interior with vibrant merchandise",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-gOgtIMeGy4dUibyqsQjtgPaN.png?st=2025-08-30T19%3A18%3A31Z&se=2025-08-30T21%3A18%3A31Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=fbf4b681-538a-442a-8e58-f3b99f10cd54&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-30T20%3A18%3A31Z&ske=2025-08-31T20%3A18%3A31Z&sks=b&skv=2024-08-04&sig=JGAgLGcjdaca/WCMs6wgtGwXb1ms0XR/GmTaE8kZDGc%3D"
+            },
+            {
+              "alt": "Assorted potpourri and scented products",
+              "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/org-IK6AVYZPfkve0xjXoY7WFrNz/user-9BT7dAcO3bvSbt5CqOulHy7d/img-ClhdmJOjFVr3Tuu9y2rY4V1i.png?st=2025-08-30T19%3A18%3A42Z&se=2025-08-30T21%3A18%3A42Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=7aed557a-269d-4dda-ab8b-c66e34024151&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-29T23%3A51%3A43Z&ske=2025-08-30T23%3A51%3A43Z&sks=b&skv=2024-08-04&sig=v60uXmLBkl2szrZd/PBdgVBpiV5V2nozpCH8PZpbYXQ%3D"
+            }
+          ],
+          "title": "Inspiration Gallery",
+          "type": "gallery"
+        },
+        {
           "cta": {
-            "href": "#products",
-            "label": "Shop Now"
+            "href": "#contact",
+            "label": "Contact Us"
           },
-          "title": "Get Inspired",
+          "heading": "Let's Get in Touch",
+          "text": "Interested in learning more about our products or want to place a special order? We'd love to hear from you!",
           "type": "cta"
         },
         {
+          "fields": [
+            "name",
+            "email",
+            "message"
+          ],
+          "title": "Contact Us",
           "type": "contact-form"
         }
       ],
@@ -136,13 +137,13 @@
       "title": "Home"
     }
   ],
-  "slug": "serene-saunas",
+  "slug": "hippy-hub-canberra",
   "style": {
-    "elev": "med",
-    "radius": 12,
-    "recipe": "elegant",
+    "elev": "low",
+    "radius": 16,
+    "recipe": "playful",
     "shapes": "soft",
-    "variant": "b"
+    "variant": "a"
   },
-  "tagline": "Find Your Escape within Luxurious Heat"
+  "tagline": "Colorful Creations for Peaceful Living"
 }
