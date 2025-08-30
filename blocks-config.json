@@ -1,0 +1,664 @@
+{
+    "version": 1,
+    "blocks": [
+        {
+            "type": "hero-split",
+            "label": "Hero split",
+            "category": "hero",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "subtitle": "text",
+                "image": "image",
+                "cta": {
+                    "label": "text",
+                    "url": "url"
+                }
+            },
+            "defaults": {
+                "title": "Welcome",
+                "subtitle": "",
+                "image": "",
+                "cta": {
+                    "label": "Learn more",
+                    "url": "#"
+                }
+            }
+        },
+        {
+            "type": "hero-video",
+            "label": "Hero with video background",
+            "category": "hero",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "video_url": "url",
+                "poster_image": "image",
+                "cta": {
+                    "label": "text",
+                    "url": "url"
+                }
+            },
+            "defaults": {
+                "title": "Your story in motion",
+                "video_url": "",
+                "poster_image": "",
+                "cta": {
+                    "label": "Get started",
+                    "url": "#"
+                }
+            }
+        },
+        {
+            "type": "hero-minimal",
+            "label": "Hero minimal",
+            "category": "hero",
+            "supports_images": false,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "subtitle": "text",
+                "cta": {
+                    "label": "text",
+                    "url": "url"
+                }
+            },
+            "defaults": {
+                "title": "We help you grow",
+                "subtitle": "",
+                "cta": {
+                    "label": "Contact us",
+                    "url": "#"
+                }
+            }
+        },
+        {
+            "type": "hero-full-screen",
+            "label": "Hero full screen",
+            "category": "hero",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "subtitle": "text",
+                "image": "image",
+                "overlay_opacity": "number"
+            },
+            "defaults": {
+                "title": "Bold headline",
+                "subtitle": "",
+                "image": "",
+                "overlay_opacity": 0.35
+            }
+        },
+        {
+            "type": "features-cards",
+            "label": "Features card grid",
+            "category": "features",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "features": [
+                    {
+                        "icon": "icon",
+                        "title": "text",
+                        "description": "text"
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "What you get",
+                "features": [
+                    {
+                        "icon": "star",
+                        "title": "Quality",
+                        "description": "Premium outcomes."
+                    },
+                    {
+                        "icon": "bolt",
+                        "title": "Speed",
+                        "description": "Delivered on time."
+                    },
+                    {
+                        "icon": "shield",
+                        "title": "Trust",
+                        "description": "Reliable support."
+                    }
+                ]
+            }
+        },
+        {
+            "type": "features-alt-rows",
+            "label": "Features alternating rows",
+            "category": "features",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "rows": [
+                    {
+                        "image": "image",
+                        "title": "text",
+                        "body": "text",
+                        "cta": {
+                            "label": "text",
+                            "url": "url"
+                        }
+                    }
+                ]
+            },
+            "defaults": {
+                "rows": [
+                    {
+                        "image": "",
+                        "title": "Designed for users",
+                        "body": "Clear, usable, effective.",
+                        "cta": {
+                            "label": "See how",
+                            "url": "#"
+                        }
+                    },
+                    {
+                        "image": "",
+                        "title": "Built for results",
+                        "body": "Fast and maintainable.",
+                        "cta": {
+                            "label": "Our work",
+                            "url": "#"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "features-tabs",
+            "label": "Features tabs",
+            "category": "features",
+            "supports_images": false,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "tabs": [
+                    {
+                        "label": "text",
+                        "content": "markdown"
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "How it works",
+                "tabs": [
+                    {
+                        "label": "Plan",
+                        "content": "Define goals, scope, and success measures."
+                    },
+                    {
+                        "label": "Build",
+                        "content": "Iterate with clear milestones."
+                    },
+                    {
+                        "label": "Launch",
+                        "content": "Ship, measure, improve."
+                    }
+                ]
+            }
+        },
+        {
+            "type": "services-icons",
+            "label": "Services with icons",
+            "category": "services",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "items": [
+                    {
+                        "icon": "icon",
+                        "title": "text",
+                        "description": "text"
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "Services",
+                "items": [
+                    {
+                        "icon": "paintbrush",
+                        "title": "Branding",
+                        "description": "Identity and guidelines."
+                    },
+                    {
+                        "icon": "layout",
+                        "title": "Web design",
+                        "description": "Accessible and responsive."
+                    },
+                    {
+                        "icon": "code",
+                        "title": "Development",
+                        "description": "Clean, testable code."
+                    }
+                ]
+            }
+        },
+        {
+            "type": "testimonials-slider",
+            "label": "Testimonials slider",
+            "category": "social-proof",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "items": [
+                    {
+                        "quote": "text",
+                        "author": "text",
+                        "role": "text",
+                        "photo": "image"
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "What clients say",
+                "items": [
+                    {
+                        "quote": "Exceptional work from start to finish.",
+                        "author": "Alex M",
+                        "role": "Director",
+                        "photo": ""
+                    },
+                    {
+                        "quote": "Clear process and strong results.",
+                        "author": "Priya S",
+                        "role": "Founder",
+                        "photo": ""
+                    }
+                ]
+            }
+        },
+        {
+            "type": "testimonials-spotlight",
+            "label": "Testimonial spotlight",
+            "category": "social-proof",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "quote": "text",
+                "author": "text",
+                "role": "text",
+                "photo": "image"
+            },
+            "defaults": {
+                "quote": "They delivered beyond expectations.",
+                "author": "Jamie L",
+                "role": "COO",
+                "photo": ""
+            }
+        },
+        {
+            "type": "logos-grid",
+            "label": "Client logos grid",
+            "category": "social-proof",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "logos": [
+                    {
+                        "image": "image",
+                        "alt": "text"
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "Trusted by teams like yours",
+                "logos": [
+                    {
+                        "image": "",
+                        "alt": "Client"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "gallery-masonry",
+            "label": "Masonry gallery",
+            "category": "media",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "images": [
+                    {
+                        "image": "image",
+                        "caption": "text"
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "Gallery",
+                "images": []
+            }
+        },
+        {
+            "type": "before-after-gallery",
+            "label": "Before and after gallery",
+            "category": "media",
+            "supports_images": true,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "pairs": [
+                    {
+                        "before": "image",
+                        "after": "image",
+                        "label": "text"
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "Transformations",
+                "pairs": []
+            }
+        },
+        {
+            "type": "pricing-toggle",
+            "label": "Pricing with monthly or yearly toggle",
+            "category": "pricing",
+            "supports_images": false,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "toggle_labels": {
+                    "monthly": "text",
+                    "yearly": "text"
+                },
+                "plans": [
+                    {
+                        "name": "text",
+                        "monthly": "number",
+                        "yearly": "number",
+                        "features": [
+                            "text"
+                        ]
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "Simple pricing",
+                "toggle_labels": {
+                    "monthly": "Monthly",
+                    "yearly": "Yearly"
+                },
+                "plans": [
+                    {
+                        "name": "Starter",
+                        "monthly": 19,
+                        "yearly": 190,
+                        "features": [
+                            "Feature A",
+                            "Feature B"
+                        ]
+                    },
+                    {
+                        "name": "Pro",
+                        "monthly": 49,
+                        "yearly": 490,
+                        "features": [
+                            "Everything in Starter",
+                            "Feature C"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "pricing-compare",
+            "label": "Pricing comparison table",
+            "category": "pricing",
+            "supports_images": false,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "columns": [
+                    {
+                        "name": "text",
+                        "price": "text"
+                    }
+                ],
+                "rows": [
+                    {
+                        "label": "text",
+                        "values": [
+                            "text"
+                        ]
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "Compare plans",
+                "columns": [
+                    {
+                        "name": "Starter",
+                        "price": "$19"
+                    },
+                    {
+                        "name": "Pro",
+                        "price": "$49"
+                    }
+                ],
+                "rows": [
+                    {
+                        "label": "Users",
+                        "values": [
+                            "1",
+                            "5"
+                        ]
+                    },
+                    {
+                        "label": "Support",
+                        "values": [
+                            "Email",
+                            "Priority"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "process-timeline",
+            "label": "Process timeline",
+            "category": "process",
+            "supports_images": false,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "steps": [
+                    {
+                        "title": "text",
+                        "description": "text"
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "Our process",
+                "steps": [
+                    {
+                        "title": "Discovery",
+                        "description": "Goals and constraints."
+                    },
+                    {
+                        "title": "Design",
+                        "description": "Iterative prototypes."
+                    },
+                    {
+                        "title": "Delivery",
+                        "description": "Ship and measure."
+                    }
+                ]
+            }
+        },
+        {
+            "type": "faq-accordion",
+            "label": "FAQ accordion",
+            "category": "content",
+            "supports_images": false,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "items": [
+                    {
+                        "q": "text",
+                        "a": "markdown"
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "Frequently asked questions",
+                "items": [
+                    {
+                        "q": "How long does it take?",
+                        "a": "Timelines vary by scope."
+                    },
+                    {
+                        "q": "Do you support after launch?",
+                        "a": "Yes, ongoing support is available."
+                    }
+                ]
+            }
+        },
+        {
+            "type": "contact-split",
+            "label": "Contact split layout",
+            "category": "contact",
+            "supports_images": false,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "address": "text",
+                "phone": "text",
+                "email": "text",
+                "form": "form",
+                "map_embed": "embed"
+            },
+            "defaults": {
+                "title": "Get in touch",
+                "address": "",
+                "phone": "",
+                "email": "",
+                "form": "",
+                "map_embed": ""
+            }
+        },
+        {
+            "type": "location-finder",
+            "label": "Location finder",
+            "category": "utility",
+            "supports_images": false,
+            "industries": [
+                "all"
+            ],
+            "inputs": {
+                "title": "text",
+                "locations": [
+                    {
+                        "name": "text",
+                        "address": "text",
+                        "lat": "number",
+                        "lng": "number"
+                    }
+                ],
+                "search_placeholder": "text"
+            },
+            "defaults": {
+                "title": "Find a location",
+                "locations": [],
+                "search_placeholder": "Search by suburb or postcode"
+            }
+        },
+        {
+            "type": "restaurant-menu-fancy",
+            "label": "Restaurant menu fancy",
+            "category": "industry",
+            "supports_images": true,
+            "industries": [
+                "restaurant"
+            ],
+            "inputs": {
+                "title": "text",
+                "sections": [
+                    {
+                        "name": "text",
+                        "items": [
+                            {
+                                "name": "text",
+                                "description": "text",
+                                "price": "text",
+                                "image": "image",
+                                "tags": [
+                                    "text"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "defaults": {
+                "title": "Seasonal menu",
+                "sections": [
+                    {
+                        "name": "Small plates",
+                        "items": [
+                            {
+                                "name": "Heirloom tomatoes",
+                                "description": "Basil and olive oil",
+                                "price": "$12",
+                                "image": "",
+                                "tags": [
+                                    "v"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
