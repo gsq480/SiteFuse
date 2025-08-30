@@ -58,7 +58,7 @@ jobs:
           set -e
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
             "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "APP_PATH='${APP_PATH}' bash -s" <<'EOS'
+            "APP_PATH='${APP_PATH}' bash -s" <<'EOF'
           set -euo pipefail
           : "${APP_PATH:?APP_PATH is not set on remote}"
           if [ ! -d "$APP_PATH" ]; then
@@ -66,7 +66,7 @@ jobs:
             exit 1
           fi
           echo "OK: APP_PATH is $APP_PATH"
-          EOS
+          EOF
 
       - name: Deploy child theme + website.json
         env:
@@ -87,7 +87,7 @@ jobs:
           set -e
           ssh -i ~/.ssh/id_rsa_cloudways -o StrictHostKeyChecking=no \
             "$CLOUDWAYS_USER@$CLOUDWAYS_HOST" \
-            "APP_PATH='${APP_PATH}' bash -s" <<'EOS'
+            "APP_PATH='${APP_PATH}' bash -s" <<'EOF'
           set -euo pipefail
           : "${APP_PATH:?APP_PATH is not set on remote}"
           MU_DIR="$APP_PATH/wp-content/mu-plugins"
@@ -331,7 +331,6 @@ jobs:
                       <?php
                   },
 
-                  // Condensed versions of other block types
                   'team' => function($b) use ($esc, $img) {
                       $members = $b['members'] ?? [];
                       echo '<section class="py-20 bg-gray-50"><div class="container">';
@@ -343,57 +342,6 @@ jobs:
                           echo '<h3 class="font-bold text-xl mb-2">'.$esc($member['name'] ?? 'Team Member').'</h3>';
                           echo '<div class="text-primary font-medium mb-3">'.$esc($member['role'] ?? '').'</div>';
                           echo '<p class="text-gray-600">'.$esc($member['bio'] ?? '').'</p></div>';
-                      }
-                      echo '</div></div></section>';
-                  },
-
-                  'menu' => function($b) use ($esc) {
-                      $categories = $b['categories'] ?? [];
-                      echo '<section class="py-20"><div class="container">';
-                      if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.$esc($b['title']).'</h2>';
-                      echo '<div class="grid gap-12 lg:grid-cols-2">';
-                      foreach ($categories as $category) {
-                          echo '<div><h3 class="text-2xl font-bold mb-6 text-primary">'.$esc($category['name'] ?? 'Menu Category').'</h3>';
-                          echo '<div class="space-y-4">';
-                          foreach ($category['items'] ?? [] as $item) {
-                              echo '<div class="flex justify-between items-start border-b border-gray-200 pb-3">';
-                              echo '<div class="flex-1"><h4 class="font-semibold">'.$esc($item['name'] ?? 'Menu Item').'</h4>';
-                              if (!empty($item['description'])) echo '<p class="text-gray-600 text-sm mt-1">'.$esc($item['description']).'</p>';
-                              echo '</div><div class="font-bold text-primary ml-4">'.$esc($item['price'] ?? '$10').'</div></div>';
-                          }
-                          echo '</div></div>';
-                      }
-                      echo '</div></div></section>';
-                  },
-
-                  'gallery' => function($b) use ($img) {
-                      $images = $b['images'] ?? [];
-                      echo '<section class="py-20"><div class="container">';
-                      if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.esc_html($b['title']).'</h2>';
-                      echo '<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">';
-                      foreach ($images as $image) echo '<div class="aspect-square overflow-hidden rounded-lg">'.$img($image['url'] ?? '', $image['alt'] ?? 'Gallery image').'</div>';
-                      echo '</div></div></section>';
-                  },
-
-                  'stats' => function($b) use ($esc) {
-                      $numbers = $b['numbers'] ?? [];
-                      echo '<section class="py-20 bg-primary text-white"><div class="container"><div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4 text-center">';
-                      foreach ($numbers as $stat) {
-                          echo '<div><div class="text-5xl font-bold mb-2">'.$esc($stat['number'] ?? '100+').'</div>';
-                          echo '<div class="text-lg opacity-90">'.$esc($stat['label'] ?? 'Statistic').'</div></div>';
-                      }
-                      echo '</div></div></section>';
-                  },
-
-                  'faq' => function($b) use ($esc) {
-                      $questions = $b['questions'] ?? [];
-                      echo '<section class="py-20"><div class="container max-w-4xl mx-auto">';
-                      if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.$esc($b['title']).'</h2>';
-                      echo '<div class="space-y-6">';
-                      foreach ($questions as $qa) {
-                          echo '<div class="bg-white p-6 rounded-xl shadow">';
-                          echo '<h3 class="font-bold text-lg mb-3">'.$esc($qa['question'] ?? 'Question?').'</h3>';
-                          echo '<p class="text-gray-600">'.$esc($qa['answer'] ?? 'Answer.').'</p></div>';
                       }
                       echo '</div></div></section>';
                   },
@@ -416,73 +364,36 @@ jobs:
                       echo '</div></div></section>';
                   },
 
-                  'hours' => function($b) use ($esc) {
-                      $hours = $b['hours'] ?? [];
-                      echo '<section class="py-20 bg-white"><div class="container max-w-2xl mx-auto">';
+                  'two-col' => function($b) use ($esc) {
+                      echo '<section class="py-20"><div class="container">';
                       if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.$esc($b['title']).'</h2>';
-                      echo '<div class="bg-gray-50 p-8 rounded-xl">';
-                      foreach ($hours as $day => $times) {
-                          echo '<div class="flex justify-between items-center py-3 border-b border-gray-200 last:border-b-0">';
-                          echo '<div class="font-semibold">'.$esc(ucfirst($day)).'</div>';
-                          echo '<div class="text-gray-600">'.$esc($times).'</div></div>';
-                      }
-                      echo '</div></div></section>';
-                  },
-
-                  'two-col' => function($b) {
-                      echo '<section class="py-20"><div class="container">';
-                      if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.esc_html($b['title']).'</h2>';
                       echo '<div class="grid gap-12 lg:grid-cols-2 items-center">';
-                      echo '<div class="prose prose-lg max-w-none">'.wp_kses_post($b['left'] ?? $b['content'] ?? '').'</div>';
-                      echo '<div class="prose prose-lg max-w-none">'.wp_kses_post($b['right'] ?? $b['image'] ?? '').'</div>';
+                      echo '<div class="prose prose-lg max-w-none">';
+                      echo wp_kses_post(is_string($b['left'] ?? '') ? $b['left'] : ($b['content'] ?? ''));
+                      echo '</div>';
+                      echo '<div class="prose prose-lg max-w-none">';
+                      echo wp_kses_post(is_string($b['right'] ?? '') ? $b['right'] : '');
+                      echo '</div>';
                       echo '</div></div></section>';
                   },
 
-                  'three-col' => function($b) {
-                      echo '<section class="py-20 bg-gray-50"><div class="container">';
-                      if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.esc_html($b['title']).'</h2>';
-                      echo '<div class="grid gap-8 lg:grid-cols-3">';
-                      echo '<div class="prose max-w-none">'.wp_kses_post($b['left'] ?? '').'</div>';
-                      echo '<div class="prose max-w-none">'.wp_kses_post($b['center'] ?? '').'</div>';
-                      echo '<div class="prose max-w-none">'.wp_kses_post($b['right'] ?? '').'</div>';
-                      echo '</div></div></section>';
-                  },
-
-                  'newsletter' => function($b) use ($esc) {
-                      ?>
-                      <section class="py-20 bg-primary text-white">
-                        <div class="container max-w-2xl mx-auto text-center">
-                          <?php if (!empty($b['title'])): ?>
-                            <h2 class="text-3xl font-bold mb-4"><?php echo $esc($b['title']); ?></h2>
-                          <?php endif; ?>
-                          <p class="text-lg mb-8 opacity-90"><?php echo $esc($b['text'] ?? 'Stay updated with our latest news.'); ?></p>
-                          <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                            <input type="email" placeholder="Enter your email" 
-                                   class="flex-1 px-4 py-3 rounded-lg text-gray-800" />
-                            <button class="btn btn-secondary whitespace-nowrap">
-                              <?php echo $esc($b['button_text'] ?? 'Subscribe'); ?>
-                            </button>
-                          </div>
-                        </div>
-                      </section>
-                      <?php
-                  },
-
-                  // Fallback handlers
-                  'html' => function($b) { echo wp_kses_post($b['html'] ?? $b['content'] ?? ''); },
-                  'service-cards' => function($b) use ($render) { return $render['services']($b); },
-                  'benefits' => function($b) use ($esc) {
+                  'service-cards' => function($b) use ($esc) {
                       $items = $b['items'] ?? [];
-                      echo '<section class="py-20"><div class="container">';
+                      echo '<section class="py-20 bg-gray-50"><div class="container">';
                       if (!empty($b['title'])) echo '<h2 class="section-title text-center mb-16">'.$esc($b['title']).'</h2>';
                       echo '<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">';
-                      foreach ($items as $benefit) {
-                          echo '<div class="flex items-start space-x-4">';
-                          echo '<div class="flex-shrink-0 w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center">✓</div>';
-                          echo '<div><h3 class="font-bold mb-2">'.$esc($benefit['title'] ?? 'Benefit').'</h3>';
-                          echo '<p class="text-gray-600">'.$esc($benefit['description'] ?? '').'</p></div></div>';
+                      foreach ($items as $item) {
+                          echo '<div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">';
+                          echo '<h3 class="text-xl font-bold mb-4">'.$esc($item['title'] ?? 'Service').'</h3>';
+                          echo '<p class="text-gray-600 mb-6">'.$esc($item['text'] ?? '').'</p>';
+                          if (!empty($item['price'])) echo '<div class="text-2xl font-bold text-primary">'.$esc($item['price']).'</div>';
+                          echo '</div>';
                       }
                       echo '</div></div></section>';
+                  },
+
+                  'html' => function($b) { 
+                      echo wp_kses_post($b['html'] ?? $b['content'] ?? ''); 
                   },
               ];
 
@@ -499,12 +410,12 @@ jobs:
               return ob_get_clean();
           });
           PHP
-          EOS
+          EOF
 
       - name: Configure WordPress (theme, pages, menu, homepage content)
         env:
-          SLUG:    ${{ inputs.slug }}
-          NAME:    ${{ inputs.name }}
+          SLUG: ${{ inputs.slug }}
+          NAME: ${{ inputs.name }}
           TAGLINE: ${{ inputs.tagline }}
         run: |
           set -e
@@ -513,32 +424,29 @@ jobs:
           set -euo pipefail
           cd "$APP_PATH"
 
-          wp option update blogname        "$NAME"    --allow-root
+          wp option update blogname "$NAME" --allow-root
           wp option update blogdescription "$TAGLINE" --allow-root
-
           wp theme activate "${SLUG}-child" --allow-root
 
-          # Home page that renders the shortcode
           HOME_ID=$(wp post list --post_type=page --name=home --field=ID --allow-root | head -1)
           if [ -z "$HOME_ID" ]; then
-            HOME_ID=$(wp post create --post_type=page --post_title='Home' --post_name='home' --post_status=publish --porcelain --allow-root)
+            HOME_ID=$(wp post create --post_type=page --post_title="Home" --post_name="home" --post_status=publish --porcelain --allow-root)
           fi
-          wp post update "$HOME_ID" --post_content='[sitefuse_home]' --allow-root
+          wp post update "$HOME_ID" --post_content="[sitefuse_home]" --allow-root
           wp option update show_on_front page --allow-root
           wp option update page_on_front "$HOME_ID" --allow-root
 
-          # Rebuild Primary Menu
-          wp menu delete 'Primary Menu' --allow-root 2>/dev/null || true
-          wp menu create 'Primary Menu' --allow-root
+          wp menu delete "Primary Menu" --allow-root 2>/dev/null || true
+          wp menu create "Primary Menu" --allow-root
           for slug in home about services contact; do
             ID=$(wp post list --post_type=page --name="$slug" --field=ID --allow-root | head -1)
             if [ -z "$ID" ] && [ "$slug" != "home" ]; then
-              TITLE=$(tr '[:lower:]' '[:upper:]' <<< ${slug:0:1})${slug:1}
+              TITLE=$(echo "${slug^}")
               ID=$(wp post create --post_type=page --post_title="$TITLE" --post_name="$slug" --post_status=publish --porcelain --allow-root)
             fi
-            [ -n "$ID" ] && wp menu item add-post 'Primary Menu' "$ID" --title="$(tr '[:lower:]' '[:upper:]' <<< ${slug:0:1})${slug:1}" --allow-root
+            [ -n "$ID" ] && wp menu item add-post "Primary Menu" "$ID" --title="$(echo "${slug^}")" --allow-root
           done
-          wp menu location assign 'Primary Menu' primary --allow-root
+          wp menu location assign "Primary Menu" primary --allow-root
           wp rewrite flush --allow-root
           EOS
 
@@ -548,9 +456,6 @@ jobs:
           SLUG: ${{ inputs.slug }}
         run: |
           echo "✅ Deployment completed!"
-          echo "🏢 Site Name: ${NAME}"
-          echo "🔧 Theme: ${SLUG}-child"
-          echo "🌐 Visit via your Cloudways domain for this app"
           echo "🏢 Site Name: ${NAME}"
           echo "🔧 Theme: ${SLUG}-child"
           echo "🌐 Visit via your Cloudways domain for this app"
